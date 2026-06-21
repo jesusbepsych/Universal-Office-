@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quarter Dashboard — Login Test</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: #0f1115; color: #e6e8ec;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex; align-items: flex-start; justify-content: center; padding: 24px;
+  }
+  .card {
+    width: 100%; max-width: 480px; background: #171a21;
+    border: 1px solid #262b36; border-radius: 14px; padding: 24px; margin-top: 8vh;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; font-weight: 600; }
+  p.sub { margin: 0 0 20px; color: #9aa3b2; font-size: 14px; }
+  label { display: block; font-size: 13px; color: #9aa3b2; margin-bottom: 6px; }
+  input[type=email] {
+    width: 100%; padding: 12px 14px; font-size: 16px; background: #0f1115;
+    border: 1px solid #2c3340; border-radius: 10px; color: #e6e8ec; margin-bottom: 14px;
+  }
+  button {
+    width: 100%; padding: 12px 14px; font-size: 16px; font-weight: 600;
+    border: none; border-radius: 10px; background: #4f7cff; color: #fff; cursor: pointer;
+  }
+  button.secondary { background: #2c3340; color: #e6e8ec; margin-top: 12px; }
+  button:disabled { opacity: .6; }
+  .msg { margin-top: 14px; font-size: 14px; line-height: 1.5; }
+  .msg.error { color: #ff8a8a; }
+  .msg.ok { color: #7ee0a8; }
+  .hidden { display: none; }
+  ul.rows { list-style: none; padding: 0; margin: 16px 0 0; }
+  ul.rows li {
+    padding: 12px 14px; background: #0f1115; border: 1px solid #262b36;
+    border-radius: 10px; margin-bottom: 8px; font-size: 14px;
+  }
+  .row-title { font-weight: 600; }
+  .row-meta { color: #9aa3b2; font-size: 12px; margin-top: 3px; }
+  .who { font-size: 13px; color: #9aa3b2; margin-bottom: 12px; word-break: break-all; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Quarter Dashboard</h1>
+    <p class="sub" id="subtitle">Sign in to load your tasks.</p>
+
+    <div id="login-view">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+      <button id="send-btn">Send magic link</button>
+      <div class="msg" id="login-msg"></div>
+    </div>
+
+    <div id="app-view" class="hidden">
+      <div class="who" id="who"></div>
+      <div class="msg" id="app-msg">Loading your tasks…</div>
+      <ul class="rows" id="rows"></ul>
+      <button class="secondary" id="logout-btn">Log out</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ---- CONFIG: fill these two in ----
+    const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+    // -----------------------------------
+
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const el = (id) => document.getElementById(id);
+    const loginView = el("login-view");
+    const appView = el("app-view");
+
+    function showLogin(message, kind) {
+      loginView.classList.remove("hidden");
+      appView.classList.add("hidden");
+      const m = el("login-msg");
+      m.textContent = message || "";
+      m.className = "msg" + (kind ? " " + kind : "");
+    }
+
+    async function showApp(session) {
+      loginView.classList.add("hidden");
+      appView.classList.remove("hidden");
+      el("who").textContent = "Signed in as " + (session.user.email || session.user.id);
+      el("subtitle").textContent = "Authenticated read test.";
+      await loadRows();
+    }
+
+    async function loadRows() {
+      const msg = el("app-msg");
+      const list = el("rows");
+      list.innerHTML = "";
+      msg.textContent = "Loading your tasks…";
+      msg.className = "msg";
+      const { data, error } = await client
+        .from("tasks")
+        .select("title, due_date, due_time, category, source, status")
+        .order("due_date", { ascending: true })
+        .limit(10);
+      if (error) {
+        msg.textContent = "Read error: " + error.message;
+        msg.className = "msg error";
+        return;
+      }
+      if (!data || data.length === 0) {
+        msg.textContent = "Signed in, but no rows came back. This usually means the email you logged in with belongs to a different account than the one your tasks were saved under.";
+        msg.className = "msg error";
+        return;
+      }
+      msg.textContent = "Read " + data.length + " row(s) — the authenticated path works.";
+      msg.className = "msg ok";
+      for (const t of data) {
+        const li = document.createElement("li");
+        const title = document.createElement("div");
+        title.className = "row-title";
+        title.textContent = t.title || "(untitled)";
+        const meta = document.createElement("div");
+        meta.className = "row-meta";
+        const bits = [];
+        if (t.due_date) bits.push(t.due_date + (t.due_time ? " " + String(t.due_time).slice(0,5) : ""));
+        if (t.category) bits.push(t.category);
+        if (t.source) bits.push(t.source);
+        if (t.status) bits.push(t.status);
+        meta.textContent = bits.join("  ·  ");
+        li.appendChild(title);
+        li.appendChild(meta);
+        list.appendChild(li);
+      }
+    }
+
+    el("send-btn").addEventListener("click", async () => {
+      const email = el("email").value.trim();
+      if (!email) { showLogin("Enter your email first.", "error"); return; }
+      const btn = el("send-btn");
+      btn.disabled = true;
+      showLogin("Sending…", null);
+      const { error } = await client.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.href.split("#")[0],
+          shouldCreateUser: false
+        }
+      });
+      btn.disabled = false;
+      if (error) {
+        showLogin("Could not send link: " + error.message, "error");
+      } else {
+        showLogin("Check your email for a sign-in link. It may take a minute and could land in spam. Open the link on this device.", "ok");
+      }
+    });
+
+    el("logout-btn").addEventListener("click", async () => {
+      await client.auth.signOut();
+      showLogin("Signed out.", null);
+      el("subtitle").textContent = "Sign in to load your tasks.";
+    });
+
+    client.auth.getSession().then(({ data }) => {
+      if (data.session) showApp(data.session);
+      else showLogin("", null);
+    });
+    client.auth.onAuthStateChange((_event, session) => {
+      if (session) showApp(session);
+      else showLogin("", null);
+    });
+  </script>
+</body>
+</html>
