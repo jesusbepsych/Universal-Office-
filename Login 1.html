@@ -108,6 +108,13 @@
   .tier-head .tline{flex:1;height:1px;background:var(--line-soft);}
   .task{display:flex;gap:12px;padding:11px 12px;border:1px solid var(--line-soft);border-radius:12px;background:var(--panel-2);margin-bottom:8px;animation:rise .4s ease both;}
   .task .bar{width:3px;border-radius:3px;background:var(--cat,var(--slate));flex:none;}
+  .check{flex:none;align-self:center;width:23px;height:23px;border-radius:7px;border:1.5px solid var(--line);background:var(--panel);display:flex;align-items:center;justify-content:center;padding:0;color:transparent;transition:background .15s, border-color .15s, box-shadow .2s;}
+  .check svg{width:13px;height:13px;}
+  .check:hover{border-color:#2a3450;}
+  .check[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#05210f;box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 28%,transparent), 0 0 14px color-mix(in srgb,var(--green) 55%,transparent);}
+  .task.done{opacity:.42;}
+  .task.done .task-title .t{text-decoration:line-through;}
+  .task.done .when,.task.done .rel{text-decoration:line-through;}
   .task-main{min-width:0;flex:1;}
   .task-title{font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:7px;}
   .task-title svg{flex:none;opacity:.7;}
@@ -179,6 +186,9 @@
   .legend{display:flex;gap:12px;flex-wrap:wrap;}
   .legend span{display:flex;align-items:center;gap:6px;}
   .legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
+
+  #toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,16px);background:#1a2238;border:1px solid var(--line);color:var(--ink);font-size:13px;padding:11px 16px;border-radius:11px;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;z-index:50;max-width:90vw;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);}
+  #toast.show{opacity:1;transform:translate(-50%,0);}
 
   @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
 
@@ -297,10 +307,10 @@
     const PER_PAGE = 8;
 
     const CATEGORY_META = {
-      "clinic-work":     { label:"Clinic",     color:"#4fd1c5" },
+      "clinic-work":     { label:"Clinic",     color:"#2fd6b0" },
       "behavioral-work": { label:"Behavioral", color:"#a78bfa" },
       "side-gig":        { label:"Side gig",   color:"#f2b066" },
-      "class":           { label:"Class",      color:"#6aa6ff" },
+      "class":           { label:"Class",      color:"#4d8bf0" },
       "admin":           { label:"Admin",      color:"#f472b6" },
       "appointment":     { label:"Appt",       color:"#94a3b8" },
       "personal":        { label:"Personal",   color:"#5fd08a" }
@@ -350,20 +360,20 @@
     function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
     // state
-    let allTasks=[], tasksByDay={}, activeTier="all", activeFilter="all", currentPage=1;
+    let allTasks=[], tasksByDay={}, activeTier="today", activeFilter="all", currentPage=1;
     let calYear=null, calMonth=null, selectedDay=null;
 
     async function loadTasks(){
       el("agenda").innerHTML='<div class="empty">Loading your items&hellip;</div>';
       try{
         const { data, error } = await client.from("tasks")
-          .select("title, due_date, due_time, category, source, status, updated_at")
-          .eq("status","open").order("due_date",{ascending:true});
+          .select("id, title, due_date, due_time, category, source, status, updated_at")
+          .in("status",["open","done"]).order("due_date",{ascending:true});
         if(error){ el("agenda").innerHTML='<div class="empty">Could not load items: '+error.message+'</div>'; return; }
         allTasks = data || [];
-        activeTier="all"; activeFilter="all"; currentPage=1; selectedDay=null; calYear=null; calMonth=null;
+        activeTier="today"; activeFilter="all"; currentPage=1; selectedDay=null; calYear=null; calMonth=null;
         buildByDay();
-        renderRibbon(); renderFilters(); renderLoadBars(); renderFooter(); renderCalendar(); renderAgenda();
+        renderRibbon(true); renderFilters(); renderLoadBars(); renderFooter(); renderCalendar(); renderAgenda();
       }catch(e){ el("agenda").innerHTML='<div class="empty">Unexpected error: '+(e&&e.message?e.message:e)+'</div>'; }
     }
 
@@ -373,20 +383,20 @@
     }
 
     // KPI tier tabs
-    function renderRibbon(){
+    function renderRibbon(animate){
       const {today,weekEnd}=computeDates();
-      let nPast=0,nToday=0,nWeek=0;
-      allTasks.forEach(t=>{ const x=tierOf(t,today,weekEnd); if(x==="past")nPast++; else if(x==="today")nToday++; else if(x==="week")nWeek++; });
+      let nPast=0,nToday=0,nWeek=0,nOpen=0;
+      allTasks.forEach(t=>{ if(t.status==="done")return; nOpen++; const x=tierOf(t,today,weekEnd); if(x==="past")nPast++; else if(x==="today")nToday++; else if(x==="week")nWeek++; });
       const kpis=[
-        {tier:"past",  n:nPast,           l:"Overdue",    c:"var(--red)"},
-        {tier:"today", n:nToday,          l:"Today",      c:"var(--amber)"},
-        {tier:"week",  n:nWeek,           l:"This week",  c:"var(--blue)"},
-        {tier:"all",   n:allTasks.length, l:"Open total", c:"var(--teal)"}
+        {tier:"past",  n:nPast,  l:"Overdue",    c:"var(--red)"},
+        {tier:"today", n:nToday, l:"Today",      c:"var(--amber)"},
+        {tier:"week",  n:nWeek,  l:"This week",  c:"var(--blue)"},
+        {tier:"all",   n:nOpen,  l:"Open total", c:"var(--teal)"}
       ];
       el("ribbon").innerHTML = kpis.map(k=>
         '<button class="kpi'+(activeTier===k.tier?' active':'')+'" data-tier="'+k.tier+'" style="--kc:'+k.c+'"><div class="n" id="kpi-'+k.tier+'">0</div><div class="l">'+k.l+'</div></button>'
       ).join("");
-      kpis.forEach(k=>{ countUp(el("kpi-"+k.tier),k.n); el("ribbon").querySelector('[data-tier="'+k.tier+'"]').addEventListener("click",()=>onTier(k.tier)); });
+      kpis.forEach(k=>{ if(animate)countUp(el("kpi-"+k.tier),k.n); else el("kpi-"+k.tier).textContent=k.n; el("ribbon").querySelector('[data-tier="'+k.tier+'"]').addEventListener("click",()=>onTier(k.tier)); });
     }
     function updateTierActive(){ el("ribbon").querySelectorAll(".kpi").forEach(b=>b.classList.toggle("active", b.dataset.tier===activeTier)); }
     function onTier(tier){ if(tier===activeTier && tier!=="all") activeTier="all"; else activeTier=tier; currentPage=1; updateTierActive(); renderAgenda(); }
@@ -410,6 +420,8 @@
       list.sort((a,b)=>{
         const da=TIER_ORDER[tierOf(a,today,weekEnd)], db=TIER_ORDER[tierOf(b,today,weekEnd)];
         if(da!==db) return da-db;
+        const ad=a.status==="done"?1:0, bd=b.status==="done"?1:0;
+        if(ad!==bd) return ad-bd;
         const ka=(a.due_date||"9999-99-99")+(a.due_time||"99:99"), kb=(b.due_date||"9999-99-99")+(b.due_time||"99:99");
         return ka.localeCompare(kb);
       });
@@ -423,11 +435,13 @@
         const tier=tierOf(t,today,weekEnd);
         if(tier!==lastTier){ const tm=TIERMETA[tier]; html+='<div class="tier-head"><span class="tname" style="--th:'+tm.color+'">'+tm.name+'</span><span class="tline"></span></div>'; lastTier=tier; }
         const m=catMeta(t.category);
+        const done=t.status==="done";
         const diff=t.due_date?dayDiff(t.due_date,today):null;
         const time=t.due_time?to12h(String(t.due_time).slice(0,5)):"";
         let relCls="rel"; if(diff!==null&&diff<0)relCls+=" is-over"; else if(diff===0)relCls+=" is-today";
         const bits=[]; if(time)bits.push('<span class="when">'+time+'</span>'); if(diff!==null)bits.push('<span class="'+relCls+'">'+relLabel(diff)+'</span>');
-        html+='<div class="task" style="--cat:'+m.color+';animation-delay:'+Math.min(idx*30,240)+'ms"><span class="bar"></span><div class="task-main"><div class="task-title">'+(SOURCE_ICON[t.source]||"")+'<span class="t">'+escapeHtml(t.title||"Untitled")+'</span></div><div class="task-meta"><span class="chip">'+m.label+'</span>'+bits.join("")+'</div></div></div>';
+        const check='<button class="check" data-id="'+t.id+'" aria-pressed="'+done+'" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>';
+        html+='<div class="task'+(done?' done':'')+'" style="--cat:'+m.color+';animation-delay:'+Math.min(idx*30,240)+'ms"><span class="bar"></span>'+check+'<div class="task-main"><div class="task-title">'+(SOURCE_ICON[t.source]||"")+'<span class="t">'+escapeHtml(t.title||"Untitled")+'</span></div><div class="task-meta"><span class="chip">'+m.label+'</span>'+bits.join("")+'</div></div></div>';
       });
       if(!html) html='<div class="empty">Nothing matches here. Try another filter, or wait for the next scan.</div>';
 
@@ -439,10 +453,11 @@
       const pv=el("prev"), nx=el("next");
       if(pv)pv.addEventListener("click",()=>{ currentPage--; renderAgenda(); });
       if(nx)nx.addEventListener("click",()=>{ currentPage++; renderAgenda(); });
+      el("agenda").querySelectorAll(".check").forEach(b=>b.addEventListener("click",()=>toggleDone(b.dataset.id)));
     }
 
     function renderLoadBars(){
-      const counts={}; allTasks.forEach(t=>{ const c=t.category||"other"; counts[c]=(counts[c]||0)+1; });
+      const counts={}; allTasks.forEach(t=>{ if(t.status==="done")return; const c=t.category||"other"; counts[c]=(counts[c]||0)+1; });
       const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
       const max=entries.length?entries[0][1]:1;
       el("load-hint").textContent=entries.length+(entries.length===1?" type":" types");
@@ -458,6 +473,26 @@
       const cats=Array.from(new Set(allTasks.map(t=>t.category).filter(Boolean))).sort();
       const legendCats=cats.length?cats:Object.keys(CATEGORY_META);
       el("legend").innerHTML=legendCats.map(c=>{ const m=catMeta(c); return '<span><i style="background:'+m.color+'"></i>'+m.label+'</span>'; }).join("");
+    }
+
+    function refreshViews(){ renderRibbon(false); renderLoadBars(); renderCalendar(); renderAgenda(); }
+
+    async function toggleDone(id){
+      const t = allTasks.find(x=>String(x.id)===String(id));
+      if(!t || !client) return;
+      const prev = t.status;
+      t.status = (prev==="done") ? "open" : "done";
+      refreshViews();
+      try{
+        const { error } = await client.from("tasks").update({ status: t.status }).eq("id", id);
+        if(error){ t.status = prev; refreshViews(); toast("Couldn't save: "+error.message); }
+      }catch(e){ t.status = prev; refreshViews(); toast("Couldn't save that change."); }
+    }
+
+    function toast(msg){
+      let n=el("toast"); if(!n){ n=document.createElement("div"); n.id="toast"; document.body.appendChild(n); }
+      n.textContent=msg; n.classList.add("show");
+      clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>n.classList.remove("show"),2800);
     }
 
     // Calendar
