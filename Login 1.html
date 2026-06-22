@@ -182,7 +182,7 @@
 
   /* Notes & folders */
   .notes-panel{margin-top:16px;}
-  .nf-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .nf-grid{display:grid;grid-template-columns:248px minmax(0,1fr);gap:20px;align-items:start;}
   .nf-sub{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
   .nf-add{display:flex;gap:6px;margin-bottom:12px;}
   .nf-add input[type=text], .fadd-input{flex:1;min-width:0;padding:9px 11px;font-size:14px;background:var(--bg-2);border:1px solid #2a3450;border-radius:9px;color:var(--ink);font-family:var(--body);}
@@ -209,8 +209,58 @@
   .check.sm svg{width:11px;height:11px;}
   .fadd{display:flex;gap:6px;}
   .empty.mini{padding:15px;font-size:12.5px;}
+
+  /* Cellular matrix */
+  .space{position:relative;overflow:hidden;background:#070a12;border:1px solid #141d33;border-radius:16px;padding:14px;min-height:248px;}
+  .stars{position:absolute;inset:0;pointer-events:none;background-repeat:no-repeat;background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 70% 18%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 42% 72%,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 55% 45%,rgba(255,255,255,.22),transparent),radial-gradient(1px 1px at 14% 82%,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 91% 88%,rgba(255,255,255,.28),transparent),radial-gradient(1px 1px at 32% 12%,rgba(255,255,255,.25),transparent),radial-gradient(1px 1px at 63% 90%,rgba(255,255,255,.25),transparent);}
+  .tw{position:absolute;width:2px;height:2px;border-radius:50%;background:#cfe9ff;pointer-events:none;animation:tw 3.2s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.12}50%{opacity:.85}}
+  .matrix{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+  .cell{position:relative;border-radius:34px 30px 32px 30px / 30px 34px 30px 32px;padding:13px 11px 15px;min-height:150px;cursor:pointer;overflow:hidden;}
+  .cell:active{transform:scale(.99);}
+  .cell h4{margin:0;text-align:center;font-size:13.5px;font-weight:600;color:#eaf0fb;}
+  .cnt{display:block;text-align:center;font-family:var(--mono);font-size:12px;margin:3px 0 11px;color:rgb(var(--c));}
+  .hexwrap{display:flex;flex-direction:column;align-items:flex-start;padding-left:12px;position:relative;z-index:1;}
+  .hexrow{display:flex;gap:6px;}
+  .hexrow.off{margin-left:18px;}
+  .hexrow + .hexrow{margin-top:-5px;}
+  .hex{width:27px;height:31px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);cursor:pointer;}
+  .hex.lit{background:radial-gradient(circle at 40% 30%,rgba(255,255,255,.6),rgb(var(--c)) 58%);box-shadow:0 0 11px 1px rgba(var(--c),.85);}
+  .hex.dim{background:rgba(var(--c),.15);}
+  .hex.ignite{animation:ignite .42s ease-out;}
+  @keyframes ignite{0%{transform:scale(.4);filter:brightness(2.2)}60%{transform:scale(1.16)}100%{transform:scale(1);filter:none}}
+  .cell.core{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border:1px solid rgba(79,209,197,.4);background:radial-gradient(125% 120% at 50% -10%,rgba(79,209,197,.16),rgba(79,209,197,.03) 62%,rgba(7,10,18,.25));}
+  .orb{width:60px;height:60px;border-radius:50%;margin-top:6px;background:radial-gradient(circle at 50% 38%,#c8f6ee,#4fd1c5 46%,rgba(79,209,197,.12) 76%);box-shadow:0 0 26px 3px rgba(79,209,197,.45);animation:corepulse 3.6s ease-in-out infinite;}
+  @keyframes corepulse{0%,100%{box-shadow:0 0 24px 3px rgba(79,209,197,.4);transform:scale(1)}50%{box-shadow:0 0 42px 9px rgba(79,209,197,.62);transform:scale(1.04)}}
+  .pct{font-family:var(--mono);font-size:12px;color:#4fd1c5;margin-top:11px;}
+  .addcell{display:flex;align-items:center;justify-content:center;border:1px dashed rgba(138,150,179,.4);background:rgba(138,150,179,.04);color:#8a96b3;}
+  .plus{font-size:28px;font-weight:300;line-height:1;}
+  .ov{position:absolute;inset:0;background:rgba(5,8,15,.82);display:flex;align-items:flex-start;justify-content:center;border-radius:16px;padding:16px;z-index:6;overflow:auto;}
+  .ovcard{width:100%;max-width:330px;background:#0e1424;border:1px solid rgba(var(--c),.45);border-radius:15px;padding:15px;box-shadow:0 0 32px rgba(var(--c),.22);}
+  .ovhead{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+  .ovdot{width:10px;height:10px;border-radius:50%;flex:none;}
+  .ovname{flex:1;font-size:15px;font-weight:600;color:#eaf0fb;}
+  .ovcat{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;}
+  .ovx{background:none;border:none;color:#8a96b3;font-size:18px;cursor:pointer;padding:0 2px;}
+  .ovlist{display:flex;flex-direction:column;gap:7px;margin-bottom:12px;max-height:200px;overflow:auto;}
+  .ovitem{display:flex;align-items:center;gap:9px;font-size:13px;}
+  .ovchk{width:18px;height:18px;border-radius:5px;flex:none;cursor:pointer;border:1px solid rgba(var(--c),.5);}
+  .ovchk.on{background:rgb(var(--c));border-color:rgb(var(--c));box-shadow:0 0 8px rgba(var(--c),.7);}
+  .ovt{flex:1;color:#eaf0fb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ovt.done{text-decoration:line-through;color:#8a96b3;}
+  .ovadd{display:flex;gap:6px;margin-bottom:12px;}
+  .ovadd input, .ovcard input, .ovcard select{flex:1;min-width:0;background:#0a0e1a;border:1px solid #2a3450;border-radius:9px;color:#eaf0fb;padding:9px 11px;font-size:14px;font-family:var(--body);}
+  .ovaddbtn{flex:none;background:rgba(var(--c),.16);border:1px solid rgba(var(--c),.5);color:rgb(var(--c));border-radius:9px;padding:9px 13px;font-size:13px;font-weight:600;cursor:pointer;}
+  .ovtitle{font-size:15px;font-weight:600;color:#eaf0fb;margin-bottom:12px;}
+  .ovcard input, .ovcard select{margin-bottom:9px;width:100%;}
+  .ovbtns{display:flex;gap:8px;}
+  .ovcancel{background:none;border:1px solid #2a3450;color:#8a96b3;border-radius:9px;padding:9px 14px;font-size:13px;cursor:pointer;}
+  .ovdel{background:none;border:1px solid rgba(244,114,182,.4);color:#f472b6;border-radius:9px;padding:7px 12px;font-size:12px;cursor:pointer;}
+  @media (prefers-reduced-motion: reduce){ .orb,.tw,.hex.ignite{animation:none!important;} }
+
+  @media(max-width:880px){ .matrix{grid-template-columns:repeat(2,1fr);} }
   @media(max-width:760px){ .nf-grid{grid-template-columns:1fr;gap:18px;} }
-  @media(min-width:960px){ .folders-list{columns:2;column-gap:16px;} }
+  @media(max-width:440px){ .matrix{grid-template-columns:1fr;} }
 
   /* Planned */
   .planned-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:16px;}
@@ -312,7 +362,7 @@
     <div class="panel notes-panel">
       <div class="panel-head"><h2>Notes &amp; folders</h2><span class="hint">Just yours &middot; not from scans</span></div>
       <div class="nf-grid">
-        <div class="nf-col">
+        <div class="nf-col notes-rail">
           <div class="nf-sub">Quick notes</div>
           <div class="nf-add">
             <input type="text" id="note-input" placeholder="Jot a quick note&hellip;" autocomplete="off">
@@ -320,14 +370,15 @@
           </div>
           <div id="notes-list" class="notes-list"></div>
         </div>
-        <div class="nf-col">
-          <div class="nf-sub">Folders</div>
-          <div class="nf-add">
-            <input type="text" id="folder-name" placeholder="New folder, e.g. Homework" autocomplete="off">
-            <select id="folder-cat" aria-label="Folder category"></select>
-            <button id="folder-add">Add</button>
+        <div class="nf-col matrix-col">
+          <div class="nf-sub">Cellular matrix &middot; tap a hex to complete, tap a cell to open</div>
+          <div class="space" id="space">
+            <div class="stars"></div>
+            <span class="tw" style="left:24%;top:18%"></span>
+            <span class="tw" style="left:80%;top:36%;animation-delay:1.1s"></span>
+            <span class="tw" style="left:46%;top:84%;animation-delay:2.2s"></span>
+            <div class="matrix" id="matrix"></div>
           </div>
-          <div id="folders-list" class="folders-list"></div>
         </div>
       </div>
     </div>
@@ -582,10 +633,11 @@
     /* ---------- Notes & folders (own data, separate tables) ---------- */
     let notes=[], folders=[], folderItems=[];
 
-    function fillCats(){
-      const sel=el("folder-cat"); if(!sel) return;
-      sel.innerHTML='<option value="">No category</option>'+Object.keys(CATEGORY_META).map(c=>'<option value="'+c+'">'+CATEGORY_META[c].label+'</option>').join("");
-    }
+    let justLit=null, cellRedraw=null, openFolderId=null;
+    const CORE_RGB="79,209,197";
+
+    function rgbOf(cat){ const h=catMeta(cat).color.replace("#",""); const n=parseInt(h,16); return ((n>>16)&255)+","+((n>>8)&255)+","+(n&255); }
+    function catOptions(sel){ return '<option value="">No category</option>'+Object.keys(CATEGORY_META).map(c=>'<option value="'+c+'"'+(c===sel?" selected":"")+'>'+CATEGORY_META[c].label+'</option>').join(""); }
 
     async function loadExtras(){
       if(!client) return;
@@ -598,11 +650,11 @@
         const err=nRes.error||fRes.error||iRes.error;
         if(err){
           el("notes-list").innerHTML='<div class="empty mini">Run the one-time SQL setup to switch this on.</div>';
-          el("folders-list").innerHTML='';
+          if(el("matrix")) el("matrix").innerHTML='';
           return;
         }
         notes=nRes.data||[]; folders=fRes.data||[]; folderItems=iRes.data||[];
-        renderNotes(); renderFolders();
+        renderNotes(); renderMatrix();
       }catch(e){ toast("Couldn't load notes / folders."); }
     }
 
@@ -635,80 +687,127 @@
       catch(e){ notes=prev; renderNotes(); toast("Couldn't delete note."); }
     }
 
-    function renderFolders(){
-      const host=el("folders-list"); if(!host) return;
-      if(!folders.length){ host.innerHTML='<div class="empty mini">No folders yet. Make one above \u2014 e.g. \u201cHomework\u201d set to Class.</div>'; return; }
-      host.innerHTML=folders.map(f=>{
-        const m=catMeta(f.category);
-        const items=folderItems.filter(it=>it.folder_id===f.id);
-        const itemsHtml=items.length ? items.map(it=>
-          '<div class="fitem'+(it.done?' done':'')+'"><button class="check sm" data-item="'+it.id+'" aria-pressed="'+it.done+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button><span class="fitem-t">'+escapeHtml(it.title)+'</span><button class="del" data-delitem="'+it.id+'" aria-label="Delete item">&times;</button></div>'
-        ).join("") : '<div class="fitem-empty">No items yet.</div>';
-        return '<div class="folder">'
-          +'<div class="folder-head"><span class="fdot" style="background:'+m.color+'"></span><span class="fname">'+escapeHtml(f.name)+'</span>'
-            +(f.category?'<span class="fcat" style="color:'+m.color+'">'+m.label+'</span>':'')
-            +'<span class="fcount">'+items.length+'</span><button class="del" data-delfolder="'+f.id+'" aria-label="Delete folder">&times;</button></div>'
-          +'<div class="fitems">'+itemsHtml+'</div>'
-          +'<div class="fadd"><input type="text" class="fadd-input" data-folder="'+f.id+'" placeholder="Add to '+escapeHtml(f.name)+'\u2026" autocomplete="off"><button class="fadd-btn" data-folderadd="'+f.id+'">Add</button></div>'
-          +'</div>';
-      }).join("");
-      host.querySelectorAll(".check[data-item]").forEach(b=>b.addEventListener("click",()=>toggleItem(b.dataset.item)));
-      host.querySelectorAll(".del[data-delitem]").forEach(b=>b.addEventListener("click",()=>deleteItem(b.dataset.delitem)));
-      host.querySelectorAll(".del[data-delfolder]").forEach(b=>b.addEventListener("click",()=>deleteFolder(b.dataset.delfolder)));
-      host.querySelectorAll(".fadd-btn[data-folderadd]").forEach(b=>b.addEventListener("click",()=>addItem(b.dataset.folderadd)));
-      host.querySelectorAll(".fadd-input[data-folder]").forEach(inp=>inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); addItem(inp.dataset.folder); } }));
+    function itemsOf(f){ return folderItems.filter(it=>String(it.folder_id)===String(f.id)); }
+
+    function hexesHtml(f){
+      const items=itemsOf(f);
+      let h='<div class="hexwrap">';
+      for(let i=0;i<items.length;i+=3){
+        const row=items.slice(i,i+3);
+        h+='<div class="hexrow'+((i/3)%2?" off":"")+'">'+row.map(it=>{ const key=f.id+":"+it.id; const ig=(it.done&&key===justLit)?" ignite":""; return '<span class="hex '+(it.done?"lit":"dim")+ig+'" data-item="'+it.id+'"></span>'; }).join("")+'</div>';
+      }
+      return h+"</div>";
     }
 
-    async function addFolder(){
-      const nameEl=el("folder-name"); if(!nameEl||!client) return;
-      const name=nameEl.value.trim(); if(!name) return;
-      const category=el("folder-cat").value||null;
-      nameEl.value=""; nameEl.focus();
-      const temp={ id:"tmp-"+Date.now(), name, category };
-      folders.push(temp); renderFolders();
+    function cellStyle(f){
+      const c=rgbOf(f.category); const items=itemsOf(f); const t=items.length; const d=items.filter(x=>x.done).length; const frac=t?d/t:0;
+      const glow=Math.round(14+frac*30), ga=(0.09+frac*0.24).toFixed(3), ea=(0.05+frac*0.15).toFixed(3), ba=(0.26+frac*0.42).toFixed(3), fa=(0.09+frac*0.17).toFixed(3);
+      return "--c:"+c+";border:1px solid rgba("+c+","+ba+");box-shadow:0 0 "+glow+"px rgba("+c+","+ga+"), inset 0 0 34px rgba("+c+","+ea+"), inset 0 1px 0 rgba(255,255,255,.05);background:radial-gradient(125% 120% at 50% -10%, rgba("+c+","+fa+"), rgba("+c+",.03) 62%, rgba(7,10,18,.25))";
+    }
+
+    function folderCellHtml(f){
+      const items=itemsOf(f), d=items.filter(x=>x.done).length;
+      return '<div class="cell" style="'+cellStyle(f)+'" data-open="'+f.id+'"><h4>'+escapeHtml(f.name)+'</h4><span class="cnt">'+d+" / "+items.length+'</span>'+hexesHtml(f)+'</div>';
+    }
+
+    function coreCellHtml(){
+      const total=folderItems.length, done=folderItems.filter(x=>x.done).length, pct=total?Math.round(done/total*100):0;
+      return '<div class="cell core"><h4>YOU</h4><span class="cnt" style="color:#9fe9df">Quarter Core</span><div class="orb"></div><div class="pct">'+pct+'% complete</div></div>';
+    }
+
+    function renderMatrix(){
+      const host=el("matrix"); if(!host) return;
+      const w=host.clientWidth||620;
+      const cols=Math.max(1, Math.min(3, Math.floor(w/200)));
+      const n=folders.length, totalNoAdd=n+1, rows=Math.ceil(totalNoAdd/cols);
+      let coreIndex=0; if(cols>=3 && rows>=3){ coreIndex=Math.floor((rows-1)/2)*cols+Math.floor((cols-1)/2); }
+      let fi=0, html="";
+      for(let i=0;i<totalNoAdd;i++){ html += (i===coreIndex) ? coreCellHtml() : folderCellHtml(folders[fi++]); }
+      html+='<div class="cell addcell" data-add="1"><span class="plus">+</span></div>';
+      host.style.gridTemplateColumns="repeat("+cols+",1fr)";
+      host.innerHTML=html; justLit=null;
+      host.querySelectorAll(".hex[data-item]").forEach(h=>h.addEventListener("click",ev=>{ ev.stopPropagation(); toggleItem(h.dataset.item); }));
+      host.querySelectorAll("[data-open]").forEach(c=>c.addEventListener("click",()=>openCell(c.dataset.open)));
+      const addc=host.querySelector("[data-add]"); if(addc) addc.addEventListener("click",openCreate);
+    }
+
+    function openCell(id){
+      const f=folders.find(x=>String(x.id)===String(id)); if(!f) return; const c=rgbOf(f.category);
+      const ov=document.createElement("div"); ov.className="ov";
+      ov.innerHTML='<div class="ovcard" style="--c:'+c+'"><div class="ovhead"><span class="ovdot" style="background:rgb('+c+')"></span><strong class="ovname">'+escapeHtml(f.name)+'</strong>'+(f.category?'<span class="ovcat" style="color:rgb('+c+')">'+catMeta(f.category).label+'</span>':'')+'<button class="ovx" data-close aria-label="Close">&times;</button></div><div id="ovlist" class="ovlist"></div><div class="ovadd"><input id="ovin" placeholder="Add item\u2026" autocomplete="off"><button class="ovaddbtn" data-additem>Add</button></div><button class="ovdel" data-delfolder>Delete cell</button></div>';
+      el("space").appendChild(ov); openFolderId=f.id;
+      function redraw(){
+        const cur=folders.find(x=>String(x.id)===String(f.id)); if(!cur){ close(); return; }
+        const L=ov.querySelector("#ovlist"), its=itemsOf(cur);
+        L.innerHTML = its.length ? its.map(it=>'<div class="ovitem"><span class="ovchk'+(it.done?" on":"")+'" data-tog="'+it.id+'" style="--c:'+c+'"></span><span class="ovt'+(it.done?" done":"")+'">'+escapeHtml(it.title)+'</span><button class="del" data-del="'+it.id+'" aria-label="Delete">&times;</button></div>').join("") : '<div class="fitem-empty">No items yet. Add one below.</div>';
+        L.querySelectorAll("[data-tog]").forEach(e=>e.addEventListener("click",()=>toggleItem(e.dataset.tog)));
+        L.querySelectorAll("[data-del]").forEach(e=>e.addEventListener("click",()=>deleteItem(e.dataset.del)));
+      }
+      function close(){ ov.remove(); cellRedraw=null; openFolderId=null; }
+      cellRedraw=redraw; redraw();
+      ov.querySelector("[data-close]").addEventListener("click",close);
+      ov.addEventListener("click",ev=>{ if(ev.target===ov) close(); });
+      const addit=()=>{ const inp=ov.querySelector("#ovin"); const v=inp.value.trim(); if(!v)return; addItemTo(f.id,v); inp.value=""; inp.focus(); };
+      ov.querySelector("[data-additem]").addEventListener("click",addit);
+      ov.querySelector("#ovin").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); addit(); } });
+      ov.querySelector("[data-delfolder]").addEventListener("click",()=>{ deleteFolder(f.id); close(); });
+    }
+
+    function openCreate(){
+      const ov=document.createElement("div"); ov.className="ov";
+      ov.innerHTML='<div class="ovcard" style="--c:'+CORE_RGB+'"><div class="ovtitle">New cell</div><input id="nfn" placeholder="Folder name" autocomplete="off"><select id="nfc">'+catOptions("")+'</select><div class="ovbtns"><button class="ovaddbtn" data-create>Create</button><button class="ovcancel" data-close>Cancel</button></div></div>';
+      el("space").appendChild(ov);
+      function close(){ ov.remove(); }
+      ov.querySelector("[data-close]").addEventListener("click",close);
+      ov.addEventListener("click",ev=>{ if(ev.target===ov) close(); });
+      const create=()=>{ const n=ov.querySelector("#nfn").value.trim(); if(!n)return; const cat=ov.querySelector("#nfc").value||null; close(); createFolder(n,cat); };
+      ov.querySelector("[data-create]").addEventListener("click",create);
+      ov.querySelector("#nfn").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); create(); } });
+    }
+
+    async function createFolder(name, category){
+      if(!client) return;
+      const temp={ id:"tmp-"+Date.now(), name, category }; folders.push(temp); renderMatrix();
       try{
         const { data, error }=await client.from("folders").insert({ name, category }).select("id, name, category, created_at").single();
-        if(error){ folders=folders.filter(f=>f.id!==temp.id); renderFolders(); toast("Couldn't create folder: "+error.message); return; }
-        const i=folders.findIndex(f=>f.id===temp.id); if(i>=0) folders[i]=data;
-        swapAttr("data-delfolder", temp.id, data.id); swapAttr("data-folder", temp.id, data.id); swapAttr("data-folderadd", temp.id, data.id);
-      }catch(e){ folders=folders.filter(f=>f.id!==temp.id); renderFolders(); toast("Couldn't create folder."); }
+        if(error){ folders=folders.filter(f=>f.id!==temp.id); renderMatrix(); toast("Couldn't create folder: "+error.message); return; }
+        const i=folders.findIndex(f=>f.id===temp.id); if(i>=0) folders[i]=data; renderMatrix();
+      }catch(e){ folders=folders.filter(f=>f.id!==temp.id); renderMatrix(); toast("Couldn't create folder."); }
     }
 
     async function deleteFolder(id){
       const pf=folders.slice(), pi=folderItems.slice();
-      folders=folders.filter(f=>f.id!==id); folderItems=folderItems.filter(it=>it.folder_id!==id); renderFolders();
-      try{ const { error }=await client.from("folders").delete().eq("id",id); if(error){ folders=pf; folderItems=pi; renderFolders(); toast("Couldn't delete folder: "+error.message); } }
-      catch(e){ folders=pf; folderItems=pi; renderFolders(); toast("Couldn't delete folder."); }
+      folders=folders.filter(f=>String(f.id)!==String(id)); folderItems=folderItems.filter(it=>String(it.folder_id)!==String(id)); renderMatrix();
+      try{ const { error }=await client.from("folders").delete().eq("id",id); if(error){ folders=pf; folderItems=pi; renderMatrix(); toast("Couldn't delete folder: "+error.message); } }
+      catch(e){ folders=pf; folderItems=pi; renderMatrix(); toast("Couldn't delete folder."); }
     }
 
-    async function addItem(folderId){
-      const host=el("folders-list");
-      const inp=host.querySelector('.fadd-input[data-folder="'+folderId+'"]');
-      if(!inp||!client) return;
-      const title=inp.value.trim(); if(!title) return;
+    async function addItemTo(folderId, title){
+      if(!client) return;
       const temp={ id:"tmp-"+Date.now(), folder_id:folderId, title, done:false };
-      folderItems.push(temp); renderFolders();
-      const again=host.querySelector('.fadd-input[data-folder="'+folderId+'"]'); if(again) again.focus();
+      folderItems.push(temp); renderMatrix(); if(cellRedraw) cellRedraw();
       try{
         const { data, error }=await client.from("folder_items").insert({ folder_id:folderId, title }).select("id, folder_id, title, done, created_at").single();
-        if(error){ folderItems=folderItems.filter(x=>x.id!==temp.id); renderFolders(); toast("Couldn't add item: "+error.message); return; }
-        const i=folderItems.findIndex(x=>x.id===temp.id); if(i>=0) folderItems[i]=data;
-        swapAttr("data-item", temp.id, data.id); swapAttr("data-delitem", temp.id, data.id);
-      }catch(e){ folderItems=folderItems.filter(x=>x.id!==temp.id); renderFolders(); toast("Couldn't add item."); }
+        if(error){ folderItems=folderItems.filter(x=>x.id!==temp.id); renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't add item: "+error.message); return; }
+        const i=folderItems.findIndex(x=>x.id===temp.id); if(i>=0) folderItems[i]=data; renderMatrix(); if(cellRedraw)cellRedraw();
+      }catch(e){ folderItems=folderItems.filter(x=>x.id!==temp.id); renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't add item."); }
     }
 
     async function toggleItem(id){
       const it=folderItems.find(x=>String(x.id)===String(id)); if(!it||!client) return;
-      const prev=it.done; it.done=!prev; renderFolders();
-      try{ const { error }=await client.from("folder_items").update({ done:it.done }).eq("id",id); if(error){ it.done=prev; renderFolders(); toast("Couldn't update: "+error.message); } }
-      catch(e){ it.done=prev; renderFolders(); toast("Couldn't update item."); }
+      const prev=it.done; it.done=!prev; justLit=it.done?(it.folder_id+":"+it.id):null;
+      renderMatrix(); if(cellRedraw)cellRedraw();
+      try{ const { error }=await client.from("folder_items").update({ done:it.done }).eq("id",id); if(error){ it.done=prev; renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't update: "+error.message); } }
+      catch(e){ it.done=prev; renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't update item."); }
     }
 
     async function deleteItem(id){
-      const prev=folderItems.slice(); folderItems=folderItems.filter(x=>x.id!==id); renderFolders();
-      try{ const { error }=await client.from("folder_items").delete().eq("id",id); if(error){ folderItems=prev; renderFolders(); toast("Couldn't delete: "+error.message); } }
-      catch(e){ folderItems=prev; renderFolders(); toast("Couldn't delete item."); }
+      const prev=folderItems.slice(); folderItems=folderItems.filter(x=>String(x.id)!==String(id)); renderMatrix(); if(cellRedraw)cellRedraw();
+      try{ const { error }=await client.from("folder_items").delete().eq("id",id); if(error){ folderItems=prev; renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't delete: "+error.message); } }
+      catch(e){ folderItems=prev; renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't delete item."); }
     }
+
+    let __mxResize; window.addEventListener("resize",()=>{ clearTimeout(__mxResize); __mxResize=setTimeout(()=>{ if(el("matrix")) renderMatrix(); },180); });
     /* ---------- end notes & folders ---------- */
 
     async function toggleDone(id){
@@ -812,7 +911,6 @@
       el("who").textContent = session.user.email || session.user.id;
       tickClock();
       if(!window.__clockTimer) window.__clockTimer=setInterval(tickClock,1000);
-      fillCats();
       await loadTasks();
       await loadExtras();
     }
@@ -834,8 +932,6 @@
 
     el("note-add").addEventListener("click", addNote);
     el("note-input").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addNote(); } });
-    el("folder-add").addEventListener("click", addFolder);
-    el("folder-name").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addFolder(); } });
 
     if(client){
       client.auth.getSession().then(({data})=>{ if(data.session) showDash(data.session); });
