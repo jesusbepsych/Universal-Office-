@@ -112,8 +112,10 @@
   .check svg{width:13px;height:13px;}
   .check:hover{border-color:#2a3450;}
   .check[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#05210f;box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 28%,transparent), 0 0 14px color-mix(in srgb,var(--green) 55%,transparent);}
-  .task.done{opacity:.42;}
-  .task.done .task-title .t{text-decoration:line-through;}
+  .task.done{animation:none;}
+  .task.done .bar{opacity:.22;filter:grayscale(.7);}
+  .task.done .task-main{opacity:.4;filter:grayscale(.75) blur(1.1px);}
+  .task.done .task-title .t{text-decoration:line-through;text-decoration-color:var(--muted);}
   .task.done .when,.task.done .rel{text-decoration:line-through;}
   .task-main{min-width:0;flex:1;}
   .task-title{font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:7px;}
@@ -191,6 +193,7 @@
   #toast.show{opacity:1;transform:translate(-50%,0);}
 
   @keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  @keyframes fogin{from{filter:grayscale(0) blur(0);opacity:.95;}to{filter:grayscale(.8) blur(1px);opacity:.5;}}
 
   @media (max-width:900px){
     .ribbon{grid-template-columns:repeat(2,1fr);}
@@ -198,6 +201,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     .task{animation:none;}
+    .task.done .task-main{animation:none;}
     .loadfill{transition:none;}
   }
 </style>
