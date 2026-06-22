@@ -180,6 +180,37 @@
   .gauge-status{font-family:var(--disp);font-size:15px;font-weight:600;display:block;}
   .gauge-sub{font-size:10.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
 
+  /* Notes & folders */
+  .notes-panel{margin-top:16px;}
+  .nf-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .nf-sub{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .nf-add{display:flex;gap:6px;margin-bottom:12px;}
+  .nf-add input[type=text], .fadd-input{flex:1;min-width:0;padding:9px 11px;font-size:14px;background:var(--bg-2);border:1px solid #2a3450;border-radius:9px;color:var(--ink);font-family:var(--body);}
+  .nf-add input:focus, .fadd-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(79,209,197,.13);}
+  #folder-cat{padding:9px 8px;background:var(--bg-2);border:1px solid #2a3450;border-radius:9px;color:var(--ink);font-size:12.5px;max-width:118px;font-family:var(--body);}
+  .nf-add button, .fadd-btn{padding:9px 14px;font-size:13px;font-weight:600;border-radius:9px;background:color-mix(in srgb,var(--teal) 16%, var(--panel));border:1px solid color-mix(in srgb,var(--teal) 45%, transparent);color:var(--teal);flex:none;}
+  .nf-add button:hover, .fadd-btn:hover{background:color-mix(in srgb,var(--teal) 26%, var(--panel));}
+  .note{display:flex;align-items:flex-start;gap:8px;background:var(--panel-2);border:1px solid var(--line-soft);border-radius:10px;padding:9px 11px;margin-bottom:7px;}
+  .note-body{font-size:13px;color:var(--ink);line-height:1.45;flex:1;white-space:pre-wrap;word-break:break-word;}
+  .del{background:none;border:none;color:var(--muted);font-size:18px;line-height:1;padding:0 3px;flex:none;cursor:pointer;}
+  .del:hover{color:var(--red);}
+  .folder{background:var(--panel-2);border:1px solid var(--line-soft);border-radius:12px;padding:11px 12px;margin-bottom:10px;}
+  .folder-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+  .fdot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .fname{font-family:var(--disp);font-size:13.5px;font-weight:600;color:var(--ink);}
+  .fcat{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;}
+  .fcount{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:auto;}
+  .fitems{display:flex;flex-direction:column;gap:6px;margin-bottom:9px;}
+  .fitem{display:flex;align-items:center;gap:8px;font-size:13px;}
+  .fitem-t{flex:1;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .fitem.done .fitem-t{text-decoration:line-through;color:var(--muted);opacity:.55;}
+  .fitem-empty{font-size:12px;color:var(--muted);padding:1px 2px;}
+  .check.sm{width:19px;height:19px;border-radius:6px;}
+  .check.sm svg{width:11px;height:11px;}
+  .fadd{display:flex;gap:6px;}
+  .empty.mini{padding:15px;font-size:12.5px;}
+  @media(max-width:760px){ .nf-grid{grid-template-columns:1fr;gap:18px;} }
+
   /* Planned */
   .planned-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:16px;}
   .planned{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden;}
@@ -277,6 +308,29 @@
       </div>
     </div>
 
+    <div class="panel notes-panel">
+      <div class="panel-head"><h2>Notes &amp; folders</h2><span class="hint">Just yours &middot; not from scans</span></div>
+      <div class="nf-grid">
+        <div class="nf-col">
+          <div class="nf-sub">Quick notes</div>
+          <div class="nf-add">
+            <input type="text" id="note-input" placeholder="Jot a quick note&hellip;" autocomplete="off">
+            <button id="note-add">Add</button>
+          </div>
+          <div id="notes-list" class="notes-list"></div>
+        </div>
+        <div class="nf-col">
+          <div class="nf-sub">Folders</div>
+          <div class="nf-add">
+            <input type="text" id="folder-name" placeholder="New folder, e.g. Homework" autocomplete="off">
+            <select id="folder-cat" aria-label="Folder category"></select>
+            <button id="folder-add">Add</button>
+          </div>
+          <div id="folders-list" class="folders-list"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="planned-grid">
       <div class="planned">
         <span class="badge">Preview</span>
@@ -291,11 +345,6 @@
         <span class="badge">Planned</span>
         <h3>Wage tracker</h3>
         <p>Tally hours and earnings across clinic, behavioral, and side-gig work, so you can see what the quarter is actually paying.</p>
-      </div>
-      <div class="planned">
-        <span class="badge">Planned</span>
-        <h3>Your own tasks &amp; notes</h3>
-        <p>Add tasks the scans can&rsquo;t see, drop notes on any item, and set reminders &mdash; on top of what email and calendar bring in.</p>
       </div>
     </div>
 
@@ -529,6 +578,138 @@
 
     function refreshViews(){ renderRibbon(false); renderGauge(); renderCalendar(); renderAgenda(); }
 
+    /* ---------- Notes & folders (own data, separate tables) ---------- */
+    let notes=[], folders=[], folderItems=[];
+
+    function fillCats(){
+      const sel=el("folder-cat"); if(!sel) return;
+      sel.innerHTML='<option value="">No category</option>'+Object.keys(CATEGORY_META).map(c=>'<option value="'+c+'">'+CATEGORY_META[c].label+'</option>').join("");
+    }
+
+    async function loadExtras(){
+      if(!client) return;
+      try{
+        const [nRes,fRes,iRes]=await Promise.all([
+          client.from("notes").select("id, body, created_at").order("created_at",{ascending:false}),
+          client.from("folders").select("id, name, category, created_at").order("created_at",{ascending:true}),
+          client.from("folder_items").select("id, folder_id, title, done, created_at").order("created_at",{ascending:true})
+        ]);
+        const err=nRes.error||fRes.error||iRes.error;
+        if(err){
+          el("notes-list").innerHTML='<div class="empty mini">Run the one-time SQL setup to switch this on.</div>';
+          el("folders-list").innerHTML='';
+          return;
+        }
+        notes=nRes.data||[]; folders=fRes.data||[]; folderItems=iRes.data||[];
+        renderNotes(); renderFolders();
+      }catch(e){ toast("Couldn't load notes / folders."); }
+    }
+
+    function swapAttr(name, oldv, newv){ document.querySelectorAll('['+name+'="'+oldv+'"]').forEach(e=>e.setAttribute(name,newv)); }
+
+    function renderNotes(){
+      const host=el("notes-list"); if(!host) return;
+      if(!notes.length){ host.innerHTML='<div class="empty mini">No notes yet. Jot something above.</div>'; return; }
+      host.innerHTML=notes.map(n=>'<div class="note"><span class="note-body">'+escapeHtml(n.body)+'</span><button class="del" data-note="'+n.id+'" aria-label="Delete note">&times;</button></div>').join("");
+      host.querySelectorAll(".del[data-note]").forEach(b=>b.addEventListener("click",()=>deleteNote(b.dataset.note)));
+    }
+
+    async function addNote(){
+      const inp=el("note-input"); if(!inp||!client) return;
+      const body=inp.value.trim(); if(!body) return;
+      inp.value=""; inp.focus();
+      const temp={ id:"tmp-"+Date.now(), body };
+      notes.unshift(temp); renderNotes();
+      try{
+        const { data, error }=await client.from("notes").insert({ body }).select("id, body, created_at").single();
+        if(error){ notes=notes.filter(x=>x.id!==temp.id); renderNotes(); toast("Couldn't save note: "+error.message); return; }
+        const i=notes.findIndex(x=>x.id===temp.id); if(i>=0) notes[i]=data;
+        swapAttr("data-note", temp.id, data.id);
+      }catch(e){ notes=notes.filter(x=>x.id!==temp.id); renderNotes(); toast("Couldn't save note."); }
+    }
+
+    async function deleteNote(id){
+      const prev=notes.slice(); notes=notes.filter(n=>n.id!==id); renderNotes();
+      try{ const { error }=await client.from("notes").delete().eq("id",id); if(error){ notes=prev; renderNotes(); toast("Couldn't delete: "+error.message); } }
+      catch(e){ notes=prev; renderNotes(); toast("Couldn't delete note."); }
+    }
+
+    function renderFolders(){
+      const host=el("folders-list"); if(!host) return;
+      if(!folders.length){ host.innerHTML='<div class="empty mini">No folders yet. Make one above \u2014 e.g. \u201cHomework\u201d set to Class.</div>'; return; }
+      host.innerHTML=folders.map(f=>{
+        const m=catMeta(f.category);
+        const items=folderItems.filter(it=>it.folder_id===f.id);
+        const itemsHtml=items.length ? items.map(it=>
+          '<div class="fitem'+(it.done?' done':'')+'"><button class="check sm" data-item="'+it.id+'" aria-pressed="'+it.done+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button><span class="fitem-t">'+escapeHtml(it.title)+'</span><button class="del" data-delitem="'+it.id+'" aria-label="Delete item">&times;</button></div>'
+        ).join("") : '<div class="fitem-empty">No items yet.</div>';
+        return '<div class="folder">'
+          +'<div class="folder-head"><span class="fdot" style="background:'+m.color+'"></span><span class="fname">'+escapeHtml(f.name)+'</span>'
+            +(f.category?'<span class="fcat" style="color:'+m.color+'">'+m.label+'</span>':'')
+            +'<span class="fcount">'+items.length+'</span><button class="del" data-delfolder="'+f.id+'" aria-label="Delete folder">&times;</button></div>'
+          +'<div class="fitems">'+itemsHtml+'</div>'
+          +'<div class="fadd"><input type="text" class="fadd-input" data-folder="'+f.id+'" placeholder="Add to '+escapeHtml(f.name)+'\u2026" autocomplete="off"><button class="fadd-btn" data-folderadd="'+f.id+'">Add</button></div>'
+          +'</div>';
+      }).join("");
+      host.querySelectorAll(".check[data-item]").forEach(b=>b.addEventListener("click",()=>toggleItem(b.dataset.item)));
+      host.querySelectorAll(".del[data-delitem]").forEach(b=>b.addEventListener("click",()=>deleteItem(b.dataset.delitem)));
+      host.querySelectorAll(".del[data-delfolder]").forEach(b=>b.addEventListener("click",()=>deleteFolder(b.dataset.delfolder)));
+      host.querySelectorAll(".fadd-btn[data-folderadd]").forEach(b=>b.addEventListener("click",()=>addItem(b.dataset.folderadd)));
+      host.querySelectorAll(".fadd-input[data-folder]").forEach(inp=>inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); addItem(inp.dataset.folder); } }));
+    }
+
+    async function addFolder(){
+      const nameEl=el("folder-name"); if(!nameEl||!client) return;
+      const name=nameEl.value.trim(); if(!name) return;
+      const category=el("folder-cat").value||null;
+      nameEl.value=""; nameEl.focus();
+      const temp={ id:"tmp-"+Date.now(), name, category };
+      folders.push(temp); renderFolders();
+      try{
+        const { data, error }=await client.from("folders").insert({ name, category }).select("id, name, category, created_at").single();
+        if(error){ folders=folders.filter(f=>f.id!==temp.id); renderFolders(); toast("Couldn't create folder: "+error.message); return; }
+        const i=folders.findIndex(f=>f.id===temp.id); if(i>=0) folders[i]=data;
+        swapAttr("data-delfolder", temp.id, data.id); swapAttr("data-folder", temp.id, data.id); swapAttr("data-folderadd", temp.id, data.id);
+      }catch(e){ folders=folders.filter(f=>f.id!==temp.id); renderFolders(); toast("Couldn't create folder."); }
+    }
+
+    async function deleteFolder(id){
+      const pf=folders.slice(), pi=folderItems.slice();
+      folders=folders.filter(f=>f.id!==id); folderItems=folderItems.filter(it=>it.folder_id!==id); renderFolders();
+      try{ const { error }=await client.from("folders").delete().eq("id",id); if(error){ folders=pf; folderItems=pi; renderFolders(); toast("Couldn't delete folder: "+error.message); } }
+      catch(e){ folders=pf; folderItems=pi; renderFolders(); toast("Couldn't delete folder."); }
+    }
+
+    async function addItem(folderId){
+      const host=el("folders-list");
+      const inp=host.querySelector('.fadd-input[data-folder="'+folderId+'"]');
+      if(!inp||!client) return;
+      const title=inp.value.trim(); if(!title) return;
+      const temp={ id:"tmp-"+Date.now(), folder_id:folderId, title, done:false };
+      folderItems.push(temp); renderFolders();
+      const again=host.querySelector('.fadd-input[data-folder="'+folderId+'"]'); if(again) again.focus();
+      try{
+        const { data, error }=await client.from("folder_items").insert({ folder_id:folderId, title }).select("id, folder_id, title, done, created_at").single();
+        if(error){ folderItems=folderItems.filter(x=>x.id!==temp.id); renderFolders(); toast("Couldn't add item: "+error.message); return; }
+        const i=folderItems.findIndex(x=>x.id===temp.id); if(i>=0) folderItems[i]=data;
+        swapAttr("data-item", temp.id, data.id); swapAttr("data-delitem", temp.id, data.id);
+      }catch(e){ folderItems=folderItems.filter(x=>x.id!==temp.id); renderFolders(); toast("Couldn't add item."); }
+    }
+
+    async function toggleItem(id){
+      const it=folderItems.find(x=>String(x.id)===String(id)); if(!it||!client) return;
+      const prev=it.done; it.done=!prev; renderFolders();
+      try{ const { error }=await client.from("folder_items").update({ done:it.done }).eq("id",id); if(error){ it.done=prev; renderFolders(); toast("Couldn't update: "+error.message); } }
+      catch(e){ it.done=prev; renderFolders(); toast("Couldn't update item."); }
+    }
+
+    async function deleteItem(id){
+      const prev=folderItems.slice(); folderItems=folderItems.filter(x=>x.id!==id); renderFolders();
+      try{ const { error }=await client.from("folder_items").delete().eq("id",id); if(error){ folderItems=prev; renderFolders(); toast("Couldn't delete: "+error.message); } }
+      catch(e){ folderItems=prev; renderFolders(); toast("Couldn't delete item."); }
+    }
+    /* ---------- end notes & folders ---------- */
+
     async function toggleDone(id){
       const t = allTasks.find(x=>String(x.id)===String(id));
       if(!t || !client) return;
@@ -630,7 +811,9 @@
       el("who").textContent = session.user.email || session.user.id;
       tickClock();
       if(!window.__clockTimer) window.__clockTimer=setInterval(tickClock,1000);
+      fillCats();
       await loadTasks();
+      await loadExtras();
     }
 
     el("send-btn").addEventListener("click", async ()=>{
@@ -646,7 +829,12 @@
       finally{ btn.disabled=false; }
     });
     el("logout-btn").addEventListener("click", async ()=>{ if(!client)return; await client.auth.signOut(); showLogin("Signed out.",null); });
-    el("refresh-btn").addEventListener("click", ()=> loadTasks());
+    el("refresh-btn").addEventListener("click", ()=>{ loadTasks(); loadExtras(); });
+
+    el("note-add").addEventListener("click", addNote);
+    el("note-input").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addNote(); } });
+    el("folder-add").addEventListener("click", addFolder);
+    el("folder-name").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addFolder(); } });
 
     if(client){
       client.auth.getSession().then(({data})=>{ if(data.session) showDash(data.session); });
