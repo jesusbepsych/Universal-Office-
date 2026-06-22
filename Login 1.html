@@ -173,6 +173,13 @@
   .loadfill{height:100%;border-radius:6px;background:var(--cc,var(--slate));width:0;transition:width .9s cubic-bezier(.2,.7,.2,1);}
   .loadrow .lval{font-family:var(--mono);font-size:12px;color:var(--muted);width:24px;text-align:right;flex:none;}
 
+  /* Weekly progress gauge */
+  .gauge-svg{display:block;width:100%;max-width:268px;height:auto;margin:2px auto 0;}
+  .gauge-num{font-family:var(--mono);font-size:34px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .gauge-cap{text-align:center;margin-top:4px;}
+  .gauge-status{font-family:var(--disp);font-size:15px;font-weight:600;display:block;}
+  .gauge-sub{font-size:10.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+
   /* Planned */
   .planned-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:16px;}
   .planned{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden;}
@@ -262,10 +269,10 @@
 
         <div class="panel">
           <div class="panel-head">
-            <h2>Load by category</h2>
-            <span class="hint" id="load-hint"></span>
+            <h2>This week&rsquo;s progress</h2>
+            <span class="hint" id="gauge-hint"></span>
           </div>
-          <div id="loadbars"></div>
+          <div id="gauge"></div>
         </div>
       </div>
     </div>
@@ -308,7 +315,7 @@
     const el = (id) => document.getElementById(id);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const TZ = "America/Los_Angeles";
-    const PER_PAGE = 8;
+    const PER_PAGE = 7;
 
     const CATEGORY_META = {
       "clinic-work":     { label:"Clinic",     color:"#2fd6b0" },
@@ -377,7 +384,7 @@
         allTasks = data || [];
         activeTier="today"; activeFilter="all"; currentPage=1; selectedDay=null; calYear=null; calMonth=null;
         buildByDay();
-        renderRibbon(true); renderFilters(); renderLoadBars(); renderFooter(); renderCalendar(); renderAgenda();
+        renderRibbon(true); renderFilters(); renderGauge(); renderFooter(); renderCalendar(); renderAgenda();
       }catch(e){ el("agenda").innerHTML='<div class="empty">Unexpected error: '+(e&&e.message?e.message:e)+'</div>'; }
     }
 
@@ -460,15 +467,56 @@
       el("agenda").querySelectorAll(".check").forEach(b=>b.addEventListener("click",()=>toggleDone(b.dataset.id)));
     }
 
-    function renderLoadBars(){
-      const counts={}; allTasks.forEach(t=>{ if(t.status==="done")return; const c=t.category||"other"; counts[c]=(counts[c]||0)+1; });
-      const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-      const max=entries.length?entries[0][1]:1;
-      el("load-hint").textContent=entries.length+(entries.length===1?" type":" types");
-      el("loadbars").innerHTML=entries.map(([c,n])=>{ const m=catMeta(c);
-        return '<div class="loadrow"><div class="lname"><span class="dot" style="--cc:'+m.color+'"></span>'+m.label+'</div><div class="loadtrack"><div class="loadfill" style="--cc:'+m.color+'" data-w="'+Math.round(n/max*100)+'"></div></div><div class="lval">'+n+'</div></div>';
-      }).join("")||'<div class="empty">No categories yet.</div>';
-      requestAnimationFrame(()=>{ document.querySelectorAll(".loadfill").forEach(f=>{ f.style.width=f.dataset.w+"%"; }); });
+    function weekRange(today){
+      const d=new Date(today+"T12:00:00Z");
+      const wd=d.getUTCDay();
+      const start=new Date(d); start.setUTCDate(d.getUTCDate()-wd);
+      const end=new Date(start); end.setUTCDate(start.getUTCDate()+6);
+      return { start:start.toISOString().slice(0,10), end:end.toISOString().slice(0,10) };
+    }
+    function gaugeColor(p){
+      const stops=[[0,[255,85,85]],[0.30,[255,159,67]],[0.55,[244,208,63]],[0.78,[163,230,53]],[1,[47,214,176]]];
+      const x=Math.max(0,Math.min(1,p/100));
+      for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i],f=(x-a[0])/(b[0]-a[0]); const c=a[1].map((v,k)=>Math.round(v+(b[1][k]-v)*f)); return 'rgb('+c[0]+','+c[1]+','+c[2]+')'; } }
+      return 'rgb(47,214,176)';
+    }
+    function statusWord(p,total){
+      if(!total) return "Nothing due";
+      if(p>=100) return "All clear";
+      if(p>=80)  return "Crushing it";
+      if(p>=60)  return "Strong";
+      if(p>=40)  return "On track";
+      if(p>=15)  return "Getting going";
+      if(p>0)    return "Just started";
+      return "Not yet";
+    }
+    function renderGauge(){
+      const host=el("gauge"); if(!host)return;
+      const {today}=computeDates();
+      const {start,end}=weekRange(today);
+      const week=allTasks.filter(t=>t.due_date && t.due_date>=start && t.due_date<=end);
+      const total=week.length, done=week.filter(t=>t.status==="done").length;
+      const pct=total?Math.round(done/total*100):0;
+      const col=gaugeColor(pct);
+      el("gauge-hint").textContent = total ? (done+" of "+total+" done") : "no tasks";
+
+      const cx=110, cy=116, r=86, sw=15;
+      const theta=(180-1.8*pct)*Math.PI/180;
+      const nx=cx+(r-12)*Math.cos(theta), ny=cy-(r-12)*Math.sin(theta);
+      const arc='M '+(cx-r)+' '+cy+' A '+r+' '+r+' 0 0 1 '+(cx+r)+' '+cy;
+
+      host.innerHTML =
+        '<svg viewBox="0 0 220 132" class="gauge-svg">'
+        +'<defs><linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">'
+          +'<stop offset="0%" stop-color="#ff5555"/><stop offset="30%" stop-color="#ff9f43"/><stop offset="55%" stop-color="#f4d03f"/><stop offset="78%" stop-color="#a3e635"/><stop offset="100%" stop-color="#2fd6b0"/>'
+        +'</linearGradient></defs>'
+        +'<path d="'+arc+'" fill="none" stroke="var(--panel-2)" stroke-width="'+(sw+5)+'" stroke-linecap="round"/>'
+        +'<path d="'+arc+'" fill="none" stroke="url(#gaugeGrad)" stroke-width="'+sw+'" stroke-linecap="round" opacity="0.92"/>'
+        +'<line x1="'+cx+'" y1="'+cy+'" x2="'+nx.toFixed(1)+'" y2="'+ny.toFixed(1)+'" stroke="'+col+'" stroke-width="3.5" stroke-linecap="round"/>'
+        +'<circle cx="'+cx+'" cy="'+cy+'" r="7" fill="var(--panel)" stroke="'+col+'" stroke-width="2.5"/>'
+        +'<text x="'+cx+'" y="94" text-anchor="middle" class="gauge-num" fill="'+col+'">'+pct+'%</text>'
+        +'</svg>'
+        +'<div class="gauge-cap"><span class="gauge-status" style="color:'+col+'">'+statusWord(pct,total)+'</span><span class="gauge-sub">completed this week</span></div>';
     }
 
     function renderFooter(){
@@ -479,7 +527,7 @@
       el("legend").innerHTML=legendCats.map(c=>{ const m=catMeta(c); return '<span><i style="background:'+m.color+'"></i>'+m.label+'</span>'; }).join("");
     }
 
-    function refreshViews(){ renderRibbon(false); renderLoadBars(); renderCalendar(); renderAgenda(); }
+    function refreshViews(){ renderRibbon(false); renderGauge(); renderCalendar(); renderAgenda(); }
 
     async function toggleDone(id){
       const t = allTasks.find(x=>String(x.id)===String(id));
