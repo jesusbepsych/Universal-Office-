@@ -14,7 +14,7 @@
     color-scheme: dark;
     --bg:#070a12;
     --bg-2:#0a0e1a;
-    --panel:#070a12;
+    --panel:#0f1728;
     --panel-2:#0d1322;
     --line:#1d2740;
     --line-soft:#161e33;
@@ -293,6 +293,29 @@
     .task.done .task-main{animation:none;}
     .loadfill{transition:none;}
   }
+
+  /* Free-time topography */
+  .topo-panel{margin:0 0 16px;}
+  .topo-pager{display:flex;align-items:center;gap:7px;}
+  .topo-nav{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;cursor:pointer;font-size:15px;color:var(--ink);background:var(--panel-2);border:1px solid var(--line);}
+  .topo-nav:active{transform:scale(.93);}
+  .topo-nav.off{opacity:.3;pointer-events:none;}
+  .topo-day{font-family:var(--mono);font-size:12px;color:var(--ink);min-width:120px;text-align:center;padding:5px 8px;border-radius:9px;background:var(--panel-2);border:1px solid var(--line);}
+  .topo-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin:-2px 0 12px;letter-spacing:.02em;}
+  .topo{position:relative;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#0a1426 0%,#080e1a 52%,#05070d 100%);border:1px solid var(--line-soft);font-size:0;}
+  .topo svg{display:block;width:100%;height:auto;}
+  .topo .t-row,.topo .t-pool,.topo .t-haze,.topo .t-glow,.topo .t-guide{opacity:0;}
+  .topo .t-puddle{opacity:.5;animation:tPuddle 3.6s ease-in-out infinite;}
+  @keyframes tPuddle{0%,100%{opacity:.30;}50%{opacity:.82;}}
+  .topo-pin{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;justify-content:flex-end;align-items:center;pointer-events:none;opacity:0;transition:opacity .55s ease;}
+  .topo-pin .lab{font-family:var(--mono);font-size:11px;white-space:nowrap;padding:5px 9px;border-radius:9px;color:#d8fbf3;background:rgba(79,209,197,.15);border:1px solid rgba(79,209,197,.38);box-shadow:0 4px 16px rgba(79,209,197,.2);}
+  .topo-pin .stem{width:1px;height:26px;background:linear-gradient(180deg,rgba(79,209,197,.6),rgba(79,209,197,0));}
+  .topo-pin .dot{width:7px;height:7px;border-radius:50%;background:#8ef3e3;box-shadow:0 0 13px 3px rgba(79,209,197,.85);margin-top:-2px;}
+  .topo-pin.in{opacity:1;}
+  .puddle-hit{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .puddle-pop{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:9px;font-family:var(--mono);font-size:11px;white-space:nowrap;padding:5px 9px;border-radius:9px;color:#d8fbf3;background:rgba(79,209,197,.16);border:1px solid rgba(79,209,197,.4);box-shadow:0 4px 16px rgba(79,209,197,.22);opacity:0;pointer-events:none;transition:opacity .3s ease;}
+  .puddle-hit.open .puddle-pop{opacity:1;}
+  @media (prefers-reduced-motion: reduce){ .topo .t-puddle{animation:none;opacity:.6;} }
 </style>
 </head>
 <body>
@@ -329,6 +352,19 @@
     </div>
 
     <div class="ribbon" id="ribbon"></div>
+
+    <div class="panel topo-panel">
+      <div class="panel-head">
+        <h2>Free-time topography</h2>
+        <div class="topo-pager">
+          <button class="topo-nav" id="topo-prev" aria-label="Previous day">&lsaquo;</button>
+          <span class="topo-day" id="topo-day">&mdash;</span>
+          <button class="topo-nav" id="topo-next" aria-label="Next day">&rsaquo;</button>
+        </div>
+      </div>
+      <div class="topo-sub" id="topo-sub">&nbsp;</div>
+      <div class="topo" id="topo"></div>
+    </div>
 
     <div class="grid">
       <div class="panel">
@@ -479,13 +515,14 @@
       el("agenda").innerHTML='<div class="empty">Loading your items&hellip;</div>';
       try{
         const { data, error } = await client.from("tasks")
-          .select("id, title, due_date, due_time, category, source, status, updated_at")
+          .select("id, title, due_date, due_time, end_time, end_date, category, source, status, updated_at")
           .in("status",["open","done"]).order("due_date",{ascending:true});
         if(error){ el("agenda").innerHTML='<div class="empty">Could not load items: '+error.message+'</div>'; return; }
         allTasks = data || [];
         activeTier="today"; activeFilter="all"; currentPage=1; selectedDay=null; calYear=null; calMonth=null;
         buildByDay();
         renderRibbon(true); renderFilters(); renderGauge(); renderFooter(); renderCalendar(); renderAgenda();
+        if(window.renderTopo) window.renderTopo();
       }catch(e){ el("agenda").innerHTML='<div class="empty">Unexpected error: '+(e&&e.message?e.message:e)+'</div>'; }
     }
 
@@ -948,6 +985,149 @@
       client.auth.getSession().then(({data})=>{ if(data.session) showDash(data.session); });
       client.auth.onAuthStateChange((_e,session)=>{ if(session) showDash(session); else { el("dash").classList.add("hidden"); el("login-shell").classList.remove("hidden"); } });
     }
+
+    /* Free-time topography map */
+    (function(){
+      var W=680,H=212,DS=6,DE=24,C=108,R=30;
+      var YB=44,PD=160,BS=.64,ELEV=100,rmid=(R-1)/2;
+      var TPEAK={'clinic-work':.97,'behavioral-work':.82,'side-gig':.78,'class':.70,'work':.72,'admin':.50,'appointment':.58,'personal':.50};
+      var STARS=[[60,11],[150,6],[240,14],[340,8],[430,5],[510,13],[580,8],[630,11],[110,18],[300,20],[470,16],[210,22]];
+      var topoDay=0, days=[], wired=false;
+      function xn(t){return (t-DS)/(DE-DS);}
+      function proj(gx,p,z){var sc=BS+(1-BS)*p;return [W/2+(gx-.5)*W*sc,(YB+p*PD)-z*ELEV*sc];}
+      function hf(v){var p=String(v).slice(0,5).split(":");return (+p[0])+((+p[1])||0)/60;}
+      function hhmm(h){var hh=Math.floor(h+1e-6),mm=Math.round((h-hh)*60);if(mm===60){hh++;mm=0;}return (hh<10?"0":"")+hh+":"+(mm<10?"0":"")+mm;}
+      function tlab(h){ if(h>=24) return "12:00 AM"; return to12h(hhmm(h)); }
+      function lab(s,e){ return tlab(s)+" \u2013 "+tlab(e); }
+      function buildDays(){
+        var t0=pacificYMD(); days=[];
+        for(var k=0;k<14;k++){
+          var ymd=addDays(t0,k), dt=new Date(ymd+"T12:00:00Z");
+          var wd=dt.toLocaleDateString("en-US",{weekday:"short",timeZone:"UTC"});
+          var md=dt.toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});
+          var label=k===0?("Today \u00b7 "+md):k===1?("Tomorrow \u00b7 "+md):(wd+" \u00b7 "+md);
+          days.push({ymd:ymd,label:label});
+        }
+      }
+      function busyOf(ymd){
+        var out=[];
+        allTasks.forEach(function(t){
+          if(t.due_date!==ymd) return;
+          if(!t.due_time || !t.end_time) return;
+          var s=hf(t.due_time), e=hf(t.end_time);
+          if(e<=s) e=24;
+          if(t.end_date && t.end_date>ymd) e=24;
+          s=Math.max(DS,Math.min(DE,s)); e=Math.max(DS,Math.min(DE,e));
+          if(e-s<0.08) return;
+          out.push({s:s,e:e,c:(TPEAK[t.category]!=null?t.category:"appointment")});
+        });
+        return out;
+      }
+      function freeWins(bs){
+        var a=bs.map(function(b){return{s:b.s,e:b.e};}).sort(function(p,q){return p.s-q.s;});
+        var m=[]; a.forEach(function(b){ if(m.length&&b.s<=m[m.length-1].e) m[m.length-1].e=Math.max(m[m.length-1].e,b.e); else m.push({s:b.s,e:b.e}); });
+        var w=[],cur=DS; m.forEach(function(x){ if(x.s>cur) w.push({s:cur,e:Math.min(x.s,DE)}); cur=Math.max(cur,x.e); });
+        if(cur<DE) w.push({s:cur,e:DE});
+        return w.map(function(x){return{s:x.s,e:x.e,d:x.e-x.s};}).filter(function(x){return x.d>=.75;});
+      }
+      function buildField(bs,wins){
+        var f=[],min=1e9,max=-1e9;
+        for(var r=0;r<R;r++){f[r]=[];var ew=Math.pow(Math.sin(Math.PI*r/(R-1)),.62);for(var c=0;c<C;c++){
+          var feat=0;
+          for(var k=0;k<bs.length;k++){var b=bs[k],tc=(b.s+b.e)/2,cc=xn(tc)*(C-1),hw=(b.e-b.s)/2,sc=Math.max(((hw+.55)/(DE-DS))*(C-1),2.4),sr=R*.24,amp=TPEAK[b.c]||.7;feat+=amp*Math.exp(-(((c-cc)*(c-cc))/(2*sc*sc)+((r-rmid)*(r-rmid))/(2*sr*sr)));}
+          for(var w2=0;w2<wins.length;w2++){var fw=wins[w2],fcc=xn((fw.s+fw.e)/2)*(C-1),fhw=(fw.e-fw.s)/2,fsc=Math.max(((fhw+.3)/(DE-DS))*(C-1),2.6),fsr=R*.22,famp=Math.min(.16,.05+.018*fw.d);feat-=famp*Math.exp(-(((c-fcc)*(c-fcc))/(2*fsc*fsc)+((r-rmid)*(r-rmid))/(2*fsr*fsr)));}
+          var val=.10+.012*Math.sin(c*.55)*Math.cos(r*.8)+ew*feat;
+          f[r][c]=val;if(val<min)min=val;if(val>max)max=val;
+        }}
+        var rng=(max-min)||1,z=[];for(var rr=0;rr<R;rr++){z[rr]=[];for(var cc2=0;cc2<C;cc2++)z[rr][cc2]=(f[rr][cc2]-min)/rng;}
+        return z;
+      }
+      function svgFor(bs,wins){
+        var z=buildField(bs,wins);
+        var s='<svg viewBox="0 0 '+W+' '+H+'" role="img"><title>Free-time terrain</title><desc>Raised peaks are busy time, glowing low basins are free time.</desc><defs>';
+        s+='<linearGradient id="tElev" x1="0" y1="32" x2="0" y2="205" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#c3aaff"/><stop offset=".38" stop-color="#7da8f5"/><stop offset=".68" stop-color="#52d3c6"/><stop offset="1" stop-color="#4fd1c5"/></linearGradient>';
+        s+='<linearGradient id="tSurf" x1="0" y1="32" x2="0" y2="212" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1a2444"/><stop offset=".55" stop-color="#0c1426"/><stop offset="1" stop-color="#070b16"/></linearGradient>';
+        s+='<radialGradient id="tPool" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#9bf6ea" stop-opacity=".7"/><stop offset=".5" stop-color="#46d3c9" stop-opacity=".18"/><stop offset="1" stop-color="#46d3c9" stop-opacity="0"/></radialGradient>';
+        s+='<radialGradient id="tHaze" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#a791ff" stop-opacity=".32"/><stop offset="1" stop-color="#a791ff" stop-opacity="0"/></radialGradient>';
+        s+='<linearGradient id="tFog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#06090f" stop-opacity=".55"/><stop offset=".5" stop-color="#06090f" stop-opacity="0"/></linearGradient></defs>';
+        STARS.forEach(function(p){s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(.6+(p[0]%3)*.3).toFixed(1)+'" fill="#cdd9ff" opacity="'+(.2+(p[1]%4)*.07).toFixed(2)+'"/>';});
+        var bk=proj(0,0,0),bk2=proj(1,0,0);
+        s+='<line x1="'+bk[0].toFixed(1)+'" y1="'+bk[1].toFixed(1)+'" x2="'+bk2[0].toFixed(1)+'" y2="'+bk2[1].toFixed(1)+'" stroke="#6fa6f0" stroke-opacity=".14" stroke-width="0.5"/>';
+        var gd="";[6,9,12,15,18,21,24].forEach(function(t){var a=proj(xn(t),0,0),b=proj(xn(t),1,0);gd+='<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'" stroke="#7fb0e8" stroke-opacity=".10" stroke-width="0.5"/>';});
+        s+='<g class="t-guide">'+gd+'</g>';
+        bs.forEach(function(b){var ce=proj(xn((b.s+b.e)/2),.5,.78),w=(xn(b.e)-xn(b.s))*W;s+='<ellipse class="t-haze" cx="'+ce[0].toFixed(1)+'" cy="'+ce[1].toFixed(1)+'" rx="'+Math.max(30,w/2+26).toFixed(1)+'" ry="36" fill="url(#tHaze)"/>';});
+        for(var r=0;r<R;r++){
+          var dp=r/(R-1),pts="";
+          for(var c=0;c<C;c++){var P=proj(c/(C-1),dp,z[r][c]);pts+=(c?"L":"M")+P[0].toFixed(1)+" "+P[1].toFixed(1)+" ";}
+          var first=proj(0,dp,z[r][0]),last=proj(1,dp,z[r][C-1]);
+          var fill=pts+"L"+last[0].toFixed(1)+" "+H+" L"+first[0].toFixed(1)+" "+H+" Z";
+          var sOp=(.30+.52*dp).toFixed(2),sW=(.9+.9*dp).toFixed(2),gOp=(.04+.09*dp).toFixed(2),gW=(3+2.5*dp).toFixed(1);
+          s+='<path class="t-row" d="'+fill+'" fill="url(#tSurf)" fill-opacity="'+(.80+.14*dp).toFixed(2)+'" stroke="none"/>';
+          s+='<path class="t-glow" d="'+pts+'" fill="none" stroke="url(#tElev)" stroke-opacity="'+gOp+'" stroke-width="'+gW+'" stroke-linecap="round" stroke-linejoin="round"/>';
+          s+='<path class="t-row" d="'+pts+'" fill="none" stroke="url(#tElev)" stroke-opacity="'+sOp+'" stroke-width="'+sW+'" stroke-linecap="round" stroke-linejoin="round"/>';
+        }
+        s+='<rect x="0" y="0" width="'+W+'" height="118" fill="url(#tFog)"/>';
+        wins.forEach(function(w){var ce=proj(xn((w.s+w.e)/2),.5,.04),rx=Math.max(22,(xn(w.e)-xn(w.s))*W/2*.92),op=Math.min(.94,.34+w.d*.085);s+='<ellipse class="'+(w.pin?"t-pool":"t-puddle")+'" cx="'+ce[0].toFixed(1)+'" cy="'+ce[1].toFixed(1)+'" rx="'+rx.toFixed(1)+'" ry="22" fill="url(#tPool)"'+(w.pin?' data-op="'+op.toFixed(2)+'"':"")+'/>';});
+        var TL=[[6,"6 AM","start"],[9,"9 AM","middle"],[12,"12 PM","middle"],[15,"3 PM","middle"],[18,"6 PM","middle"],[21,"9 PM","middle"],[24,"12 AM","end"]];
+        TL.forEach(function(p){var a=proj(xn(p[0]),0,0);s+='<text x="'+a[0].toFixed(1)+'" y="'+(a[1]-7).toFixed(1)+'" text-anchor="'+p[2]+'" fill="#6f7b98" font-family="IBM Plex Mono,monospace" font-size="11">'+p[1]+'</text>';});
+        return s+"</svg>";
+      }
+      function enter(host){
+        var rows=host.querySelectorAll(".t-row"),glow=host.querySelectorAll(".t-glow"),pool=host.querySelectorAll(".t-pool"),haze=host.querySelectorAll(".t-haze"),guide=host.querySelector(".t-guide"),pins=host.querySelectorAll(".topo-pin");
+        if(reduceMotion){ if(guide)guide.style.opacity=1; rows.forEach(function(e){e.style.opacity=1;}); glow.forEach(function(e){e.style.opacity=1;}); pool.forEach(function(e){e.style.opacity=e.getAttribute("data-op");}); haze.forEach(function(e){e.style.opacity=1;}); pins.forEach(function(e){e.classList.add("in");}); return; }
+        if(guide){guide.style.transition="opacity .6s ease";requestAnimationFrame(function(){guide.style.opacity=1;});}
+        haze.forEach(function(e){e.style.transition="opacity .6s ease";requestAnimationFrame(function(){e.style.opacity=1;});});
+        rows.forEach(function(e,n){e.style.transition="opacity .45s ease";e.style.transitionDelay=(Math.floor(n/3)*22)+"ms";requestAnimationFrame(function(){e.style.opacity=1;});});
+        glow.forEach(function(e,n){e.style.transition="opacity .5s ease";e.style.transitionDelay=(n*22)+"ms";requestAnimationFrame(function(){e.style.opacity=1;});});
+        pool.forEach(function(e,n){e.style.transition="opacity .6s ease";e.style.transitionDelay=(360+n*70)+"ms";requestAnimationFrame(function(){e.style.opacity=e.getAttribute("data-op");});});
+        pins.forEach(function(e,n){setTimeout(function(){e.classList.add("in");},520+n*120);});
+      }
+      function render(){
+        var host=el("topo"); if(!host) return;
+        buildDays();
+        if(topoDay<0)topoDay=0; if(topoDay>days.length-1)topoDay=days.length-1;
+        var day=days[topoDay], bs=busyOf(day.ymd), wins=freeWins(bs);
+        var best=wins.slice().sort(function(p,q){return q.d-p.d;});
+        best.forEach(function(w,n){ w.pin = n<2; });
+        el("topo-day").textContent=day.label;
+        var sub; if(!wins.length) sub="No open windows"; else if(!bs.length) sub="Nothing scheduled \u00b7 fully open"; else sub=wins.length+" free window"+(wins.length===1?"":"s")+" today";
+        el("topo-sub").textContent=sub;
+        el("topo-prev").className="topo-nav"+(topoDay===0?" off":"");
+        el("topo-next").className="topo-nav"+(topoDay===days.length-1?" off":"");
+        host.innerHTML=svgFor(bs,wins);
+        best.forEach(function(w){
+          var ce=proj(xn((w.s+w.e)/2),.5,.04), L=(ce[0]/W*100), T=(ce[1]/H*100);
+          if(w.pin){
+            var pin=document.createElement("div"); pin.className="topo-pin"; pin.style.left=L+"%"; pin.style.height=T+"%";
+            pin.innerHTML='<div class="lab">'+lab(w.s,w.e)+'</div><div class="stem"></div><div class="dot"></div>';
+            host.appendChild(pin);
+          } else {
+            var rx=Math.max(22,(xn(w.e)-xn(w.s))*W/2*.92);
+            var hit=document.createElement("button"); hit.className="puddle-hit"; hit.type="button";
+            hit.style.left=L+"%"; hit.style.top=T+"%"; hit.style.width=Math.max(40,rx*2)+"px"; hit.style.height="40px";
+            hit.setAttribute("aria-label","Free window "+lab(w.s,w.e));
+            hit.innerHTML='<span class="puddle-pop">'+lab(w.s,w.e)+'</span>';
+            host.appendChild(hit);
+          }
+        });
+        enter(host);
+      }
+      function wire(){
+        if(wired) return; wired=true;
+        var host=el("topo"), pv=el("topo-prev"), nx=el("topo-next");
+        if(pv) pv.addEventListener("click",function(){ topoDay--; render(); });
+        if(nx) nx.addEventListener("click",function(){ topoDay++; render(); });
+        if(host) host.addEventListener("click",function(e){
+          var hit=e.target.closest(".puddle-hit");
+          var open=host.querySelectorAll(".puddle-hit.open");
+          if(!hit){ open.forEach(function(b){b.classList.remove("open");}); return; }
+          var was=hit.classList.contains("open");
+          open.forEach(function(b){b.classList.remove("open");});
+          if(!was) hit.classList.add("open");
+        });
+      }
+      window.renderTopo=function(){ wire(); render(); };
+    })();
   </script>
 </body>
 </html>
