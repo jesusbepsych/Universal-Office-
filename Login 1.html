@@ -316,6 +316,24 @@
   .puddle-pop{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:9px;font-family:var(--mono);font-size:11px;white-space:nowrap;padding:5px 9px;border-radius:9px;color:#d8fbf3;background:rgba(79,209,197,.16);border:1px solid rgba(79,209,197,.4);box-shadow:0 4px 16px rgba(79,209,197,.22);opacity:0;pointer-events:none;transition:opacity .3s ease;}
   .puddle-hit.open .puddle-pop{opacity:1;}
   @media (prefers-reduced-motion: reduce){ .topo .t-puddle{animation:none;opacity:.6;} }
+
+  /* Small UI helpers */
+  .late-badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#ffd9a0;background:rgba(242,176,102,.16);border:1px solid rgba(242,176,102,.4);border-radius:6px;padding:1px 6px;}
+  .cell .edit{position:absolute;top:9px;right:10px;width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0;border:1px solid rgba(255,255,255,.1);background:rgba(10,16,30,.55);color:#aeb9d6;cursor:pointer;z-index:2;-webkit-tap-highlight-color:transparent;}
+  .cell .edit:active{transform:scale(.9);}
+  .cell .edit svg{width:13px;height:13px;}
+  .notes-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .notes-head .nf-sub{margin:0;}
+  .notes-clear{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:3px 8px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .notes-clear.armed{color:#ffd9a0;border-color:rgba(242,176,102,.5);background:rgba(242,176,102,.12);}
+  .notes-head-l{display:flex;align-items:center;gap:10px;}
+  .mode-lever{position:relative;width:20px;height:30px;border-radius:11px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;padding:0;flex:none;-webkit-tap-highlight-color:transparent;transition:background .25s,border-color .25s;}
+  .lever-knob{position:absolute;left:50%;top:3px;transform:translateX(-50%);width:14px;height:14px;border-radius:50%;background:#8a96b3;box-shadow:0 1px 3px rgba(0,0,0,.45);transition:top .28s cubic-bezier(.34,1.56,.64,1),background .25s,box-shadow .25s;}
+  .mode-lever.on{background:rgba(79,209,197,.16);border-color:rgba(79,209,197,.5);}
+  .mode-lever.on .lever-knob{top:13px;background:var(--teal);box-shadow:0 0 9px rgba(79,209,197,.65);}
+  .qcheck{flex:none;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;padding:0;cursor:pointer;border:1.5px solid rgba(79,209,197,.6);background:rgba(79,209,197,.10);color:var(--teal);-webkit-tap-highlight-color:transparent;transition:transform .12s;}
+  .qcheck:active{transform:scale(.86);}
+  .qcheck svg{width:11px;height:11px;}
 </style>
 </head>
 <body>
@@ -399,7 +417,7 @@
       <div class="panel-head"><h2>Notes &amp; folders</h2><span class="hint">Just yours &middot; not from scans</span></div>
       <div class="nf-grid">
         <div class="nf-col notes-rail">
-          <div class="nf-sub">Quick notes</div>
+          <div class="notes-head"><div class="notes-head-l"><div class="nf-sub" id="notes-title">Quick notes</div><button class="mode-lever" id="mode-lever" type="button" role="switch" aria-checked="false" aria-label="Switch to Quick Tasks"><span class="lever-knob"></span></button></div><button class="notes-clear" id="notes-clear" type="button" hidden>Clear all</button></div>
           <div class="nf-add">
             <input type="text" id="note-input" placeholder="Jot a quick note&hellip;" autocomplete="off">
             <button id="note-add">Add</button>
@@ -590,7 +608,8 @@
         let relCls="rel"; if(diff!==null&&diff<0)relCls+=" is-over"; else if(diff===0)relCls+=" is-today";
         const bits=[]; if(time)bits.push('<span class="when">'+time+'</span>'); if(diff!==null)bits.push('<span class="'+relCls+'">'+relLabel(diff)+'</span>');
         const check='<button class="check" data-id="'+t.id+'" aria-pressed="'+done+'" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>';
-        html+='<div class="task'+(done?' done':'')+'" style="--cat:'+m.color+';animation-delay:'+Math.min(idx*30,240)+'ms"><span class="bar"></span>'+check+'<div class="task-main"><div class="task-title">'+(SOURCE_ICON[t.source]||"")+'<span class="t">'+escapeHtml(t.title||"Untitled")+'</span></div><div class="task-meta"><span class="chip">'+m.label+'</span>'+bits.join("")+'</div></div></div>';
+        const lateBadge=(done&&tier==="past")?'<span class="late-badge">late</span>':"";
+        html+='<div class="task'+(done?' done':'')+'" style="--cat:'+m.color+';animation-delay:'+Math.min(idx*30,240)+'ms"><span class="bar"></span>'+check+'<div class="task-main"><div class="task-title">'+(SOURCE_ICON[t.source]||"")+'<span class="t">'+escapeHtml(t.title||"Untitled")+'</span></div><div class="task-meta"><span class="chip">'+m.label+'</span>'+bits.join("")+lateBadge+'</div></div></div>';
       });
       if(!html) html='<div class="empty">Nothing matches here. Try another filter, or wait for the next scan.</div>';
 
@@ -669,6 +688,7 @@
 
     /* ---------- Notes & folders (own data, separate tables) ---------- */
     let notes=[], folders=[], folderItems=[];
+    let quickTasks=[], noteMode="notes";
 
     let justLit=null, cellRedraw=null, openFolderId=null;
     const CORE_RGB="79,209,197";
@@ -692,6 +712,8 @@
         }
         notes=nRes.data||[]; folders=fRes.data||[]; folderItems=iRes.data||[];
         renderNotes(); renderMatrix();
+        try{ const qtRes=await client.from("quick_tasks").select("id, body, created_at").order("created_at",{ascending:false}); if(!qtRes.error) quickTasks=qtRes.data||[]; }catch(e){}
+        if(noteMode==="tasks") renderQuickTasks();
       }catch(e){ toast("Couldn't load notes / folders."); }
     }
 
@@ -704,6 +726,7 @@
 
     function renderNotes(){
       const host=el("notes-list"); if(!host) return;
+      const cl=el("notes-clear"); if(cl){ cl.hidden=!notes.length; if(!notes.length){ cl.classList.remove("armed"); cl.textContent="Clear all"; } }
       if(!notes.length){ host.innerHTML='<div class="empty mini">No notes yet. Jot something above.</div>'; return; }
       host.innerHTML=notes.map(n=>{
         const x=hashStr(n.body);
@@ -733,6 +756,75 @@
       catch(e){ notes=prev; renderNotes(); toast("Couldn't delete note."); }
     }
 
+    async function deleteAllNotes(){
+      if(!client || !notes.length) return;
+      const prev=notes.slice();
+      const ids=prev.map(n=>n.id).filter(id=>String(id).indexOf("tmp-")!==0);
+      notes=[]; renderNotes();
+      if(!ids.length) return;
+      try{ const { error }=await client.from("notes").delete().in("id",ids); if(error){ notes=prev; renderNotes(); toast("Couldn't clear notes: "+error.message); } }
+      catch(e){ notes=prev; renderNotes(); toast("Couldn't clear notes."); }
+    }
+
+    function applyMode(){
+      const on = noteMode==="tasks";
+      const lev=el("mode-lever"); if(lev){ lev.classList.toggle("on",on); lev.setAttribute("aria-checked", on?"true":"false"); lev.setAttribute("aria-label", on?"Switch to Quick Notes":"Switch to Quick Tasks"); }
+      const ttl=el("notes-title"); if(ttl) ttl.textContent = on?"Quick tasks":"Quick notes";
+      const inp=el("note-input"); if(inp) inp.placeholder = on?"Add a quick task\u2026":"Jot a quick note\u2026";
+      const cl=el("notes-clear"); if(cl){ cl.classList.remove("armed"); cl.textContent="Clear all"; }
+      if(on) renderQuickTasks(); else renderNotes();
+    }
+    function addActive(){ if(noteMode==="tasks") addQuickTask(); else addNote(); }
+
+    function renderQuickTasks(){
+      const host=el("notes-list"); if(!host) return;
+      const cl=el("notes-clear"); if(cl){ cl.hidden=!quickTasks.length; if(!quickTasks.length){ cl.classList.remove("armed"); cl.textContent="Clear all"; } }
+      if(!quickTasks.length){ host.innerHTML='<div class="empty mini">No quick tasks. Add one above.</div>'; return; }
+      host.innerHTML=quickTasks.map(q=>{
+        const r=NOTE_RADII[hashStr(q.body)%NOTE_RADII.length];
+        return '<div class="nrow"><span class="note qtask" style="--t:79,209,197;border-radius:'+r+'"><button class="qcheck" data-done="'+q.id+'" aria-label="Complete and remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button><span class="note-body">'+escapeHtml(q.body)+'</span><button class="del" data-qdel="'+q.id+'" aria-label="Delete task">&times;</button></span></div>';
+      }).join("");
+      host.querySelectorAll(".qcheck[data-done]").forEach(b=>b.addEventListener("click",()=>completeQuickTask(b.dataset.done)));
+      host.querySelectorAll(".del[data-qdel]").forEach(b=>b.addEventListener("click",()=>deleteQuickTask(b.dataset.qdel)));
+    }
+
+    async function addQuickTask(){
+      const inp=el("note-input"); if(!inp||!client) return;
+      const body=inp.value.trim(); if(!body) return;
+      inp.value=""; inp.focus();
+      const temp={ id:"tmp-"+Date.now(), body };
+      quickTasks.unshift(temp); renderQuickTasks();
+      try{
+        const { data, error }=await client.from("quick_tasks").insert({ body }).select("id, body, created_at").single();
+        if(error){ quickTasks=quickTasks.filter(x=>x.id!==temp.id); renderQuickTasks(); toast("Couldn't save task: "+error.message); return; }
+        const i=quickTasks.findIndex(x=>x.id===temp.id); if(i>=0) quickTasks[i]=data;
+        swapAttr("data-done", temp.id, data.id); swapAttr("data-qdel", temp.id, data.id);
+      }catch(e){ quickTasks=quickTasks.filter(x=>x.id!==temp.id); renderQuickTasks(); toast("Couldn't save task."); }
+    }
+
+    function completeQuickTask(id){
+      const host=el("notes-list"); const btn=host&&host.querySelector('.qcheck[data-done="'+id+'"]');
+      const pill=btn?btn.closest(".nrow"):null;
+      if(pill && !reduceMotion){ pill.style.transition="opacity .18s ease, transform .18s ease"; pill.style.opacity="0"; pill.style.transform="scale(.92)"; setTimeout(()=>deleteQuickTask(id),170); }
+      else deleteQuickTask(id);
+    }
+
+    async function deleteQuickTask(id){
+      const prev=quickTasks.slice(); quickTasks=quickTasks.filter(q=>q.id!==id); renderQuickTasks();
+      try{ const { error }=await client.from("quick_tasks").delete().eq("id",id); if(error){ quickTasks=prev; renderQuickTasks(); toast("Couldn't delete: "+error.message); } }
+      catch(e){ quickTasks=prev; renderQuickTasks(); toast("Couldn't delete task."); }
+    }
+
+    async function deleteAllQuickTasks(){
+      if(!client || !quickTasks.length) return;
+      const prev=quickTasks.slice();
+      const ids=prev.map(q=>q.id).filter(id=>String(id).indexOf("tmp-")!==0);
+      quickTasks=[]; renderQuickTasks();
+      if(!ids.length) return;
+      try{ const { error }=await client.from("quick_tasks").delete().in("id",ids); if(error){ quickTasks=prev; renderQuickTasks(); toast("Couldn't clear tasks: "+error.message); } }
+      catch(e){ quickTasks=prev; renderQuickTasks(); toast("Couldn't clear tasks."); }
+    }
+
     function itemsOf(f){ return folderItems.filter(it=>String(it.folder_id)===String(f.id)); }
 
     function hexesHtml(f){
@@ -753,7 +845,7 @@
 
     function folderCellHtml(f){
       const items=itemsOf(f), d=items.filter(x=>x.done).length;
-      return '<div class="cell" style="'+cellStyle(f)+'" data-open="'+f.id+'"><h4>'+escapeHtml(f.name)+'</h4><span class="cnt">'+d+" / "+items.length+'</span>'+hexesHtml(f)+'</div>';
+      return '<div class="cell" style="'+cellStyle(f)+'" data-open="'+f.id+'"><button class="edit" data-rename="'+f.id+'" aria-label="Rename cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button><h4>'+escapeHtml(f.name)+'</h4><span class="cnt">'+d+" / "+items.length+'</span>'+hexesHtml(f)+'</div>';
     }
 
     function coreCellHtml(){
@@ -774,6 +866,7 @@
       host.innerHTML=html; justLit=null;
       host.querySelectorAll(".hex[data-item]").forEach(h=>h.addEventListener("click",ev=>{ ev.stopPropagation(); toggleItem(h.dataset.item); }));
       host.querySelectorAll("[data-open]").forEach(c=>c.addEventListener("click",()=>openCell(c.dataset.open)));
+      host.querySelectorAll("[data-rename]").forEach(b=>b.addEventListener("click",ev=>{ ev.stopPropagation(); openRename(b.dataset.rename); }));
       const addc=host.querySelector("[data-add]"); if(addc) addc.addEventListener("click",openCreate);
     }
 
@@ -809,6 +902,27 @@
       const create=()=>{ const n=ov.querySelector("#nfn").value.trim(); if(!n)return; const cat=ov.querySelector("#nfc").value||null; close(); createFolder(n,cat); };
       ov.querySelector("[data-create]").addEventListener("click",create);
       ov.querySelector("#nfn").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); create(); } });
+    }
+
+    function openRename(id){
+      const f=folders.find(x=>String(x.id)===String(id)); if(!f) return; const c=rgbOf(f.category);
+      const ov=document.createElement("div"); ov.className="ov";
+      ov.innerHTML='<div class="ovcard" style="--c:'+c+'"><div class="ovtitle">Rename cell</div><input id="rfn" autocomplete="off"><div class="ovbtns"><button class="ovaddbtn" data-save>Save</button><button class="ovcancel" data-close>Cancel</button></div></div>';
+      el("space").appendChild(ov);
+      const inp=ov.querySelector("#rfn"); inp.value=f.name||""; setTimeout(()=>{ inp.focus(); if(inp.select)inp.select(); },30);
+      function close(){ ov.remove(); }
+      const save=()=>{ const v=inp.value.trim(); if(!v){ close(); return; } close(); updateFolderName(f.id,v); };
+      ov.querySelector("[data-close]").addEventListener("click",close);
+      ov.addEventListener("click",ev=>{ if(ev.target===ov) close(); });
+      ov.querySelector("[data-save]").addEventListener("click",save);
+      inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); save(); } });
+    }
+
+    async function updateFolderName(id,name){
+      const f=folders.find(x=>String(x.id)===String(id)); if(!f||!client) return;
+      const prev=f.name; f.name=name; renderMatrix(); if(cellRedraw)cellRedraw();
+      try{ const { error }=await client.from("folders").update({ name }).eq("id",id); if(error){ f.name=prev; renderMatrix(); toast("Couldn't rename: "+error.message); } }
+      catch(e){ f.name=prev; renderMatrix(); toast("Couldn't rename cell."); }
     }
 
     async function createFolder(name, category){
@@ -978,8 +1092,19 @@
     el("logout-btn").addEventListener("click", async ()=>{ if(!client)return; await client.auth.signOut(); showLogin("Signed out.",null); });
     el("refresh-btn").addEventListener("click", ()=>{ loadTasks(); loadExtras(); });
 
-    el("note-add").addEventListener("click", addNote);
-    el("note-input").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addNote(); } });
+    el("note-add").addEventListener("click", addActive);
+    el("mode-lever").addEventListener("click", ()=>{ noteMode = noteMode==="tasks"?"notes":"tasks"; applyMode(); const inp=el("note-input"); if(inp) inp.focus(); });
+    (function(){
+      const cb=el("notes-clear"); if(!cb) return; let armed=false, tmr;
+      const reset=()=>{ armed=false; cb.classList.remove("armed"); cb.textContent="Clear all"; };
+      cb.addEventListener("click",()=>{
+        const list = noteMode==="tasks" ? quickTasks : notes;
+        if(!list.length) return;
+        if(!armed){ armed=true; cb.classList.add("armed"); cb.textContent="Confirm?"; clearTimeout(tmr); tmr=setTimeout(reset,3000); return; }
+        clearTimeout(tmr); reset(); if(noteMode==="tasks") deleteAllQuickTasks(); else deleteAllNotes();
+      });
+    })();
+    el("note-input").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); addActive(); } });
 
     if(client){
       client.auth.getSession().then(({data})=>{ if(data.session) showDash(data.session); });
