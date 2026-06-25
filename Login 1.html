@@ -344,13 +344,13 @@
   .cell.drop-pop{animation:dropPop .38s ease;}
   @media (prefers-reduced-motion: reduce){ .qghost{transition:opacity .12s ease;} .cell.drop-pop{animation:none;} .cell{transition:none;} }
   /* Day Summary tile */
-  .ds-wrap{display:flex;justify-content:center;}
-  .ds-stage{position:relative;width:100%;max-width:260px;transition:min-height .42s cubic-bezier(.2,.7,.2,1);}
+  .ds-wrap{width:100%;}
+  .ds-stage{position:relative;width:100%;transition:min-height .42s cubic-bezier(.2,.7,.2,1);}
   .ds-layer{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:16px;border:1px solid rgba(79,209,197,.16);background:rgba(13,22,40,.45);opacity:0;transform:translate(0,0);transition:transform .5s cubic-bezier(.2,.7,.2,1),opacity .45s ease;z-index:0;}
-  .ds-stage.scanning .ds-l2,.ds-stage.result .ds-l2,.ds-stage.full .ds-l2{opacity:1;transform:translate(6px,8px);}
-  .ds-stage.scanning .ds-l3,.ds-stage.result .ds-l3,.ds-stage.full .ds-l3{opacity:.7;transform:translate(11px,15px);}
-  .ds-stage.scanning .ds-l2{transform:translate(9px,6px);}
-  .ds-stage.scanning .ds-l3{transform:translate(16px,11px);}
+  .ds-stage.scanning .ds-l2,.ds-stage.result .ds-l2,.ds-stage.full .ds-l2{opacity:1;transform:translate(5px,7px);}
+  .ds-stage.scanning .ds-l3,.ds-stage.result .ds-l3,.ds-stage.full .ds-l3{opacity:.7;transform:translate(9px,12px);}
+  .ds-stage.scanning .ds-l2{transform:translate(7px,5px);}
+  .ds-stage.scanning .ds-l3{transform:translate(12px,9px);}
   .ds-card{position:relative;z-index:1;border-radius:16px;border:1px solid rgba(79,209,197,.42);background:linear-gradient(180deg,rgba(16,27,48,.94),rgba(9,14,24,.96));box-shadow:0 18px 44px -22px rgba(0,0,0,.7),0 0 26px -14px rgba(79,209,197,.42);padding:14px;transition:min-height .42s cubic-bezier(.2,.7,.2,1);}
   .ds-fade{animation:dsFade .42s ease both;}
   @keyframes dsFade{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
@@ -394,11 +394,16 @@
   .ds-back{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--ink);width:28px;height:28px;border-radius:8px;display:grid;place-items:center;cursor:pointer;flex:none;} .ds-back svg{width:16px;height:16px;}
   .ds-ftitle{font-family:var(--disp);font-size:13.5px;font-weight:600;flex:1;}
   .ds-fdate{font-family:var(--mono);font-size:10.5px;color:var(--muted);}
-  .ds-fbody{max-height:300px;overflow:auto;-webkit-overflow-scrolling:touch;}
-  .ds-sh{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:10px 0 4px;}
+  .ds-fbody{max-height:360px;overflow:auto;-webkit-overflow-scrolling:touch;padding-right:4px;}
+  .ds-sh{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:16px 0 7px;}
   .ds-sh:first-child{margin-top:0;}
-  .ds-sl{font-size:11.5px;color:#c4ccea;line-height:1.5;padding-left:10px;border-left:1px solid rgba(79,209,197,.2);margin-bottom:3px;}
+  .ds-dh{font-family:var(--disp);font-size:11.5px;font-weight:600;color:#aeb9d8;margin:12px 0 5px;}
+  .ds-dh:first-child{margin-top:0;}
+  .ds-sl{font-size:12px;color:#c4ccea;line-height:1.6;padding-left:12px;border-left:1px solid rgba(79,209,197,.2);margin-bottom:7px;}
   .ds-empty{font-size:12px;color:var(--muted);line-height:1.55;padding:6px 2px;}
+  .task-x{flex:none;margin-left:8px;align-self:center;background:none;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:2px 7px;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:background .2s,color .2s;}
+  .task-x:hover{color:var(--ink);}
+  .task-x.armed{background:rgba(255,85,85,.16);color:#ff8a8a;font-size:11px;font-family:var(--mono);padding:4px 8px;}
   @media (prefers-reduced-motion:reduce){.ds-fade{animation:none;}.ds-dot{animation:none;left:50%;}.ds-ico.ds-pulse,.ds-spark,.ds-bounce .l-top,.ds-bounce .l-mid,.ds-bounce .l-bot{animation:none;}}
 </style>
 </head>
@@ -678,7 +683,7 @@
         const bits=[]; if(time)bits.push('<span class="when">'+time+'</span>'); if(diff!==null)bits.push('<span class="'+relCls+'">'+relLabel(diff)+'</span>');
         const check='<button class="check" data-id="'+t.id+'" aria-pressed="'+done+'" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>';
         const lateBadge=(done&&tier==="past")?'<span class="late-badge">late</span>':"";
-        html+='<div class="task'+(done?' done':'')+'" style="--cat:'+m.color+';animation-delay:'+Math.min(idx*30,240)+'ms"><span class="bar"></span>'+check+'<div class="task-main"><div class="task-title">'+(SOURCE_ICON[t.source]||"")+'<span class="t">'+escapeHtml(t.title||"Untitled")+'</span></div><div class="task-meta"><span class="chip">'+m.label+'</span>'+bits.join("")+lateBadge+'</div></div></div>';
+        html+='<div class="task'+(done?' done':'')+'" style="--cat:'+m.color+';animation-delay:'+Math.min(idx*30,240)+'ms"><span class="bar"></span>'+check+'<div class="task-main"><div class="task-title">'+(SOURCE_ICON[t.source]||"")+'<span class="t">'+escapeHtml(t.title||"Untitled")+'</span></div><div class="task-meta"><span class="chip">'+m.label+'</span>'+bits.join("")+lateBadge+'</div></div><button class="task-x" data-del="'+t.id+'" aria-label="Remove this item">&times;</button></div>';
       });
       if(!html) html='<div class="empty">Nothing matches here. Try another filter, or wait for the next scan.</div>';
 
@@ -691,6 +696,13 @@
       if(pv)pv.addEventListener("click",()=>{ currentPage--; renderAgenda(); });
       if(nx)nx.addEventListener("click",()=>{ currentPage++; renderAgenda(); });
       el("agenda").querySelectorAll(".check").forEach(b=>b.addEventListener("click",()=>toggleDone(b.dataset.id)));
+      el("agenda").querySelectorAll(".task-x").forEach(b=>{
+        let armed=false, tmr;
+        b.addEventListener("click",(e)=>{ e.stopPropagation();
+          if(!armed){ armed=true; b.classList.add("armed"); b.textContent="Remove?"; clearTimeout(tmr); tmr=setTimeout(()=>{ armed=false; b.classList.remove("armed"); b.innerHTML="&times;"; },3000); return; }
+          clearTimeout(tmr); dismissTask(b.dataset.del);
+        });
+      });
     }
 
     function weekRange(today){
@@ -1144,6 +1156,18 @@
       }catch(e){ t.status = prev; refreshViews(); toast("Couldn't save that change."); }
     }
 
+    async function dismissTask(id){
+      const i = allTasks.findIndex(x=>String(x.id)===String(id));
+      if(i<0 || !client) return;
+      const removed = allTasks[i];
+      allTasks.splice(i,1);
+      buildByDay(); refreshViews(); if(window.renderTopo) window.renderTopo();
+      try{
+        const { error } = await client.from("tasks").update({ status:"dismissed" }).eq("id", id);
+        if(error){ allTasks.splice(i,0,removed); buildByDay(); refreshViews(); if(window.renderTopo) window.renderTopo(); toast("Couldn't remove: "+error.message); }
+      }catch(e){ allTasks.splice(i,0,removed); buildByDay(); refreshViews(); if(window.renderTopo) window.renderTopo(); toast("Couldn't remove that item."); }
+    }
+
     function toast(msg){
       let n=el("toast"); if(!n){ n=document.createElement("div"); n.id="toast"; document.body.appendChild(n); }
       n.textContent=msg; n.classList.add("show");
@@ -1471,7 +1495,10 @@
       function fmtDate(ymd){ try{ return new Date(ymd+"T12:00:00Z").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",timeZone:"UTC"}); }catch(e){ return ""; } }
       function renderBrief(body){
         var lines=String(body).split(/\r?\n/), html="";
-        lines.forEach(function(ln){ var t=ln.trim(); if(!t) return; var hm=t.match(/^#{1,3}\s+(.*)/); if(hm){ html+='<div class="ds-sh">'+escapeHtml(hm[1])+'</div>'; } else { t=t.replace(/^[-*\u2022]\s+/,""); html+='<div class="ds-sl">'+escapeHtml(t)+'</div>'; } });
+        lines.forEach(function(ln){ var t=ln.trim(); if(!t) return;
+          var h3=t.match(/^###\s+(.*)/); if(h3){ html+='<div class="ds-dh">'+escapeHtml(h3[1])+'</div>'; return; }
+          var hm=t.match(/^#{1,2}\s+(.*)/); if(hm){ html+='<div class="ds-sh">'+escapeHtml(hm[1])+'</div>'; return; }
+          t=t.replace(/^[-*\u2022]\s+/,""); html+='<div class="ds-sl">'+escapeHtml(t)+'</div>'; });
         return html||'<div class="ds-empty">The briefing was empty.</div>';
       }
       async function loadFull(){
