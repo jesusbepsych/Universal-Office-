@@ -1157,6 +1157,529 @@
   @media(max-width:980px){.notes-panel .nf-grid{grid-template-columns:1fr!important}.matrix-v7-shell{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:14px!important}.matrix-v7-center{grid-column:1/-1!important;order:-1!important}.matrix-v7-col{gap:14px!important}.matrix-v7-shell::before,.matrix-v7-shell::after{display:none!important}.matrix.matrix-v7 .cell.core,.matrix.matrix-v7 .addcell{width:100%!important;clip-path:none!important;border-radius:16px!important}.matrix-v7-hint{flex-wrap:wrap;gap:14px}}
   @media(max-width:560px){.space{padding:16px!important}.matrix-v7-shell{grid-template-columns:1fr!important}.matrix.matrix-v7 .hexwrap{padding-left:0!important}.matrix-v7-hint{display:none!important}}
 
+
+
+  /* Cellular matrix v8 — stable max-6 console with View All drawer */
+  .notes-panel .nf-grid{
+    grid-template-columns:248px minmax(0,1fr)!important;
+    gap:22px!important;
+    align-items:start!important;
+  }
+  .matrix-col .nf-sub{
+    letter-spacing:.18em!important;
+    color:#9aa5c2!important;
+    margin-bottom:12px!important;
+    white-space:normal!important;
+  }
+  .space{
+    min-height:0!important;
+    padding:18px 20px 20px!important;
+    overflow:hidden!important;
+    border-radius:18px!important;
+    background:
+      radial-gradient(circle at 21% 18%,rgba(67,131,236,.055),transparent 24%),
+      radial-gradient(circle at 76% 62%,rgba(79,209,197,.045),transparent 28%),
+      linear-gradient(180deg,#070c16 0%,#050914 60%,#03060d 100%)!important;
+    border:1px solid rgba(71,96,139,.30)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 24px 60px -38px rgba(0,0,0,.95)!important;
+  }
+  .space::before{
+    content:""!important;
+    position:absolute!important;inset:18px!important;border-radius:16px!important;pointer-events:none!important;opacity:.38!important;
+    background:
+      radial-gradient(1px 1px at 13% 24%,rgba(255,255,255,.34),transparent),
+      radial-gradient(1px 1px at 32% 69%,rgba(255,255,255,.20),transparent),
+      radial-gradient(1px 1px at 52% 28%,rgba(255,255,255,.18),transparent),
+      radial-gradient(1px 1px at 79% 72%,rgba(255,255,255,.18),transparent),
+      radial-gradient(1px 1px at 91% 17%,rgba(255,255,255,.13),transparent)!important;
+  }
+  .space::after{content:none!important;}
+  .matrix.matrix-v8{
+    position:relative!important;
+    z-index:1!important;
+    display:block!important;
+    width:100%!important;
+    max-width:1020px!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0 auto!important;
+    padding:0!important;
+    isolation:isolate!important;
+  }
+  .matrix.matrix-v8::before,
+  .matrix.matrix-v8::after{content:none!important;display:none!important;}
+  .matrix-v8-shell{
+    position:relative;
+    z-index:1;
+    width:100%;
+    min-height:0;
+    border-radius:16px;
+    padding:15px;
+    background:
+      linear-gradient(180deg,rgba(11,18,33,.76),rgba(5,9,17,.78)),
+      radial-gradient(circle at 50% 0%,rgba(79,209,197,.055),transparent 48%);
+    border:1px solid rgba(93,119,171,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  }
+  .matrix-v8-shell::before{
+    content:"";
+    position:absolute;
+    left:18px;right:18px;top:56px;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(79,209,197,.18),rgba(167,139,250,.10),transparent);
+    pointer-events:none;
+    opacity:.65;
+  }
+  .matrix-v8-head{
+    position:relative;
+    z-index:3;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:16px;
+  }
+  .matrix-v8-title{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    min-width:0;
+  }
+  .matrix-v8-mark{
+    width:34px;height:34px;
+    display:grid;
+    place-items:center;
+    flex:none;
+    color:#54d7cf;
+    border:1px solid rgba(79,209,197,.46);
+    border-radius:12px;
+    background:rgba(79,209,197,.07);
+    font-size:18px;
+    line-height:1;
+    box-shadow:0 0 18px -10px rgba(79,209,197,.8);
+  }
+  .matrix-v8-title strong{
+    display:block;
+    font-family:var(--disp);
+    font-size:15px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:#edf4ff;
+  }
+  .matrix-v8-title span:not(.matrix-v8-mark){
+    display:block;
+    margin-top:2px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#8f9ab7;
+  }
+  .matrix-v8-actions,
+  .matrix-all-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+  }
+  .matrix-v8-action{
+    min-height:32px;
+    padding:7px 12px;
+    border-radius:10px;
+    border:1px solid rgba(79,209,197,.36);
+    background:rgba(79,209,197,.085);
+    color:#6fe0d7;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.04em;
+    font-weight:600;
+    text-transform:uppercase;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .matrix-v8-action span{
+    display:inline-grid;
+    place-items:center;
+    min-width:18px;
+    height:18px;
+    margin-left:5px;
+    border-radius:999px;
+    background:rgba(79,209,197,.16);
+    color:#dffdfa;
+    font-size:10px;
+  }
+  .matrix-v8-action:hover{
+    border-color:rgba(79,209,197,.64);
+    background:rgba(79,209,197,.13);
+  }
+  .matrix-v8-add{
+    border-color:rgba(138,150,179,.28);
+    background:rgba(138,150,179,.06);
+    color:#c0c9e1;
+  }
+  .matrix-v8-body{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:184px minmax(0,1fr);
+    gap:16px;
+    align-items:stretch;
+  }
+  .matrix-v8-core-card{
+    position:relative;
+    min-width:0;
+  }
+  .matrix-v8-core-card::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:calc(100% + 2px);
+    width:16px;
+    height:1px;
+    background:linear-gradient(90deg,rgba(79,209,197,.32),transparent);
+    pointer-events:none;
+  }
+  .matrix-v8-grid{
+    position:relative;
+    min-width:0;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+  .matrix-v8-grid::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    pointer-events:none;
+    opacity:.20;
+    background:
+      linear-gradient(90deg,transparent calc(50% - .5px),rgba(79,209,197,.25) calc(50% - .5px),rgba(79,209,197,.25) calc(50% + .5px),transparent calc(50% + .5px)),
+      linear-gradient(0deg,transparent calc(50% - .5px),rgba(167,139,250,.22) calc(50% - .5px),rgba(167,139,250,.22) calc(50% + .5px),transparent calc(50% + .5px));
+    mask-image:linear-gradient(90deg,transparent,black 12%,black 88%,transparent);
+    -webkit-mask-image:linear-gradient(90deg,transparent,black 12%,black 88%,transparent);
+  }
+  .matrix.matrix-v8 .cell{
+    --edge:rgba(var(--c,79,209,197),.44);
+    position:relative!important;
+    left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+    transform:none!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:84px!important;
+    padding:13px 48px 13px 15px!important;
+    overflow:hidden!important;
+    color:#eef4ff!important;
+    border:1px solid var(--edge)!important;
+    border-radius:12px!important;
+    clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 20px) 100%,0 100%,0 16px)!important;
+    background:
+      linear-gradient(180deg,rgba(12,20,36,.965),rgba(6,11,20,.995) 74%,rgba(4,8,15,1)),
+      radial-gradient(140px 64px at 10% 0%,rgba(var(--c,79,209,197),.105),transparent 70%)!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.045),
+      0 14px 32px -30px rgba(var(--c,79,209,197),.92)!important;
+    transition:transform .16s ease,border-color .18s ease,box-shadow .18s ease,filter .18s ease!important;
+  }
+  .matrix.matrix-v8 .cell.p-right,
+  .matrix.matrix-v8 .cell.p-left{
+    clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 20px) 100%,0 100%,0 16px)!important;
+  }
+  .matrix.matrix-v8 .cell::before{
+    content:""!important;
+    position:absolute!important;
+    inset:1px!important;
+    pointer-events:none!important;
+    border-radius:10px!important;
+    background:
+      linear-gradient(90deg,rgba(var(--c,79,209,197),.060),transparent 34%,transparent 78%,rgba(var(--c,79,209,197),.035)),
+      radial-gradient(120px 60px at 10% 0%,rgba(var(--c,79,209,197),.085),transparent 70%)!important;
+    opacity:.85!important;
+  }
+  .matrix.matrix-v8 .cell::after{
+    content:""!important;
+    position:absolute!important;
+    left:20px!important;right:20px!important;bottom:1px!important;
+    height:1px!important;
+    pointer-events:none!important;
+    background:linear-gradient(90deg,transparent,rgba(var(--c,79,209,197),calc(.16 + var(--frac,0)*.42)),transparent)!important;
+  }
+  .matrix.matrix-v8 .cell:hover,
+  .matrix.matrix-v8 .cell.drop-hover{
+    transform:translateY(-2px)!important;
+    border-color:rgba(var(--c,79,209,197),.76)!important;
+    box-shadow:0 16px 38px -28px rgba(var(--c,79,209,197),.95),0 0 0 1px rgba(var(--c,79,209,197),.12),inset 0 1px 0 rgba(255,255,255,.055)!important;
+  }
+  .matrix.matrix-v8 .cell-head{
+    position:relative!important;
+    z-index:2!important;
+    display:flex!important;
+    align-items:flex-start!important;
+    gap:12px!important;
+  }
+  .matrix.matrix-v8 .cell h4{
+    margin:0!important;
+    font-size:14px!important;
+    line-height:1.1!important;
+    font-weight:700!important;
+    letter-spacing:-.01em!important;
+    color:#f4f7ff!important;
+    text-align:left!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:100%!important;
+    padding-right:0!important;
+  }
+  .matrix.matrix-v8 .cnt{
+    display:block!important;
+    text-align:left!important;
+    font-family:var(--mono)!important;
+    font-size:12px!important;
+    margin:6px 0 0!important;
+    color:rgb(var(--c))!important;
+    letter-spacing:.04em!important;
+  }
+  .matrix.matrix-v8 .micon{
+    width:36px!important;height:36px!important;
+    flex:none!important;
+    filter:drop-shadow(0 0 7px rgba(var(--c),.45))!important;
+  }
+  .matrix.matrix-v8 .micon svg{width:36px!important;height:36px!important;display:block!important;overflow:visible!important;}
+  .matrix.matrix-v8 .micon .micon-bg{fill:rgba(var(--c),.075)!important;stroke:rgba(var(--c),.86)!important;stroke-width:1.35!important;}
+  .matrix.matrix-v8 .micon .micon-line{stroke:rgb(var(--c))!important;stroke-width:1.85!important;stroke-linecap:round!important;stroke-linejoin:round!important;}
+  .matrix.matrix-v8 .cell .edit{
+    position:absolute!important;
+    top:11px!important;right:11px!important;
+    width:26px!important;height:26px!important;
+    border-radius:9px!important;
+    background:rgba(5,9,16,.82)!important;
+    border:1px solid rgba(145,158,190,.18)!important;
+    color:#aeb9d6!important;
+    z-index:4!important;
+  }
+  .matrix.matrix-v8 .hexwrap{
+    position:relative!important;
+    z-index:2!important;
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    gap:6px!important;
+    margin-top:11px!important;
+    padding-left:48px!important;
+    min-height:20px!important;
+    flex-wrap:wrap!important;
+  }
+  .matrix.matrix-v8 .hexwrap.emptyhex{
+    display:none!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  .matrix.matrix-v8 .hex{
+    width:18px!important;
+    height:20px!important;
+    flex:none!important;
+    clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)!important;
+  }
+  .matrix.matrix-v8 .hex.lit{
+    background:radial-gradient(circle at 36% 28%,rgba(255,255,255,.78),rgb(var(--c)) 58%)!important;
+    box-shadow:0 0 12px rgba(var(--c),.78),0 0 2px rgba(255,255,255,.55) inset!important;
+  }
+  .matrix.matrix-v8 .hex.dim{
+    background:rgba(16,24,38,.94)!important;
+    box-shadow:inset 0 0 0 1px rgba(var(--c),.28),0 0 8px -7px rgba(var(--c),.70)!important;
+  }
+  .matrix.matrix-v8 .hex.phantom{display:none!important;}
+  .matrix.matrix-v8 .cell.core{
+    position:relative!important;
+    width:100%!important;
+    min-height:100%!important;
+    height:100%!important;
+    padding:19px 14px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    z-index:3!important;
+    border-color:rgba(79,209,197,.75)!important;
+    border-radius:18px!important;
+    clip-path:polygon(50% 0,94% 24%,94% 76%,50% 100%,6% 76%,6% 24%)!important;
+    background:
+      radial-gradient(circle at 50% 54%,rgba(79,209,197,.22),transparent 58%),
+      linear-gradient(180deg,rgba(10,28,40,.96),rgba(5,12,20,.99))!important;
+    box-shadow:0 0 30px -14px rgba(79,209,197,.76),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  }
+  .matrix.matrix-v8 .cell.core:hover{transform:none!important;}
+  .matrix.matrix-v8 .cell.core::before{
+    content:""!important;
+    position:absolute!important;
+    inset:12px!important;
+    border-radius:50%!important;
+    background:repeating-radial-gradient(circle at 50% 50%,rgba(79,209,197,.12) 0 1px,transparent 1px 14px)!important;
+    opacity:.36!important;
+    clip-path:none!important;
+  }
+  .matrix.matrix-v8 .cell.core::after{
+    content:""!important;
+    position:absolute!important;
+    inset:10px!important;
+    clip-path:polygon(50% 0,92% 24%,92% 76%,50% 100%,8% 76%,8% 24%)!important;
+    border:1px solid rgba(79,209,197,.28)!important;
+    background:transparent!important;
+  }
+  .matrix.matrix-v8 .cell.core h4{
+    position:relative!important;z-index:2!important;
+    text-align:center!important;
+    font-size:20px!important;
+    line-height:1!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+  .matrix.matrix-v8 .cell.core .cnt{
+    position:relative!important;z-index:2!important;
+    text-align:center!important;
+    margin-top:6px!important;
+    color:#8feee4!important;
+  }
+  .matrix.matrix-v8 .cell.core .orb{
+    position:relative!important;z-index:2!important;
+    width:56px!important;height:56px!important;
+    margin-top:12px!important;
+    border-radius:50%!important;
+    background:radial-gradient(circle at 38% 30%,#e6fffb,#7de4da 42%,#35bfb4 66%,rgba(79,209,197,.08) 80%)!important;
+    box-shadow:0 0 28px 4px rgba(79,209,197,.45)!important;
+  }
+  .matrix.matrix-v8 .cell.core .pct{
+    position:relative!important;z-index:2!important;
+    margin-top:10px!important;
+    font-family:var(--mono)!important;
+    font-size:12px!important;
+    color:#67e0d6!important;
+    white-space:nowrap!important;
+  }
+  .matrix-v8-hint{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    margin-top:14px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:#8a96b3;
+    letter-spacing:.04em;
+    flex-wrap:wrap;
+  }
+  .matrix-v8-hint span{display:inline-flex;align-items:center;gap:7px}
+  .matrix-v8-hint i{width:13px;height:15px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:inline-block}
+  .matrix-v8-hint .lit{background:#9eece4;box-shadow:0 0 11px rgba(79,209,197,.8)}
+  .matrix-v8-hint .dim{background:#111827;box-shadow:inset 0 0 0 1px rgba(138,150,179,.35)}
+  .matrix-v8-empty{
+    grid-column:1/-1;
+    min-height:150px;
+    border:1px dashed rgba(138,150,179,.28);
+    border-radius:14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    color:#8a96b3;
+    background:rgba(138,150,179,.035);
+    text-align:center;
+    padding:20px;
+  }
+  .matrix-v8-empty strong{font-family:var(--disp);font-size:15px;color:#d7def0;}
+  .matrix-v8-empty span{font-size:12px;color:#8a96b3;}
+  .matrix-all-layer{
+    position:absolute;
+    inset:0;
+    z-index:18;
+    display:flex;
+    padding:18px;
+    background:rgba(3,6,12,.86);
+    backdrop-filter:blur(10px);
+    border-radius:18px;
+  }
+  .matrix-all-card{
+    width:100%;
+    max-height:100%;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    border-radius:16px;
+    padding:16px;
+    background:linear-gradient(180deg,rgba(12,20,36,.98),rgba(5,9,17,.99));
+    border:1px solid rgba(79,209,197,.26);
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .matrix-all-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border-bottom:1px solid rgba(138,150,179,.13);
+    padding-bottom:12px;
+  }
+  .matrix-all-head strong{
+    display:block;
+    font-family:var(--disp);
+    font-size:16px;
+    color:#f3f7ff;
+  }
+  .matrix-all-head span{
+    display:block;
+    margin-top:2px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#8f9ab7;
+  }
+  .matrix-all-close{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    border-radius:10px;
+    background:rgba(138,150,179,.08);
+    border:1px solid rgba(138,150,179,.20);
+    color:#c6cee3;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+  }
+  .matrix-all-grid{
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    padding-right:4px;
+  }
+  .matrix-all-grid .cell{
+    min-height:92px!important;
+  }
+  .space > .ov{z-index:30!important;}
+  @media(max-width:1180px){
+    .matrix-v8-body{grid-template-columns:164px minmax(0,1fr);}
+    .matrix.matrix-v8 .cell.core .orb{width:52px!important;height:52px!important}
+    .matrix.matrix-v8 .cell h4{font-size:13.5px!important}
+  }
+  @media(max-width:980px){
+    .notes-panel .nf-grid{grid-template-columns:1fr!important}
+    .matrix-v8-body{grid-template-columns:1fr!important}
+    .matrix-v8-core-card::after{display:none!important}
+    .matrix.matrix-v8 .cell.core{min-height:150px!important;clip-path:none!important;border-radius:16px!important}
+    .matrix-v8-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:640px){
+    .space{padding:14px!important}
+    .matrix-v8-head,.matrix-all-head{align-items:flex-start;flex-direction:column}
+    .matrix-v8-actions,.matrix-all-actions{justify-content:flex-start}
+    .matrix-v8-grid,.matrix-all-grid{grid-template-columns:1fr}
+    .matrix.matrix-v8 .hexwrap{padding-left:0!important}
+    .matrix-v8-hint{display:none}
+  }
+
 </style>
 </head>
 <body>
@@ -1793,21 +2316,59 @@
       return '<div class="cell core matrix-core"><h4>YOU</h4><span class="cnt">Quarter Core</span><div class="orb"></div><div class="pct">'+pct+'% complete</div></div>';
     }
 
+    function bindMatrixEvents(scope){
+      const root = scope || el("matrix"); if(!root) return;
+      root.querySelectorAll(".hex[data-item]").forEach(h=>h.addEventListener("click",ev=>{ ev.stopPropagation(); toggleItem(h.dataset.item); }));
+      root.querySelectorAll("[data-open]").forEach(c=>c.addEventListener("click",()=>openCell(c.dataset.open)));
+      root.querySelectorAll("[data-rename]").forEach(b=>b.addEventListener("click",ev=>{ ev.stopPropagation(); openRename(b.dataset.rename); }));
+      root.querySelectorAll("[data-add]").forEach(addc=>addc.addEventListener("click",openCreate));
+      root.querySelectorAll("[data-viewall]").forEach(btn=>btn.addEventListener("click",openMatrixAll));
+    }
+
     function renderMatrix(){
       const host=el("matrix"); if(!host) return;
-      host.classList.add("matrix-v7");
-      const left=[], right=[];
-      folders.forEach((f,i)=>{ (i%2===0 ? left : right).push(folderCellHtml(f,i)); });
-      const html='<div class="matrix-v7-shell">'
-        + '<div class="matrix-v7-col matrix-v7-left">'+left.join("")+'</div>'
-        + '<div class="matrix-v7-center">'+coreCellHtml()+'<div class="cell addcell" data-add="1"><span class="plus">+</span></div></div>'
-        + '<div class="matrix-v7-col matrix-v7-right">'+right.join("")+'</div>'
-        + '</div><div class="matrix-v7-hint"><span><i class="lit"></i>Completed</span><span><i class="dim"></i>Incomplete</span><span>No tasks = no hexes</span></div>';
+      host.className = "matrix matrix-v8";
+      const total=folderItems.length, done=folderItems.filter(x=>x.done).length, pct=total?Math.round(done/total*100):0;
+      const visible=folders.slice(0,6);
+      const hiddenCount=Math.max(0,folders.length-visible.length);
+      const actionView = hiddenCount
+        ? '<button class="matrix-v8-action matrix-v8-view" data-viewall type="button">View all <span>'+folders.length+'</span></button>'
+        : '<button class="matrix-v8-action matrix-v8-view" data-viewall type="button">View all</button>';
+      const folderHtml = visible.length
+        ? visible.map((f,i)=>folderCellHtml(f,i)).join("")
+        : '<div class="matrix-v8-empty"><strong>No cells yet.</strong><span>Create a folder to start building your matrix.</span></div>';
+      const html =
+        '<div class="matrix-v8-shell">'
+          + '<div class="matrix-v8-head">'
+            + '<div class="matrix-v8-title"><span class="matrix-v8-mark" aria-hidden="true">⬢</span><div><strong>Cellular Matrix</strong><span>Showing '+visible.length+' of '+folders.length+' cells</span></div></div>'
+            + '<div class="matrix-v8-actions"><button class="matrix-v8-action matrix-v8-add" data-add type="button">+ New cell</button>'+actionView+'</div>'
+          + '</div>'
+          + '<div class="matrix-v8-body">'
+            + '<div class="matrix-v8-core-card">'+coreCellHtml()+'</div>'
+            + '<div class="matrix-v8-grid">'+folderHtml+'</div>'
+          + '</div>'
+          + '<div class="matrix-v8-hint"><span><i class="lit"></i>Completed</span><span><i class="dim"></i>Incomplete</span><span>No tasks = no hexes</span>'+(hiddenCount?'<span>'+hiddenCount+' hidden in View all</span>':'')+'</div>'
+        + '</div>';
       host.innerHTML=html; justLit=null;
-      host.querySelectorAll(".hex[data-item]").forEach(h=>h.addEventListener("click",ev=>{ ev.stopPropagation(); toggleItem(h.dataset.item); }));
-      host.querySelectorAll("[data-open]").forEach(c=>c.addEventListener("click",()=>openCell(c.dataset.open)));
-      host.querySelectorAll("[data-rename]").forEach(b=>b.addEventListener("click",ev=>{ ev.stopPropagation(); openRename(b.dataset.rename); }));
-      const addc=host.querySelector("[data-add]"); if(addc) addc.addEventListener("click",openCreate);
+      bindMatrixEvents(host);
+    }
+
+    function openMatrixAll(){
+      const space=el("space"); if(!space) return;
+      const old=space.querySelector(".matrix-all-layer"); if(old) old.remove();
+      const ov=document.createElement("div"); ov.className="matrix-all-layer";
+      const allHtml = folders.length
+        ? folders.map((f,i)=>folderCellHtml(f,i)).join("")
+        : '<div class="matrix-v8-empty"><strong>No cells yet.</strong><span>Create a folder to start building your matrix.</span></div>';
+      ov.innerHTML =
+        '<div class="matrix-all-card">'
+          + '<div class="matrix-all-head"><div><strong>All cellular folders</strong><span>'+folders.length+' total cells</span></div><div class="matrix-all-actions"><button class="matrix-v8-action matrix-v8-add" data-add type="button">+ New cell</button><button class="matrix-all-close" data-close type="button" aria-label="Close">&times;</button></div></div>'
+          + '<div class="matrix-all-grid">'+allHtml+'</div>'
+        + '</div>';
+      space.appendChild(ov);
+      ov.querySelector("[data-close]").addEventListener("click",()=>ov.remove());
+      ov.addEventListener("click",ev=>{ if(ev.target===ov) ov.remove(); });
+      bindMatrixEvents(ov);
     }
 
     function openCell(id){
