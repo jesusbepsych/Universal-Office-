@@ -142,8 +142,8 @@
     text-shadow:0 0 18px rgba(var(--krgb,79,209,197),.18),0 2px 10px rgba(0,0,0,.55);
   }
   .kpi .l{
-    margin-top:8px;
-    font-size:10.5px;
+    margin-top:0;
+    font-size:10px;
     letter-spacing:.10em;
     color:rgba(218,226,248,.76);
   }
@@ -251,7 +251,7 @@
 
   .runway-stage{
     position:relative;
-    min-height:940px;
+    min-height:990px;
     width:100%;
     border-radius:24px;
     border:1px solid rgba(112,134,184,.24);
@@ -530,19 +530,9 @@
   }
 
   .runway-card .rc-body{position:relative;z-index:1;max-width:100%;}
-  .runway-card .r-time{
-    font-family:var(--disp);
-    font-size:clamp(18px,2.2vw,32px);
-    line-height:1;
-    font-weight:600;
-    color:#f4f8ff;
-    letter-spacing:-.04em;
-    text-shadow:0 0 18px rgba(160,210,255,.12);
-  }
-  .runway-card.is-current .r-time{font-size:clamp(36px,3.1vw,60px);}
   .runway-card .r-title{
     margin-top:8px;
-    font-size:clamp(14px,1.42vw,21px);
+    font-size:clamp(13px,1.28vw,19px);
     line-height:1.1;
     font-weight:700;
     color:#f5f8ff;
@@ -552,9 +542,9 @@
     -webkit-box-orient:vertical;
     overflow:hidden;
   }
-  .runway-card.is-current .r-title{font-size:clamp(18px,1.72vw,29px);}
+  .runway-card.is-current .r-title{font-size:clamp(17px,1.58vw,26px);}
   .runway-card .r-sub{
-    margin-top:7px;
+    margin-top:8px;
     font-size:10.5px;
     color:#b3c4e1;
     font-family:var(--mono);
@@ -646,19 +636,18 @@
   }
   @media(max-width:1240px){
     .grid{grid-template-columns:minmax(0,1.72fr) minmax(300px,1fr);}
-    .runway-stage{min-height:900px;}
+    .runway-stage{min-height:960px;}
   }
   @media(max-width:1040px){.grid{grid-template-columns:1fr;}}
   @media(max-width:720px){
-    .runway-stage{min-height:760px;}
+    .runway-stage{min-height:820px;}
     .runway-pin{display:none;}
     .runway-footer{flex-direction:column;align-items:stretch;}
     .runway-legend{justify-content:flex-start;}
-    .runway-card .r-title{font-size:15px;}
-    .runway-card.is-current .r-time{font-size:34px;}
+    .runway-card .r-title{font-size:14px;}
   }
   @media(max-width:560px){
-    .runway-stage{min-height:680px;padding-bottom:88px;}
+    .runway-stage{min-height:740px;padding-bottom:88px;}
     .runway-card{padding-left:16px;padding-right:16px;}
   }
 
@@ -2829,11 +2818,11 @@
       const currentTask=slice[currentIdx];
 
       const positions=[
-        {width:'76%',height:184,bottom:110,pin:168},
-        {width:'63%',height:122,bottom:350,pin:392},
-        {width:'54%',height:102,bottom:514,pin:548},
-        {width:'46%',height:86,bottom:644,pin:670},
-        {width:'38%',height:72,bottom:744,pin:764}
+        {width:'78%',height:164,bottom:92,pin:150},
+        {width:'65%',height:110,bottom:300,pin:338},
+        {width:'56%',height:94,bottom:446,pin:478},
+        {width:'48%',height:82,bottom:572,pin:598},
+        {width:'40%',height:68,bottom:680,pin:700}
       ];
       const viewCats=[];
       slice.forEach(t=>{ if(t.category && !viewCats.includes(t.category)) viewCats.push(t.category); });
@@ -2864,7 +2853,7 @@
         return '<div class="'+cardClass+'" style="--c:'+rgbOf(t.category)+';width:'+pos.width+';height:'+pos.height+'px;bottom:'+pos.bottom+'px;z-index:'+(90-i)+'">'
           +'<span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>'
           +'<div class="runway-actions">'+check+remove+'</div>'
-          +'<div class="rc-body"><div class="r-time">'+escapeHtml(time)+'</div><div class="r-title">'+escapeHtml(t.title||'Untitled')+'</div><div class="r-sub">'+escapeHtml(sub)+'</div><div class="r-badge"><i></i>'+escapeHtml(m.label)+'</div></div></div>';
+          +'<div class="rc-body"><div class="r-title">'+escapeHtml(t.title||'Untitled')+'</div><div class="r-sub">'+escapeHtml(sub)+'</div><div class="r-badge"><i></i>'+escapeHtml(m.label)+'</div></div></div>';
       }).join('');
 
       const legendHtml=viewCats.map(c=>{ const m=catMeta(c); return '<span class="runway-leg" style="--c:'+rgbOf(c)+'"><i></i>'+escapeHtml(m.label)+'</span>'; }).join('');
