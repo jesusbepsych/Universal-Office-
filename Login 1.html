@@ -278,8 +278,8 @@
     border:1px solid rgba(115,140,190,.32);
     overflow:hidden;
     background:
-      radial-gradient(circle at 50% 12%, rgba(91,150,255,.28) 0 2%, rgba(91,150,255,.12) 2% 10%, transparent 24%),
-      radial-gradient(ellipse at 50% 74%, rgba(33,150,255,.12), transparent 48%),
+      linear-gradient(180deg, rgba(5,10,18,.08), rgba(2,6,14,.22)),
+      url("signal_runway_user_clean_plate.jpg") center/cover no-repeat,
       linear-gradient(180deg,#071122 0%,#040913 36%,#02060d 100%);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,.06),
@@ -294,12 +294,8 @@
     pointer-events:none;
     z-index:1;
     background:
-      radial-gradient(1px 1px at 14% 16%,rgba(210,235,255,.35),transparent),
-      radial-gradient(1px 1px at 34% 24%,rgba(210,235,255,.20),transparent),
-      radial-gradient(1px 1px at 58% 18%,rgba(210,235,255,.30),transparent),
-      radial-gradient(1px 1px at 74% 32%,rgba(210,235,255,.22),transparent),
-      radial-gradient(1px 1px at 88% 20%,rgba(210,235,255,.24),transparent),
-      linear-gradient(90deg,rgba(1,4,10,.20),transparent 16%,transparent 84%,rgba(1,4,10,.18));
+      radial-gradient(circle at 50% 12%, rgba(160,205,255,.08), transparent 12%),
+      linear-gradient(180deg, rgba(255,255,255,.03), transparent 12%, transparent 88%, rgba(0,0,0,.16));
   }
   .runway-stage::after{
     content:"";
@@ -319,18 +315,21 @@
   .runway-mountains,
   .runway-gridlines,
   .runway-dots{
+    display:none !important;
     position:absolute;
     inset:0;
     pointer-events:none;
   }
 
   .runway-sky{
+    display:none !important;
     z-index:2;
     background:
       radial-gradient(ellipse at 50% 20%, rgba(73,122,255,.20), transparent 30%),
       linear-gradient(180deg, rgba(5,13,30,.20), transparent 48%);
   }
   .runway-horizon{
+    display:none !important;
     z-index:3;
   }
   .runway-horizon::before{
@@ -357,6 +356,7 @@
   }
 
   .runway-mountains{
+    display:none !important;
     z-index:4;
   }
   .runway-mountains::before,
@@ -378,6 +378,7 @@
   }
 
   .runway-plane{
+    display:none !important;
     z-index:5;
     left:5.5%;
     right:5.5%;
@@ -401,6 +402,7 @@
   }
 
   .runway-lanes{
+    display:none !important;
     z-index:6;
   }
   .runway-lanes::before,
@@ -418,6 +420,7 @@
   .runway-lanes::after{right:5.5%;transform:skewX(-35deg);}
 
   .runway-dots{
+    display:none !important;
     z-index:7;
   }
   .runway-dots::before,
@@ -441,6 +444,7 @@
   .runway-dots::after{right:12%;}
 
   .runway-midline{
+    display:none !important;
     z-index:8;
     left:50%;
     top:20.5%;
@@ -475,6 +479,7 @@
   }
 
   .runway-scene-head{
+    display:none !important;
     position:absolute;
     z-index:20;
     left:5%;
@@ -509,6 +514,7 @@
     color:#66a5ff;
   }
   .runway-upnext-label{
+    display:none !important;
     position:absolute;
     z-index:20;
     left:5.2%;
@@ -521,6 +527,54 @@
     pointer-events:none;
   }
 
+
+  .runway-slotfx{
+    position:absolute;
+    inset:0;
+    z-index:14;
+    pointer-events:none;
+  }
+  .runway-slotglow{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    border-radius:16px;
+    opacity:.18;
+    filter:saturate(1.05);
+    animation:slotClimbGlow 4.8s ease-in-out infinite;
+  }
+  .runway-slotglow::before{
+    content:"";
+    position:absolute;
+    left:8%; right:8%; top:0;
+    height:3px;
+    border-radius:999px;
+    background:linear-gradient(90deg,transparent,rgba(var(--c),.86),rgba(255,255,255,.95),rgba(var(--c),.86),transparent);
+    box-shadow:0 0 18px rgba(var(--c),.55);
+  }
+  .runway-slotglow::after{
+    content:"";
+    position:absolute;
+    left:6%; right:6%; bottom:-6px;
+    height:16px;
+    border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(var(--c),.24), transparent 72%);
+  }
+  .runway-slotglow .pillar{
+    position:absolute;
+    top:14%; bottom:12%;
+    width:3px; border-radius:999px;
+    background:linear-gradient(180deg, rgba(255,255,255,.58), rgba(var(--c),.86), rgba(var(--c),.32));
+    box-shadow:0 0 12px rgba(var(--c),.42);
+    opacity:.72;
+  }
+  .runway-slotglow .pillar.left{ left:4.8%; }
+  .runway-slotglow .pillar.right{ right:4.8%; }
+  @keyframes slotClimbGlow{
+    0%, 18%, 100%{ opacity:.14; filter:brightness(1) saturate(1); }
+    8%{ opacity:.60; filter:brightness(1.18) saturate(1.22); }
+  }
+
   .runway-card{
     position:absolute;
     z-index:22;
@@ -531,7 +585,7 @@
     justify-content:center;
     text-align:center;
     border-radius:18px;
-    padding:12px 58px 12px 22px;
+    padding:10px 42px 10px 16px;
     background:
       linear-gradient(180deg,rgba(5,10,20,.50),rgba(2,6,14,.66)),
       radial-gradient(ellipse at center,rgba(5,12,24,.80),rgba(3,7,15,.58) 68%,rgba(3,7,15,.18));
@@ -566,8 +620,8 @@
   }
   .runway-card .gate-pillar{
     position:absolute;
-    top:13%;
-    bottom:10%;
+    top:15%;
+    bottom:15%;
     width:3px;
     border-radius:999px;
     background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(var(--c,95,160,255),.90),rgba(var(--c,95,160,255),.40));
@@ -579,12 +633,12 @@
 
   .runway-card.is-current{
     z-index:28;
-    filter:saturate(1.25) brightness(1.04);
+    filter:saturate(1.18) brightness(1.03);
     animation:runwayCurrentFloat 2.8s ease-in-out infinite;
   }
   @keyframes runwayCurrentFloat{
     0%,100%{transform:translateX(-50%) translateY(-5px);}
-    50%{transform:translateX(-50%) translateY(-12px);}
+    50%{transform:translateX(-50%) translateY(-9px);}
   }
   .runway-card.done{opacity:.62;filter:saturate(.7);}
 
@@ -594,68 +648,39 @@
     width:100%;
     max-width:100%;
   }
-    .runway-card:not(.is-current) .r-time{
-    font-size:clamp(12px, calc(1.35vw * var(--cardScale,1)), 24px);
-  }
-.runway-card .r-time{
-    display:block;
-    font-family:var(--disp);
-    font-size:clamp(12px,1.35vw,24px);
-    line-height:1;
-    color:#f4f8ff;
-    font-weight:600;
-    letter-spacing:-.035em;
-    margin-bottom:5px;
-    text-shadow:0 0 18px rgba(170,215,255,.14);
-  }
-  .runway-card.is-current .r-time{
-    font-size:clamp(25px,3.0vw,50px);
-    margin-bottom:8px;
-  }
-    .runway-card:not(.is-current) .r-title{
-    font-size:clamp(10px, calc(.95vw * var(--cardScale,1) + 1px), 16px);
-  }
-.runway-card .r-title{
+  .runway-card .r-time{display:none;}
+  .runway-card .r-title{
     margin:0;
     color:#f6f8ff;
     font-weight:700;
-    font-size:clamp(10px,.95vw,16px);
     line-height:1.08;
     display:-webkit-box;
-    -webkit-line-clamp:2;
     -webkit-box-orient:vertical;
     overflow:hidden;
     text-wrap:balance;
+    text-shadow:0 0 12px rgba(170,215,255,.10);
   }
-  .runway-card.is-current .r-title{
-    font-size:clamp(15px,1.55vw,26px);
-  }
-    .runway-card:not(.is-current) .r-sub{
-    font-size:clamp(8px, calc(.62vw * var(--cardScale,1) + 1px), 10px);
-  }
-  .runway-card.compact-title .r-title{
-    font-size:clamp(9px, calc(.82vw * var(--cardScale,1) + 1px), 14px);
-    line-height:1.04;
-  }
-  .runway-card.compact-title .r-sub{
-    margin-top:4px;
-  }
-.runway-card .r-sub{
-    margin-top:5px;
+  .runway-card .r-sub{
+    margin-top:6px;
     color:#b7c6df;
     font-family:var(--mono);
-    font-size:clamp(8px,.66vw,10px);
-    line-height:1.25;
-    letter-spacing:.025em;
+    line-height:1.24;
+    letter-spacing:.02em;
     display:-webkit-box;
-    -webkit-line-clamp:2;
     -webkit-box-orient:vertical;
     overflow:hidden;
   }
-  .runway-card.is-current .r-sub{
-    font-size:clamp(9px,.82vw,12px);
-    margin-top:7px;
-  }
+  .runway-card.level-0 .r-title{ font-size:clamp(20px,2.4vw,38px); -webkit-line-clamp:2; }
+  .runway-card.level-0 .r-sub{ font-size:clamp(10px,.95vw,14px); -webkit-line-clamp:2; }
+  .runway-card.level-1 .r-title{ font-size:clamp(15px,1.65vw,25px); -webkit-line-clamp:2; }
+  .runway-card.level-1 .r-sub{ font-size:clamp(9px,.78vw,12px); -webkit-line-clamp:1; }
+  .runway-card.level-2 .r-title{ font-size:clamp(13px,1.38vw,20px); -webkit-line-clamp:2; }
+  .runway-card.level-2 .r-sub{ font-size:clamp(8px,.70vw,10px); -webkit-line-clamp:1; }
+  .runway-card.level-3 .r-title{ font-size:clamp(11px,1.08vw,16px); -webkit-line-clamp:2; }
+  .runway-card.level-3 .r-sub{ font-size:clamp(8px,.58vw,9px); -webkit-line-clamp:1; }
+  .runway-card.level-4 .r-title{ font-size:clamp(10px,.92vw,14px); -webkit-line-clamp:2; }
+  .runway-card.level-4 .r-sub{ font-size:clamp(7px,.52vw,8px); -webkit-line-clamp:1; }
+  .runway-card.compact-title .r-title{ line-height:1.02; }
   .runway-card .r-badge{
     display:none;
   }
@@ -672,8 +697,8 @@
     opacity:.72;
   }
   .runway-iconbtn{
-    width:20px;
-    height:20px;
+    width:18px;
+    height:18px;
     border-radius:999px;
     border:1px solid rgba(255,255,255,.12);
     background:rgba(3,7,14,.58);
@@ -684,12 +709,13 @@
     padding:0;
     backdrop-filter:blur(6px);
   }
-  .runway-iconbtn svg{width:10px;height:10px;}
+  .runway-iconbtn svg{width:9px;height:9px;}
   .runway-iconbtn:hover{border-color:rgba(var(--c,95,160,255),.48);color:rgb(var(--c,95,160,255));}
   .runway-done[aria-pressed="true"]{background:rgba(47,214,176,.20);border-color:rgba(47,214,176,.56);color:#6ef0c9;}
   .runway-remove.armed{width:auto;padding:0 8px;border-radius:999px;font-size:10px;font-weight:700;color:#ff9aa2;border-color:rgba(255,111,125,.52);}
 
   .runway-pin{
+    display:none !important;
     position:absolute;
     z-index:24;
     left:calc(var(--x) * 1%);
@@ -730,7 +756,7 @@
     left:3.6%;
     right:3.6%;
     bottom:2.4%;
-    height:7.3%;
+    height:6.4%;
     display:flex;
     align-items:center;
     gap:18px;
@@ -738,15 +764,15 @@
     border:1px solid rgba(94,118,165,.18);
     background:rgba(5,10,18,.48);
     border-radius:13px;
-    padding:8px 10px;
+    padding:7px 10px;
     backdrop-filter:blur(4px);
   }
   .runway-stamp{
     display:flex;
     align-items:center;
     gap:10px;
-    width:27%;
-    min-width:200px;
+    width:24%;
+    min-width:180px;
     padding-left:12px;
   }
   .runway-stamp .warn{
@@ -895,7 +921,7 @@
   .fitem.done .fitem-t{text-decoration:line-through;color:var(--muted);opacity:.55;}
   .fitem-empty{font-size:12px;color:var(--muted);padding:1px 2px;}
   .check.sm{width:19px;height:19px;border-radius:6px;}
-  .check.sm svg{width:10px;height:10px;}
+  .check.sm svg{width:9px;height:9px;}
   .fadd{display:flex;gap:6px;}
   .empty.mini{padding:15px;font-size:12.5px;}
 
@@ -951,7 +977,7 @@
   .ov{position:absolute;inset:0;background:rgba(5,8,15,.82);display:flex;align-items:flex-start;justify-content:center;border-radius:16px;padding:16px;z-index:6;overflow:auto;}
   .ovcard{width:100%;max-width:330px;background:#0e1424;border:1px solid rgba(var(--c),.45);border-radius:15px;padding:15px;box-shadow:0 0 32px rgba(var(--c),.22);}
   .ovhead{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-  .ovdot{width:10px;height:10px;border-radius:50%;flex:none;}
+  .ovdot{width:9px;height:9px;border-radius:50%;flex:none;}
   .ovname{flex:1;font-size:15px;font-weight:600;color:#eaf0fb;}
   .ovcat{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;}
   .ovx{background:none;border:none;color:#8a96b3;font-size:18px;cursor:pointer;padding:0 2px;}
@@ -1046,7 +1072,7 @@
   .mode-lever.on .lever-knob{top:15px;background:var(--teal);box-shadow:0 0 9px rgba(79,209,197,.65);}
   .qcheck{flex:none;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;padding:0;cursor:pointer;border:1.5px solid rgba(79,209,197,.6);background:rgba(79,209,197,.10);color:var(--teal);-webkit-tap-highlight-color:transparent;transition:transform .12s;}
   .qcheck:active{transform:scale(.86);}
-  .qcheck svg{width:10px;height:10px;}
+  .qcheck svg{width:9px;height:9px;}
   .qtask, .qtask *{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
   .qtask.dragging-src{ opacity:.3; transition:opacity .15s ease; }
   .qghost{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;max-width:240px;padding:10px 14px;border-radius:24px 30px 22px 28px / 28px 22px 30px 24px;font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(135deg,rgba(79,209,197,.30),rgba(79,209,197,.13));border:1px solid rgba(79,209,197,.6);box-shadow:0 18px 40px -12px rgba(79,209,197,.55),0 0 28px -6px rgba(79,209,197,.5),inset 0 1px 0 rgba(255,255,255,.08);transform:translate(-9999px,-9999px) scale(.9);opacity:0;transition:transform .09s ease-out, box-shadow .2s ease, opacity .18s ease;}
@@ -1092,7 +1118,7 @@
   @keyframes dsBlink{0%,100%{opacity:.35;}50%{opacity:1;}}
   .ds-track{position:relative;height:2px;margin:18px 6px 2px;border-radius:2px;background:rgba(127,176,232,.16);}
   .ds-track i{position:absolute;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(127,176,232,.4);transform:translate(-50%,-50%);}
-  .ds-dot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:#c6f1ec;box-shadow:0 0 15px 5px rgba(79,209,197,.85);transform:translate(-50%,-50%);animation:dsSweep 1.9s cubic-bezier(.45,0,.55,1) infinite;}
+  .ds-dot{position:absolute;top:50%;width:9px;height:9px;border-radius:50%;background:#c6f1ec;box-shadow:0 0 15px 5px rgba(79,209,197,.85);transform:translate(-50%,-50%);animation:dsSweep 1.9s cubic-bezier(.45,0,.55,1) infinite;}
   @keyframes dsSweep{0%{left:3%;}50%{left:97%;}100%{left:3%;}}
   .ds-head{margin-bottom:2px;}
   .ds-chk{flex:none;background:none;border:0;color:var(--teal);cursor:pointer;padding:0;line-height:1;} .ds-chk svg{width:23px;height:23px;}
@@ -2995,23 +3021,19 @@
       const currentTask=slice[currentIdx];
 
       const positions=[
-        {left:50.4,top:69.2,width:54.0,height:15.4,pinX:10.3,pinY:68.2,current:true},
-        {left:50.9,top:52.8,width:48.5,height:11.6,pinX:14.8,pinY:52.1},
-        {left:51.0,top:40.7,width:41.0,height:10.2,pinX:20.8,pinY:40.0},
-        {left:50.9,top:30.6,width:34.5,height:9.0,pinX:25.8,pinY:30.0},
-        {left:50.8,top:21.8,width:29.0,height:8.4,pinX:30.0,pinY:21.2}
+        {left:50.1,top:69.6,width:56.0,height:16.2,current:true},
+        {left:50.3,top:53.4,width:44.5,height:11.7},
+        {left:50.4,top:41.4,width:35.5,height:10.1},
+        {left:50.5,top:31.2,width:28.6,height:8.7},
+        {left:50.6,top:22.1,width:22.4,height:7.4}
       ];
+      const slotColors=["106,190,255","168,255,193","212,156,255","255,216,123","106,170,255"];
 
       const viewCats=[];
       slice.forEach(t=>{ if(t.category && !viewCats.includes(t.category)) viewCats.push(t.category); });
-      const displayDate=(currentTask&&currentTask.due_date)||today;
-      const monthDay=monthDayLabel(displayDate).toUpperCase();
-      const weekday=weekdayLabel(displayDate).toUpperCase();
 
-      const pinsHtml=slice.map((t,i)=>{
-        const pos=positions[Math.min(i,positions.length-1)], m=catMeta(t.category);
-        return '<div class="runway-pin" style="--c:'+rgbOf(t.category)+';--x:'+pos.pinX+';--y:'+pos.pinY+'"><span class="pin-circle">'+escapeHtml(runwayPinSymbol(t.category))+'</span><span class="ptext">'+escapeHtml(m.label)+'</span></div>';
-      }).join('');
+      const slotHtml=positions.map((pos,i)=>'<div class="runway-slotglow level-'+i+'" style="--c:'+slotColors[i]+';left:'+pos.left+'%;top:'+pos.top+'%;width:'+pos.width+'%;height:'+pos.height+'%;margin-top:'+(-pos.height/2)+'%;animation-delay:'+(i*0.42)+'s">'
+        +'<span class="pillar left"></span><span class="pillar right"></span></div>').join('');
 
       const cardsHtml=slice.map((t,i)=>{
         const pos=positions[Math.min(i,positions.length-1)], m=catMeta(t.category);
@@ -3019,17 +3041,15 @@
         const diff=t.due_date?dayDiff(t.due_date,today):null;
         const isCurrent=i===currentIdx || (i===0 && !slice.some(x=>isCurrentWindowTask(x,today,nowHM)));
         const titleText=(t.title||'Untitled');
-        const longTitle=titleText.length>30;
-        const cardClass='runway-card'+(done?' done':'')+(isCurrent?' is-current':'')+(longTitle?' compact-title':'');
+        const longTitle=titleText.length>34;
+        const cardClass='runway-card level-'+Math.min(i,4)+(done?' done':'')+(isCurrent?' is-current':'')+(longTitle?' compact-title':'');
         const sub=runwaySubtext(t,m,diff);
-        const time=runway24(t.due_time);
-        const scale=isCurrent?1:(1-Math.min(i,4)*0.08);
         const check='<button class="runway-iconbtn runway-done" data-id="'+t.id+'" aria-pressed="'+done+'" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>';
         const remove='<button class="runway-iconbtn runway-remove" data-del="'+t.id+'" aria-label="Remove this item">&times;</button>';
-        return '<div class="'+cardClass+'" style="--c:'+rgbOf(t.category)+';--cardScale:'+scale+';left:'+pos.left+'%;top:'+pos.top+'%;width:'+pos.width+'%;height:'+pos.height+'%;margin-top:'+(-pos.height/2)+'%;z-index:'+(90-i)+'">'
+        return '<div class="'+cardClass+'" style="--c:'+slotColors[Math.min(i,4)]+';left:'+pos.left+'%;top:'+pos.top+'%;width:'+pos.width+'%;height:'+pos.height+'%;margin-top:'+(-pos.height/2)+'%;z-index:'+(90-i)+'">'
           +'<span class="gate-pillar left"></span><span class="gate-pillar right"></span>'
           +'<div class="runway-actions">'+check+remove+'</div>'
-          +'<div class="rc-body"><div class="r-time">'+escapeHtml(time)+'</div><div class="r-title">'+escapeHtml(titleText)+'</div><div class="r-sub">'+escapeHtml(sub)+'</div><div class="r-badge"><i></i>'+escapeHtml(m.label)+'</div></div></div>';
+          +'<div class="rc-body"><div class="r-title">'+escapeHtml(titleText)+'</div><div class="r-sub">'+escapeHtml(sub)+'</div></div></div>';
       }).join('');
 
       const legendHtml=viewCats.map(c=>{ const m=catMeta(c); return '<span class="runway-leg" style="--c:'+rgbOf(c)+'"><i></i>'+escapeHtml(m.label)+'</span>'; }).join('');
@@ -3038,10 +3058,8 @@
       const html=''
         +'<div class="runway-shell">'
           +'<div class="runway-stage">'
-            +'<div class="runway-sky"></div><div class="runway-horizon"></div><div class="runway-mountains"></div><div class="runway-plane"></div><div class="runway-lanes"></div><div class="runway-dots"></div><div class="runway-midline"></div>'
-            +'<div class="runway-scene-head"><span class="runway-scene-kicker">Today</span><span class="runway-scene-date">'+escapeHtml(monthDay)+'</span><span class="runway-scene-day">'+escapeHtml(weekday)+'</span></div>'
-            +'<div class="runway-upnext-label">Up next &rarr;</div>'
-            +pinsHtml+cardsHtml
+            +'<div class="runway-slotfx">'+slotHtml+'</div>'
+            +cardsHtml
             +'<div class="runway-footer"><div class="runway-stamp"><span class="warn">△</span><div class="copy"><strong>Signal runway agenda</strong><span>Live queue · current view</span></div></div><div class="runway-legend">'+legendHtml+'</div></div>'
           +'</div>'
         +'</div>'+pager;
