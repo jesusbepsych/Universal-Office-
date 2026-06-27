@@ -244,96 +244,423 @@
 
   /* Agenda */
   #agenda{position:relative;}
-  .runway-shell{display:grid;grid-template-columns:176px minmax(0,1fr);gap:20px;align-items:stretch;}
-  .runway-side{display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-width:0;padding:6px 0 10px;}
-  .runway-datecard{display:flex;flex-direction:column;gap:2px;padding:6px 2px 0;}
-  .runway-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
-  .runway-bigdate{font-family:var(--disp);font-size:56px;line-height:.86;letter-spacing:-.065em;color:#f3f7ff;text-shadow:0 0 20px rgba(127,169,255,.06);}
-  .runway-bigdate span{display:block;font-family:var(--disp);font-size:19px;line-height:1.05;letter-spacing:.11em;text-transform:uppercase;color:#6ea3ff;margin-top:10px;}
-  .runway-upnext{margin-top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
-  .runway-current-chip{display:inline-flex;align-items:flex-start;gap:9px;margin-top:12px;padding:12px 13px;border-radius:18px;background:linear-gradient(180deg,rgba(9,15,28,.82),rgba(7,10,19,.68));border:1px solid rgba(79,209,197,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 0 20px -14px rgba(79,209,197,.6);max-width:152px;}
-  .runway-current-chip .rc-copy{min-width:0;}
-  .runway-current-chip .rc-label{display:block;font-size:11px;line-height:1.22;color:var(--muted);font-family:var(--mono);}
-  .runway-current-chip .rc-name{display:block;font-size:13px;line-height:1.22;font-weight:700;color:#f0f6ff;margin:2px 0 3px;}
-  .runway-sidecats{display:flex;flex-direction:column;gap:11px;}
-  .runway-sidecats .runway-kicker{margin-bottom:1px;}
-  .runway-sidecat{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:999px;border:1px solid rgba(var(--c,79,209,197),.18);background:linear-gradient(180deg,rgba(var(--c,79,209,197),.10),rgba(5,10,18,.64));color:rgb(var(--c,79,209,197));box-shadow:0 0 18px -16px rgba(var(--c,79,209,197),.9), inset 0 1px 0 rgba(255,255,255,.03);}
-  .runway-sidecat .label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
 
-  .runway-stage{position:relative;min-height:820px;border-radius:24px;border:1px solid rgba(112,134,184,.24);background:linear-gradient(180deg,rgba(5,9,18,.985),rgba(4,8,14,.985));overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 34px 70px -52px rgba(79,209,197,.18);}
-  .runway-stage::before{content:"";position:absolute;inset:0;background:
-      radial-gradient(circle at 50% 12%,rgba(101,145,255,.26),transparent 18%),
-      radial-gradient(circle at 50% 31%,rgba(105,189,255,.08),transparent 26%),
-      linear-gradient(180deg,rgba(7,14,26,.35),transparent 20%);
-      pointer-events:none;}
-  .runway-stage::after{content:"";position:absolute;left:10%;right:10%;bottom:40px;height:170px;background:radial-gradient(ellipse at center,rgba(74,187,255,.08),transparent 72%);pointer-events:none;}
-  .runway-sky,.runway-mountains,.runway-horizon,.runway-plane,.runway-lanes,.runway-midline,.runway-markers,.runway-stars{position:absolute;inset:0;pointer-events:none;}
-  .runway-stars{background-repeat:no-repeat;background-image:radial-gradient(2px 2px at 18% 16%,rgba(220,238,255,.35),transparent),radial-gradient(2px 2px at 62% 14%,rgba(220,238,255,.25),transparent),radial-gradient(2px 2px at 78% 26%,rgba(220,238,255,.18),transparent),radial-gradient(2px 2px at 48% 22%,rgba(220,238,255,.20),transparent),radial-gradient(2px 2px at 28% 34%,rgba(220,238,255,.16),transparent),radial-gradient(2px 2px at 85% 18%,rgba(220,238,255,.18),transparent);opacity:.85;}
-  .runway-sky::before{content:"";position:absolute;inset:-2% -2% auto;height:45%;background:radial-gradient(circle at 50% 24%,rgba(92,136,255,.22),transparent 24%),linear-gradient(180deg,rgba(6,12,25,.08),transparent 62%);} 
-  .runway-mountains::before,.runway-mountains::after{content:"";position:absolute;left:0;right:0;bottom:250px;height:170px;background:linear-gradient(180deg,rgba(8,15,28,0),rgba(5,9,18,.02) 30%,rgba(2,5,10,.9) 100%);clip-path:polygon(0 100%,0 86%,10% 63%,16% 78%,27% 52%,39% 86%,52% 54%,65% 83%,79% 50%,91% 79%,100% 60%,100% 100%);} 
-  .runway-mountains::after{bottom:226px;height:116px;opacity:.68;clip-path:polygon(0 100%,0 88%,12% 66%,22% 80%,33% 58%,46% 84%,57% 62%,72% 84%,85% 60%,100% 80%,100% 100%);} 
-  .runway-horizon::before{content:"";position:absolute;left:50%;top:84px;transform:translateX(-50%);width:8px;height:92px;border-radius:999px;background:linear-gradient(180deg,rgba(218,240,255,.98),rgba(132,186,255,.46),transparent);box-shadow:0 0 30px rgba(128,188,255,.92);} 
-  .runway-horizon::after{content:"";position:absolute;left:11%;right:11%;top:172px;height:2px;background:linear-gradient(90deg,transparent,rgba(113,164,255,.32),rgba(113,164,255,.14),transparent);box-shadow:0 0 12px rgba(105,155,255,.26);} 
-  .runway-plane{left:13%;right:13%;bottom:118px;top:184px;clip-path:polygon(50% 0,100% 100%,0 100%);} 
-  .runway-plane::before{content:"";position:absolute;inset:0;background:
-      repeating-linear-gradient(90deg,rgba(100,145,224,.16) 0 1px,transparent 1px 52px),
-      repeating-linear-gradient(0deg,rgba(100,145,224,.13) 0 1px,transparent 1px 44px);
-      opacity:.55;filter:drop-shadow(0 0 8px rgba(99,152,255,.16));}
-  .runway-plane::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(79,209,197,.05),transparent 18%,transparent 100%);} 
-  .runway-lanes::before,.runway-lanes::after{content:"";position:absolute;bottom:102px;width:2px;height:565px;background:linear-gradient(180deg,rgba(107,151,236,.04),rgba(110,157,245,.40) 72%,rgba(186,232,255,.92));transform-origin:bottom center;box-shadow:0 0 12px rgba(101,154,255,.28);} 
-  .runway-lanes::before{left:12.7%;transform:skewX(32deg);} 
-  .runway-lanes::after{right:12.7%;transform:skewX(-32deg);} 
-  .runway-midline{left:50%;bottom:104px;width:1px;height:510px;background:linear-gradient(180deg,rgba(109,145,218,.03),rgba(111,157,241,.16) 64%,rgba(179,236,255,.34));box-shadow:0 0 8px rgba(94,145,250,.10);} 
-  .runway-midline::before{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:104px;height:104px;border-radius:50%;border:1px solid rgba(101,180,255,.22);box-shadow:0 0 0 22px rgba(101,180,255,.05),0 0 0 44px rgba(101,180,255,.025);} 
-  .runway-markers{left:50%;bottom:124px;transform:translateX(-50%);display:flex;flex-direction:column;gap:52px;opacity:.6;} 
-  .runway-markers i{display:block;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid rgba(134,182,255,.48);filter:drop-shadow(0 0 4px rgba(134,182,255,.25));}
+  /* Signal Runway Agenda: full-width version, no left sidebar */
+  .runway-shell{display:block;width:100%;}
+  .runway-side{display:none!important;}
 
-  .runway-pin{position:absolute;left:28px;display:flex;align-items:center;gap:11px;z-index:4;padding:9px 13px;border-radius:999px;background:rgba(6,12,23,.72);border:1px solid rgba(var(--c,79,209,197),.18);backdrop-filter:blur(8px);box-shadow:0 10px 26px -22px rgba(var(--c,79,209,197),.9);} 
-  .runway-pin::before{content:"";display:block;width:40px;height:40px;border-radius:50%;border:1px solid rgba(var(--c,79,209,197),.62);box-shadow:inset 0 0 0 1px rgba(255,255,255,.04),0 0 16px -6px rgba(var(--c,79,209,197),.8);} 
-  .runway-pin .ptext{position:relative;left:-29px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgb(var(--c,79,209,197));white-space:nowrap;}
+  .runway-stage{
+    position:relative;
+    min-height:860px;
+    width:100%;
+    border-radius:24px;
+    border:1px solid rgba(112,134,184,.24);
+    background:linear-gradient(180deg,rgba(5,9,18,.985),rgba(4,8,14,.988));
+    overflow:hidden;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.045),
+      0 34px 70px -52px rgba(79,209,197,.18);
+  }
+  .runway-stage::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 12%,rgba(101,145,255,.28),transparent 18%),
+      radial-gradient(circle at 50% 31%,rgba(105,189,255,.10),transparent 27%),
+      linear-gradient(180deg,rgba(7,14,26,.36),transparent 20%);
+    pointer-events:none;
+  }
+  .runway-stage::after{
+    content:"";
+    position:absolute;
+    left:8%;
+    right:8%;
+    bottom:40px;
+    height:184px;
+    background:radial-gradient(ellipse at center,rgba(74,187,255,.085),transparent 72%);
+    pointer-events:none;
+  }
 
-  .runway-card{position:absolute;left:50%;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px 24px 18px;border-radius:20px;border:1.5px solid rgba(var(--c,95,160,255),.64);background:linear-gradient(180deg,rgba(var(--c,95,160,255),.09),rgba(4,8,16,.68) 26%,rgba(2,5,11,.92));box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 0 34px -12px rgba(var(--c,95,160,255),.68),0 20px 40px -24px rgba(0,0,0,.82);overflow:hidden;transform:translateX(-50%);z-index:2;transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease;clip-path:polygon(0 100%,0 24px,24px 0,calc(100% - 24px) 0,100% 24px,100% 100%,calc(100% - 16px) 100%,16px 100%);} 
-  .runway-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 24%,transparent 80%,rgba(255,255,255,.03));pointer-events:none;} 
-  .runway-card::after{content:"";position:absolute;left:10%;right:10%;bottom:-28px;height:46px;background:radial-gradient(ellipse at center,rgba(var(--c,95,160,255),.42),transparent 70%);pointer-events:none;opacity:.82;} 
-  .runway-card .corner{position:absolute;width:34px;height:34px;border-color:rgba(var(--c,95,160,255),.78);border-style:solid;pointer-events:none;filter:drop-shadow(0 0 6px rgba(var(--c,95,160,255),.42));}
+  .runway-sky,.runway-mountains,.runway-horizon,.runway-plane,.runway-lanes,.runway-midline,.runway-markers,.runway-stars{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+
+  .runway-stars{
+    background-repeat:no-repeat;
+    background-image:
+      radial-gradient(2px 2px at 18% 16%,rgba(220,238,255,.35),transparent),
+      radial-gradient(2px 2px at 62% 14%,rgba(220,238,255,.25),transparent),
+      radial-gradient(2px 2px at 78% 26%,rgba(220,238,255,.18),transparent),
+      radial-gradient(2px 2px at 48% 22%,rgba(220,238,255,.20),transparent),
+      radial-gradient(2px 2px at 28% 34%,rgba(220,238,255,.16),transparent),
+      radial-gradient(2px 2px at 85% 18%,rgba(220,238,255,.18),transparent);
+    opacity:.88;
+  }
+  .runway-sky::before{
+    content:"";
+    position:absolute;
+    inset:-2% -2% auto;
+    height:45%;
+    background:
+      radial-gradient(circle at 50% 24%,rgba(92,136,255,.24),transparent 24%),
+      linear-gradient(180deg,rgba(6,12,25,.08),transparent 62%);
+  }
+
+  .runway-mountains::before,
+  .runway-mountains::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:266px;
+    height:180px;
+    background:linear-gradient(180deg,rgba(8,15,28,0),rgba(5,9,18,.02) 30%,rgba(2,5,10,.9) 100%);
+    clip-path:polygon(0 100%,0 86%,10% 63%,16% 78%,27% 52%,39% 86%,52% 54%,65% 83%,79% 50%,91% 79%,100% 60%,100% 100%);
+  }
+  .runway-mountains::after{
+    bottom:240px;
+    height:124px;
+    opacity:.68;
+    clip-path:polygon(0 100%,0 88%,12% 66%,22% 80%,33% 58%,46% 84%,57% 62%,72% 84%,85% 60%,100% 80%,100% 100%);
+  }
+
+  .runway-horizon::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:84px;
+    transform:translateX(-50%);
+    width:8px;
+    height:94px;
+    border-radius:999px;
+    background:linear-gradient(180deg,rgba(218,240,255,.98),rgba(132,186,255,.46),transparent);
+    box-shadow:0 0 30px rgba(128,188,255,.92);
+  }
+  .runway-horizon::after{
+    content:"";
+    position:absolute;
+    left:9%;
+    right:9%;
+    top:176px;
+    height:2px;
+    background:linear-gradient(90deg,transparent,rgba(113,164,255,.32),rgba(113,164,255,.14),transparent);
+    box-shadow:0 0 12px rgba(105,155,255,.26);
+  }
+
+  .runway-plane{
+    left:7%;
+    right:7%;
+    bottom:118px;
+    top:186px;
+    clip-path:polygon(50% 0,100% 100%,0 100%);
+  }
+  .runway-plane::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(90deg,rgba(100,145,224,.16) 0 1px,transparent 1px 56px),
+      repeating-linear-gradient(0deg,rgba(100,145,224,.13) 0 1px,transparent 1px 46px);
+    opacity:.56;
+    filter:drop-shadow(0 0 8px rgba(99,152,255,.16));
+  }
+  .runway-plane::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,rgba(79,209,197,.05),transparent 18%,transparent 100%);
+  }
+
+  .runway-lanes::before,
+  .runway-lanes::after{
+    content:"";
+    position:absolute;
+    bottom:102px;
+    width:2px;
+    height:592px;
+    background:linear-gradient(180deg,rgba(107,151,236,.04),rgba(110,157,245,.40) 72%,rgba(186,232,255,.92));
+    transform-origin:bottom center;
+    box-shadow:0 0 12px rgba(101,154,255,.28);
+  }
+  .runway-lanes::before{left:8%;transform:skewX(33deg);}
+  .runway-lanes::after{right:8%;transform:skewX(-33deg);}
+
+  .runway-midline{
+    left:50%;
+    bottom:104px;
+    width:1px;
+    height:536px;
+    background:linear-gradient(180deg,rgba(109,145,218,.03),rgba(111,157,241,.16) 64%,rgba(179,236,255,.34));
+    box-shadow:0 0 8px rgba(94,145,250,.10);
+  }
+  .runway-midline::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    width:114px;
+    height:114px;
+    border-radius:50%;
+    border:1px solid rgba(101,180,255,.22);
+    box-shadow:0 0 0 24px rgba(101,180,255,.05),0 0 0 48px rgba(101,180,255,.025);
+  }
+
+  .runway-markers{
+    left:50%;
+    bottom:124px;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:58px;
+    opacity:.6;
+  }
+  .runway-markers i{
+    display:block;
+    width:0;
+    height:0;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-top:10px solid rgba(134,182,255,.48);
+    filter:drop-shadow(0 0 4px rgba(134,182,255,.25));
+  }
+
+  .runway-pin{
+    position:absolute;
+    left:12.5%;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    z-index:4;
+    padding:9px 13px;
+    border-radius:999px;
+    background:rgba(6,12,23,.72);
+    border:1px solid rgba(var(--c,79,209,197),.18);
+    backdrop-filter:blur(8px);
+    box-shadow:0 10px 26px -22px rgba(var(--c,79,209,197),.9);
+  }
+  .runway-pin::before{
+    content:"";
+    display:block;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:1px solid rgba(var(--c,79,209,197),.62);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04),0 0 16px -6px rgba(var(--c,79,209,197),.8);
+  }
+  .runway-pin .ptext{
+    position:relative;
+    left:-29px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:rgb(var(--c,79,209,197));
+    white-space:nowrap;
+  }
+
+  .runway-card{
+    position:absolute;
+    left:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:16px 24px 18px;
+    border-radius:22px;
+    border:1.5px solid rgba(var(--c,95,160,255),.64);
+    background:linear-gradient(180deg,rgba(var(--c,95,160,255),.09),rgba(4,8,16,.68) 26%,rgba(2,5,11,.92));
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.03) inset,
+      0 0 34px -12px rgba(var(--c,95,160,255),.68),
+      0 20px 40px -24px rgba(0,0,0,.82);
+    overflow:hidden;
+    transform:translateX(-50%);
+    z-index:2;
+    transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease;
+    clip-path:polygon(0 100%,0 24px,24px 0,calc(100% - 24px) 0,100% 24px,100% 100%,calc(100% - 16px) 100%,16px 100%);
+  }
+  .runway-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 24%,transparent 80%,rgba(255,255,255,.03));
+    pointer-events:none;
+  }
+  .runway-card::after{
+    content:"";
+    position:absolute;
+    left:10%;
+    right:10%;
+    bottom:-28px;
+    height:46px;
+    background:radial-gradient(ellipse at center,rgba(var(--c,95,160,255),.42),transparent 70%);
+    pointer-events:none;
+    opacity:.82;
+  }
+  .runway-card .corner{
+    position:absolute;
+    width:34px;
+    height:34px;
+    border-color:rgba(var(--c,95,160,255),.78);
+    border-style:solid;
+    pointer-events:none;
+    filter:drop-shadow(0 0 6px rgba(var(--c,95,160,255),.42));
+  }
   .runway-card .corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px;border-top-left-radius:18px;}
   .runway-card .corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0;border-top-right-radius:18px;}
   .runway-card .corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px;border-bottom-left-radius:18px;}
   .runway-card .corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-bottom-right-radius:18px;}
-  .runway-card:hover{box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 0 42px -8px rgba(var(--c,95,160,255),.80),0 20px 44px -24px rgba(0,0,0,.84);} 
-  .runway-card.done{opacity:.48;filter:saturate(.58) grayscale(.16);} 
-  .runway-card.is-current{z-index:9;box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 0 58px -4px rgba(var(--c,95,160,255),.98),0 28px 56px -22px rgba(0,0,0,.86);animation:runwayCurrentFloat 2.8s ease-in-out infinite;} 
-  @keyframes runwayCurrentFloat{0%,100%{transform:translateX(-50%) translateY(-10px);}50%{transform:translateX(-50%) translateY(-18px);}} 
+  .runway-card:hover{box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 0 42px -8px rgba(var(--c,95,160,255),.80),0 20px 44px -24px rgba(0,0,0,.84);}
+  .runway-card.done{opacity:.48;filter:saturate(.58) grayscale(.16);}
+  .runway-card.is-current{
+    z-index:9;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.06) inset,
+      0 0 58px -4px rgba(var(--c,95,160,255),.98),
+      0 28px 56px -22px rgba(0,0,0,.86);
+    animation:runwayCurrentFloat 2.8s ease-in-out infinite;
+  }
+  @keyframes runwayCurrentFloat{
+    0%,100%{transform:translateX(-50%) translateY(-10px);}
+    50%{transform:translateX(-50%) translateY(-18px);}
+  }
+
   .runway-card .rc-body{position:relative;z-index:1;max-width:88%;}
-  .runway-card .r-time{font-family:var(--disp);font-size:clamp(17px,2vw,30px);line-height:1;font-weight:600;color:#f4f8ff;letter-spacing:-.04em;text-shadow:0 0 18px rgba(160,210,255,.12);} 
-  .runway-card.is-current .r-time{font-size:clamp(34px,3vw,58px);} 
-  .runway-card .r-title{margin-top:8px;font-size:clamp(14px,1.45vw,22px);line-height:1.1;font-weight:700;color:#f5f8ff;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;} 
-  .runway-card.is-current .r-title{font-size:clamp(18px,1.75vw,30px);} 
-  .runway-card .r-sub{margin-top:7px;font-size:11px;color:#b3c4e1;font-family:var(--mono);letter-spacing:.03em;line-height:1.35;} 
-  .runway-card .r-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgb(var(--c,95,160,255));}
-  .runway-card .r-badge i{display:inline-block;width:7px;height:7px;border-radius:50%;background:rgb(var(--c,95,160,255));box-shadow:0 0 8px rgba(var(--c,95,160,255),.62);} 
+  .runway-card .r-time{
+    font-family:var(--disp);
+    font-size:clamp(18px,2.2vw,32px);
+    line-height:1;
+    font-weight:600;
+    color:#f4f8ff;
+    letter-spacing:-.04em;
+    text-shadow:0 0 18px rgba(160,210,255,.12);
+  }
+  .runway-card.is-current .r-time{font-size:clamp(36px,3.1vw,60px);}
+  .runway-card .r-title{
+    margin-top:8px;
+    font-size:clamp(15px,1.55vw,23px);
+    line-height:1.1;
+    font-weight:700;
+    color:#f5f8ff;
+    text-wrap:balance;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .runway-card.is-current .r-title{font-size:clamp(19px,1.85vw,31px);}
+  .runway-card .r-sub{
+    margin-top:7px;
+    font-size:11px;
+    color:#b3c4e1;
+    font-family:var(--mono);
+    letter-spacing:.03em;
+    line-height:1.35;
+  }
+  .runway-card .r-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-top:10px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:rgb(var(--c,95,160,255));
+  }
+  .runway-card .r-badge i{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:rgb(var(--c,95,160,255));
+    box-shadow:0 0 8px rgba(var(--c,95,160,255),.62);
+  }
+
   .runway-actions{position:absolute;top:10px;right:10px;display:flex;gap:7px;z-index:2;}
-  .runway-iconbtn{width:28px;height:28px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(4,7,13,.56);display:flex;align-items:center;justify-content:center;color:#dfe9f8;padding:0;box-shadow:0 8px 18px -18px #000;backdrop-filter:blur(8px);} 
+  .runway-iconbtn{
+    width:28px;
+    height:28px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(4,7,13,.56);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#dfe9f8;
+    padding:0;
+    box-shadow:0 8px 18px -18px #000;
+    backdrop-filter:blur(8px);
+  }
   .runway-iconbtn svg{width:14px;height:14px;}
   .runway-iconbtn:hover{border-color:rgba(var(--c,95,160,255),.46);color:rgb(var(--c,95,160,255));}
-  .runway-done[aria-pressed="true"]{background:rgba(47,214,176,.20);border-color:rgba(47,214,176,.56);color:#6ef0c9;box-shadow:0 0 18px -10px rgba(47,214,176,.82);} 
-  .runway-remove.armed{width:auto;padding:0 10px;border-radius:999px;font-size:11px;font-weight:700;color:#ff9aa2;border-color:rgba(255,111,125,.52);} 
-  .runway-footer{position:absolute;left:18px;right:18px;bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:4;}
-  .runway-stamp{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:13px;background:rgba(5,9,18,.64);border:1px solid rgba(103,126,167,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.03);} 
-  .runway-stamp .warn{width:18px;height:18px;border-radius:6px;border:1px solid rgba(114,192,255,.30);display:grid;place-items:center;color:#72c0ff;font-family:var(--mono);font-size:11px;}
+  .runway-done[aria-pressed="true"]{background:rgba(47,214,176,.20);border-color:rgba(47,214,176,.56);color:#6ef0c9;box-shadow:0 0 18px -10px rgba(47,214,176,.82);}
+  .runway-remove.armed{width:auto;padding:0 10px;border-radius:999px;font-size:11px;font-weight:700;color:#ff9aa2;border-color:rgba(255,111,125,.52);}
+
+  .runway-footer{
+    position:absolute;
+    left:18px;
+    right:18px;
+    bottom:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    z-index:4;
+  }
+  .runway-stamp{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:13px;
+    background:rgba(5,9,18,.64);
+    border:1px solid rgba(103,126,167,.22);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+  }
+  .runway-stamp .warn{
+    width:18px;
+    height:18px;
+    border-radius:6px;
+    border:1px solid rgba(114,192,255,.30);
+    display:grid;
+    place-items:center;
+    color:#72c0ff;
+    font-family:var(--mono);
+    font-size:11px;
+  }
   .runway-stamp .copy{display:flex;flex-direction:column;gap:2px;}
   .runway-stamp .copy strong{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#72c0ff;}
   .runway-stamp .copy span{font-size:10px;color:var(--muted);font-family:var(--mono);}
   .runway-legend{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:11px 14px;flex:1;}
   .runway-leg{display:inline-flex;align-items:center;gap:7px;font-size:10px;color:#aab7d1;font-family:var(--mono);letter-spacing:.10em;text-transform:uppercase;}
-  .runway-leg i{display:inline-block;width:20px;height:3px;border-radius:999px;background:rgb(var(--c,79,209,197));box-shadow:0 0 10px rgba(var(--c,79,209,197),.55);} 
-  .runway-empty{padding:28px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.65;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.01);} 
-  @media (prefers-reduced-motion: reduce){.runway-card.is-current{animation:none!important;transform:translateX(-50%) translateY(-10px);}}
-  @media(max-width:1240px){.grid{grid-template-columns:minmax(0,1.72fr) minmax(300px,1fr);} .runway-shell{grid-template-columns:160px minmax(0,1fr);} .runway-stage{min-height:780px;} .runway-bigdate{font-size:48px;}}
-  @media(max-width:1040px){.grid{grid-template-columns:1fr;} }
-  @media(max-width:980px){.runway-shell{grid-template-columns:1fr;} .runway-side{padding:0;gap:14px;} .runway-datecard{padding-top:0;} .runway-sidecats{flex-direction:row;flex-wrap:wrap;} .runway-sidecat{flex:0 1 auto;} }
-  @media(max-width:720px){.runway-stage{min-height:640px;} .runway-pin{display:none;} .runway-footer{flex-direction:column;align-items:stretch;} .runway-legend{justify-content:flex-start;} .runway-card .r-title{font-size:16px;} .runway-card.is-current .r-time{font-size:36px;} }
-  @media(max-width:560px){.runway-stage{min-height:580px;padding-bottom:88px;} .runway-bigdate{font-size:40px;} .runway-current-chip{padding:9px 10px;max-width:100%;} }
+  .runway-leg i{display:inline-block;width:20px;height:3px;border-radius:999px;background:rgb(var(--c,79,209,197));box-shadow:0 0 10px rgba(var(--c,79,209,197),.55);}
+  .runway-empty{padding:28px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.65;border:1px dashed var(--line);border-radius:14px;background:rgba(255,255,255,.01);}
+
+  @media (prefers-reduced-motion: reduce){
+    .runway-card.is-current{animation:none!important;transform:translateX(-50%) translateY(-10px);}
+  }
+  @media(max-width:1240px){
+    .grid{grid-template-columns:minmax(0,1.72fr) minmax(300px,1fr);}
+    .runway-stage{min-height:820px;}
+  }
+  @media(max-width:1040px){.grid{grid-template-columns:1fr;}}
+  @media(max-width:720px){
+    .runway-stage{min-height:670px;}
+    .runway-pin{display:none;}
+    .runway-footer{flex-direction:column;align-items:stretch;}
+    .runway-legend{justify-content:flex-start;}
+    .runway-card .r-title{font-size:16px;}
+    .runway-card.is-current .r-time{font-size:36px;}
+  }
+  @media(max-width:560px){
+    .runway-stage{min-height:600px;padding-bottom:88px;}
+    .runway-card{padding-left:16px;padding-right:16px;}
+  }
 
   /* Pagination */
   .pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;}
@@ -2502,11 +2829,11 @@
       const currentTask=slice[currentIdx];
 
       const positions=[
-        {width:'74%',height:176,bottom:118,pin:164},
-        {width:'60%',height:118,bottom:324,pin:368},
-        {width:'50%',height:96,bottom:466,pin:492},
-        {width:'42%',height:82,bottom:572,pin:592},
-        {width:'36%',height:70,bottom:658,pin:672}
+        {width:'76%',height:182,bottom:120,pin:170},
+        {width:'66%',height:126,bottom:340,pin:382},
+        {width:'56%',height:106,bottom:492,pin:526},
+        {width:'48%',height:90,bottom:618,pin:646},
+        {width:'40%',height:76,bottom:720,pin:742}
       ];
       const viewCats=[];
       slice.forEach(t=>{ if(t.category && !viewCats.includes(t.category)) viewCats.push(t.category); });
@@ -2548,14 +2875,6 @@
 
       const html=''
         +'<div class="runway-shell">'
-          +'<aside class="runway-side">'
-            +'<div>'
-              +'<div class="runway-datecard"><span class="runway-kicker">Today</span><div class="runway-bigdate">'+monthDay+'<span>'+weekday+'</span></div></div>'
-              +'<div class="runway-upnext">Up next &rarr;</div>'
-              +'<div class="runway-current-chip" style="--c:'+upRgb+'"><div class="rc-copy"><span class="rc-label">Current window</span><span class="rc-name">'+currentName+'</span><span class="rc-label">'+currentLabel+'</span></div></div>'
-            +'</div>'
-            +'<div class="runway-sidecats"><div class="runway-kicker">Signal lanes</div>'+sideCatsHtml+'</div>'
-          +'</aside>'
           +'<div class="runway-stage">'
             +'<div class="runway-stars"></div><div class="runway-sky"></div><div class="runway-mountains"></div><div class="runway-horizon"></div><div class="runway-plane"></div><div class="runway-lanes"></div><div class="runway-midline"></div><div class="runway-markers"><i></i><i></i><i></i></div>'
             +pinsHtml+cardsHtml
