@@ -531,7 +531,7 @@
     justify-content:center;
     text-align:center;
     border-radius:18px;
-    padding:10px 42px 10px 22px;
+    padding:12px 58px 12px 22px;
     background:
       linear-gradient(180deg,rgba(5,10,20,.50),rgba(2,6,14,.66)),
       radial-gradient(ellipse at center,rgba(5,12,24,.80),rgba(3,7,15,.58) 68%,rgba(3,7,15,.18));
@@ -594,10 +594,13 @@
     width:100%;
     max-width:100%;
   }
-  .runway-card .r-time{
+    .runway-card:not(.is-current) .r-time{
+    font-size:clamp(12px, calc(1.35vw * var(--cardScale,1)), 24px);
+  }
+.runway-card .r-time{
     display:block;
     font-family:var(--disp);
-    font-size:clamp(13px,1.5vw,26px);
+    font-size:clamp(12px,1.35vw,24px);
     line-height:1;
     color:#f4f8ff;
     font-weight:600;
@@ -606,14 +609,17 @@
     text-shadow:0 0 18px rgba(170,215,255,.14);
   }
   .runway-card.is-current .r-time{
-    font-size:clamp(28px,3.3vw,56px);
+    font-size:clamp(25px,3.0vw,50px);
     margin-bottom:8px;
   }
-  .runway-card .r-title{
+    .runway-card:not(.is-current) .r-title{
+    font-size:clamp(10px, calc(.95vw * var(--cardScale,1) + 1px), 16px);
+  }
+.runway-card .r-title{
     margin:0;
     color:#f6f8ff;
     font-weight:700;
-    font-size:clamp(10px,1.02vw,18px);
+    font-size:clamp(10px,.95vw,16px);
     line-height:1.08;
     display:-webkit-box;
     -webkit-line-clamp:2;
@@ -622,13 +628,23 @@
     text-wrap:balance;
   }
   .runway-card.is-current .r-title{
-    font-size:clamp(16px,1.8vw,30px);
+    font-size:clamp(15px,1.55vw,26px);
   }
-  .runway-card .r-sub{
+    .runway-card:not(.is-current) .r-sub{
+    font-size:clamp(8px, calc(.62vw * var(--cardScale,1) + 1px), 10px);
+  }
+  .runway-card.compact-title .r-title{
+    font-size:clamp(9px, calc(.82vw * var(--cardScale,1) + 1px), 14px);
+    line-height:1.04;
+  }
+  .runway-card.compact-title .r-sub{
+    margin-top:4px;
+  }
+.runway-card .r-sub{
     margin-top:5px;
     color:#b7c6df;
     font-family:var(--mono);
-    font-size:clamp(8px,.7vw,11px);
+    font-size:clamp(8px,.66vw,10px);
     line-height:1.25;
     letter-spacing:.025em;
     display:-webkit-box;
@@ -637,7 +653,7 @@
     overflow:hidden;
   }
   .runway-card.is-current .r-sub{
-    font-size:clamp(10px,.95vw,14px);
+    font-size:clamp(9px,.82vw,12px);
     margin-top:7px;
   }
   .runway-card .r-badge{
@@ -647,17 +663,17 @@
   .runway-actions{
     position:absolute;
     top:50%;
-    right:8px;
+    right:7px;
     transform:translateY(-50%);
     display:flex;
     flex-direction:column;
-    gap:5px;
+    gap:4px;
     z-index:4;
     opacity:.72;
   }
   .runway-iconbtn{
-    width:22px;
-    height:22px;
+    width:20px;
+    height:20px;
     border-radius:999px;
     border:1px solid rgba(255,255,255,.12);
     background:rgba(3,7,14,.58);
@@ -668,7 +684,7 @@
     padding:0;
     backdrop-filter:blur(6px);
   }
-  .runway-iconbtn svg{width:11px;height:11px;}
+  .runway-iconbtn svg{width:10px;height:10px;}
   .runway-iconbtn:hover{border-color:rgba(var(--c,95,160,255),.48);color:rgb(var(--c,95,160,255));}
   .runway-done[aria-pressed="true"]{background:rgba(47,214,176,.20);border-color:rgba(47,214,176,.56);color:#6ef0c9;}
   .runway-remove.armed{width:auto;padding:0 8px;border-radius:999px;font-size:10px;font-weight:700;color:#ff9aa2;border-color:rgba(255,111,125,.52);}
@@ -879,7 +895,7 @@
   .fitem.done .fitem-t{text-decoration:line-through;color:var(--muted);opacity:.55;}
   .fitem-empty{font-size:12px;color:var(--muted);padding:1px 2px;}
   .check.sm{width:19px;height:19px;border-radius:6px;}
-  .check.sm svg{width:11px;height:11px;}
+  .check.sm svg{width:10px;height:10px;}
   .fadd{display:flex;gap:6px;}
   .empty.mini{padding:15px;font-size:12.5px;}
 
@@ -928,7 +944,7 @@
   .addcell{grid-column:2;grid-row:4;align-self:stretch;justify-self:stretch;display:flex;align-items:center;justify-content:center;min-height:78px;border:1px dashed rgba(138,150,179,.34);background:rgba(138,150,179,.035);color:#8a96b3;clip-path:none;border-radius:14px;}
   .plus{font-size:26px;font-weight:300;line-height:1;}
   @media (prefers-reduced-motion: reduce){ .orb,.tw,.hex.ignite{animation:none!important;} }
-  @media(max-width:1120px){ .matrix{grid-template-columns:minmax(210px,1fr) 160px minmax(210px,1fr);gap:14px 18px}.cell.core{width:160px;min-height:160px}.space{min-height:405px}.cell{min-height:78px}.hex{width:15px;height:17px}.hexwrap{gap:5px;} }
+  @media(max-width:1120px){ .matrix{grid-template-columns:minmax(210px,1fr) 160px minmax(210px,1fr);gap:14px 18px}.cell.core{width:160px;min-height:160px}.space{min-height:405px}.cell{min-height:78px}.hex{width:15px;height:17px}.hexwrap{gap:4px;} }
   @media(max-width:860px){ .matrix{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto;max-width:100%;}.matrix::before,.matrix::after{display:none}.cell,.cell.p-right{grid-column:auto!important;grid-row:auto!important;clip-path:polygon(8px 0,100% 0,100% calc(100% - 15px),calc(100% - 18px) 100%,0 100%,0 15px);}.cell.core{grid-column:1/-1!important;grid-row:auto!important;width:auto;min-height:118px;clip-path:none;border-radius:16px;}.addcell{grid-column:auto;grid-row:auto;} }
   @media(max-width:520px){ .space{padding:14px;min-height:0}.matrix{grid-template-columns:1fr}.cell.core{grid-column:auto!important}.hexwrap{padding-left:0;} }
 
@@ -1030,7 +1046,7 @@
   .mode-lever.on .lever-knob{top:15px;background:var(--teal);box-shadow:0 0 9px rgba(79,209,197,.65);}
   .qcheck{flex:none;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;padding:0;cursor:pointer;border:1.5px solid rgba(79,209,197,.6);background:rgba(79,209,197,.10);color:var(--teal);-webkit-tap-highlight-color:transparent;transition:transform .12s;}
   .qcheck:active{transform:scale(.86);}
-  .qcheck svg{width:11px;height:11px;}
+  .qcheck svg{width:10px;height:10px;}
   .qtask, .qtask *{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
   .qtask.dragging-src{ opacity:.3; transition:opacity .15s ease; }
   .qghost{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;max-width:240px;padding:10px 14px;border-radius:24px 30px 22px 28px / 28px 22px 30px 24px;font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:linear-gradient(135deg,rgba(79,209,197,.30),rgba(79,209,197,.13));border:1px solid rgba(79,209,197,.6);box-shadow:0 18px 40px -12px rgba(79,209,197,.55),0 0 28px -6px rgba(79,209,197,.5),inset 0 1px 0 rgba(255,255,255,.08);transform:translate(-9999px,-9999px) scale(.9);opacity:0;transition:transform .09s ease-out, box-shadow .2s ease, opacity .18s ease;}
@@ -2256,7 +2272,7 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:5px;
+    gap:4px;
     color:#8a96b3;
     background:rgba(138,150,179,.035);
     text-align:center;
@@ -2979,11 +2995,11 @@
       const currentTask=slice[currentIdx];
 
       const positions=[
-        {left:50.2,top:68.3,width:55.5,height:16.6,pinX:10.1,pinY:67.7,current:true},
-        {left:50.8,top:51.4,width:45.7,height:11.0,pinX:14.4,pinY:51.0},
-        {left:50.8,top:39.2,width:36.8,height:9.1,pinX:21.7,pinY:39.0},
-        {left:50.7,top:29.3,width:29.5,height:7.6,pinX:26.5,pinY:29.1},
-        {left:50.6,top:20.6,width:23.0,height:6.6,pinX:30.7,pinY:20.3}
+        {left:50.4,top:69.2,width:54.0,height:15.4,pinX:10.3,pinY:68.2,current:true},
+        {left:50.9,top:52.8,width:48.5,height:11.6,pinX:14.8,pinY:52.1},
+        {left:51.0,top:40.7,width:41.0,height:10.2,pinX:20.8,pinY:40.0},
+        {left:50.9,top:30.6,width:34.5,height:9.0,pinX:25.8,pinY:30.0},
+        {left:50.8,top:21.8,width:29.0,height:8.4,pinX:30.0,pinY:21.2}
       ];
 
       const viewCats=[];
@@ -3002,15 +3018,18 @@
         const done=t.status==="done";
         const diff=t.due_date?dayDiff(t.due_date,today):null;
         const isCurrent=i===currentIdx || (i===0 && !slice.some(x=>isCurrentWindowTask(x,today,nowHM)));
-        const cardClass='runway-card'+(done?' done':'')+(isCurrent?' is-current':'');
+        const titleText=(t.title||'Untitled');
+        const longTitle=titleText.length>30;
+        const cardClass='runway-card'+(done?' done':'')+(isCurrent?' is-current':'')+(longTitle?' compact-title':'');
         const sub=runwaySubtext(t,m,diff);
         const time=runway24(t.due_time);
+        const scale=isCurrent?1:(1-Math.min(i,4)*0.08);
         const check='<button class="runway-iconbtn runway-done" data-id="'+t.id+'" aria-pressed="'+done+'" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>';
         const remove='<button class="runway-iconbtn runway-remove" data-del="'+t.id+'" aria-label="Remove this item">&times;</button>';
-        return '<div class="'+cardClass+'" style="--c:'+rgbOf(t.category)+';left:'+pos.left+'%;top:'+pos.top+'%;width:'+pos.width+'%;height:'+pos.height+'%;margin-top:'+(-pos.height/2)+'%;z-index:'+(90-i)+'">'
+        return '<div class="'+cardClass+'" style="--c:'+rgbOf(t.category)+';--cardScale:'+scale+';left:'+pos.left+'%;top:'+pos.top+'%;width:'+pos.width+'%;height:'+pos.height+'%;margin-top:'+(-pos.height/2)+'%;z-index:'+(90-i)+'">'
           +'<span class="gate-pillar left"></span><span class="gate-pillar right"></span>'
           +'<div class="runway-actions">'+check+remove+'</div>'
-          +'<div class="rc-body"><div class="r-time">'+escapeHtml(time)+'</div><div class="r-title">'+escapeHtml(t.title||'Untitled')+'</div><div class="r-sub">'+escapeHtml(sub)+'</div><div class="r-badge"><i></i>'+escapeHtml(m.label)+'</div></div></div>';
+          +'<div class="rc-body"><div class="r-time">'+escapeHtml(time)+'</div><div class="r-title">'+escapeHtml(titleText)+'</div><div class="r-sub">'+escapeHtml(sub)+'</div><div class="r-badge"><i></i>'+escapeHtml(m.label)+'</div></div></div>';
       }).join('');
 
       const legendHtml=viewCats.map(c=>{ const m=catMeta(c); return '<span class="runway-leg" style="--c:'+rgbOf(c)+'"><i></i>'+escapeHtml(m.label)+'</span>'; }).join('');
