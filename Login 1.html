@@ -235,6 +235,7 @@
   .panel-head h2{font-family:var(--disp);font-size:14px;font-weight:600;margin:0;}
   .panel-head .hint{font-family:var(--mono);font-size:11px;color:var(--muted);}
   .col{display:flex;flex-direction:column;gap:16px;}
+  .leftcol{display:flex;flex-direction:column;gap:18px;min-width:0;}
 
   /* Filters */
   .filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
@@ -243,15 +244,15 @@
   .fchip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--cc,var(--teal));margin-right:6px;vertical-align:middle;}
 
   /* Agenda */
-  .grid > .panel:first-child{
+  .leftcol > .panel:first-child{
     position:relative;
     padding:18px;
     overflow:hidden;
   }
-  .grid > .panel:first-child .panel-head{
+  .leftcol > .panel:first-child .panel-head{
     display:none;
   }
-  .grid > .panel:first-child .filters{
+  .leftcol > .panel:first-child .filters{
     position:absolute;
     z-index:60;
     left:50%;
@@ -404,7 +405,7 @@
   @media(max-width:1240px){ .grid{grid-template-columns:minmax(0,2.05fr) minmax(280px,.9fr);} }
   @media(max-width:1040px){ .grid{grid-template-columns:1fr;} }
   @media(max-width:720px){
-    .grid > .panel:first-child .filters{position:relative;left:auto;right:auto;bottom:auto;transform:none;max-width:100%;margin-bottom:10px;justify-content:flex-start;}
+    .leftcol > .panel:first-child .filters{position:relative;left:auto;right:auto;bottom:auto;transform:none;max-width:100%;margin-bottom:10px;justify-content:flex-start;}
     .runway-footer{flex-direction:column;align-items:flex-start;gap:4px;}
   }
   @media(max-width:560px){ .runway-actions{display:none;} }
@@ -664,6 +665,17 @@
   @keyframes dsFade{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
   .ds-row,.ds-head{display:flex;align-items:center;gap:12px;}
   .ds-idle{width:100%;background:none;border:0;padding:0;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:transparent;}
+  .ds-strip{width:100%;background:none;border:0;padding:2px;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .ds-strip-k{font-family:var(--disp);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);flex:none;display:flex;align-items:center;gap:8px;}
+  .ds-strip-k::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px 1px rgba(79,209,197,.7);}
+  .ds-strip-items{display:flex;align-items:baseline;gap:9px 14px;flex-wrap:wrap;flex:1;min-width:0;}
+  .ds-si{display:inline-flex;align-items:baseline;gap:6px;font-size:13px;white-space:nowrap;}
+  .ds-si b{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
+  .ds-si i{font-style:normal;font-family:var(--disp);font-weight:600;color:var(--ink);}
+  .ds-sep{color:rgba(127,176,232,.32);flex:none;}
+  .ds-strip-chev{margin-left:auto;color:var(--muted);flex:none;display:flex;}
+  .ds-strip-chev svg{width:20px;height:20px;}
+  .ds-strip:active{opacity:.85;}
   .ds-ico{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:rgba(79,209,197,.08);border:1px solid rgba(79,209,197,.28);color:var(--teal);}
   .ds-ico svg{width:21px;height:21px;overflow:visible;}
   .ds-ico.ds-sm{width:38px;height:38px;}
@@ -691,7 +703,8 @@
   @keyframes dsSweep{0%{left:3%;}50%{left:97%;}100%{left:3%;}}
   .ds-head{margin-bottom:2px;}
   .ds-chk{flex:none;background:none;border:0;color:var(--teal);cursor:pointer;padding:0;line-height:1;} .ds-chk svg{width:23px;height:23px;}
-  .ds-rows{margin-top:4px;}
+  .ds-rows{margin-top:6px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;}
+  @media(max-width:600px){ .ds-rows{grid-template-columns:1fr;} }
   .ds-rrow{display:flex;align-items:center;gap:11px;padding:10px 2px;border-top:1px solid rgba(255,255,255,.06);}
   .ds-rrow svg{width:17px;height:17px;color:var(--muted);flex:none;}
   .ds-rl{flex:none;font-size:12.5px;color:var(--muted);}
@@ -2329,18 +2342,20 @@
     </div>
 
     <div class="grid">
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Agenda</h2>
-          <span class="hint" id="agenda-hint"></span>
+      <div class="leftcol">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Agenda</h2>
+            <span class="hint" id="agenda-hint"></span>
+          </div>
+          <div class="filters" id="filters"></div>
+          <div id="agenda"></div>
         </div>
-        <div class="filters" id="filters"></div>
-        <div id="agenda"></div>
+
+        <div class="ds-wrap"><div class="ds-stage idle" id="ds-stage" style="min-height:64px;"><div class="ds-layer ds-l3"></div><div class="ds-layer ds-l2"></div><div class="ds-card" id="ds-card" style="min-height:64px;"><div class="ds-c ds-fade" id="ds-c"></div></div></div></div>
       </div>
 
       <div class="col">
-        <div class="ds-wrap"><div class="ds-stage idle" id="ds-stage" style="min-height:70px;"><div class="ds-layer ds-l3"></div><div class="ds-layer ds-l2"></div><div class="ds-card" id="ds-card" style="min-height:70px;"><div class="ds-c ds-fade" id="ds-c"></div></div></div></div>
-
         <div class="panel calpanel">
           <div class="panel-head">
             <h2>Calendar</h2>
@@ -3464,7 +3479,7 @@
       };
       var stage=el("ds-stage"), card=el("ds-card"), C=el("ds-c");
       if(!stage||!card||!C) return;
-      var MH={idle:"70px",scanning:"104px",result:"288px",full:"360px"};
+      var MH={idle:"64px",scanning:"104px",result:"200px",full:"380px"};
       var rm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion:reduce)").matches;
       var briefCache=null;
       function hf(v){var p=String(v).slice(0,5).split(":");return (+p[0])+((+p[1])||0)/60;}
@@ -3482,12 +3497,15 @@
         var bestWin = best ? (lab(best.s)+" \u2013 "+lab(best.e)) : (busy.length?"Booked solid":"Wide open");
         var tToday=allTasks.filter(function(t){return t.status!=="done" && tierOf(t,today,weekEnd)==="today";}).length;
         var rev=allTasks.filter(function(t){return t.needs_review===true;}).length;
-        return {firstEv:firstEv,bestWin:bestWin,tasks:(tToday?tToday+" today":"None today"),review:(rev?rev+(rev===1?" item":" items"):"All clear")};
+        var up=allTasks.filter(function(t){return t.status!=="done" && t.due_date && t.due_date>=today;}).sort(function(a,b){ var k=String(a.due_date).localeCompare(String(b.due_date)); return k||String(a.due_time||"").localeCompare(String(b.due_time||"")); });
+        var nextT= up.length ? trunc(up[0].title,20) : "Nothing upcoming";
+        var wr=weekRange(today); var wk=allTasks.filter(function(t){return t.due_date && t.due_date>=wr.start && t.due_date<=wr.end;}); var wt=wk.length, wd=wk.filter(function(t){return t.status==="done";}).length; var prog=wt?Math.round(wd/wt*100):0;
+        return {firstEv:firstEv,bestWin:bestWin,tasks:(tToday?tToday+" today":"None today"),review:(rev?rev+(rev===1?" item":" items"):"All clear"),next:nextT,remain:(tToday?tToday+" remaining":"none left"),progress:prog+"%"};
       }
       function tpl(s){
-        if(s==="idle") return '<button class="ds-idle" id="ds-go" aria-label="Run day summary"><span class="ds-ico ds-bounce">'+ICON.layersB+'</span><span class="ds-mid"><span class="ds-ttl">Day Summary</span><span class="ds-pill">Ready</span></span><span class="ds-chev">'+ICON.chevR+'</span></button>';
+        if(s==="idle"){ var cs=compute(); return '<button class="ds-strip" id="ds-go" aria-label="Open day briefing"><span class="ds-strip-k">Day briefing</span><span class="ds-strip-items"><span class="ds-si"><b>Next:</b> <i>'+escapeHtml(cs.next)+'</i></span><span class="ds-sep">\u00b7</span><span class="ds-si"><b>Free:</b> <i>'+escapeHtml(cs.bestWin)+'</i></span><span class="ds-sep">\u00b7</span><span class="ds-si"><b>Today:</b> <i>'+escapeHtml(cs.remain)+'</i></span><span class="ds-sep">\u00b7</span><span class="ds-si"><b>Progress:</b> <i>'+escapeHtml(cs.progress)+'</i></span></span><span class="ds-strip-chev">'+ICON.chevR+'</span></button>'; }
         if(s==="scanning") return '<div class="ds-row"><span class="ds-ico ds-pulse">'+ICON.layers+'</span><span class="ds-mid"><span class="ds-ttl">Day Summary</span><span class="ds-sub">Scanning\u2026</span></span><span class="ds-spark"></span></div><div class="ds-track"><i style="left:18%"></i><i style="left:38%"></i><i style="left:58%"></i><i style="left:78%"></i><span class="ds-dot"></span></div>';
-        if(s==="result"){ var v=compute(); return '<div class="ds-head"><span class="ds-ico ds-sm">'+ICON.layers+'</span><span class="ds-mid"><span class="ds-ttl">Day Summary</span><span class="ds-done">Complete</span></span><button class="ds-chk" id="ds-restart" aria-label="Run again">'+ICON.check+'</button></div><div class="ds-rows"><div class="ds-rrow">'+ICON.cal+'<span class="ds-rl">First event</span><span class="ds-rv">'+escapeHtml(v.firstEv)+'</span></div><div class="ds-rrow">'+ICON.clock+'<span class="ds-rl">Best window</span><span class="ds-rv">'+escapeHtml(v.bestWin)+'</span></div><div class="ds-rrow">'+ICON.box+'<span class="ds-rl">Tasks</span><span class="ds-rv">'+escapeHtml(v.tasks)+'</span></div><div class="ds-rrow">'+ICON.list+'<span class="ds-rl">To review</span><span class="ds-rv">'+escapeHtml(v.review)+'</span></div></div><button class="ds-brief" id="ds-brief">Review brief '+ICON.chevR+'</button>'; }
+        if(s==="result"){ var v=compute(); return '<div class="ds-head"><span class="ds-ico ds-sm">'+ICON.layers+'</span><span class="ds-mid"><span class="ds-ttl">Day briefing</span><span class="ds-done">Today</span></span><button class="ds-chk" id="ds-restart" aria-label="Collapse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button></div><div class="ds-rows"><div class="ds-rrow">'+ICON.cal+'<span class="ds-rl">First event</span><span class="ds-rv">'+escapeHtml(v.firstEv)+'</span></div><div class="ds-rrow">'+ICON.clock+'<span class="ds-rl">Best window</span><span class="ds-rv">'+escapeHtml(v.bestWin)+'</span></div><div class="ds-rrow">'+ICON.box+'<span class="ds-rl">Tasks</span><span class="ds-rv">'+escapeHtml(v.tasks)+'</span></div><div class="ds-rrow">'+ICON.list+'<span class="ds-rl">To review</span><span class="ds-rv">'+escapeHtml(v.review)+'</span></div></div><button class="ds-brief" id="ds-brief">Review brief '+ICON.chevR+'</button>'; }
         return '<div class="ds-fhead"><button class="ds-back" id="ds-back" aria-label="Back">'+ICON.chevL+'</button><span class="ds-ftitle">Catch-up briefing</span><span class="ds-fdate" id="ds-fdate"></span></div><div class="ds-fbody" id="ds-fbody"><div class="ds-empty">Loading\u2026</div></div>';
       }
       function set(s){
@@ -3497,7 +3515,7 @@
       }
       function bind(s){
         var b;
-        if(s==="idle"){ b=el("ds-go"); if(b) b.onclick=function(){ set("scanning"); setTimeout(function(){ set("result"); }, rm?500:2200); }; }
+        if(s==="idle"){ b=el("ds-go"); if(b) b.onclick=function(){ set("result"); }; }
         else if(s==="result"){ b=el("ds-brief"); if(b) b.onclick=function(){ set("full"); }; var r=el("ds-restart"); if(r) r.onclick=function(){ set("idle"); }; }
         else if(s==="full"){ var bk=el("ds-back"); if(bk) bk.onclick=function(){ set("result"); }; }
       }
