@@ -287,7 +287,7 @@
   .rw-gate{position:absolute;inset:0;pointer-events:none;z-index:6;}
 
   .rw-content{
-    position:absolute;left:46.9%;transform:translate(-50%,-50%);
+    position:absolute;left:49%;transform:translate(-50%,-50%);
     text-align:center;color:var(--ink);pointer-events:none;
   }
   .rw-time{
@@ -311,25 +311,25 @@
 
   /* per-level sizing: lv0 front/largest -> lv4 back/smallest */
   .rw-gate.lv0 .rw-content{width:58%;}
-  .rw-gate.lv0 .rw-time{font-size:clamp(30px,4.0vw,58px);}
-  .rw-gate.lv0 .rw-title{font-size:clamp(15px,1.7vw,26px);}
-  .rw-gate.lv0 .rw-sub{font-size:clamp(10px,1.0vw,15px);}
+  .rw-gate.lv0 .rw-time{font-size:clamp(28px,3.7vw,53px);}
+  .rw-gate.lv0 .rw-title{font-size:clamp(14px,1.56vw,24px);}
+  .rw-gate.lv0 .rw-sub{font-size:clamp(9px,.92vw,14px);}
   .rw-gate.lv1 .rw-content{width:46%;}
-  .rw-gate.lv1 .rw-time{font-size:clamp(20px,2.5vw,34px);}
-  .rw-gate.lv1 .rw-title{font-size:clamp(12px,1.25vw,19px);}
-  .rw-gate.lv1 .rw-sub{font-size:clamp(8px,.8vw,12px);}
+  .rw-gate.lv1 .rw-time{font-size:clamp(18px,2.3vw,31px);}
+  .rw-gate.lv1 .rw-title{font-size:clamp(11px,1.15vw,17.5px);}
+  .rw-gate.lv1 .rw-sub{font-size:clamp(8px,.74vw,11px);}
   .rw-gate.lv2 .rw-content{width:36%;}
-  .rw-gate.lv2 .rw-time{font-size:clamp(16px,1.9vw,27px);}
-  .rw-gate.lv2 .rw-title{font-size:clamp(11px,1.05vw,16px);}
-  .rw-gate.lv2 .rw-sub{font-size:clamp(8px,.7vw,11px);}
+  .rw-gate.lv2 .rw-time{font-size:clamp(15px,1.75vw,25px);}
+  .rw-gate.lv2 .rw-title{font-size:clamp(10px,.97vw,14.5px);}
+  .rw-gate.lv2 .rw-sub{font-size:clamp(7px,.64vw,10px);}
   .rw-gate.lv3 .rw-content{width:30%;}
-  .rw-gate.lv3 .rw-time{font-size:clamp(13px,1.5vw,21px);}
-  .rw-gate.lv3 .rw-title{font-size:clamp(10px,.92vw,14px);}
-  .rw-gate.lv3 .rw-sub{font-size:clamp(7px,.62vw,10px);}
+  .rw-gate.lv3 .rw-time{font-size:clamp(12px,1.38vw,19px);}
+  .rw-gate.lv3 .rw-title{font-size:clamp(9px,.85vw,13px);}
+  .rw-gate.lv3 .rw-sub{font-size:clamp(7px,.57vw,9px);}
   .rw-gate.lv4 .rw-content{width:24%;}
-  .rw-gate.lv4 .rw-time{font-size:clamp(12px,1.25vw,18px);}
-  .rw-gate.lv4 .rw-title{font-size:clamp(9px,.8vw,12px);}
-  .rw-gate.lv4 .rw-sub{font-size:clamp(7px,.55vw,9px);}
+  .rw-gate.lv4 .rw-time{font-size:clamp(11px,1.15vw,16.5px);}
+  .rw-gate.lv4 .rw-title{font-size:clamp(8px,.74vw,11px);}
+  .rw-gate.lv4 .rw-sub{font-size:clamp(6px,.5vw,8.5px);}
 
   /* left-rail category icon (+ label on the three nearest rows) */
   .rw-rail{
@@ -356,7 +356,7 @@
 
   /* climbing pulse: soft bloom over each gate, staggered front -> back so the wave rises */
   .rw-pulse{
-    position:absolute;left:46.9%;transform:translate(-50%,-50%);border-radius:50%;
+    position:absolute;left:49%;transform:translate(-50%,-50%);border-radius:50%;
     background:radial-gradient(ellipse at center, rgba(var(--c),.55), rgba(var(--c),0) 70%);
     opacity:0;z-index:4;pointer-events:none;
     animation:rwPulse 3.2s ease-in-out infinite;
@@ -2605,11 +2605,11 @@
       const currentTask=slice[currentIdx];
 
       const SLOTS=[
-        {cy:71.0, ix:6.5,  iy:67.5},
-        {cy:52.0, ix:14.0, iy:50.0},
-        {cy:39.0, ix:21.5, iy:37.5},
-        {cy:30.0, ix:26.4, iy:29.0},
-        {cy:20.0, ix:28.3, iy:19.5}
+        {cy:71.0, cx:48.9,  ix:6.5,  iy:67.5},
+        {cy:52.0, cx:49.0,  ix:14.0, iy:50.0},
+        {cy:39.0, cx:49.0,  ix:21.5, iy:37.5},
+        {cy:30.0, cx:49.0,  ix:26.4, iy:29.0},
+        {cy:20.0, cx:49.05, ix:28.3, iy:19.5}
       ];
       const slotColors=["90,212,255","120,240,170","190,150,250","245,200,110","110,170,255"];
 
@@ -2619,7 +2619,7 @@
       let gatesHtml='';
       for(let i=0;i<5;i++){
         const s=SLOTS[i], col=slotColors[i], t=slice[i];
-        const pulse='<div class="rw-pulse" style="top:'+s.cy+'%"></div>';
+        const pulse='<div class="rw-pulse" style="left:'+s.cx+'%;top:'+s.cy+'%"></div>';
         if(!t){ gatesHtml+='<div class="rw-gate lv'+i+' rw-empty" style="--c:'+col+'">'+pulse+'</div>'; continue; }
         const m=catMeta(t.category);
         const done=t.status==='done';
@@ -2633,7 +2633,7 @@
         const check='<button class="runway-iconbtn runway-done" data-id="'+t.id+'" aria-pressed="'+done+'" aria-label="Mark done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button>';
         const remove='<button class="runway-iconbtn runway-remove" data-del="'+t.id+'" aria-label="Remove this item">&times;</button>';
         const rail='<div class="rw-rail" style="top:'+s.iy+'%;left:'+s.ix+'%">'+railIcon(t.category)+(i<3?'<span class="rw-rail-label">'+escapeHtml(m.label)+'</span>':'')+'</div>';
-        const content='<div class="rw-content" style="top:'+s.cy+'%">'+hero+'<div class="rw-title">'+escapeHtml(t.title||'Untitled')+'</div><div class="rw-sub">'+escapeHtml(sub)+'</div></div>';
+        const content='<div class="rw-content" style="left:'+s.cx+'%;top:'+s.cy+'%">'+hero+'<div class="rw-title">'+escapeHtml(t.title||'Untitled')+'</div><div class="rw-sub">'+escapeHtml(sub)+'</div></div>';
         const actions='<div class="runway-actions" style="top:'+s.cy+'%">'+check+remove+'</div>';
         gatesHtml+='<div class="rw-gate lv'+i+(done?' done':'')+(isCur?' is-current':'')+'" style="--c:'+col+'">'+pulse+rail+content+actions+'</div>';
       }
