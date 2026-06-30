@@ -2291,6 +2291,400 @@
       radial-gradient(ellipse at 50% 0%,rgba(var(--c,79,209,197),.34),transparent 30%),
       linear-gradient(180deg,rgba(8,18,31,.72),rgba(4,9,17,.82) 68%,rgba(2,5,11,.95))!important;}
 
+
+  /* Console redesign v1 — structural command-deck layout */
+  body{
+    background:
+      radial-gradient(ellipse at 50% -20%,rgba(55,116,210,.20),transparent 40%),
+      radial-gradient(ellipse at 94% 18%,rgba(79,209,197,.08),transparent 30%),
+      radial-gradient(ellipse at 10% 42%,rgba(106,166,255,.07),transparent 34%),
+      #050812!important;
+  }
+  .console-layout{
+    position:relative;
+    max-width:1460px!important;
+    padding:14px 14px 34px!important;
+    isolation:isolate;
+  }
+  .console-bg{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+    background:
+      linear-gradient(90deg,rgba(130,170,255,.035) 1px,transparent 1px),
+      linear-gradient(180deg,rgba(130,170,255,.025) 1px,transparent 1px);
+    background-size:56px 56px;
+    mask-image:linear-gradient(180deg,black,rgba(0,0,0,.65),transparent 92%);
+    -webkit-mask-image:linear-gradient(180deg,black,rgba(0,0,0,.65),transparent 92%);
+    opacity:.55;
+  }
+  .console-topbar{
+    display:grid!important;
+    grid-template-columns:minmax(260px,1fr) auto minmax(320px,1fr);
+    align-items:center;
+    gap:18px;
+    min-height:72px;
+    margin:0 0 14px!important;
+    padding:13px 16px;
+    border:1px solid rgba(113,137,190,.18);
+    border-radius:18px;
+    background:linear-gradient(180deg,rgba(13,20,36,.78),rgba(6,10,20,.78));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 18px 50px -42px rgba(71,145,255,.45);
+    backdrop-filter:blur(10px);
+  }
+  .console-brand .eyebrow{font-size:10px;margin-bottom:3px;color:#62ddd4;letter-spacing:.28em;}
+  .console-brand h1{font-size:22px!important;}
+  .console-timebox{text-align:center;}
+  .console-timebox .time{font-size:23px;font-weight:700;letter-spacing:.04em;}
+  .console-timebox .date{font-size:12px;color:var(--muted);margin-top:2px;}
+  .console-actions{justify-content:flex-end;}
+  .console-actions .who{max-width:230px;}
+
+  .console-ribbon{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    margin-bottom:14px!important;
+  }
+  .console-ribbon .kpi{
+    min-height:78px!important;
+    padding:15px 18px 13px!important;
+  }
+  .console-ribbon .kpi .n{font-size:30px!important;}
+  .console-ribbon .kpi-signal-bg{inset:9px 13px 8px 92px!important;}
+
+  .console-main{
+    display:grid;
+    grid-template-columns:minmax(570px,1.22fr) minmax(430px,.92fr) 116px;
+    gap:14px;
+    align-items:start;
+  }
+  .console-primary{gap:0!important;min-width:0;}
+  .console-stack{display:flex;flex-direction:column;gap:12px;min-width:0;}
+
+  .panel,
+  .ds-card{
+    background:linear-gradient(180deg,rgba(15,23,40,.86),rgba(8,13,24,.88))!important;
+    border-color:rgba(119,145,198,.20)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 20px 54px -48px rgba(71,145,255,.55);
+  }
+
+  .console-agenda-panel{
+    padding:16px!important;
+    min-height:724px;
+  }
+  .console-agenda-panel .runway-stage{
+    border-radius:16px!important;
+    min-height:660px;
+    aspect-ratio:auto!important;
+  }
+  .console-agenda-panel .pager{
+    position:absolute;
+    left:28px;
+    right:28px;
+    bottom:12px;
+    z-index:70;
+    margin:0!important;
+    pointer-events:auto;
+  }
+  .console-agenda-panel .pager .pagebtn{
+    background:rgba(8,14,27,.78)!important;
+    border-color:rgba(118,148,205,.22)!important;
+  }
+  .console-agenda-panel .pager .pageinfo{
+    background:rgba(4,8,16,.52);
+    padding:6px 14px;
+    border-radius:999px;
+    border:1px solid rgba(118,148,205,.16);
+  }
+
+  .leftcol > .panel:first-child .filters{
+    bottom:28px!important;
+    right:38px!important;
+    left:50%!important;
+    transform:translateX(-170px) scale(.78)!important;
+    z-index:75!important;
+  }
+
+  .console-ds-wrap .ds-stage{width:100%;}
+  .console-ds-wrap .ds-card{border-radius:16px!important;}
+  .console-ds-wrap .ds-strip{
+    min-height:94px;
+    align-items:center;
+    background:
+      radial-gradient(ellipse at 92% 50%,rgba(79,209,197,.16),transparent 44%),
+      linear-gradient(90deg,rgba(13,23,42,.88),rgba(7,12,22,.92))!important;
+  }
+  .console-ds-wrap .ds-strip-k{
+    font-size:13px;
+    color:#dbe7ff;
+  }
+
+  .console-mini-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,.95fr);
+    gap:12px;
+  }
+  .console-mini-card{
+    min-height:286px;
+    padding:16px!important;
+    overflow:hidden;
+  }
+  .console-mini-card .panel-head{margin-bottom:8px!important;}
+  .console-progress-card #gauge svg{max-height:198px;}
+  .console-progress-card .gauge-wrap{min-height:226px;}
+
+  .console-notes-matrix{
+    margin-top:0!important;
+    padding:14px!important;
+    min-height:344px;
+    overflow:hidden;
+  }
+  .console-notes-matrix .panel-head{margin-bottom:8px!important;}
+  .console-notes-matrix .nf-grid{
+    grid-template-columns:210px minmax(0,1fr)!important;
+    gap:13px!important;
+    align-items:stretch!important;
+  }
+  .console-notes-matrix .notes-rail{
+    min-height:292px;
+    padding:8px 0 0;
+  }
+  .console-notes-matrix .nf-add{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 54px;
+    gap:6px!important;
+  }
+  .console-notes-matrix .nf-add input[type=text]{
+    min-height:38px!important;
+    border-radius:10px!important;
+    padding:8px 10px!important;
+    font-size:12px!important;
+  }
+  .console-notes-matrix #note-add{
+    min-height:38px!important;
+    border-radius:10px!important;
+    padding:0!important;
+    font-size:12px!important;
+  }
+  .console-notes-matrix .notes-list{
+    max-height:154px;
+    overflow:auto;
+  }
+  .console-notes-matrix .space{
+    min-height:292px!important;
+    border-radius:14px!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10{
+    min-height:292px!important;
+    height:292px!important;
+  }
+  .console-notes-matrix .matrix-v10-artplate{
+    filter:saturate(.92) brightness(.76);
+  }
+  .console-notes-matrix .matrix-v10-frame{inset:10px!important;border-radius:12px!important;}
+  .console-notes-matrix .matrix-v10-core-wrap{
+    top:34px!important;
+    width:142px!important;
+    height:142px!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .cell.core{
+    width:118px!important;
+    height:118px!important;
+    min-height:118px!important;
+    padding:13px 10px 12px!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .cell.core::before{inset:-14px!important;}
+  .console-notes-matrix .matrix.matrix-v10 .cell.core::after{height:86px!important;width:14px!important;}
+  .console-notes-matrix .matrix.matrix-v10 .cell.core h4{
+    font-size:16px!important;
+    transform:translateY(-10px)!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .cell.core .orb{
+    width:44px!important;
+    height:44px!important;
+    transform:translateY(-5px)!important;
+    margin-top:0!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .cell.core .pct{
+    font-size:10px!important;
+    margin-top:-4px!important;
+  }
+  .console-notes-matrix .matrix-v10-cove{
+    left:18px!important;
+    right:18px!important;
+    bottom:66px!important;
+    min-height:106px!important;
+    gap:8px!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .cell.matrix-node{
+    min-width:68px!important;
+    max-width:92px!important;
+    height:112px!important;
+    min-height:112px!important;
+    padding:10px 5px 8px!important;
+    border-radius:26px!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .micon,
+  .console-notes-matrix .matrix.matrix-v10 .micon svg{width:24px!important;height:24px!important;}
+  .console-notes-matrix .matrix.matrix-v10 .cell h4{
+    font-size:10px!important;
+    line-height:1.08!important;
+    -webkit-line-clamp:2!important;
+  }
+  .console-notes-matrix .matrix.matrix-v10 .cnt{font-size:10px!important;margin-top:4px!important;}
+  .console-notes-matrix .matrix.matrix-v10 .hexwrap{margin-top:5px!important;gap:3px!important;}
+  .console-notes-matrix .matrix.matrix-v10 .hex{width:11px!important;height:12px!important;}
+  .console-notes-matrix .matrix.matrix-v10 .cell .edit{
+    width:20px!important;
+    height:20px!important;
+    top:7px!important;
+    right:7px!important;
+    border-radius:7px!important;
+  }
+  .console-notes-matrix .matrix-v10-actions{
+    left:20px!important;
+    right:20px!important;
+    bottom:12px!important;
+    gap:10px!important;
+  }
+  .console-notes-matrix .matrix-v10-action{
+    padding:9px 18px!important;
+    font-size:12px!important;
+  }
+  .console-notes-matrix .matrix-v10-hidden{display:none!important;}
+
+  .console-dock{
+    position:sticky;
+    top:14px;
+    min-height:724px;
+    padding:13px 10px;
+    border:1px solid rgba(128,155,208,.22);
+    border-radius:18px;
+    background:linear-gradient(180deg,rgba(20,29,49,.84),rgba(8,12,22,.88));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 20px 54px -46px rgba(76,160,255,.55);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:stretch;
+  }
+  .dock-label{
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.11em;
+    color:rgba(217,228,255,.56);
+    text-transform:uppercase;
+    text-align:center;
+    padding:3px 0 5px;
+  }
+  .dock-btn{
+    min-height:82px;
+    border-radius:14px;
+    border:1px solid rgba(137,160,206,.13);
+    background:rgba(10,16,29,.60);
+    color:#93a1c1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.18s ease;
+  }
+  .dock-btn:hover,
+  .dock-btn.on{
+    color:#eaf4ff;
+    border-color:rgba(106,166,255,.45);
+    background:linear-gradient(180deg,rgba(38,68,116,.58),rgba(11,21,38,.74));
+    box-shadow:inset 0 0 0 1px rgba(106,166,255,.18),0 0 24px -15px rgba(106,166,255,.9);
+  }
+  .dock-ico{
+    width:32px;
+    height:32px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    border:1px solid rgba(137,160,206,.18);
+    background:rgba(255,255,255,.025);
+    color:#8ccaff;
+    font-size:18px;
+  }
+  .dock-btn span:last-child{font-size:11px;font-weight:600;}
+  .dock-collapse{
+    margin-top:auto;
+    padding:10px 8px;
+    border-radius:12px;
+    background:rgba(9,14,26,.72);
+    color:#8d99b8;
+    border:1px solid rgba(137,160,206,.16);
+    font-size:11px;
+  }
+
+  .console-signals-panel{
+    position:fixed;
+    z-index:650;
+    right:142px;
+    top:98px;
+    width:min(980px,calc(100vw - 176px));
+    transform:translateY(10px) scale(.985);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease, transform .24s ease;
+  }
+  .console-signals-panel.open{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+  .console-signals-panel::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(2,5,12,.46);
+    z-index:-1;
+    backdrop-filter:blur(4px);
+  }
+  .console-signals-panel .topo-panel{
+    margin:0!important;
+    border-color:rgba(79,209,197,.36)!important;
+    box-shadow:0 28px 100px -38px rgba(0,0,0,.85),0 0 60px -36px rgba(79,209,197,.95);
+  }
+  .console-signals-panel .topo{min-height:360px;}
+  .topo-close{
+    margin-left:6px;
+    color:#dce8ff!important;
+    border-color:rgba(255,255,255,.16)!important;
+  }
+
+  .console-hidden-utility{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    overflow:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  @media(max-width:1220px){
+    .console-main{grid-template-columns:minmax(0,1fr) 102px;}
+    .console-stack{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;align-items:start;}
+    .console-dock{grid-column:2;grid-row:1;min-height:600px;}
+    .console-primary{grid-column:1;grid-row:1;}
+    .console-notes-matrix{grid-column:1/-1;}
+  }
+  @media(max-width:900px){
+    .console-topbar{grid-template-columns:1fr;gap:10px;text-align:center;}
+    .console-actions{justify-content:center;}
+    .console-ribbon{grid-template-columns:repeat(2,1fr)!important;}
+    .console-main{display:flex;flex-direction:column;}
+    .console-dock{position:relative;top:auto;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);}
+    .dock-label,.dock-collapse{display:none;}
+    .dock-btn{min-height:64px;}
+    .console-mini-grid,.console-stack,.console-notes-matrix .nf-grid{grid-template-columns:1fr!important;}
+    .console-agenda-panel{min-height:auto;}
+    .console-agenda-panel .runway-stage{min-height:540px;}
+    .console-signals-panel{right:14px;left:14px;width:auto;top:80px;}
+    .leftcol > .panel:first-child .filters{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;transform:none!important;max-width:100%!important;margin-bottom:10px!important;}
+  }
+
 </style>
 </head>
 <body>
@@ -2309,41 +2703,32 @@
   </div>
 
   <!-- DASHBOARD -->
-  <div id="dash" class="wrap hidden">
-    <div class="topbar">
-      <div class="brand">
-        <p class="eyebrow">Quarter &middot; Survival</p>
+  <div id="dash" class="wrap console-layout hidden">
+    <div class="console-bg" aria-hidden="true"></div>
+
+    <header class="console-topbar topbar">
+      <div class="brand console-brand">
+        <p class="eyebrow">Quarter &middot; Survival Command Deck</p>
         <h1>Command Deck</h1>
       </div>
-      <div class="topright">
-        <div class="clockline">
-          <div class="time mono" id="top-time">--:--</div>
-          <div class="date" id="top-date">&nbsp;</div>
-        </div>
+
+      <div class="console-timebox">
+        <div class="time mono" id="top-time">--:--</div>
+        <div class="date" id="top-date">&nbsp;</div>
+      </div>
+
+      <div class="topright console-actions">
         <span class="who" id="who"></span>
         <button class="iconbtn" id="refresh-btn">Refresh</button>
         <button class="iconbtn" id="logout-btn">Log out</button>
       </div>
-    </div>
+    </header>
 
-    <div class="ribbon" id="ribbon"></div>
+    <section class="ribbon console-ribbon" id="ribbon" aria-label="Task signal counters"></section>
 
-    <div class="panel topo-panel">
-      <div class="panel-head">
-        <h2>Free-time topography</h2>
-        <div class="topo-pager">
-          <button class="topo-nav" id="topo-prev" aria-label="Previous day">&lsaquo;</button>
-          <span class="topo-day" id="topo-day">&mdash;</span>
-          <button class="topo-nav" id="topo-next" aria-label="Next day">&rsaquo;</button>
-        </div>
-      </div>
-      <div class="topo-sub" id="topo-sub">&nbsp;</div>
-      <div class="topo" id="topo"></div>
-    </div>
-
-    <div class="grid">
-      <div class="leftcol">
-        <div class="panel">
+    <section class="console-main">
+      <main class="console-primary leftcol" id="console-overview">
+        <div class="panel console-agenda-panel" id="agenda-panel">
           <div class="panel-head">
             <h2>Agenda</h2>
             <span class="hint" id="agenda-hint"></span>
@@ -2351,71 +2736,108 @@
           <div class="filters" id="filters"></div>
           <div id="agenda"></div>
         </div>
+      </main>
 
-        <div class="ds-wrap"><div class="ds-stage idle" id="ds-stage" style="min-height:64px;"><div class="ds-layer ds-l3"></div><div class="ds-layer ds-l2"></div><div class="ds-card" id="ds-card" style="min-height:64px;"><div class="ds-c ds-fade" id="ds-c"></div></div></div></div>
-      </div>
+      <aside class="console-stack">
+        <div class="ds-wrap console-ds-wrap" id="console-summary">
+          <div class="ds-stage idle" id="ds-stage" style="min-height:64px;">
+            <div class="ds-layer ds-l3"></div>
+            <div class="ds-layer ds-l2"></div>
+            <div class="ds-card" id="ds-card" style="min-height:64px;">
+              <div class="ds-c ds-fade" id="ds-c"></div>
+            </div>
+          </div>
+        </div>
 
-      <div class="col">
-        <div class="panel calpanel">
+        <div class="console-mini-grid">
+          <div class="panel calpanel console-mini-card" id="console-calendar">
+            <div class="panel-head">
+              <h2>Calendar</h2>
+              <span class="hint">Pacific</span>
+            </div>
+            <div id="calendar"></div>
+          </div>
+
+          <div class="panel console-mini-card console-progress-card" id="console-progress">
+            <div class="panel-head">
+              <h2>This week&rsquo;s progress</h2>
+              <span class="hint" id="gauge-hint"></span>
+            </div>
+            <div id="gauge"></div>
+          </div>
+        </div>
+
+        <div class="panel notes-panel console-notes-matrix" id="console-notes">
           <div class="panel-head">
-            <h2>Calendar</h2>
-            <span class="hint">Pacific</span>
+            <h2>Notes &amp; folders</h2>
+            <span class="hint">Cellular matrix &middot; just yours</span>
           </div>
-          <div id="calendar"></div>
-        </div>
+          <div class="nf-grid">
+            <div class="nf-col notes-rail">
+              <div class="notes-head">
+                <div class="notes-head-l">
+                  <div class="nf-sub" id="notes-title">Quick notes</div>
+                  <button class="mode-lever" id="mode-lever" type="button" role="switch" aria-checked="false" aria-label="Switch to Quick Tasks"><span class="lever-knob"></span></button>
+                </div>
+                <button class="notes-clear" id="notes-clear" type="button" hidden>Clear all</button>
+              </div>
+              <div class="nf-add">
+                <input type="text" id="note-input" placeholder="Jot a quick note&hellip;" autocomplete="off">
+                <button id="note-add">Add</button>
+              </div>
+              <div id="notes-list" class="notes-list"></div>
+            </div>
 
-        <div class="panel">
-          <div class="panel-head">
-            <h2>This week&rsquo;s progress</h2>
-            <span class="hint" id="gauge-hint"></span>
-          </div>
-          <div id="gauge"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel notes-panel">
-      <div class="panel-head"><h2>Notes &amp; folders</h2><span class="hint">Just yours &middot; not from scans</span></div>
-      <div class="nf-grid">
-        <div class="nf-col notes-rail">
-          <div class="notes-head"><div class="notes-head-l"><div class="nf-sub" id="notes-title">Quick notes</div><button class="mode-lever" id="mode-lever" type="button" role="switch" aria-checked="false" aria-label="Switch to Quick Tasks"><span class="lever-knob"></span></button></div><button class="notes-clear" id="notes-clear" type="button" hidden>Clear all</button></div>
-          <div class="nf-add">
-            <input type="text" id="note-input" placeholder="Jot a quick note&hellip;" autocomplete="off">
-            <button id="note-add">Add</button>
-          </div>
-          <div id="notes-list" class="notes-list"></div>
-        </div>
-        <div class="nf-col matrix-col">
-          <div class="nf-sub">Cellular matrix &middot; tap a hex to complete, tap a cell to open</div>
-          <div class="space" id="space">
-            <div class="stars"></div>
-            <span class="tw" style="left:24%;top:18%"></span>
-            <span class="tw" style="left:80%;top:36%;animation-delay:1.1s"></span>
-            <span class="tw" style="left:46%;top:84%;animation-delay:2.2s"></span>
-            <div class="matrix" id="matrix"></div>
+            <div class="nf-col matrix-col" id="console-matrix">
+              <div class="nf-sub">Cellular matrix &middot; tap a hex to complete</div>
+              <div class="space" id="space">
+                <div class="stars"></div>
+                <span class="tw" style="left:24%;top:18%"></span>
+                <span class="tw" style="left:80%;top:36%;animation-delay:1.1s"></span>
+                <span class="tw" style="left:46%;top:84%;animation-delay:2.2s"></span>
+                <div class="matrix" id="matrix"></div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </aside>
 
-    <div class="planned-grid">
-      <div class="planned">
-        <span class="badge">Preview</span>
-        <h3>Crypto allocations</h3>
-        <p>Live wallet balances and allocation, pulled the same way your tasks are. Not wired up yet &mdash; the line below is a placeholder.</p>
-        <svg class="spark" id="spark" viewBox="0 0 240 42" preserveAspectRatio="none">
-          <polyline class="area" id="spark-area" points=""></polyline>
-          <polyline id="spark-line" points=""></polyline>
-        </svg>
-      </div>
-      <div class="planned">
-        <span class="badge">Planned</span>
-        <h3>Wage tracker</h3>
-        <p>Tally hours and earnings across clinic, behavioral, and side-gig work, so you can see what the quarter is actually paying.</p>
-      </div>
-    </div>
+      <nav class="console-dock" aria-label="Console dock">
+        <div class="dock-label">Console Dock</div>
+        <button class="dock-btn on" type="button" data-scroll="console-overview" title="Overview"><span class="dock-ico">◎</span><span>Overview</span></button>
+        <button class="dock-btn" id="dock-signals" type="button" title="Signals / free-time topography"><span class="dock-ico">⌁</span><span>Signals</span></button>
+        <button class="dock-btn" type="button" data-scroll="console-calendar" title="Calendar"><span class="dock-ico">▦</span><span>Calendar</span></button>
+        <button class="dock-btn" type="button" data-scroll="console-matrix" title="Matrix"><span class="dock-ico">⬡</span><span>Matrix</span></button>
+        <button class="dock-btn" type="button" data-scroll="console-notes" title="Notes"><span class="dock-ico">▤</span><span>Notes</span></button>
+        <button class="dock-btn" type="button" data-scroll="console-progress" title="Analytics"><span class="dock-ico">▥</span><span>Analytics</span></button>
+        <button class="dock-collapse" type="button" data-scroll="console-overview">‹ Collapse</button>
+      </nav>
+    </section>
 
-    <div class="footer">
+    <aside class="console-signals-panel" id="signals-panel" aria-hidden="true">
+      <div class="panel topo-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Free-time topography</h2>
+            <span class="hint">Signals deck &middot; availability terrain</span>
+          </div>
+          <div class="topo-pager">
+            <button class="topo-nav" id="topo-prev" aria-label="Previous day">&lsaquo;</button>
+            <span class="topo-day" id="topo-day">&mdash;</span>
+            <button class="topo-nav" id="topo-next" aria-label="Next day">&rsaquo;</button>
+            <button class="topo-nav topo-close" id="signals-close" aria-label="Close signals panel">&times;</button>
+          </div>
+        </div>
+        <div class="topo-sub" id="topo-sub">&nbsp;</div>
+        <div class="topo" id="topo"></div>
+      </div>
+    </aside>
+
+    <div class="console-hidden-utility" aria-hidden="true">
+      <svg class="spark" id="spark" viewBox="0 0 240 42" preserveAspectRatio="none">
+        <polyline class="area" id="spark-area" points=""></polyline>
+        <polyline id="spark-line" points=""></polyline>
+      </svg>
       <div id="sync">&nbsp;</div>
       <div class="legend" id="legend"></div>
     </div>
@@ -3553,5 +3975,37 @@
       set("idle");
     })();
   </script>
+
+  <script>
+    (function(){
+      function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+      ready(function(){
+        var panel=document.getElementById("signals-panel");
+        var open=document.getElementById("dock-signals");
+        var close=document.getElementById("signals-close");
+        function setSignals(on){
+          if(!panel) return;
+          panel.classList.toggle("open",!!on);
+          panel.setAttribute("aria-hidden",on?"false":"true");
+          if(open) open.classList.toggle("on",!!on);
+          if(on && window.renderTopo) setTimeout(function(){ window.renderTopo(); },60);
+        }
+        if(open) open.addEventListener("click",function(){ setSignals(!panel.classList.contains("open")); });
+        if(close) close.addEventListener("click",function(){ setSignals(false); });
+        document.addEventListener("keydown",function(e){ if(e.key==="Escape") setSignals(false); });
+        document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll]").forEach(function(btn){
+          btn.addEventListener("click",function(){
+            setSignals(false);
+            var id=btn.getAttribute("data-scroll");
+            var target=document.getElementById(id);
+            if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+            document.querySelectorAll(".dock-btn").forEach(function(b){ b.classList.remove("on"); });
+            if(btn.classList.contains("dock-btn")) btn.classList.add("on");
+          });
+        });
+      });
+    })();
+  </script>
+
 </body>
 </html>
