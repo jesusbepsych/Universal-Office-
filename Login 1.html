@@ -3582,6 +3582,284 @@
     opacity:.62;
   }
 
+
+  /* Signal Garden v7 polish: intentional belt focus, pod drawer, quieter utility cards */
+  .console-notes-matrix .panel-head h2{
+    color:#f3f8ff!important;
+    text-shadow:0 0 18px rgba(79,209,197,.18);
+  }
+  .console-notes-matrix .panel-head .hint{
+    display:none!important;
+  }
+
+  .sg-pods{
+    padding-left:14px!important;
+    padding-right:14px!important;
+    mask-image:linear-gradient(90deg,transparent 0,black 6%,black 94%,transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,black 6%,black 94%,transparent 100%);
+  }
+  .sg-pods .sg-pod{
+    opacity:.66;
+    filter:saturate(.88) brightness(.88);
+    transform-origin:50% 90%;
+  }
+  .sg-pods .sg-pod.sg-near{
+    opacity:.86;
+    filter:saturate(.98) brightness(.98);
+  }
+  .sg-pods .sg-pod.sg-active{
+    opacity:1!important;
+    z-index:12;
+    filter:saturate(1.18) brightness(1.12)!important;
+    transform:translateY(calc(var(--lift,0) - 9px)) scale(1.075)!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.28),
+      inset 0 -22px 38px rgba(var(--c,79,209,197),.19),
+      0 0 0 1px rgba(var(--c,79,209,197),.30),
+      0 0 54px -8px rgba(var(--c,79,209,197),1),
+      0 32px 38px -22px rgba(0,0,0,1)!important;
+  }
+  .sg-pods .sg-pod.sg-active::before{
+    opacity:.98;
+  }
+  .sg-position{
+    position:absolute;
+    left:50%;
+    bottom:23px;
+    transform:translateX(-50%);
+    z-index:10;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1px solid rgba(137,170,225,.18);
+    background:rgba(4,9,18,.54);
+    color:rgba(210,228,255,.68);
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    pointer-events:none;
+    backdrop-filter:blur(8px);
+  }
+  .sg-belt-hint{
+    left:auto!important;
+    right:24px!important;
+    bottom:24px!important;
+    opacity:.42!important;
+  }
+  .sg-actions{
+    width:auto!important;
+    right:auto!important;
+  }
+
+  .sg-drawer{
+    position:absolute;
+    z-index:30;
+    right:16px;
+    top:58px;
+    width:min(310px,42%);
+    max-height:calc(100% - 92px);
+    overflow:hidden;
+    border-radius:18px;
+    border:1px solid rgba(var(--c,79,209,197),.42);
+    background:
+      radial-gradient(ellipse at 85% 0%,rgba(var(--c,79,209,197),.20),transparent 38%),
+      linear-gradient(180deg,rgba(12,20,36,.92),rgba(5,9,18,.94));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.08),
+      0 24px 60px -30px rgba(0,0,0,.92),
+      0 0 42px -24px rgba(var(--c,79,209,197),.95);
+    backdrop-filter:blur(14px);
+  }
+  .sg-drawer-head{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:14px 14px 10px;
+    border-bottom:1px solid rgba(140,170,220,.13);
+  }
+  .sg-drawer-dot{
+    width:11px;
+    height:11px;
+    border-radius:50%;
+    flex:none;
+    margin-top:5px;
+    background:rgb(var(--c,79,209,197));
+    box-shadow:0 0 18px rgba(var(--c,79,209,197),.78);
+  }
+  .sg-drawer-name{
+    font-family:var(--disp);
+    font-size:16px;
+    line-height:1.1;
+    color:#f4f8ff;
+  }
+  .sg-drawer-meta{
+    margin-top:4px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.11em;
+    color:rgba(204,220,255,.58);
+    text-transform:uppercase;
+  }
+  .sg-drawer-x{
+    margin-left:auto;
+    width:28px;
+    height:28px;
+    border-radius:10px;
+    border:1px solid rgba(220,235,255,.14);
+    background:rgba(4,9,18,.58);
+    color:rgba(230,240,255,.82);
+    font-size:18px;
+    line-height:1;
+  }
+  .sg-drawer-body{
+    padding:12px 14px 14px;
+    max-height:270px;
+    overflow:auto;
+  }
+  .sg-drawer-section{
+    margin-bottom:12px;
+  }
+  .sg-drawer-label{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:rgba(198,216,255,.52);
+    margin-bottom:8px;
+  }
+  .sg-drawer-seeds{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .sg-drawer-seeds .hex.sg-seed{
+    width:13px!important;
+    height:14px!important;
+  }
+  .sg-drawer-list{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+  }
+  .sg-drawer-item{
+    display:grid;
+    grid-template-columns:18px minmax(0,1fr) 20px;
+    align-items:center;
+    gap:8px;
+    padding:8px 9px;
+    border-radius:12px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(140,170,220,.08);
+  }
+  .sg-drawer-check{
+    width:18px;
+    height:18px;
+    border-radius:7px;
+    border:1px solid rgba(var(--c,79,209,197),.42);
+    background:rgba(var(--c,79,209,197),.08);
+    box-shadow:0 0 14px -10px rgba(var(--c,79,209,197),1);
+  }
+  .sg-drawer-check.on{
+    background:rgb(var(--c,79,209,197));
+    box-shadow:0 0 14px rgba(var(--c,79,209,197),.68);
+  }
+  .sg-drawer-text{
+    font-size:12px;
+    line-height:1.25;
+    color:rgba(235,242,255,.88);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .sg-drawer-text.done{
+    color:rgba(170,184,212,.55);
+    text-decoration:line-through;
+  }
+  .sg-drawer-del{
+    width:20px;
+    height:20px;
+    border-radius:7px;
+    background:rgba(255,255,255,.035);
+    color:rgba(225,235,255,.52);
+    font-size:15px;
+  }
+  .sg-drawer-empty{
+    padding:10px 2px;
+    color:rgba(205,220,255,.58);
+    font-size:12px;
+    line-height:1.35;
+  }
+  .sg-drawer-add{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 52px;
+    gap:7px;
+    margin-top:10px;
+  }
+  .sg-drawer-add input{
+    min-width:0;
+    border-radius:11px;
+    border:1px solid rgba(120,150,205,.18);
+    background:rgba(4,9,18,.58);
+    color:#edf6ff;
+    padding:9px 10px;
+    font-size:12px;
+    outline:none;
+  }
+  .sg-drawer-add input:focus{
+    border-color:rgba(var(--c,79,209,197),.50);
+    box-shadow:0 0 0 3px rgba(var(--c,79,209,197),.10);
+  }
+  .sg-drawer-add button{
+    border-radius:11px;
+    background:rgba(var(--c,79,209,197),.18);
+    color:#cafff7;
+    border:1px solid rgba(var(--c,79,209,197),.32);
+    font-size:12px;
+    font-weight:700;
+  }
+
+  .console-mini-card{
+    filter:saturate(.78) brightness(.92);
+    opacity:.92;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 14px 42px -42px rgba(71,145,255,.34)!important;
+  }
+  .console-mini-card:hover{
+    filter:saturate(.92) brightness(.98);
+    opacity:1;
+  }
+  .console-mini-card .panel-head h2{
+    color:rgba(232,240,255,.78)!important;
+  }
+  .console-mini-card .hint{
+    color:rgba(145,158,190,.62)!important;
+  }
+  .console-progress-card #gauge{
+    opacity:.82;
+    transform:scale(.96);
+    transform-origin:center top;
+  }
+  .calpanel #calendar{
+    opacity:.86;
+  }
+
+  @media(max-width:1220px){
+    .sg-drawer{
+      width:min(300px,48%);
+    }
+  }
+  @media(max-width:900px){
+    .sg-drawer{
+      left:12px;
+      right:12px;
+      top:76px;
+      width:auto;
+      max-height:calc(100% - 108px);
+    }
+    .sg-position{
+      bottom:56px;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -3666,7 +3944,7 @@
 
         <div class="panel notes-panel console-notes-matrix" id="console-notes">
           <div class="panel-head">
-            <h2>Notes &amp; folders</h2>
+            <h2>Signal Garden</h2>
             
           </div>
           <div class="nf-grid">
@@ -4911,13 +5189,17 @@
       var loopCenter=Math.floor(loopCopies/2);
       var gardenSavedScroll=null;
       var suppressGardenClickUntil=0;
+      var activeGardenRealIndex=0;
 
       function safeTrunc(s,n){ s=String(s||""); return s.length>n ? s.slice(0,n-1)+"…" : s; }
+      function mod(n,m){ return ((n%m)+m)%m; }
+
       function gardenPreviewHtml(f){
         var items=itemsOf(f);
         if(!items.length) return '<span>No notes yet.<br>Add something here.</span>';
         return '<ul>'+items.slice(0,2).map(function(it){ return '<li>'+escapeHtml(safeTrunc(it.title,46))+'</li>'; }).join("")+'</ul>';
       }
+
       function gardenSeedsHtml(f){
         var items=itemsOf(f);
         if(!items.length) return '<div class="sg-seeds" aria-label="No tasks"></div>';
@@ -4927,10 +5209,11 @@
           return '<span class="hex sg-seed '+(it.done?"lit":"dim")+ig+'" data-item="'+it.id+'" title="'+escapeHtml(it.title||"")+'"></span>';
         }).join("")+'</div>';
       }
-      function gardenPodHtml(f,i){
+
+      function gardenPodHtml(f,i,realIndex){
         var items=itemsOf(f), d=items.filter(function(x){return x.done;}).length;
         var c=rgbOf(f.category);
-        return '<div class="sg-pod sg-pod-'+((i%visibleCount)+1)+'" style="--c:'+c+'" data-open="'+f.id+'">'
+        return '<div class="sg-pod sg-pod-'+((i%visibleCount)+1)+'" style="--c:'+c+'" data-open="'+f.id+'" data-real-index="'+realIndex+'">'
           + '<button class="sg-edit" data-rename="'+f.id+'" aria-label="Rename pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
           + '<div class="sg-icon">'+matrixIcon(f.category)+'</div>'
           + '<div class="sg-name">'+escapeHtml(f.name)+'</div>'
@@ -4941,22 +5224,65 @@
       }
 
       function makeLoopedFolders(){
-        if(folders.length<=visibleCount) return folders.slice(0,visibleCount);
+        if(folders.length<=visibleCount) return folders.slice(0,visibleCount).map(function(f,i){return {f:f,real:i};});
         var arr=[];
         for(var c=0;c<loopCopies;c++){
-          for(var i=0;i<folders.length;i++) arr.push(folders[i]);
+          for(var i=0;i<folders.length;i++) arr.push({f:folders[i],real:i});
         }
         return arr;
       }
 
+      function visibleRangeFromDom(belt){
+        if(!folders.length) return folders.length+" active pods";
+        var br=belt.getBoundingClientRect();
+        var nodes=[].slice.call(belt.querySelectorAll(".sg-pod"));
+        var visible=[];
+        nodes.forEach(function(p){
+          var r=p.getBoundingClientRect();
+          if(r.right>br.left+8 && r.left<br.right-8){
+            var idx=Number(p.getAttribute("data-real-index"));
+            if(visible.indexOf(idx)===-1) visible.push(idx);
+          }
+        });
+        visible=visible.slice(0,visibleCount);
+        if(!visible.length) return folders.length+" active pods";
+        if(folders.length<=visibleCount) return folders.length+" active pods";
+        var first=visible[0], last=visible[visible.length-1];
+        if(visible.length===1) return "Pod "+(first+1)+" of "+folders.length;
+        return "Pods "+(first+1)+"–"+(last+1)+" of "+folders.length;
+      }
+
+      function updateBeltFocus(belt){
+        if(!belt) return;
+        var br=belt.getBoundingClientRect(), center=br.left+br.width/2;
+        var pods=[].slice.call(belt.querySelectorAll(".sg-pod"));
+        var closest=null, closestDist=Infinity;
+        pods.forEach(function(p){
+          var r=p.getBoundingClientRect(), pc=r.left+r.width/2, d=Math.abs(pc-center);
+          if(d<closestDist){closestDist=d;closest=p;}
+        });
+        pods.forEach(function(p){
+          p.classList.remove("sg-active","sg-near");
+          if(!closest) return;
+          var r=p.getBoundingClientRect(), pc=r.left+r.width/2, d=Math.abs(pc-center);
+          if(p===closest) p.classList.add("sg-active");
+          else if(d<br.width*.34) p.classList.add("sg-near");
+        });
+        if(closest){
+          activeGardenRealIndex=Number(closest.getAttribute("data-real-index"))||0;
+        }
+        var pos=el("sg-position");
+        if(pos) pos.textContent=visibleRangeFromDom(belt);
+      }
+
       function bindStableBelt(host){
         var belt=host.querySelector(".sg-pods");
-        if(!belt || folders.length<=visibleCount) return;
+        if(!belt) return;
 
         var unit=0, down=false, startX=0, startY=0, startLeft=0, dragged=false, lastX=0, lastT=0, velocity=0, programmatic=false;
 
         function measure(){
-          unit = belt.scrollWidth / loopCopies;
+          unit = folders.length>visibleCount ? belt.scrollWidth / loopCopies : 0;
           return unit;
         }
 
@@ -4964,11 +5290,18 @@
           programmatic=true;
           belt.scrollLeft=pos;
           gardenSavedScroll=pos;
-          requestAnimationFrame(function(){ programmatic=false; });
+          requestAnimationFrame(function(){
+            programmatic=false;
+            updateBeltFocus(belt);
+          });
         }
 
         function initialPlace(){
           measure();
+          if(folders.length<=visibleCount){
+            updateBeltFocus(belt);
+            return;
+          }
           if(!unit) return;
           if(gardenSavedScroll==null || gardenSavedScroll<unit || gardenSavedScroll>unit*(loopCopies-1)){
             jumpTo(unit*loopCenter);
@@ -4978,17 +5311,17 @@
         }
 
         function quietRecentering(){
+          if(folders.length<=visibleCount) return;
           measure();
           if(!unit) return;
           var x=belt.scrollLeft;
-          // Only re-center at the far guard rails. This keeps the same visible sequence
-          // because every loop copy is identical, but avoids the earlier constant snap-back.
           if(x < unit*.75){
             jumpTo(x + unit*loopCenter);
           }else if(x > unit*(loopCopies-.75)){
             jumpTo(x - unit*loopCenter);
           }else{
             gardenSavedScroll=x;
+            updateBeltFocus(belt);
           }
         }
 
@@ -4997,11 +5330,11 @@
         belt.addEventListener("scroll",function(){
           if(programmatic) return;
           gardenSavedScroll=belt.scrollLeft;
+          updateBeltFocus(belt);
           if(belt.__sgEdgeTimer) clearTimeout(belt.__sgEdgeTimer);
           belt.__sgEdgeTimer=setTimeout(quietRecentering,180);
         },{passive:true});
 
-        // Mouse / trackpad drag. Touch uses normal native momentum scrolling.
         belt.addEventListener("pointerdown",function(e){
           if(e.pointerType==="touch") return;
           down=true; dragged=false; startX=e.clientX; startY=e.clientY; startLeft=belt.scrollLeft; lastX=e.clientX; lastT=performance.now(); velocity=0;
@@ -5042,6 +5375,56 @@
         },true);
       }
 
+      function drawerSeedsHtml(f){
+        var items=itemsOf(f);
+        if(!items.length) return '<div class="sg-drawer-empty">No completion seeds yet.</div>';
+        return '<div class="sg-drawer-seeds">'+items.map(function(it){
+          return '<span class="hex sg-seed '+(it.done?"lit":"dim")+'" data-drawer-tog="'+it.id+'" title="'+escapeHtml(it.title||"")+'"></span>';
+        }).join("")+'</div>';
+      }
+
+      function drawGardenDrawer(){
+        var f=folders.find(function(x){return String(x.id)===String(openFolderId);});
+        var host=el("matrix"); if(!host) return;
+        var shell=host.querySelector(".sg-shell"); if(!shell) return;
+        var old=shell.querySelector(".sg-drawer"); if(old) old.remove();
+        if(!f) return;
+
+        var c=rgbOf(f.category), items=itemsOf(f), done=items.filter(function(x){return x.done;}).length;
+        var active=items.filter(function(x){return !x.done;});
+        var label=f.category?catMeta(f.category).label:"No category";
+
+        var list=active.length ? active.map(function(it){
+          return '<div class="sg-drawer-item"><span class="sg-drawer-check" data-drawer-tog="'+it.id+'"></span><span class="sg-drawer-text">'+escapeHtml(it.title)+'</span><button class="sg-drawer-del" data-drawer-del="'+it.id+'" aria-label="Delete item">&times;</button></div>';
+        }).join("") : '<div class="sg-drawer-empty">No incomplete items. This pod is clear.</div>';
+
+        var drawer=document.createElement("div");
+        drawer.className="sg-drawer";
+        drawer.style.setProperty("--c",c);
+        drawer.innerHTML=
+          '<div class="sg-drawer-head"><span class="sg-drawer-dot"></span><div><div class="sg-drawer-name">'+escapeHtml(f.name)+'</div><div class="sg-drawer-meta">'+escapeHtml(label)+' · '+done+' / '+items.length+' complete</div></div><button class="sg-drawer-x" data-sg-close aria-label="Close">&times;</button></div>'
+          + '<div class="sg-drawer-body">'
+            + '<div class="sg-drawer-section"><div class="sg-drawer-label">Completion seeds</div>'+drawerSeedsHtml(f)+'</div>'
+            + '<div class="sg-drawer-section"><div class="sg-drawer-label">Incomplete items</div><div class="sg-drawer-list">'+list+'</div></div>'
+            + '<div class="sg-drawer-add"><input data-sg-input placeholder="Add to this pod…" autocomplete="off"><button data-sg-add>Add</button></div>'
+          + '</div>';
+        shell.appendChild(drawer);
+
+        function close(){ var d=shell.querySelector(".sg-drawer"); if(d)d.remove(); cellRedraw=null; openFolderId=null; }
+        function add(){ var inp=drawer.querySelector("[data-sg-input]"); var v=inp.value.trim(); if(!v)return; addItemTo(f.id,v); inp.value=""; inp.focus(); }
+        drawer.querySelector("[data-sg-close]").addEventListener("click",close);
+        drawer.querySelector("[data-sg-add]").addEventListener("click",add);
+        drawer.querySelector("[data-sg-input]").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); add(); } });
+        drawer.querySelectorAll("[data-drawer-tog]").forEach(function(x){ x.addEventListener("click",function(ev){ ev.stopPropagation(); toggleItem(x.getAttribute("data-drawer-tog")); }); });
+        drawer.querySelectorAll("[data-drawer-del]").forEach(function(x){ x.addEventListener("click",function(ev){ ev.stopPropagation(); deleteItem(x.getAttribute("data-drawer-del")); }); });
+      }
+
+      openCell = function(id){
+        openFolderId=id;
+        cellRedraw=drawGardenDrawer;
+        drawGardenDrawer();
+      };
+
       renderMatrix = function(){
         var host=el("matrix"); if(!host) return;
         var space=el("space");
@@ -5052,9 +5435,9 @@
         host.className="signal-garden";
 
         var hasBelt=folders.length>visibleCount;
-        var displayFolders=hasBelt ? makeLoopedFolders() : folders.slice(0,visibleCount);
+        var displayFolders=hasBelt ? makeLoopedFolders() : folders.slice(0,visibleCount).map(function(f,i){return {f:f,real:i};});
         var podHtml=displayFolders.length
-          ? displayFolders.map(function(f,i){ return gardenPodHtml(f,i); }).join("")
+          ? displayFolders.map(function(x,i){ return gardenPodHtml(x.f,i,x.real); }).join("")
           : '<div class="sg-empty"><div><strong>No pods yet.</strong><span>Create a pod to start growing your signal garden.</span></div></div>';
 
         var statusText = hasBelt ? folders.length+' active pods · swipe to rotate' : folders.length+' active pods';
@@ -5066,13 +5449,14 @@
             + '<div class="sg-plants" aria-hidden="true"></div>'
             + '<div class="sg-header"><div><div class="sg-title">Signal Garden</div><div class="sg-subtitle">Grow your focus · cultivate progress</div></div><div class="sg-status">'+statusText+'</div></div>'
             + '<div class="sg-pods">'+podHtml+'</div>'
-            + (hasBelt?'<div class="sg-belt-hint">swipe belt ↔</div>':'')
+            + (hasBelt?'<div class="sg-belt-hint">swipe belt ↔</div><div class="sg-position" id="sg-position">Pods</div>':'<div class="sg-position" id="sg-position">'+folders.length+' active pods</div>')
             + '<div class="sg-actions"><button class="sg-action sg-add" data-add type="button">+ New pod</button></div>'
           + '</div>';
 
         justLit=null;
         bindMatrixEvents(host);
         bindStableBelt(host);
+        if(openFolderId) setTimeout(drawGardenDrawer,30);
       };
 
       openMatrixAll = function(){
@@ -5080,7 +5464,7 @@
         var old=space.querySelector(".matrix-all-layer"); if(old) old.remove();
         var ov=document.createElement("div"); ov.className="matrix-all-layer";
         var allHtml=folders.length
-          ? folders.map(function(f,i){ return gardenPodHtml(f,i); }).join("")
+          ? folders.map(function(f,i){ return gardenPodHtml(f,i,i); }).join("")
           : '<div class="matrix-v8-empty"><strong>No pods yet.</strong><span>Create a pod to start building your garden.</span></div>';
         ov.innerHTML =
           '<div class="matrix-all-card">'
