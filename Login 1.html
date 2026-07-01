@@ -3516,6 +3516,57 @@
     .sg-belt-hint{display:none;}
   }
 
+
+  /* Signal Garden v5: true native swipe belt, not click-step carousel */
+  .sg-pods{
+    justify-content:flex-start!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x proximity!important;
+    scroll-behavior:smooth!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x pan-y!important;
+    padding:8px 8px 20px!important;
+    cursor:grab;
+    scrollbar-width:none!important;
+  }
+  .sg-pods:active{cursor:grabbing;}
+  .sg-pods::-webkit-scrollbar{display:none!important;}
+  .sg-pods .sg-pod{
+    flex:0 0 calc((100% - 72px) / 5)!important;
+    min-width:0!important;
+    max-width:none!important;
+    scroll-snap-align:center!important;
+  }
+  .sg-belt-btn,
+  .sg-belt-prev,
+  .sg-belt-next{
+    display:none!important;
+  }
+  .sg-belt-hint{
+    right:24px!important;
+    bottom:24px!important;
+  }
+  .sg-status{
+    max-width:260px;
+  }
+  @media(max-width:1220px){
+    .sg-pods .sg-pod{
+      flex-basis:calc((100% - 48px) / 5)!important;
+    }
+  }
+  @media(max-width:900px){
+    .sg-pods{
+      flex-wrap:nowrap!important;
+      align-content:stretch!important;
+    }
+    .sg-pods .sg-pod{
+      flex:0 0 176px!important;
+      max-width:none!important;
+      height:205px!important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -4840,21 +4891,11 @@
 
   <script>
     (function(){
-      var gardenOffset=0;
-      var gardenSwipeBound=false;
-      var gardenSwipeDir="";
       var visibleCount=5;
+      var beltReady=false;
+      var suppressGardenClickUntil=0;
 
       function safeTrunc(s,n){ s=String(s||""); return s.length>n ? s.slice(0,n-1)+"…" : s; }
-      function mod(n,m){ return ((n%m)+m)%m; }
-      function rotateFolders(list,offset,count){
-        if(!list.length) return [];
-        var out=[];
-        var max=Math.min(count,list.length);
-        var start=mod(offset,list.length);
-        for(var i=0;i<max;i++) out.push(list[(start+i)%list.length]);
-        return out;
-      }
       function gardenPreviewHtml(f){
         var items=itemsOf(f);
         if(!items.length) return '<span>No notes yet.<br>Add something here.</span>';
@@ -4872,8 +4913,8 @@
       function gardenPodHtml(f,i){
         var items=itemsOf(f), d=items.filter(function(x){return x.done;}).length;
         var c=rgbOf(f.category);
-        return '<div class="sg-pod sg-pod-'+(i+1)+'" style="--c:'+c+'" data-open="'+f.id+'">'
-          + '<button class="sg-edit" data-rename="'+f.id+'" aria-label="Rename pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
+        return '<div class="sg-pod sg-pod-'+((i%visibleCount)+1)+'" style="--c:'+c+'" data-open="'+f.id+'">'
+          + '<button class="sg-edit" data-rename="'+f.id+'" aria-label="Rename pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
           + '<div class="sg-icon">'+matrixIcon(f.category)+'</div>'
           + '<div class="sg-name">'+escapeHtml(f.name)+'</div>'
           + '<div class="sg-count">'+d+' / '+items.length+'</div>'
@@ -4881,52 +4922,81 @@
           + gardenSeedsHtml(f)
         + '</div>';
       }
-      function bindGardenSwipe(){
-        if(gardenSwipeBound) return;
-        gardenSwipeBound=true;
-        var sx=0, sy=0, down=false, moved=false;
 
-        document.addEventListener("pointerdown",function(e){
-          var belt=e.target.closest && e.target.closest(".sg-pods");
-          if(!belt || folders.length<=visibleCount) return;
-          if(e.target.closest("[data-open],button,.hex")) {
-            // allow pod clicks, but still track if the movement becomes a real swipe
+      function bindNativeBelt(host){
+        var belt=host.querySelector(".sg-pods");
+        if(!belt || folders.length<=visibleCount) return;
+
+        var loopWidth=0, initialized=false, down=false, startX=0, startY=0, startLeft=0, dragged=false, lastX=0, lastT=0, velocity=0;
+
+        function measure(){
+          loopWidth = belt.scrollWidth / 3;
+          return loopWidth;
+        }
+        function centerAtMiddle(){
+          measure();
+          if(!loopWidth) return;
+          belt.scrollLeft = loopWidth;
+          initialized=true;
+        }
+        function normalize(){
+          if(!initialized) return;
+          measure();
+          if(!loopWidth) return;
+          if(belt.scrollLeft < loopWidth * .45){
+            belt.scrollLeft += loopWidth;
+          }else if(belt.scrollLeft > loopWidth * 1.55){
+            belt.scrollLeft -= loopWidth;
           }
-          down=true; moved=false; sx=e.clientX; sy=e.clientY;
-          belt.classList.add("sg-dragging");
-        },true);
+        }
 
-        document.addEventListener("pointermove",function(e){
+        requestAnimationFrame(centerAtMiddle);
+        belt.addEventListener("scroll",function(){
+          if(belt.__sgNormTimer) clearTimeout(belt.__sgNormTimer);
+          belt.__sgNormTimer=setTimeout(normalize,50);
+        },{passive:true});
+
+        // Mouse/trackpad drag support. Touch devices also get native momentum scrolling.
+        belt.addEventListener("pointerdown",function(e){
+          if(e.pointerType==="touch") return;
+          down=true; dragged=false; startX=e.clientX; startY=e.clientY; startLeft=belt.scrollLeft; lastX=e.clientX; lastT=performance.now(); velocity=0;
+          belt.setPointerCapture && belt.setPointerCapture(e.pointerId);
+        });
+        belt.addEventListener("pointermove",function(e){
           if(!down) return;
-          var dx=e.clientX-sx, dy=e.clientY-sy;
-          if(Math.abs(dx)>18 && Math.abs(dx)>Math.abs(dy)*1.25) moved=true;
-        },true);
-
-        document.addEventListener("pointerup",function(e){
+          var dx=e.clientX-startX, dy=e.clientY-startY;
+          if(Math.abs(dx)>4 && Math.abs(dx)>Math.abs(dy)){
+            dragged=true;
+            e.preventDefault();
+            belt.scrollLeft=startLeft-dx;
+            var now=performance.now(), dt=Math.max(1,now-lastT);
+            velocity=(lastX-e.clientX)/dt;
+            lastX=e.clientX; lastT=now;
+            normalize();
+          }
+        });
+        belt.addEventListener("pointerup",function(){
           if(!down) return;
           down=false;
-          var belt=document.querySelector(".sg-pods");
-          if(belt) belt.classList.remove("sg-dragging");
-          var dx=e.clientX-sx, dy=e.clientY-sy;
-          if(folders.length>visibleCount && Math.abs(dx)>42 && Math.abs(dx)>Math.abs(dy)*1.25){
+          if(dragged){
+            suppressGardenClickUntil=Date.now()+180;
+            var boost=velocity*180;
+            belt.scrollBy({left:boost,behavior:"smooth"});
+            setTimeout(normalize,220);
+          }
+        });
+        belt.addEventListener("pointercancel",function(){ down=false; });
+
+        // Stop accidental pod-open clicks after a real drag.
+        belt.addEventListener("click",function(e){
+          if(Date.now()<suppressGardenClickUntil){
             e.preventDefault();
             e.stopPropagation();
-            shiftGarden(dx<0 ? 1 : -1);
+            if(e.stopImmediatePropagation) e.stopImmediatePropagation();
           }
         },true);
 
-        document.addEventListener("pointercancel",function(){
-          down=false;
-          var belt=document.querySelector(".sg-pods");
-          if(belt) belt.classList.remove("sg-dragging");
-        },true);
-      }
-
-      function shiftGarden(step){
-        if(!folders.length) return;
-        gardenOffset=mod(gardenOffset+step,folders.length);
-        gardenSwipeDir=step>0?"left":"right";
-        renderMatrix();
+        beltReady=true;
       }
 
       renderMatrix = function(){
@@ -4937,47 +5007,29 @@
           space.classList.add("signal-garden-space");
         }
         host.className="signal-garden";
-        if(folders.length) gardenOffset=mod(gardenOffset,folders.length);
-        else gardenOffset=0;
 
-        var visible=rotateFolders(folders,gardenOffset,visibleCount);
         var hasBelt=folders.length>visibleCount;
-        var podHtml=visible.length
-          ? visible.map(function(f,i){ return gardenPodHtml(f,i); }).join("")
+        var displayFolders=hasBelt ? folders.concat(folders,folders) : folders.slice(0,visibleCount);
+        var podHtml=displayFolders.length
+          ? displayFolders.map(function(f,i){ return gardenPodHtml(f,i); }).join("")
           : '<div class="sg-empty"><div><strong>No pods yet.</strong><span>Create a pod to start growing your signal garden.</span></div></div>';
 
-        var rangeText = hasBelt
-          ? 'showing '+(gardenOffset+1)+'–'+mod(gardenOffset+visible.length-1,folders.length)+1+' of '+folders.length+' pods'
-          : folders.length+' active pods';
+        var statusText = hasBelt ? folders.length+' active pods · swipe to rotate' : folders.length+' active pods';
 
         host.innerHTML =
           '<div class="sg-shell">'
             + '<div class="sg-aurora" aria-hidden="true"></div>'
             + '<div class="sg-floor" aria-hidden="true"></div>'
             + '<div class="sg-plants" aria-hidden="true"></div>'
-            + '<div class="sg-header"><div><div class="sg-title">Signal Garden</div><div class="sg-subtitle">Grow your focus · cultivate progress</div></div><div class="sg-status">'+rangeText+'</div></div>'
-            + (hasBelt?'<button class="sg-belt-btn sg-belt-prev" type="button" data-shift="-1" aria-label="Previous pods">‹</button>':'')
-            + '<div class="sg-pods '+(gardenSwipeDir?("sg-swipe-"+gardenSwipeDir):"")+'">'+podHtml+'</div>'
-            + (hasBelt?'<button class="sg-belt-btn sg-belt-next" type="button" data-shift="1" aria-label="Next pods">›</button><div class="sg-belt-hint">swipe belt ↔</div>':'')
+            + '<div class="sg-header"><div><div class="sg-title">Signal Garden</div><div class="sg-subtitle">Grow your focus · cultivate progress</div></div><div class="sg-status">'+statusText+'</div></div>'
+            + '<div class="sg-pods">'+podHtml+'</div>'
+            + (hasBelt?'<div class="sg-belt-hint">swipe belt ↔</div>':'')
             + '<div class="sg-actions"><button class="sg-action sg-add" data-add type="button">+ New pod</button></div>'
           + '</div>';
+
         justLit=null;
         bindMatrixEvents(host);
-        host.querySelectorAll("[data-shift]").forEach(function(btn){
-          btn.addEventListener("click",function(ev){
-            ev.stopPropagation();
-            shiftGarden(Number(btn.getAttribute("data-shift"))||1);
-          });
-        });
-        bindGardenSwipe();
-        if(gardenSwipeDir){
-          var dir=gardenSwipeDir;
-          gardenSwipeDir="";
-          setTimeout(function(){
-            var p=host.querySelector(".sg-pods");
-            if(p) p.classList.remove("sg-swipe-"+dir);
-          },280);
-        }
+        bindNativeBelt(host);
       };
 
       openMatrixAll = function(){
