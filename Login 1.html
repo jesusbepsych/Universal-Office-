@@ -3446,6 +3446,76 @@
     }
   }
 
+
+  /* Signal Garden swipe-belt carousel */
+  .sg-pods{
+    touch-action:pan-y!important;
+    user-select:none;
+  }
+  .sg-pods.sg-dragging .sg-pod{
+    transition:none!important;
+  }
+  .sg-pods.sg-swipe-left .sg-pod{
+    animation:sgBeltLeft .24s ease both;
+  }
+  .sg-pods.sg-swipe-right .sg-pod{
+    animation:sgBeltRight .24s ease both;
+  }
+  @keyframes sgBeltLeft{
+    0%{opacity:.74;transform:translateX(24px) translateY(var(--lift,0)) scale(.985);}
+    100%{opacity:1;transform:translateX(0) translateY(var(--lift,0)) scale(1);}
+  }
+  @keyframes sgBeltRight{
+    0%{opacity:.74;transform:translateX(-24px) translateY(var(--lift,0)) scale(.985);}
+    100%{opacity:1;transform:translateX(0) translateY(var(--lift,0)) scale(1);}
+  }
+  .sg-belt-btn{
+    position:absolute;
+    top:50%;
+    z-index:12;
+    width:34px;
+    height:52px;
+    margin-top:-26px;
+    display:grid;
+    place-items:center;
+    border-radius:999px;
+    border:1px solid rgba(130,165,220,.26);
+    background:rgba(4,9,18,.58);
+    color:rgba(220,238,255,.72);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 28px -20px rgba(79,209,197,.92);
+    backdrop-filter:blur(8px);
+  }
+  .sg-belt-btn:hover{
+    color:#effcff;
+    border-color:rgba(79,209,197,.48);
+    background:rgba(8,22,31,.74);
+  }
+  .sg-belt-prev{left:10px;}
+  .sg-belt-next{right:10px;}
+  .sg-belt-hint{
+    position:absolute;
+    right:22px;
+    bottom:23px;
+    z-index:9;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(201,219,255,.54);
+    pointer-events:none;
+  }
+  .sg-actions{
+    right:auto!important;
+    width:auto!important;
+  }
+  .sg-status{
+    text-align:right;
+  }
+  @media(max-width:900px){
+    .sg-belt-btn{width:32px;height:46px;}
+    .sg-belt-hint{display:none;}
+  }
+
 </style>
 </head>
 <body>
@@ -4770,7 +4840,21 @@
 
   <script>
     (function(){
+      var gardenOffset=0;
+      var gardenSwipeBound=false;
+      var gardenSwipeDir="";
+      var visibleCount=5;
+
       function safeTrunc(s,n){ s=String(s||""); return s.length>n ? s.slice(0,n-1)+"…" : s; }
+      function mod(n,m){ return ((n%m)+m)%m; }
+      function rotateFolders(list,offset,count){
+        if(!list.length) return [];
+        var out=[];
+        var max=Math.min(count,list.length);
+        var start=mod(offset,list.length);
+        for(var i=0;i<max;i++) out.push(list[(start+i)%list.length]);
+        return out;
+      }
       function gardenPreviewHtml(f){
         var items=itemsOf(f);
         if(!items.length) return '<span>No notes yet.<br>Add something here.</span>';
@@ -4789,13 +4873,60 @@
         var items=itemsOf(f), d=items.filter(function(x){return x.done;}).length;
         var c=rgbOf(f.category);
         return '<div class="sg-pod sg-pod-'+(i+1)+'" style="--c:'+c+'" data-open="'+f.id+'">'
-          + '<button class="sg-edit" data-rename="'+f.id+'" aria-label="Rename pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
+          + '<button class="sg-edit" data-rename="'+f.id+'" aria-label="Rename pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
           + '<div class="sg-icon">'+matrixIcon(f.category)+'</div>'
           + '<div class="sg-name">'+escapeHtml(f.name)+'</div>'
           + '<div class="sg-count">'+d+' / '+items.length+'</div>'
           + '<div class="sg-preview">'+gardenPreviewHtml(f)+'</div>'
           + gardenSeedsHtml(f)
         + '</div>';
+      }
+      function bindGardenSwipe(){
+        if(gardenSwipeBound) return;
+        gardenSwipeBound=true;
+        var sx=0, sy=0, down=false, moved=false;
+
+        document.addEventListener("pointerdown",function(e){
+          var belt=e.target.closest && e.target.closest(".sg-pods");
+          if(!belt || folders.length<=visibleCount) return;
+          if(e.target.closest("[data-open],button,.hex")) {
+            // allow pod clicks, but still track if the movement becomes a real swipe
+          }
+          down=true; moved=false; sx=e.clientX; sy=e.clientY;
+          belt.classList.add("sg-dragging");
+        },true);
+
+        document.addEventListener("pointermove",function(e){
+          if(!down) return;
+          var dx=e.clientX-sx, dy=e.clientY-sy;
+          if(Math.abs(dx)>18 && Math.abs(dx)>Math.abs(dy)*1.25) moved=true;
+        },true);
+
+        document.addEventListener("pointerup",function(e){
+          if(!down) return;
+          down=false;
+          var belt=document.querySelector(".sg-pods");
+          if(belt) belt.classList.remove("sg-dragging");
+          var dx=e.clientX-sx, dy=e.clientY-sy;
+          if(folders.length>visibleCount && Math.abs(dx)>42 && Math.abs(dx)>Math.abs(dy)*1.25){
+            e.preventDefault();
+            e.stopPropagation();
+            shiftGarden(dx<0 ? 1 : -1);
+          }
+        },true);
+
+        document.addEventListener("pointercancel",function(){
+          down=false;
+          var belt=document.querySelector(".sg-pods");
+          if(belt) belt.classList.remove("sg-dragging");
+        },true);
+      }
+
+      function shiftGarden(step){
+        if(!folders.length) return;
+        gardenOffset=mod(gardenOffset+step,folders.length);
+        gardenSwipeDir=step>0?"left":"right";
+        renderMatrix();
       }
 
       renderMatrix = function(){
@@ -4806,24 +4937,47 @@
           space.classList.add("signal-garden-space");
         }
         host.className="signal-garden";
-        var visible=folders.slice(0,5);
-        var hiddenCount=Math.max(0,folders.length-visible.length);
-        var viewLabel=folders.length ? "View all pods ("+folders.length+")" : "View all pods";
+        if(folders.length) gardenOffset=mod(gardenOffset,folders.length);
+        else gardenOffset=0;
+
+        var visible=rotateFolders(folders,gardenOffset,visibleCount);
+        var hasBelt=folders.length>visibleCount;
         var podHtml=visible.length
           ? visible.map(function(f,i){ return gardenPodHtml(f,i); }).join("")
           : '<div class="sg-empty"><div><strong>No pods yet.</strong><span>Create a pod to start growing your signal garden.</span></div></div>';
+
+        var rangeText = hasBelt
+          ? 'showing '+(gardenOffset+1)+'–'+mod(gardenOffset+visible.length-1,folders.length)+1+' of '+folders.length+' pods'
+          : folders.length+' active pods';
+
         host.innerHTML =
           '<div class="sg-shell">'
             + '<div class="sg-aurora" aria-hidden="true"></div>'
             + '<div class="sg-floor" aria-hidden="true"></div>'
             + '<div class="sg-plants" aria-hidden="true"></div>'
-            + '<div class="sg-header"><div><div class="sg-title">Signal Garden</div><div class="sg-subtitle">Grow your focus · cultivate progress</div></div><div class="sg-status">'+folders.length+' active pods</div></div>'
-            + '<div class="sg-pods">'+podHtml+'</div>'
-            + '<div class="sg-actions"><button class="sg-action sg-add" data-add type="button">+ New pod</button><button class="sg-action sg-view" data-viewall type="button">'+viewLabel+' <span>›</span></button></div>'
-            + (hiddenCount?'<div class="sg-hidden mono">'+hiddenCount+' hidden in View all</div>':'')
+            + '<div class="sg-header"><div><div class="sg-title">Signal Garden</div><div class="sg-subtitle">Grow your focus · cultivate progress</div></div><div class="sg-status">'+rangeText+'</div></div>'
+            + (hasBelt?'<button class="sg-belt-btn sg-belt-prev" type="button" data-shift="-1" aria-label="Previous pods">‹</button>':'')
+            + '<div class="sg-pods '+(gardenSwipeDir?("sg-swipe-"+gardenSwipeDir):"")+'">'+podHtml+'</div>'
+            + (hasBelt?'<button class="sg-belt-btn sg-belt-next" type="button" data-shift="1" aria-label="Next pods">›</button><div class="sg-belt-hint">swipe belt ↔</div>':'')
+            + '<div class="sg-actions"><button class="sg-action sg-add" data-add type="button">+ New pod</button></div>'
           + '</div>';
         justLit=null;
         bindMatrixEvents(host);
+        host.querySelectorAll("[data-shift]").forEach(function(btn){
+          btn.addEventListener("click",function(ev){
+            ev.stopPropagation();
+            shiftGarden(Number(btn.getAttribute("data-shift"))||1);
+          });
+        });
+        bindGardenSwipe();
+        if(gardenSwipeDir){
+          var dir=gardenSwipeDir;
+          gardenSwipeDir="";
+          setTimeout(function(){
+            var p=host.querySelector(".sg-pods");
+            if(p) p.classList.remove("sg-swipe-"+dir);
+          },280);
+        }
       };
 
       openMatrixAll = function(){
@@ -4860,7 +5014,7 @@
         try{ renderMatrix(); }catch(e){}
       }
     })();
-  </script>
+  </script>  </script>
 
 </body>
 </html>
