@@ -3860,6 +3860,33 @@
     }
   }
 
+
+  /* Signal Garden v8: dim non-selected belt pods further */
+  .sg-pods .sg-pod{
+    opacity:.48!important;
+    filter:saturate(.62) brightness(.70)!important;
+  }
+  .sg-pods .sg-pod.sg-near{
+    opacity:.66!important;
+    filter:saturate(.78) brightness(.82)!important;
+  }
+  .sg-pods .sg-pod.sg-active{
+    opacity:1!important;
+    filter:saturate(1.20) brightness(1.14)!important;
+  }
+  .sg-pods .sg-pod:not(.sg-active)::before{
+    opacity:.48!important;
+  }
+  .sg-pods .sg-pod:not(.sg-active)::after{
+    opacity:.42!important;
+  }
+  .sg-pods .sg-pod.sg-near::before{
+    opacity:.60!important;
+  }
+  .sg-pods .sg-pod.sg-near::after{
+    opacity:.52!important;
+  }
+
 </style>
 </head>
 <body>
