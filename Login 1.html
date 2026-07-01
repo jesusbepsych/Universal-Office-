@@ -3567,6 +3567,21 @@
     }
   }
 
+
+  /* Signal Garden v6: stable swipe belt, no auto-snap-back while page scrolling */
+  .sg-pods{
+    scroll-snap-type:none!important;
+    overscroll-behavior-x:contain!important;
+    overscroll-behavior-y:auto!important;
+    scroll-behavior:auto!important;
+  }
+  .sg-pods .sg-pod{
+    scroll-snap-align:none!important;
+  }
+  .sg-belt-hint{
+    opacity:.62;
+  }
+
 </style>
 </head>
 <body>
@@ -4892,7 +4907,9 @@
   <script>
     (function(){
       var visibleCount=5;
-      var beltReady=false;
+      var loopCopies=7;
+      var loopCenter=Math.floor(loopCopies/2);
+      var gardenSavedScroll=null;
       var suppressGardenClickUntil=0;
 
       function safeTrunc(s,n){ s=String(s||""); return s.length>n ? s.slice(0,n-1)+"…" : s; }
@@ -4923,45 +4940,74 @@
         + '</div>';
       }
 
-      function bindNativeBelt(host){
+      function makeLoopedFolders(){
+        if(folders.length<=visibleCount) return folders.slice(0,visibleCount);
+        var arr=[];
+        for(var c=0;c<loopCopies;c++){
+          for(var i=0;i<folders.length;i++) arr.push(folders[i]);
+        }
+        return arr;
+      }
+
+      function bindStableBelt(host){
         var belt=host.querySelector(".sg-pods");
         if(!belt || folders.length<=visibleCount) return;
 
-        var loopWidth=0, initialized=false, down=false, startX=0, startY=0, startLeft=0, dragged=false, lastX=0, lastT=0, velocity=0;
+        var unit=0, down=false, startX=0, startY=0, startLeft=0, dragged=false, lastX=0, lastT=0, velocity=0, programmatic=false;
 
         function measure(){
-          loopWidth = belt.scrollWidth / 3;
-          return loopWidth;
+          unit = belt.scrollWidth / loopCopies;
+          return unit;
         }
-        function centerAtMiddle(){
-          measure();
-          if(!loopWidth) return;
-          belt.scrollLeft = loopWidth;
-          initialized=true;
+
+        function jumpTo(pos){
+          programmatic=true;
+          belt.scrollLeft=pos;
+          gardenSavedScroll=pos;
+          requestAnimationFrame(function(){ programmatic=false; });
         }
-        function normalize(){
-          if(!initialized) return;
+
+        function initialPlace(){
           measure();
-          if(!loopWidth) return;
-          if(belt.scrollLeft < loopWidth * .45){
-            belt.scrollLeft += loopWidth;
-          }else if(belt.scrollLeft > loopWidth * 1.55){
-            belt.scrollLeft -= loopWidth;
+          if(!unit) return;
+          if(gardenSavedScroll==null || gardenSavedScroll<unit || gardenSavedScroll>unit*(loopCopies-1)){
+            jumpTo(unit*loopCenter);
+          }else{
+            jumpTo(gardenSavedScroll);
           }
         }
 
-        requestAnimationFrame(centerAtMiddle);
+        function quietRecentering(){
+          measure();
+          if(!unit) return;
+          var x=belt.scrollLeft;
+          // Only re-center at the far guard rails. This keeps the same visible sequence
+          // because every loop copy is identical, but avoids the earlier constant snap-back.
+          if(x < unit*.75){
+            jumpTo(x + unit*loopCenter);
+          }else if(x > unit*(loopCopies-.75)){
+            jumpTo(x - unit*loopCenter);
+          }else{
+            gardenSavedScroll=x;
+          }
+        }
+
+        requestAnimationFrame(initialPlace);
+
         belt.addEventListener("scroll",function(){
-          if(belt.__sgNormTimer) clearTimeout(belt.__sgNormTimer);
-          belt.__sgNormTimer=setTimeout(normalize,50);
+          if(programmatic) return;
+          gardenSavedScroll=belt.scrollLeft;
+          if(belt.__sgEdgeTimer) clearTimeout(belt.__sgEdgeTimer);
+          belt.__sgEdgeTimer=setTimeout(quietRecentering,180);
         },{passive:true});
 
-        // Mouse/trackpad drag support. Touch devices also get native momentum scrolling.
+        // Mouse / trackpad drag. Touch uses normal native momentum scrolling.
         belt.addEventListener("pointerdown",function(e){
           if(e.pointerType==="touch") return;
           down=true; dragged=false; startX=e.clientX; startY=e.clientY; startLeft=belt.scrollLeft; lastX=e.clientX; lastT=performance.now(); velocity=0;
           belt.setPointerCapture && belt.setPointerCapture(e.pointerId);
         });
+
         belt.addEventListener("pointermove",function(e){
           if(!down) return;
           var dx=e.clientX-startX, dy=e.clientY-startY;
@@ -4972,22 +5018,21 @@
             var now=performance.now(), dt=Math.max(1,now-lastT);
             velocity=(lastX-e.clientX)/dt;
             lastX=e.clientX; lastT=now;
-            normalize();
           }
         });
+
         belt.addEventListener("pointerup",function(){
           if(!down) return;
           down=false;
           if(dragged){
             suppressGardenClickUntil=Date.now()+180;
-            var boost=velocity*180;
-            belt.scrollBy({left:boost,behavior:"smooth"});
-            setTimeout(normalize,220);
+            belt.scrollBy({left:velocity*160,behavior:"smooth"});
+            setTimeout(quietRecentering,260);
           }
         });
+
         belt.addEventListener("pointercancel",function(){ down=false; });
 
-        // Stop accidental pod-open clicks after a real drag.
         belt.addEventListener("click",function(e){
           if(Date.now()<suppressGardenClickUntil){
             e.preventDefault();
@@ -4995,8 +5040,6 @@
             if(e.stopImmediatePropagation) e.stopImmediatePropagation();
           }
         },true);
-
-        beltReady=true;
       }
 
       renderMatrix = function(){
@@ -5009,7 +5052,7 @@
         host.className="signal-garden";
 
         var hasBelt=folders.length>visibleCount;
-        var displayFolders=hasBelt ? folders.concat(folders,folders) : folders.slice(0,visibleCount);
+        var displayFolders=hasBelt ? makeLoopedFolders() : folders.slice(0,visibleCount);
         var podHtml=displayFolders.length
           ? displayFolders.map(function(f,i){ return gardenPodHtml(f,i); }).join("")
           : '<div class="sg-empty"><div><strong>No pods yet.</strong><span>Create a pod to start growing your signal garden.</span></div></div>';
@@ -5029,7 +5072,7 @@
 
         justLit=null;
         bindMatrixEvents(host);
-        bindNativeBelt(host);
+        bindStableBelt(host);
       };
 
       openMatrixAll = function(){
