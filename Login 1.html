@@ -3290,6 +3290,162 @@
     min-height:44px;
   }
 
+
+  /* Signal Garden tuning: fewer visible pods, larger garden area, cleaner headings */
+  .console-notes-matrix{
+    min-height:500px!important;
+  }
+  .console-notes-matrix .panel-head{
+    margin-bottom:8px!important;
+  }
+  .console-notes-matrix .panel-head .hint{
+    display:none!important;
+  }
+  .console-notes-matrix .nf-grid{
+    grid-template-columns:214px minmax(0,1fr)!important;
+    gap:16px!important;
+    min-height:434px!important;
+  }
+  .console-notes-matrix .notes-rail{
+    min-height:434px!important;
+    padding:6px 10px 0 0!important;
+  }
+  .console-notes-matrix .notes-list{
+    max-height:292px!important;
+  }
+  .console-notes-matrix .matrix-col .nf-sub{
+    display:none!important;
+  }
+  .console-notes-matrix .space.signal-garden-space{
+    min-height:434px!important;
+    height:434px!important;
+  }
+  .signal-garden{
+    min-height:434px!important;
+  }
+  .sg-header{
+    left:20px!important;
+    right:20px!important;
+    top:16px!important;
+  }
+  .sg-pods{
+    left:18px!important;
+    right:18px!important;
+    top:64px!important;
+    bottom:78px!important;
+    gap:18px!important;
+  }
+  .sg-pod{
+    min-width:98px!important;
+    max-width:170px!important;
+    padding:50px 14px 18px!important;
+  }
+  .sg-pod:nth-child(1){--podH:226px!important;--lift:14px!important;}
+  .sg-pod:nth-child(2){--podH:252px!important;--lift:5px!important;}
+  .sg-pod:nth-child(3){--podH:276px!important;--lift:-9px!important;}
+  .sg-pod:nth-child(4){--podH:252px!important;--lift:2px!important;}
+  .sg-pod:nth-child(5){--podH:236px!important;--lift:12px!important;}
+  .sg-pod:nth-child(6){--podH:226px!important;--lift:18px!important;}
+  .sg-icon{
+    width:40px!important;
+    height:40px!important;
+    margin:0 auto 11px!important;
+  }
+  .sg-icon .micon,
+  .sg-icon .micon svg{
+    width:36px!important;
+    height:36px!important;
+  }
+  .sg-name{
+    font-size:14px!important;
+    min-height:32px!important;
+  }
+  .sg-count{
+    margin-top:7px!important;
+    font-size:16px!important;
+  }
+  .sg-preview{
+    max-width:116px!important;
+    min-height:56px!important;
+    margin-top:11px!important;
+    font-size:11px!important;
+    line-height:1.38!important;
+  }
+  .sg-seeds{
+    bottom:36px!important;
+    gap:6px!important;
+  }
+  .signal-garden .hex.sg-seed{
+    width:11px!important;
+    height:12px!important;
+  }
+  .sg-actions{
+    left:18px!important;
+    right:18px!important;
+    bottom:18px!important;
+  }
+  .sg-hidden{
+    right:20px!important;
+    top:42px!important;
+  }
+  @media(max-width:1220px){
+    .console-notes-matrix .nf-grid{
+      grid-template-columns:206px minmax(0,1fr)!important;
+    }
+    .console-notes-matrix .space.signal-garden-space{
+      min-height:414px!important;
+      height:414px!important;
+    }
+    .signal-garden{
+      min-height:414px!important;
+    }
+    .sg-pods{
+      gap:12px!important;
+      left:16px!important;
+      right:16px!important;
+    }
+    .sg-pod{
+      max-width:156px!important;
+      min-width:92px!important;
+      padding-left:11px!important;
+      padding-right:11px!important;
+    }
+    .sg-name{font-size:13px!important;}
+    .sg-preview{
+      max-width:104px!important;
+      font-size:10.5px!important;
+    }
+  }
+  @media(max-width:900px){
+    .console-notes-matrix .nf-grid{
+      grid-template-columns:1fr!important;
+      min-height:unset!important;
+    }
+    .console-notes-matrix .notes-rail{
+      min-height:auto!important;
+      padding-right:0!important;
+    }
+    .console-notes-matrix .space.signal-garden-space{
+      height:auto!important;
+      min-height:590px!important;
+    }
+    .signal-garden{
+      min-height:590px!important;
+    }
+    .sg-pods{
+      top:70px!important;
+      bottom:86px!important;
+      gap:12px!important;
+    }
+    .sg-pod{
+      flex:1 1 30%!important;
+      height:200px!important;
+      min-width:124px!important;
+      max-width:33%!important;
+      --lift:0!important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -3375,7 +3531,7 @@
         <div class="panel notes-panel console-notes-matrix" id="console-notes">
           <div class="panel-head">
             <h2>Notes &amp; folders</h2>
-            <span class="hint">Signal Garden &middot; notes and categories</span>
+            
           </div>
           <div class="nf-grid">
             <div class="nf-col notes-rail">
@@ -3394,8 +3550,7 @@
             </div>
 
             <div class="nf-col matrix-col" id="console-matrix">
-              <div class="nf-sub">Signal Garden &middot; grow your focus, cultivate progress</div>
-              <div class="space" id="space">
+                            <div class="space" id="space">
                 <div class="stars"></div>
                 <span class="tw" style="left:24%;top:18%"></span>
                 <span class="tw" style="left:80%;top:36%;animation-delay:1.1s"></span>
@@ -4651,7 +4806,7 @@
           space.classList.add("signal-garden-space");
         }
         host.className="signal-garden";
-        var visible=folders.slice(0,6);
+        var visible=folders.slice(0,5);
         var hiddenCount=Math.max(0,folders.length-visible.length);
         var viewLabel=folders.length ? "View all pods ("+folders.length+")" : "View all pods";
         var podHtml=visible.length
