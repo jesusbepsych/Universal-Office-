@@ -3274,6 +3274,22 @@
     .sg-pod{flex:1 1 30%;height:190px!important;min-width:120px;max-width:33%;--lift:0!important;}
   }
 
+
+  /* Day Summary default-open refinement */
+  .console-ds-wrap .ds-stage.result,
+  .console-ds-wrap .ds-stage.result .ds-card{
+    min-height:200px!important;
+  }
+  .console-ds-wrap .ds-stage.result .ds-card{
+    background:
+      radial-gradient(ellipse at 5% 35%,rgba(79,209,197,.16),transparent 28%),
+      radial-gradient(ellipse at 95% 0%,rgba(79,209,197,.07),transparent 26%),
+      linear-gradient(180deg,rgba(14,23,42,.88),rgba(7,12,22,.92))!important;
+  }
+  .console-ds-wrap .ds-brief{
+    min-height:44px;
+  }
+
 </style>
 </head>
 <body>
@@ -3329,10 +3345,10 @@
 
       <aside class="console-stack">
         <div class="ds-wrap console-ds-wrap" id="console-summary">
-          <div class="ds-stage idle" id="ds-stage" style="min-height:64px;">
+          <div class="ds-stage result" id="ds-stage" style="min-height:200px;">
             <div class="ds-layer ds-l3"></div>
             <div class="ds-layer ds-l2"></div>
-            <div class="ds-card" id="ds-card" style="min-height:64px;">
+            <div class="ds-card" id="ds-card" style="min-height:200px;">
               <div class="ds-c ds-fade" id="ds-c"></div>
             </div>
           </div>
@@ -4560,8 +4576,8 @@
         if(fd) fd.textContent=row.for_date?fmtDate(row.for_date):(row.generated_at?fmtDate(String(row.generated_at).slice(0,10)):"");
         fb.innerHTML=renderBrief(row.body||"");
       }
-      window.renderDaySummary=function(){ briefCache=null; set("idle"); };
-      set("idle");
+      window.renderDaySummary=function(){ briefCache=null; set("result"); };
+      set("result");
     })();
   </script>
 
