@@ -465,6 +465,17 @@
 
   /* Notes & folders */
   .notes-panel{margin-top:16px;}
+  .ai-block{margin-top:16px;padding-top:14px;border-top:1px solid var(--line,rgba(255,255,255,.09));}
+  .ai-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px;}
+  .ai-hint{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted,#8a96b3);opacity:.82;}
+  .ai-list{display:flex;flex-direction:column;gap:8px;}
+  .ai-row{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:rgba(255,196,84,.05);border:1px solid rgba(255,196,84,.22);}
+  .ai-check{flex:none;width:20px;height:20px;margin-top:1px;border-radius:6px;display:grid;place-items:center;background:rgba(255,196,84,.08);border:1px solid rgba(255,196,84,.42);color:#ffcf70;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .ai-check svg{width:12px;height:12px;}
+  .ai-check:active{transform:scale(.9);}
+  .ai-body{flex:1;min-width:0;font-size:12.5px;line-height:1.4;color:var(--ink,#e9eefb);word-break:break-word;}
+  .ai-body .ai-sum{display:block;margin-top:2px;font-size:11px;color:var(--muted,#8a96b3);}
+  .ai-empty{font-size:11.5px;color:var(--muted,#8a96b3);opacity:.75;padding:2px;}
   .nf-grid{display:grid;grid-template-columns:248px minmax(0,1fr);gap:20px;align-items:start;}
   .nf-sub{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
   .nf-add{display:flex;gap:6px;margin-bottom:12px;}
@@ -3988,6 +3999,14 @@
                 <button id="note-add">Add</button>
               </div>
               <div id="notes-list" class="notes-list"></div>
+
+              <div class="ai-block" id="ai-block">
+                <div class="ai-head">
+                  <div class="nf-sub">Action items</div>
+                  <span class="ai-hint">from your inbox</span>
+                </div>
+                <div id="ai-list" class="ai-list"></div>
+              </div>
             </div>
 
             <div class="nf-col matrix-col" id="console-matrix">
@@ -4366,6 +4385,7 @@
     /* ---------- Notes & folders (own data, separate tables) ---------- */
     let notes=[], folders=[], folderItems=[];
     let quickTasks=[], noteMode="notes";
+    let inboxTodos=[];
 
     let justLit=null, cellRedraw=null, openFolderId=null;
     const CORE_RGB="79,209,197";
@@ -4391,6 +4411,8 @@
         renderNotes(); renderMatrix();
         try{ const qtRes=await client.from("quick_tasks").select("id, body, created_at").order("created_at",{ascending:false}); if(!qtRes.error) quickTasks=qtRes.data||[]; }catch(e){}
         if(noteMode==="tasks") renderQuickTasks();
+        try{ const aiRes=await client.from("inbox_todos").select("id,title,summary,source_ref,status,created_at").eq("status","open").order("created_at",{ascending:false}); if(!aiRes.error) inboxTodos=aiRes.data||[]; }catch(e){}
+        renderActionItems();
       }catch(e){ toast("Couldn't load notes / folders."); }
     }
 
@@ -4504,6 +4526,26 @@
       if(!ids.length) return;
       try{ const { error }=await client.from("quick_tasks").delete().in("id",ids); if(error){ quickTasks=prev; renderQuickTasks(); toast("Couldn't clear tasks: "+error.message); } }
       catch(e){ quickTasks=prev; renderQuickTasks(); toast("Couldn't clear tasks."); }
+    }
+
+    function renderActionItems(){
+      const host=el("ai-list"); if(!host) return;
+      if(!inboxTodos.length){ host.innerHTML='<div class="ai-empty">Inbox clear. Action items from your morning email scan land here.</div>'; return; }
+      host.innerHTML=inboxTodos.map(t=>{
+        const sum=t.summary?'<span class="ai-sum">'+escapeHtml(t.summary)+'</span>':'';
+        return '<div class="ai-row" data-aid="'+t.id+'"><button class="ai-check" data-aidone="'+t.id+'" aria-label="Mark done and remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button><span class="ai-body">'+escapeHtml(t.title)+sum+'</span></div>';
+      }).join("");
+      host.querySelectorAll(".ai-check[data-aidone]").forEach(b=>b.addEventListener("click",()=>completeActionItem(b.dataset.aidone)));
+    }
+    function completeActionItem(id){
+      const host=el("ai-list"); const row=host&&host.querySelector('.ai-row[data-aid="'+id+'"]');
+      if(row && !reduceMotion){ row.style.transition="opacity .18s ease, transform .18s ease"; row.style.opacity="0"; row.style.transform="scale(.94)"; setTimeout(()=>markActionDone(id),170); }
+      else markActionDone(id);
+    }
+    async function markActionDone(id){
+      const prev=inboxTodos.slice(); inboxTodos=inboxTodos.filter(t=>t.id!==id); renderActionItems();
+      try{ const { error }=await client.from("inbox_todos").update({status:"done"}).eq("id",id); if(error){ inboxTodos=prev; renderActionItems(); toast("Couldn't update: "+error.message); } }
+      catch(e){ inboxTodos=prev; renderActionItems(); toast("Couldn't update action item."); }
     }
 
     let dragState=null;
