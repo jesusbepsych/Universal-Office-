@@ -4147,6 +4147,29 @@
     }
   }
 
+
+  /* Action Items panel centering refinement */
+  .console-actions-panel{
+    left:50%!important;
+    right:auto!important;
+    width:min(900px,calc(100vw - 240px))!important;
+    transform:translateX(-50%) translateY(10px) scale(.985)!important;
+  }
+  .console-actions-panel.open{
+    transform:translateX(-50%) translateY(0) scale(1)!important;
+  }
+  @media(max-width:900px){
+    .console-actions-panel{
+      left:14px!important;
+      right:14px!important;
+      width:auto!important;
+      transform:translateY(10px) scale(.985)!important;
+    }
+    .console-actions-panel.open{
+      transform:translateY(0) scale(1)!important;
+    }
+  }
+
 </style>
 </head>
 <body>
