@@ -3898,6 +3898,255 @@
     opacity:.52!important;
   }
 
+
+  /* Action Items dock + dedicated screen */
+  .dock-btn{position:relative;}
+  .dock-action-items .dock-ico{
+    color:#ffcf70;
+  }
+  .dock-badge{
+    position:absolute;
+    top:8px;
+    right:9px;
+    min-width:22px;
+    height:22px;
+    padding:0 6px;
+    border-radius:999px;
+    display:grid;
+    place-items:center;
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    line-height:1;
+    color:#120b03;
+    background:linear-gradient(135deg,#ffd27a,#ff8f4a);
+    border:1px solid rgba(255,231,174,.72);
+    box-shadow:0 0 0 2px rgba(255,178,82,.12),0 0 20px rgba(255,168,69,.65);
+    animation:actionPing 1.9s ease-in-out infinite;
+  }
+  .dock-badge[hidden]{display:none!important;}
+  @keyframes actionPing{
+    0%,100%{transform:scale(1);box-shadow:0 0 0 2px rgba(255,178,82,.10),0 0 15px rgba(255,168,69,.46);}
+    45%{transform:scale(1.08);box-shadow:0 0 0 6px rgba(255,178,82,.04),0 0 24px rgba(255,168,69,.75);}
+  }
+  .ai-block{display:none!important;}
+
+  .console-actions-panel{
+    position:fixed;
+    z-index:670;
+    right:142px;
+    top:98px;
+    width:min(900px,calc(100vw - 176px));
+    max-height:calc(100vh - 126px);
+    transform:translateY(10px) scale(.985);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease, transform .24s ease;
+  }
+  .console-actions-panel.open{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+  .console-actions-panel::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(2,5,12,.52);
+    z-index:-1;
+    backdrop-filter:blur(4px);
+  }
+  .action-screen-panel{
+    margin:0!important;
+    max-height:calc(100vh - 126px);
+    overflow:hidden;
+    border-color:rgba(255,196,84,.36)!important;
+    background:
+      radial-gradient(ellipse at 88% 0%,rgba(255,196,84,.14),transparent 34%),
+      radial-gradient(ellipse at 8% 24%,rgba(79,209,197,.10),transparent 32%),
+      linear-gradient(180deg,rgba(15,23,40,.94),rgba(6,10,20,.96))!important;
+    box-shadow:0 28px 100px -38px rgba(0,0,0,.88),0 0 70px -42px rgba(255,196,84,.95);
+  }
+  .action-screen-head{
+    margin-bottom:12px!important;
+  }
+  .action-screen-head h2{
+    font-size:18px!important;
+    letter-spacing:-.01em;
+  }
+  .action-close{
+    margin-left:auto;
+    color:#fff4db!important;
+    border-color:rgba(255,196,84,.30)!important;
+  }
+  .action-screen-kpis{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin:0 0 14px;
+  }
+  .action-kpi{
+    border-radius:14px;
+    border:1px solid rgba(255,196,84,.20);
+    background:rgba(255,196,84,.055);
+    padding:12px 14px;
+    min-height:64px;
+  }
+  .action-kpi-soft{
+    border-color:rgba(130,160,210,.14);
+    background:rgba(255,255,255,.025);
+  }
+  .action-kpi-n{
+    display:block;
+    font-family:var(--mono);
+    font-size:22px;
+    color:#fff4db;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+  }
+  .action-kpi-soft .action-kpi-n{
+    font-size:15px;
+    color:rgba(230,240,255,.86);
+  }
+  .action-kpi-l{
+    display:block;
+    margin-top:3px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(220,230,255,.58);
+  }
+  .ai-screen-list{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    max-height:calc(100vh - 304px);
+    overflow:auto;
+    padding:2px 4px 6px 0;
+  }
+  .ai-screen-list .ai-row{
+    position:relative;
+    min-height:118px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 34px;
+    gap:12px;
+    align-items:start;
+    padding:14px 14px 13px;
+    border-radius:18px;
+    background:
+      radial-gradient(ellipse at 100% 0%,rgba(255,196,84,.12),transparent 42%),
+      linear-gradient(180deg,rgba(17,26,44,.74),rgba(7,12,22,.82));
+    border:1px solid rgba(255,196,84,.22);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 16px 34px -32px rgba(255,196,84,.62);
+  }
+  .ai-screen-list .ai-row::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:14px;
+    bottom:14px;
+    width:3px;
+    border-radius:999px;
+    background:linear-gradient(180deg,transparent,#ffcf70,transparent);
+    box-shadow:0 0 18px rgba(255,196,84,.62);
+  }
+  .ai-screen-list .ai-check{
+    grid-column:2;
+    grid-row:1 / span 2;
+    width:34px;
+    height:34px;
+    margin:0;
+    border-radius:12px;
+    background:rgba(255,196,84,.10);
+    border:1px solid rgba(255,196,84,.45);
+    color:#ffcf70;
+  }
+  .ai-screen-list .ai-check svg{
+    width:16px;
+    height:16px;
+  }
+  .ai-screen-list .ai-body{
+    grid-column:1;
+    font-size:14px;
+    line-height:1.35;
+    color:#f6f9ff;
+    padding-left:6px;
+  }
+  .ai-screen-list .ai-body strong{
+    display:block;
+    margin-bottom:5px;
+    font-family:var(--disp);
+    font-size:14.5px;
+    line-height:1.2;
+  }
+  .ai-screen-list .ai-body .ai-sum{
+    display:block;
+    margin-top:5px;
+    color:rgba(204,216,242,.70);
+    font-size:12px;
+    line-height:1.36;
+  }
+  .ai-screen-list .ai-meta{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-top:10px;
+    padding-left:6px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:rgba(255,215,145,.70);
+  }
+  .ai-screen-list .ai-pill{
+    border:1px solid rgba(255,196,84,.20);
+    background:rgba(255,196,84,.06);
+    border-radius:999px;
+    padding:4px 7px;
+  }
+  .ai-screen-list .ai-empty{
+    grid-column:1/-1;
+    min-height:220px;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    border:1px dashed rgba(255,196,84,.24);
+    border-radius:20px;
+    background:rgba(255,255,255,.025);
+    color:rgba(222,232,255,.70);
+    font-size:14px;
+    line-height:1.5;
+    padding:28px;
+  }
+  .ai-screen-list .ai-empty strong{
+    display:block;
+    margin-bottom:5px;
+    color:#fff7e8;
+    font-family:var(--disp);
+    font-size:19px;
+  }
+  @media(max-width:900px){
+    .console-actions-panel{
+      right:14px;
+      left:14px;
+      top:80px;
+      width:auto;
+      max-height:calc(100vh - 100px);
+    }
+    .action-screen-panel{
+      max-height:calc(100vh - 100px);
+    }
+    .action-screen-kpis{
+      grid-template-columns:1fr;
+    }
+    .ai-screen-list{
+      grid-template-columns:1fr;
+      max-height:calc(100vh - 362px);
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -3999,14 +4248,6 @@
                 <button id="note-add">Add</button>
               </div>
               <div id="notes-list" class="notes-list"></div>
-
-              <div class="ai-block" id="ai-block">
-                <div class="ai-head">
-                  <div class="nf-sub">Action items</div>
-                  <span class="ai-hint">from your inbox</span>
-                </div>
-                <div id="ai-list" class="ai-list"></div>
-              </div>
             </div>
 
             <div class="nf-col matrix-col" id="console-matrix">
@@ -4029,7 +4270,7 @@
         <button class="dock-btn" type="button" data-scroll="console-calendar" title="Calendar"><span class="dock-ico">▦</span><span>Calendar</span></button>
         <button class="dock-btn" type="button" data-scroll="console-matrix" title="Garden"><span class="dock-ico">⬡</span><span>Garden</span></button>
         <button class="dock-btn" type="button" data-scroll="console-notes" title="Notes"><span class="dock-ico">▤</span><span>Notes</span></button>
-        <button class="dock-btn" type="button" data-scroll="console-progress" title="Analytics"><span class="dock-ico">▥</span><span>Analytics</span></button>
+        <button class="dock-btn dock-action-items" id="dock-actions" type="button" title="Action Items"><span class="dock-ico">▤</span><span>Action Items</span><span class="dock-badge" id="action-count-badge" hidden>0</span></button>
         <button class="dock-collapse" type="button" data-scroll="console-overview">‹ Collapse</button>
       </nav>
     </section>
@@ -4050,6 +4291,24 @@
         </div>
         <div class="topo-sub" id="topo-sub">&nbsp;</div>
         <div class="topo" id="topo"></div>
+      </div>
+    </aside>
+
+    <aside class="console-actions-panel" id="actions-panel" aria-hidden="true">
+      <div class="panel action-screen-panel">
+        <div class="panel-head action-screen-head">
+          <div>
+            <h2>Action Items</h2>
+            <span class="hint" id="action-screen-hint">From email scans &middot; items requiring attention</span>
+          </div>
+          <button class="topo-nav action-close" id="actions-close" aria-label="Close action items panel">&times;</button>
+        </div>
+        <div class="action-screen-kpis">
+          <div class="action-kpi"><span class="action-kpi-n" id="action-open-count">0</span><span class="action-kpi-l">open</span></div>
+          <div class="action-kpi action-kpi-soft"><span class="action-kpi-n">Inbox</span><span class="action-kpi-l">source</span></div>
+          <div class="action-kpi action-kpi-soft"><span class="action-kpi-n">Scan</span><span class="action-kpi-l">action required</span></div>
+        </div>
+        <div id="ai-list" class="ai-screen-list"></div>
       </div>
     </aside>
 
@@ -4529,11 +4788,28 @@
     }
 
     function renderActionItems(){
-      const host=el("ai-list"); if(!host) return;
-      if(!inboxTodos.length){ host.innerHTML='<div class="ai-empty">Inbox clear. Action items from your morning email scan land here.</div>'; return; }
+      const host=el("ai-list");
+      const count=inboxTodos.length;
+      const badge=el("action-count-badge");
+      const openCount=el("action-open-count");
+      const hint=el("action-screen-hint");
+      if(badge){
+        badge.textContent=count>99?"99+":String(count);
+        badge.hidden=count===0;
+        badge.setAttribute("aria-label",count+" open action item"+(count===1?"":"s"));
+      }
+      if(openCount) openCount.textContent=String(count);
+      if(hint) hint.textContent=count ? ("From email scans · "+count+" requiring attention") : "From email scans · inbox clear";
+      if(!host) return;
+      if(!count){
+        host.innerHTML='<div class="ai-empty"><div><strong>Inbox action deck clear.</strong><span>When email scans detect deadlines, reply requests, or other required follow-up, they will land here.</span></div></div>';
+        return;
+      }
       host.innerHTML=inboxTodos.map(t=>{
         const sum=t.summary?'<span class="ai-sum">'+escapeHtml(t.summary)+'</span>':'';
-        return '<div class="ai-row" data-aid="'+t.id+'"><button class="ai-check" data-aidone="'+t.id+'" aria-label="Mark done and remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button><span class="ai-body">'+escapeHtml(t.title)+sum+'</span></div>';
+        const when=t.created_at?new Date(t.created_at).toLocaleDateString([], {month:"short",day:"numeric"}):"Inbox scan";
+        const ref=t.source_ref?'<span class="ai-pill">'+escapeHtml(String(t.source_ref).slice(0,38))+'</span>':'';
+        return '<div class="ai-row" data-aid="'+t.id+'"><span class="ai-body"><strong>'+escapeHtml(t.title||"Untitled action")+'</strong>'+sum+'<span class="ai-meta"><span class="ai-pill">'+escapeHtml(when)+'</span>'+ref+'</span></span><button class="ai-check" data-aidone="'+t.id+'" aria-label="Mark done and remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></button></div>';
       }).join("");
       host.querySelectorAll(".ai-check[data-aidone]").forEach(b=>b.addEventListener("click",()=>completeActionItem(b.dataset.aidone)));
     }
@@ -5563,6 +5839,42 @@
       }
     })();
   </script>  </script>
+
+
+  <script>
+    (function(){
+      function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+      ready(function(){
+        var panel=document.getElementById("actions-panel");
+        var open=document.getElementById("dock-actions");
+        var close=document.getElementById("actions-close");
+        var signals=document.getElementById("signals-panel");
+
+        function setActions(on){
+          if(!panel) return;
+          panel.classList.toggle("open",!!on);
+          panel.setAttribute("aria-hidden",on?"false":"true");
+          if(open) open.classList.toggle("on",!!on);
+          if(on){
+            if(signals) signals.classList.remove("open");
+            var dockSignals=document.getElementById("dock-signals");
+            if(dockSignals) dockSignals.classList.remove("on");
+            document.querySelectorAll(".dock-btn").forEach(function(b){ if(b!==open) b.classList.remove("on"); });
+            if(window.renderActionItems) window.renderActionItems();
+          }
+        }
+
+        window.setActionPanel=setActions;
+        if(open) open.addEventListener("click",function(){ setActions(!panel.classList.contains("open")); });
+        if(close) close.addEventListener("click",function(){ setActions(false); });
+        document.addEventListener("keydown",function(e){ if(e.key==="Escape") setActions(false); });
+
+        document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals").forEach(function(btn){
+          btn.addEventListener("click",function(){ setActions(false); });
+        });
+      });
+    })();
+  </script>
 
 </body>
 </html>
