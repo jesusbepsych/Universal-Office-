@@ -5008,6 +5008,399 @@
     }
   }
 
+
+  /* Calendar Gatekeeper main view */
+  .caldesk-panel{
+    min-height:840px;
+    padding:16px!important;
+    overflow:hidden;
+    position:relative;
+    border-color:rgba(78,147,255,.34)!important;
+    background:
+      radial-gradient(ellipse at 82% 6%,rgba(78,147,255,.14),transparent 32%),
+      radial-gradient(ellipse at 8% 45%,rgba(79,209,197,.07),transparent 34%),
+      linear-gradient(180deg,rgba(7,12,24,.94),rgba(4,8,17,.97))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 24px 70px -56px rgba(78,147,255,.90)!important;
+  }
+  .caldesk-shell{
+    height:806px;
+    min-height:806px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 330px;
+    gap:14px;
+  }
+  .cg-main{
+    min-width:0;
+    border-radius:18px;
+    border:1px solid rgba(117,145,199,.22);
+    background:
+      linear-gradient(180deg,rgba(8,15,29,.78),rgba(5,9,19,.88));
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .cg-tabs{
+    height:56px;
+    display:flex;
+    align-items:center;
+    gap:28px;
+    padding:0 26px;
+    border-bottom:1px solid rgba(120,150,205,.12);
+    background:rgba(4,8,16,.28);
+    font-family:var(--mono);
+    text-transform:uppercase;
+    letter-spacing:.13em;
+    font-size:12px;
+    color:rgba(174,190,224,.54);
+  }
+  .cg-tab{position:relative;}
+  .cg-tab.on{color:#9cd9ff;}
+  .cg-tab.on::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;bottom:-18px;height:2px;
+    background:#6ebcff;
+    box-shadow:0 0 16px rgba(110,188,255,.75);
+  }
+  .cg-monthbar{
+    height:70px;
+    display:grid;
+    grid-template-columns:1fr auto auto;
+    gap:14px;
+    align-items:center;
+    padding:0 26px;
+  }
+  .cg-nav{display:flex;align-items:center;gap:9px;}
+  .cg-navbtn{
+    width:34px;height:34px;border-radius:10px;
+    border:1px solid rgba(132,160,214,.18);
+    background:rgba(255,255,255,.035);
+    color:#cfe4ff;
+    font-size:23px;
+    line-height:1;
+  }
+  .cg-month-title{
+    background:transparent;
+    color:#eaf3ff;
+    font-family:var(--disp);
+    font-size:19px;
+    font-weight:700;
+    padding:0 6px;
+  }
+  .cg-view-toggle{
+    display:flex;
+    gap:0;
+    padding:3px;
+    border-radius:12px;
+    border:1px solid rgba(132,160,214,.16);
+    background:rgba(255,255,255,.025);
+  }
+  .cg-view-toggle button{
+    padding:8px 13px;
+    border-radius:9px;
+    background:transparent;
+    color:rgba(203,218,248,.62);
+    font-size:12px;
+    font-weight:700;
+  }
+  .cg-view-toggle button.on{
+    color:#eaf5ff;
+    background:rgba(78,147,255,.18);
+    box-shadow:inset 0 0 0 1px rgba(78,147,255,.22);
+  }
+  .cg-filter{
+    border-radius:11px;
+    border:1px solid rgba(132,160,214,.16);
+    background:rgba(255,255,255,.035);
+    color:rgba(225,238,255,.78);
+    padding:10px 13px;
+    font-size:12px;
+    font-weight:800;
+  }
+  .cg-calendar{
+    flex:1;
+    min-height:0;
+    padding:0 22px 22px;
+    display:grid;
+    grid-template-rows:34px 1fr;
+  }
+  .cg-wd,
+  .cg-days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+  }
+  .cg-wd{
+    color:rgba(171,188,222,.52);
+    font-family:var(--mono);
+    text-transform:uppercase;
+    letter-spacing:.10em;
+    font-size:10px;
+    align-items:center;
+  }
+  .cg-wd div{
+    padding-left:10px;
+  }
+  .cg-days{
+    border:1px solid rgba(120,150,205,.13);
+    border-radius:14px;
+    overflow:hidden;
+    background:rgba(2,6,13,.20);
+  }
+  .cg-day{
+    min-height:96px;
+    border-right:1px solid rgba(120,150,205,.10);
+    border-bottom:1px solid rgba(120,150,205,.10);
+    padding:10px;
+    background:rgba(255,255,255,.012);
+    position:relative;
+    overflow:hidden;
+  }
+  .cg-day:nth-child(7n){border-right:0;}
+  .cg-day.muted{opacity:.34;}
+  .cg-day.today{
+    background:radial-gradient(ellipse at 50% 0%,rgba(78,147,255,.20),rgba(255,255,255,.014) 62%);
+    box-shadow:inset 0 0 0 1px rgba(78,147,255,.55),inset 0 0 24px rgba(78,147,255,.08);
+  }
+  .cg-day.selected{
+    box-shadow:inset 0 0 0 1px rgba(110,188,255,.80),inset 0 0 34px rgba(110,188,255,.12);
+  }
+  .cg-daynum{
+    display:block;
+    font-family:var(--mono);
+    color:rgba(232,240,255,.82);
+    font-size:13px;
+    margin-bottom:6px;
+  }
+  .cg-day.muted .cg-daynum{color:rgba(180,195,225,.38);}
+  .cg-event{
+    display:block;
+    margin:4px 0;
+    padding:5px 6px;
+    border-radius:7px;
+    border:1px solid rgba(var(--evrgb,78,147,255),.35);
+    background:rgba(var(--evrgb,78,147,255),.12);
+    color:#dbeaff;
+    font-size:10.5px;
+    line-height:1.15;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    box-shadow:0 0 14px -12px rgba(var(--evrgb,78,147,255),.95);
+  }
+  .cg-event small{
+    float:right;
+    margin-left:5px;
+    color:rgba(220,234,255,.62);
+    font-family:var(--mono);
+    font-size:9px;
+  }
+  .cg-more{
+    margin-top:4px;
+    color:rgba(180,198,230,.56);
+    font-size:10px;
+    font-family:var(--mono);
+  }
+  .cg-gatekeeper{
+    min-width:0;
+    border-radius:18px;
+    border:1px solid rgba(117,145,199,.22);
+    background:
+      radial-gradient(ellipse at 0% 0%,rgba(78,147,255,.16),transparent 42%),
+      linear-gradient(180deg,rgba(11,18,34,.92),rgba(5,9,18,.96));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 52px -42px rgba(78,147,255,.95);
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .cg-gk-head{
+    display:flex;
+    align-items:flex-start;
+    gap:11px;
+    padding-bottom:14px;
+  }
+  .cg-shield{
+    width:42px;height:42px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    flex:none;
+    border:1px solid rgba(78,147,255,.32);
+    background:rgba(78,147,255,.10);
+    color:#8ccaff;
+    font-size:22px;
+    box-shadow:0 0 24px -14px rgba(78,147,255,.94);
+  }
+  .cg-gk-head h2{
+    margin:2px 0 3px;
+    font-family:var(--disp);
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#eaf5ff;
+  }
+  .cg-gk-head p{
+    margin:0;
+    font-size:11.5px;
+    color:rgba(198,214,244,.62);
+  }
+  .cg-gk-tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .cg-gk-tabs button{
+    border-radius:11px;
+    padding:10px 8px;
+    border:1px solid rgba(132,160,214,.14);
+    background:rgba(255,255,255,.025);
+    color:rgba(193,210,240,.62);
+    font-family:var(--mono);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:10px;
+    font-weight:800;
+  }
+  .cg-gk-tabs button.on{
+    color:#eef7ff;
+    background:rgba(78,147,255,.14);
+    border-color:rgba(78,147,255,.26);
+  }
+  .cg-draft-list{
+    flex:1;
+    min-height:0;
+    overflow:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding-right:4px;
+  }
+  .cg-draft-card{
+    border-radius:14px;
+    border:1px solid rgba(132,160,214,.16);
+    background:
+      radial-gradient(ellipse at 100% 0%,rgba(var(--drgb,78,147,255),.10),transparent 40%),
+      linear-gradient(180deg,rgba(13,23,42,.78),rgba(7,12,23,.88));
+    padding:12px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  }
+  .cg-dtag{
+    display:inline-block;
+    margin-bottom:6px;
+    padding:3px 6px;
+    border-radius:7px;
+    background:rgba(var(--drgb,78,147,255),.13);
+    border:1px solid rgba(var(--drgb,78,147,255),.22);
+    color:rgb(var(--drgb,78,147,255));
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:800;
+  }
+  .cg-draft-title{
+    font-family:var(--disp);
+    color:#f0f6ff;
+    font-size:14px;
+    font-weight:700;
+    line-height:1.18;
+    margin-bottom:6px;
+  }
+  .cg-draft-meta{
+    color:rgba(196,213,244,.66);
+    font-family:var(--mono);
+    font-size:10.5px;
+    line-height:1.5;
+  }
+  .cg-draft-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:7px;
+    margin-top:10px;
+  }
+  .cg-action{
+    width:38px;
+    height:28px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:900;
+    border:1px solid rgba(132,160,214,.14);
+    background:rgba(255,255,255,.035);
+  }
+  .cg-action.approve{
+    color:#68f0bd;
+    border-color:rgba(95,208,138,.28);
+    background:rgba(95,208,138,.12);
+  }
+  .cg-action.skip{
+    color:#f2b066;
+    border-color:rgba(242,176,102,.28);
+    background:rgba(242,176,102,.12);
+  }
+  .cg-action.reject{
+    color:#ff7d8c;
+    border-color:rgba(255,107,107,.30);
+    background:rgba(255,107,107,.12);
+  }
+  .cg-empty{
+    min-height:180px;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    color:rgba(202,218,246,.62);
+    border:1px dashed rgba(132,160,214,.18);
+    border-radius:14px;
+    padding:18px;
+    font-size:12px;
+    line-height:1.4;
+  }
+  .cg-empty strong{
+    display:block;
+    margin-bottom:5px;
+    color:#eef7ff;
+    font-family:var(--disp);
+    font-size:16px;
+  }
+  .cg-view-all{
+    margin-top:12px;
+    border-radius:12px;
+    padding:11px 12px;
+    border:1px solid rgba(132,160,214,.16);
+    background:rgba(255,255,255,.026);
+    color:rgba(216,230,255,.72);
+    font-size:12px;
+  }
+  .cal-draft-badge{
+    background:linear-gradient(135deg,#ffd27a,#ff8f4a);
+    border-color:rgba(255,231,174,.72);
+    color:#120b03;
+  }
+  .dock-caldesk.on{
+    color:#eaf4ff;
+    border-color:rgba(106,166,255,.45);
+    background:linear-gradient(180deg,rgba(38,68,116,.58),rgba(11,21,38,.74));
+    box-shadow:inset 0 0 0 1px rgba(106,166,255,.18),0 0 24px -15px rgba(106,166,255,.9);
+  }
+  @media(max-width:1220px){
+    .caldesk-panel{min-height:1040px;}
+    .caldesk-shell{
+      height:auto;
+      min-height:1000px;
+      grid-template-columns:1fr;
+    }
+    .cg-gatekeeper{min-height:360px;}
+  }
+  @media(max-width:900px){
+    .cg-monthbar{grid-template-columns:1fr; height:auto; padding:14px 18px; align-items:start;}
+    .cg-view-toggle{width:max-content;}
+    .cg-calendar{padding:0 14px 18px;}
+    .cg-day{min-height:82px;padding:7px;}
+    .cg-event{font-size:9.5px;}
+  }
+
 </style>
 </head>
 <body>
@@ -5106,6 +5499,49 @@
             </div>
           </div>
         </div>
+        <div class="panel caldesk-panel hidden" id="caldesk-panel" aria-hidden="true">
+          <div class="caldesk-shell">
+            <div class="cg-main">
+              <div class="cg-tabs">
+                <span class="cg-tab on">Calendar</span>
+                <span class="cg-tab">Agenda</span>
+                <span class="cg-tab">Timeline</span>
+                <span class="cg-tab">Schedule</span>
+              </div>
+              <div class="cg-monthbar">
+                <div class="cg-nav">
+                  <button class="cg-navbtn" id="cg-prev-month" type="button" aria-label="Previous month">‹</button>
+                  <button class="cg-navbtn" id="cg-next-month" type="button" aria-label="Next month">›</button>
+                  <button class="cg-month-title" id="cg-month-title" type="button">Month</button>
+                </div>
+                <div class="cg-view-toggle">
+                  <button type="button">Week</button>
+                  <button type="button" class="on">Month</button>
+                  <button type="button">Agenda</button>
+                </div>
+                <button class="cg-filter" type="button">☷ Filter</button>
+              </div>
+              <div class="cg-calendar" id="cg-calendar"></div>
+            </div>
+
+            <aside class="cg-gatekeeper">
+              <div class="cg-gk-head">
+                <div class="cg-shield">◇</div>
+                <div>
+                  <h2>Calendar Gatekeeper</h2>
+                  <p>Review staged events before they’re added.</p>
+                </div>
+              </div>
+              <div class="cg-gk-tabs">
+                <button class="on" type="button">Pending <span id="cg-pending-count">(0)</span></button>
+                <button type="button">Recent <span id="cg-recent-count">(0)</span></button>
+              </div>
+              <div class="cg-draft-list" id="cg-draft-list"></div>
+              <button class="cg-view-all" id="cg-view-all" type="button">View all staged events ›</button>
+            </aside>
+          </div>
+        </div>
+
 
       </main>
 
@@ -5176,7 +5612,7 @@
         <div class="dock-label">Console Dock</div>
         <button class="dock-btn on" type="button" data-scroll="console-overview" title="Overview"><span class="dock-ico">◎</span><span>Overview</span></button>
         <button class="dock-btn" id="dock-signals" type="button" title="Signals / free-time topography"><span class="dock-ico">⌁</span><span>Signals</span></button>
-        <button class="dock-btn" type="button" data-scroll="console-calendar" title="Calendar"><span class="dock-ico">▦</span><span>Calendar</span></button>
+        <button class="dock-btn dock-caldesk" id="dock-caldesk" type="button" title="Calendar Gatekeeper"><span class="dock-ico">▦</span><span>Calendar</span><span class="dock-badge cal-draft-badge" id="cal-draft-badge" hidden>0</span></button>
         <button class="dock-btn" type="button" data-scroll="console-matrix" title="Garden"><span class="dock-ico">⬡</span><span>Garden</span></button>
         <button class="dock-btn dock-replydesk" id="dock-replydesk" type="button" title="Reply Desk"><span class="dock-ico">✉</span><span>Reply<br>Desk</span><span class="dock-badge reply-badge" id="reply-draft-badge" hidden>0</span></button>
         <button class="dock-btn dock-action-items" id="dock-actions" type="button" title="Action Items"><span class="dock-ico">▤</span><span>Action Items</span><span class="dock-badge" id="action-count-badge" hidden>0</span></button>
@@ -7046,6 +7482,189 @@
         updateReplyBadge();
         window.renderReplyDesk();
         setTimeout(loadReplyDraftsFromSupabase,2000);
+      });
+    })();
+  </script>
+
+
+  <script>
+    (function(){
+      var cgYear=null, cgMonth=null, cgSelected=null;
+
+      function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+      function rgbFromColor(hex){
+        var h=String(hex||"#6aa6ff").replace("#","");
+        if(h.length===3) h=h.split("").map(function(x){return x+x;}).join("");
+        var n=parseInt(h,16);
+        if(isNaN(n)) return "106,166,255";
+        return ((n>>16)&255)+","+((n>>8)&255)+","+(n&255);
+      }
+      function eventColor(t){
+        var m=catMeta((t&&t.category)||"other");
+        return rgbFromColor(m.color||"#6aa6ff");
+      }
+      function draftColor(d){
+        var c=String((d&&d.category)||"class").toLowerCase();
+        if(c.indexOf("clinic")>=0) return "95,208,138";
+        if(c.indexOf("event")>=0) return "242,176,102";
+        if(c.indexOf("work")>=0) return "106,166,255";
+        if(c.indexOf("personal")>=0) return "79,209,197";
+        return "167,139,250";
+      }
+      function stagedDrafts(){
+        var arr=window.stagedCalendarDrafts||window.calendarEventDrafts||window.calendarDrafts||[];
+        if(Array.isArray(arr)&&arr.length) return arr;
+        return [
+          {id:"cal-demo-1",title:"Psych 402 Study Session",category:"class",date:"2025-05-10",time:"2:00 PM",source:"you",age:"1h ago"},
+          {id:"cal-demo-2",title:"Wellness Workshop",category:"clinic",date:"2025-05-11",time:"10:00 AM",source:"Wellness Center",age:"3h ago"},
+          {id:"cal-demo-3",title:"AI in Learning Talk",category:"event",date:"2025-05-15",time:"6:30 PM",source:"Student Org",age:"5h ago"},
+          {id:"cal-demo-4",title:"CS 201 Project Check-in",category:"class",date:"2025-05-17",time:"1:00 PM",source:"you",age:"7h ago"}
+        ];
+      }
+      function updateCalBadge(){
+        var b=document.getElementById("cal-draft-badge");
+        if(!b) return;
+        var n=stagedDrafts().length;
+        b.textContent=n>99?"99+":String(n);
+        b.hidden=n===0;
+      }
+      function renderCalGatekeeper(){
+        var host=document.getElementById("cg-draft-list");
+        var pc=document.getElementById("cg-pending-count");
+        var rc=document.getElementById("cg-recent-count");
+        var drafts=stagedDrafts();
+        if(pc) pc.textContent="("+drafts.length+")";
+        if(rc) rc.textContent="("+(window.calendarRecentDraftsCount||0)+")";
+        updateCalBadge();
+        if(!host) return;
+        if(!drafts.length){
+          host.innerHTML='<div class="cg-empty"><div><strong>No staged events.</strong><span>Calendar drafts that need approval will appear here before they are added to the main calendar.</span></div></div>';
+          return;
+        }
+        host.innerHTML=drafts.map(function(d){
+          var rgb=draftColor(d);
+          var tag=String(d.category||"event").toUpperCase();
+          var meta='Proposed: '+escapeHtml(d.date||d.when||"Date pending")+(d.time?' · '+escapeHtml(d.time):'');
+          var src='Added by '+escapeHtml(d.source||"Email scan")+(d.age?' · '+escapeHtml(d.age):'');
+          return '<article class="cg-draft-card" style="--drgb:'+rgb+'" data-cgd="'+escapeHtml(d.id)+'">'
+            + '<span class="cg-dtag">'+escapeHtml(tag)+'</span>'
+            + '<div class="cg-draft-title">'+escapeHtml(d.title||"Untitled event")+'</div>'
+            + '<div class="cg-draft-meta">'+meta+'<br>'+src+'</div>'
+            + '<div class="cg-draft-actions"><button class="cg-action approve" data-cg-act="approve" data-cg-id="'+escapeHtml(d.id)+'" title="Approve">✓</button><button class="cg-action skip" data-cg-act="skip" data-cg-id="'+escapeHtml(d.id)+'" title="Skip">◷</button><button class="cg-action reject" data-cg-act="reject" data-cg-id="'+escapeHtml(d.id)+'" title="Reject">×</button></div>'
+          + '</article>';
+        }).join("");
+        host.querySelectorAll("[data-cg-act]").forEach(function(btn){
+          btn.addEventListener("click",function(ev){
+            ev.stopPropagation();
+            var detail={id:btn.getAttribute("data-cg-id"),action:btn.getAttribute("data-cg-act")};
+            window.dispatchEvent(new CustomEvent("calendarDraftAction",{detail:detail}));
+            if(window.toast) toast(detail.action==="approve"?"Calendar draft approved.":detail.action==="reject"?"Calendar draft rejected.":"Calendar draft skipped.");
+          });
+        });
+      }
+      function taskOnDay(ymd){
+        var map=window.tasksByDay||tasksByDay||{};
+        return (map&&map[ymd]) ? map[ymd].slice().sort(function(a,b){return String(a.due_time||"").localeCompare(String(b.due_time||""));}) : [];
+      }
+      function renderCalendarDesk(){
+        var host=document.getElementById("cg-calendar");
+        if(!host) return;
+        var today=pacificYMD();
+        if(cgYear==null){
+          var p=today.split("-");
+          cgYear=+p[0]; cgMonth=+p[1]-1;
+        }
+        var monthName=new Date(cgYear,cgMonth,1).toLocaleString("en-US",{month:"long"});
+        var title=document.getElementById("cg-month-title");
+        if(title) title.textContent=monthName+" "+cgYear;
+        var startWd=new Date(Date.UTC(cgYear,cgMonth,1)).getUTCDay();
+        var daysIn=new Date(Date.UTC(cgYear,cgMonth+1,0)).getUTCDate();
+        var prevDays=new Date(Date.UTC(cgYear,cgMonth,0)).getUTCDate();
+        var cells=[];
+        function cell(ymd,day,muted){
+          var items=taskOnDay(ymd);
+          var html=items.slice(0,2).map(function(t){
+            var rgb=eventColor(t);
+            var time=t.due_time?to12h(String(t.due_time).slice(0,5)):"";
+            return '<span class="cg-event" style="--evrgb:'+rgb+'">'+escapeHtml(t.title||"Untitled")+(time?'<small>'+escapeHtml(time)+'</small>':'')+'</span>';
+          }).join("");
+          if(items.length>2) html+='<div class="cg-more">+'+(items.length-2)+' more</div>';
+          var cls='cg-day'+(muted?' muted':'')+(ymd===today?' today':'')+(ymd===cgSelected?' selected':'');
+          return '<button class="'+cls+'" type="button" data-cg-day="'+ymd+'"><span class="cg-daynum">'+day+'</span>'+html+'</button>';
+        }
+        for(var i=0;i<startWd;i++){
+          var d=prevDays-startWd+i+1;
+          var pm=cgMonth===0?11:cgMonth-1, py=cgMonth===0?cgYear-1:cgYear;
+          var ymd=py+'-'+String(pm+1).padStart(2,"0")+'-'+String(d).padStart(2,"0");
+          cells.push(cell(ymd,d,true));
+        }
+        for(var d=1;d<=daysIn;d++){
+          var ymd=cgYear+'-'+String(cgMonth+1).padStart(2,"0")+'-'+String(d).padStart(2,"0");
+          cells.push(cell(ymd,d,false));
+        }
+        var next=1;
+        while(cells.length<42){
+          var nm=cgMonth===11?0:cgMonth+1, ny=cgMonth===11?cgYear+1:cgYear;
+          var ymd=ny+'-'+String(nm+1).padStart(2,"0")+'-'+String(next).padStart(2,"0");
+          cells.push(cell(ymd,next,true));
+          next++;
+        }
+        host.innerHTML='<div class="cg-wd">'+["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(function(x){return "<div>"+x+"</div>";}).join("")+'</div><div class="cg-days">'+cells.join("")+'</div>';
+        host.querySelectorAll("[data-cg-day]").forEach(function(btn){
+          btn.addEventListener("click",function(){
+            cgSelected=btn.getAttribute("data-cg-day");
+            renderCalendarDesk();
+          });
+        });
+      }
+      function renderCalDesk(){
+        renderCalendarDesk();
+        renderCalGatekeeper();
+      }
+      window.renderCalDesk=renderCalDesk;
+      window.setStagedCalendarDrafts=function(arr){
+        window.stagedCalendarDrafts=Array.isArray(arr)?arr:[];
+        renderCalDesk();
+      };
+
+      ready(function(){
+        var btn=document.getElementById("dock-caldesk");
+        var panel=document.getElementById("caldesk-panel");
+        var agenda=document.getElementById("agenda-panel");
+        var reply=document.getElementById("replydesk-panel");
+        var primary=document.getElementById("console-overview");
+
+        function setCalDesk(on){
+          if(!panel||!agenda) return;
+          panel.classList.toggle("hidden",!on);
+          panel.setAttribute("aria-hidden",on?"false":"true");
+          agenda.classList.toggle("hidden",!!on);
+          if(reply) reply.classList.add("hidden");
+          if(primary) primary.classList.toggle("caldesk-mode",!!on);
+          if(btn) btn.classList.toggle("on",!!on);
+          if(on){
+            if(window.setReplyDesk) window.setReplyDesk(false);
+            if(window.setActionPanel) window.setActionPanel(false);
+            var sig=document.getElementById("signals-panel");
+            if(sig) sig.classList.remove("open");
+            var ds=document.getElementById("dock-signals");
+            if(ds) ds.classList.remove("on");
+            document.querySelectorAll(".dock-btn").forEach(function(b){ if(b!==btn) b.classList.remove("on"); });
+            renderCalDesk();
+            setTimeout(function(){ panel.scrollIntoView({behavior:"smooth",block:"start"}); },40);
+          }
+        }
+        window.setCalDesk=setCalDesk;
+        if(btn) btn.addEventListener("click",function(){ setCalDesk(panel.classList.contains("hidden")); });
+        var prev=document.getElementById("cg-prev-month");
+        var next=document.getElementById("cg-next-month");
+        if(prev) prev.addEventListener("click",function(){ cgMonth--; if(cgMonth<0){cgMonth=11;cgYear--;} renderCalDesk(); });
+        if(next) next.addEventListener("click",function(){ cgMonth++; if(cgMonth>11){cgMonth=0;cgYear++;} renderCalDesk(); });
+
+        document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions,#dock-replydesk").forEach(function(other){
+          other.addEventListener("click",function(){ setCalDesk(false); });
+        });
+        updateCalBadge();
       });
     })();
   </script>
