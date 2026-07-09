@@ -4912,6 +4912,102 @@
     background:rgba(255,107,107,.11);
   }
 
+
+  /* Reply Desk v9: use full vertical space and give draft cards breathing room */
+  .replydesk-panel{
+    min-height:840px!important;
+  }
+  .replydesk-panel .replydesk-shell{
+    min-height:806px!important;
+    height:806px!important;
+  }
+  .replydesk-panel .rd-top{
+    min-height:46px!important;
+    padding:0 6px 8px!important;
+  }
+  .replydesk-panel .rd-grid{
+    height:calc(100% - 54px)!important;
+    min-height:0!important;
+    align-items:stretch!important;
+  }
+  .replydesk-panel .rd-queue,
+  .replydesk-panel .rd-preview{
+    height:100%!important;
+    max-height:none!important;
+  }
+  .replydesk-panel .rd-list{
+    height:calc(100% - 60px)!important;
+    max-height:calc(100% - 60px)!important;
+    gap:15px!important;
+    padding-top:16px!important;
+    padding-bottom:28px!important;
+    padding-right:14px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  .replydesk-panel .rd-card{
+    min-height:142px!important;
+    max-height:none!important;
+    padding:15px!important;
+    flex:0 0 auto!important;
+  }
+  .replydesk-panel .rd-card:not(.active){
+    min-height:142px!important;
+    max-height:none!important;
+  }
+  .replydesk-panel .rd-card .rd-excerpt{
+    margin:12px 0 13px!important;
+    line-height:1.42!important;
+  }
+  .replydesk-panel .rd-card:not(.active) .rd-excerpt{
+    -webkit-line-clamp:2!important;
+  }
+  .replydesk-panel .rd-card-actions{
+    gap:8px!important;
+  }
+  .replydesk-panel .rd-mini-btn{
+    min-height:34px!important;
+  }
+  .replydesk-panel .rd-inline-preview{
+    margin-top:14px!important;
+    max-height:none!important;
+  }
+  .replydesk-panel .rd-inline-body{
+    max-height:154px!important;
+    line-height:1.52!important;
+  }
+  .replydesk-panel .rd-preview-body{
+    max-height:calc(100% - 60px)!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+  }
+  @media(max-width:1220px){
+    .replydesk-panel{
+      min-height:900px!important;
+    }
+    .replydesk-panel .replydesk-shell{
+      min-height:858px!important;
+      height:858px!important;
+    }
+    .replydesk-panel .rd-grid{
+      height:calc(100% - 54px)!important;
+    }
+  }
+  @media(max-width:900px){
+    .replydesk-panel{
+      min-height:860px!important;
+    }
+    .replydesk-panel .replydesk-shell{
+      min-height:820px!important;
+      height:820px!important;
+    }
+    .replydesk-panel .rd-card{
+      min-height:136px!important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -6668,7 +6764,7 @@
         try{ renderMatrix(); }catch(e){}
       }
     })();
-  </script>  </script>
+  </script>
 
 
   <script>
