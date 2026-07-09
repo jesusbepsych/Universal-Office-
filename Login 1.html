@@ -5414,6 +5414,108 @@
     gap:0!important;
   }
 
+
+  /* Calendar Gatekeeper v13: keep gatekeeper beside the month calendar on iPad-width screens */
+  .console-primary.caldesk-mode #agenda-panel{
+    display:none!important;
+  }
+  .console-primary.caldesk-mode #caldesk-panel{
+    display:block!important;
+    margin-top:0!important;
+  }
+  .caldesk-panel{
+    min-height:760px!important;
+    padding:14px!important;
+  }
+  .caldesk-shell{
+    height:730px!important;
+    min-height:730px!important;
+    grid-template-columns:minmax(0,1fr) minmax(278px,315px)!important;
+    gap:12px!important;
+  }
+  .cg-tabs{
+    height:50px!important;
+    padding:0 20px!important;
+    gap:24px!important;
+    font-size:11px!important;
+  }
+  .cg-monthbar{
+    height:62px!important;
+    padding:0 20px!important;
+    gap:10px!important;
+  }
+  .cg-calendar{
+    padding:0 18px 18px!important;
+  }
+  .cg-day{
+    min-height:76px!important;
+    padding:7px!important;
+  }
+  .cg-event{
+    margin:3px 0!important;
+    padding:4px 5px!important;
+    font-size:9.5px!important;
+  }
+  .cg-gatekeeper{
+    padding:12px!important;
+  }
+  .cg-gk-head{
+    padding-bottom:11px!important;
+  }
+  .cg-shield{
+    width:36px!important;
+    height:36px!important;
+    border-radius:12px!important;
+  }
+  .cg-gk-head h2{
+    font-size:12.5px!important;
+  }
+  .cg-gk-head p{
+    font-size:10.5px!important;
+  }
+  .cg-draft-list{
+    gap:8px!important;
+  }
+  .cg-draft-card{
+    padding:10px!important;
+  }
+  .cg-draft-title{
+    font-size:12.5px!important;
+  }
+  .cg-draft-meta{
+    font-size:9.5px!important;
+  }
+  .cg-action{
+    width:34px!important;
+    height:25px!important;
+  }
+  @media(max-width:1220px){
+    .caldesk-panel{
+      min-height:760px!important;
+    }
+    .caldesk-shell{
+      height:730px!important;
+      min-height:730px!important;
+      grid-template-columns:minmax(0,1fr) minmax(260px,300px)!important;
+    }
+    .cg-view-toggle button{
+      padding:7px 10px!important;
+      font-size:11px!important;
+    }
+    .cg-filter{
+      padding:9px 10px!important;
+    }
+  }
+  @media(max-width:760px){
+    .caldesk-panel{min-height:1040px!important;}
+    .caldesk-shell{
+      height:auto!important;
+      min-height:1000px!important;
+      grid-template-columns:1fr!important;
+    }
+    .cg-gatekeeper{min-height:350px!important;}
+  }
+
 </style>
 </head>
 <body>
@@ -7477,7 +7579,7 @@
           if(btn) btn.classList.toggle("on",!!on);
           if(on){
             var cal=document.getElementById("caldesk-panel");
-            if(cal) cal.classList.add("hidden");
+            if(cal){ cal.classList.add("hidden"); cal.style.display=""; }
             var calbtn=document.getElementById("dock-caldesk");
             if(calbtn) calbtn.classList.remove("on");
             if(window.setActionPanel) window.setActionPanel(false);
@@ -7659,9 +7761,11 @@
             if(window.setActionPanel) window.setActionPanel(false);
           }
           panel.classList.toggle("hidden",!on);
+          panel.style.display=on?"block":"";
           panel.setAttribute("aria-hidden",on?"false":"true");
           agenda.classList.toggle("hidden",!!on);
-          if(reply) reply.classList.add("hidden");
+          agenda.style.display=on?"none":"";
+          if(reply){ reply.classList.add("hidden"); reply.style.display=""; }
           if(primary) primary.classList.toggle("caldesk-mode",!!on);
           if(btn) btn.classList.toggle("on",!!on);
           if(on){
