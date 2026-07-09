@@ -439,6 +439,9 @@
   .cal-pop{position:absolute;inset:0;background:var(--panel);border-radius:16px;padding:18px;display:flex;flex-direction:column;}
   .cal-pop-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;}
   .calback{background:none;color:var(--teal);font-size:13px;font-weight:600;padding:2px;}
+  .console-placeholder-card{display:flex;flex-direction:column;}
+  .placeholder-body{flex:1;min-height:120px;display:grid;place-items:center;padding:14px;border:1px dashed var(--line,rgba(255,255,255,.12));border-radius:14px;margin-top:6px;}
+  .placeholder-note{font-size:12px;line-height:1.5;text-align:center;color:var(--muted,#8a96b3);opacity:.82;}
   .cal-pop-date{font-family:var(--mono);font-size:12px;color:var(--muted);}
   .cal-pop-list{overflow:auto;display:flex;flex-direction:column;gap:7px;}
   .cal-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink);}
@@ -5923,12 +5926,14 @@
         </div>
 
         <div class="console-mini-grid">
-          <div class="panel calpanel console-mini-card" id="console-calendar">
+          <div class="panel console-mini-card console-placeholder-card" id="console-placeholder">
             <div class="panel-head">
-              <h2>Calendar</h2>
-              <span class="hint">Pacific</span>
+              <h2>Reserved</h2>
+              <span class="hint">Placeholder</span>
             </div>
-            <div id="calendar"></div>
+            <div class="placeholder-body">
+              <span class="placeholder-note">Space reserved for a future panel.<br>The full calendar now lives in the Calendar dock.</span>
+            </div>
           </div>
 
           <div class="panel console-mini-card console-progress-card" id="console-progress">
@@ -6123,7 +6128,7 @@
         allTasks = data || [];
         activeTier="today"; activeFilter="all"; currentPage=1; selectedDay=null; calYear=null; calMonth=null;
         buildByDay();
-        renderRibbon(true); renderFilters(); renderGauge(); renderFooter(); renderCalendar(); renderAgenda();
+        renderRibbon(true); renderFilters(); renderGauge(); renderFooter(); renderAgenda();
         if(window.renderTopo) window.renderTopo();
         if(window.renderDaySummary) window.renderDaySummary();
       }catch(e){ el("agenda").innerHTML='<div class="empty">Unexpected error: '+(e&&e.message?e.message:e)+'</div>'; }
@@ -6350,7 +6355,7 @@
       el("legend").innerHTML=legendCats.map(c=>{ const m=catMeta(c); return '<span><i style="background:'+m.color+'"></i>'+m.label+'</span>'; }).join("");
     }
 
-    function refreshViews(){ renderRibbon(false); renderGauge(); renderCalendar(); renderAgenda(); }
+    function refreshViews(){ renderRibbon(false); renderGauge(); renderAgenda(); }
 
     /* ---------- Notes & folders (own data, separate tables) ---------- */
     let notes=[], folders=[], folderItems=[];
@@ -6859,56 +6864,8 @@
 
     // Calendar
     const CAL_RADII=["54% 46% 52% 48% / 48% 52% 46% 54%","48% 52% 50% 50% / 52% 48% 52% 48%","50% 50% 46% 54% / 50% 50% 54% 46%","52% 48% 50% 50% / 46% 54% 50% 50%","46% 54% 52% 48% / 54% 46% 48% 52%"];
-    function renderCalendar(){
-      const host=el("calendar"); if(!host)return;
-      const today=pacificYMD();
-      if(calYear==null){ const p=today.split("-"); calYear=+p[0]; calMonth=+p[1]-1; }
-      const monthName=new Date(calYear, calMonth, 1).toLocaleString("en-US",{month:"long"});
-      const startWd=new Date(Date.UTC(calYear,calMonth,1)).getUTCDay();
-      const daysIn=new Date(Date.UTC(calYear,calMonth+1,0)).getUTCDate();
+    // Mini calendar removed - the full calendar now lives in the Calendar dock (Calendar Gatekeeper).
 
-      let head='<div class="cal-head">'
-        +'<button class="calnav" data-nav="y-1" aria-label="Previous year">&laquo;</button>'
-        +'<button class="calnav" data-nav="m-1" aria-label="Previous month">&lsaquo;</button>'
-        +'<div class="cal-title">'+monthName+' '+calYear+'</div>'
-        +'<button class="calnav" data-nav="m1" aria-label="Next month">&rsaquo;</button>'
-        +'<button class="calnav" data-nav="y1" aria-label="Next year">&raquo;</button>'
-        +'</div>';
-      let wd='<div class="cal-grid cal-wd">'+["Su","Mo","Tu","We","Th","Fr","Sa"].map(d=>'<div class="cal-wdh">'+d+'</div>').join("")+'</div>';
-      let cells="";
-      for(let i=0;i<startWd;i++) cells+='<div class="cal-cell empty"></div>';
-      for(let d=1;d<=daysIn;d++){
-        const ymd=calYear+'-'+String(calMonth+1).padStart(2,"0")+'-'+String(d).padStart(2,"0");
-        const items=tasksByDay[ymd]||[];
-        const catset=[]; items.forEach(t=>{ const c=t.category||"other"; if(catset.indexOf(c)===-1)catset.push(c); });
-        const dots=catset.slice(0,3).map(c=>'<i style="background:'+catMeta(c).color+'"></i>').join("");
-        let cls="cal-cell"; if(ymd===today)cls+=" today"; if(ymd===selectedDay)cls+=" sel"; if(items.length)cls+=" has";
-        const cr=CAL_RADII[(d-1)%CAL_RADII.length];
-        cells+='<button class="'+cls+'" data-day="'+ymd+'" style="border-radius:'+cr+'"><span class="dn">'+d+'</span><span class="dots">'+dots+'</span></button>';
-      }
-      let grid='<div class="cal-grid cal-days">'+cells+'</div>';
-
-      let overlay="";
-      if(selectedDay){
-        const items=(tasksByDay[selectedDay]||[]).slice().sort((a,b)=>(a.due_time||"").localeCompare(b.due_time||""));
-        const dlabel=new Date(selectedDay+"T12:00:00Z").toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"});
-        const listHtml = items.length ? items.map(t=>{ const m=catMeta(t.category);
-            return '<div class="cal-item"><span class="cal-dot" style="background:'+m.color+'"></span>'+(t.due_time?'<span class="cal-time">'+to12h(String(t.due_time).slice(0,5))+'</span>':'')+'<span class="cal-it">'+escapeHtml(t.title||"Untitled")+'</span></div>';
-          }).join("") : '<div class="cal-none">Nothing scheduled this day.</div>';
-        overlay='<div class="cal-pop"><div class="cal-pop-head"><button class="calback" data-back="1">&lsaquo; Calendar</button><span class="cal-pop-date">'+dlabel+'</span></div><div class="cal-pop-list">'+listHtml+'</div></div>';
-      }
-
-      host.innerHTML = head+wd+grid+overlay;
-      host.querySelectorAll(".calnav").forEach(b=>b.addEventListener("click",()=>{
-        const n=b.dataset.nav;
-        if(n==="m-1"){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} }
-        else if(n==="m1"){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} }
-        else if(n==="y-1") calYear--; else if(n==="y1") calYear++;
-        renderCalendar();
-      }));
-      host.querySelectorAll(".cal-cell[data-day]").forEach(b=>b.addEventListener("click",()=>{ selectedDay=b.dataset.day; renderCalendar(); }));
-      const back=host.querySelector(".calback"); if(back)back.addEventListener("click",()=>{ selectedDay=null; renderCalendar(); });
-    }
 
     function countUp(node,target){
       if(!node)return;
