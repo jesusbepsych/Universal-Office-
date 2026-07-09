@@ -4628,6 +4628,171 @@
     .rd-card-actions{grid-template-columns:1fr;}
   }
 
+
+  /* Reply Desk v5: inline compact draft preview under selected email */
+  .replydesk-panel.inline-reply-mode .rd-grid{
+    grid-template-columns:minmax(0,1fr) 260px!important;
+  }
+  .replydesk-panel.inline-reply-mode .rd-preview{
+    min-height:0!important;
+    max-height:690px;
+  }
+  .replydesk-panel.inline-reply-mode .rd-preview-body{
+    height:auto!important;
+    padding:16px!important;
+  }
+  .replydesk-panel.inline-reply-mode .rd-preview-body .rd-empty{
+    min-height:300px;
+  }
+  .rd-inline-preview{
+    margin-top:12px;
+    border-radius:14px;
+    border:1px solid rgba(64,159,255,.28);
+    background:
+      radial-gradient(ellipse at 100% 0%,rgba(64,159,255,.10),transparent 38%),
+      linear-gradient(180deg,rgba(6,13,27,.82),rgba(4,8,17,.90));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 28px -22px rgba(64,159,255,.95);
+    overflow:hidden;
+  }
+  .rd-inline-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border-bottom:1px solid rgba(132,160,214,.12);
+  }
+  .rd-inline-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(180,207,255,.76);
+  }
+  .rd-inline-title i{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#40f2bd;
+    box-shadow:0 0 12px rgba(64,242,189,.72);
+    flex:none;
+  }
+  .rd-inline-meta{
+    color:rgba(187,204,236,.55);
+    font-family:var(--mono);
+    font-size:10px;
+    white-space:nowrap;
+  }
+  .rd-inline-body{
+    padding:12px;
+    max-height:172px;
+    overflow:auto;
+    color:rgba(238,246,255,.88);
+    font-size:12.5px;
+    line-height:1.48;
+    white-space:pre-wrap;
+  }
+  .rd-inline-foot{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    padding:10px 12px 12px;
+    border-top:1px solid rgba(132,160,214,.10);
+    background:rgba(255,255,255,.018);
+  }
+  .rd-inline-btn{
+    border-radius:10px;
+    padding:9px 8px;
+    font-size:11px;
+    font-weight:800;
+    border:1px solid rgba(120,150,205,.18);
+    background:rgba(255,255,255,.035);
+    color:#eaf4ff;
+  }
+  .rd-inline-btn.approve{
+    color:#76ffd0;
+    border-color:rgba(64,242,189,.28);
+    background:rgba(64,242,189,.075);
+  }
+  .rd-inline-btn.edit{
+    color:#8ed0ff;
+    border-color:rgba(64,159,255,.28);
+    background:rgba(64,159,255,.075);
+  }
+  .rd-inline-btn.clear{
+    color:#ff9da8;
+    border-color:rgba(255,107,107,.30);
+    background:rgba(255,107,107,.075);
+  }
+  .rd-side-summary{
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .rd-side-card{
+    border-radius:15px;
+    border:1px solid rgba(132,160,214,.14);
+    background:rgba(255,255,255,.025);
+    padding:14px;
+  }
+  .rd-side-card .rd-kicker{
+    display:block;
+    margin-bottom:8px;
+  }
+  .rd-side-big{
+    font-family:var(--mono);
+    font-size:30px;
+    color:#8ed0ff;
+    font-weight:800;
+    line-height:1;
+  }
+  .rd-side-copy{
+    margin-top:8px;
+    color:rgba(203,219,249,.68);
+    font-size:12px;
+    line-height:1.38;
+  }
+  .rd-side-route{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    color:rgba(232,242,255,.86);
+    font-size:12px;
+  }
+  .rd-side-route span{
+    display:grid;
+    place-items:center;
+    width:30px;
+    height:30px;
+    border-radius:11px;
+    border:1px solid rgba(64,159,255,.22);
+    background:rgba(64,159,255,.08);
+  }
+  .rd-card.active{
+    margin-bottom:2px;
+  }
+  @media(max-width:1220px){
+    .replydesk-panel.inline-reply-mode .rd-grid{
+      grid-template-columns:1fr!important;
+    }
+    .replydesk-panel.inline-reply-mode .rd-preview{
+      display:none!important;
+    }
+  }
+  @media(max-width:900px){
+    .rd-inline-foot{
+      grid-template-columns:1fr;
+    }
+    .rd-inline-body{
+      max-height:220px;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -4679,7 +4844,7 @@
           <div class="filters" id="filters"></div>
           <div id="agenda"></div>
         </div>
-        <div class="panel replydesk-panel hidden" id="replydesk-panel" aria-hidden="true">
+        <div class="panel replydesk-panel inline-reply-mode hidden" id="replydesk-panel" aria-hidden="true">
           <div class="replydesk-shell">
             <div class="rd-top">
               <div class="rd-title-block">
@@ -6490,6 +6655,13 @@
         return p.indexOf("high")>=0?"high":(p.indexOf("low")>=0?"low":"medium");
       }
       function formatBody(s){ return escapeHtml(String(s||"")); }
+      function inlinePreviewHtml(d){
+        return '<div class="rd-inline-preview">'
+          + '<div class="rd-inline-head"><div class="rd-inline-title"><i></i><span>Draft preview</span></div><div class="rd-inline-meta">'+escapeHtml(String(d.confidence||"—"))+'% confidence · '+escapeHtml(d.scanned||d.created_at||"recent")+'</div></div>'
+          + '<div class="rd-inline-body">'+formatBody(d.body||d.draft||d.excerpt||"Draft preview unavailable.")+'</div>'
+          + '<div class="rd-inline-foot"><button class="rd-inline-btn approve" data-rd-act="approve" data-reply-id="'+escapeHtml(d.id)+'">✓ Approve</button><button class="rd-inline-btn edit" data-rd-act="edit" data-reply-id="'+escapeHtml(d.id)+'">✎ Edit</button><button class="rd-inline-btn clear" data-rd-act="clear" data-reply-id="'+escapeHtml(d.id)+'">🗑 Clear</button></div>'
+        + '</div>';
+      }
       function updateReplyBadge(){
         var b=document.getElementById("reply-draft-badge");
         if(!b) return;
@@ -6514,10 +6686,12 @@
         if(!selectedReplyDraftId || !list.some(function(d){return String(d.id)===String(selectedReplyDraftId);})) selectedReplyDraftId=list[0].id;
         host.innerHTML=list.map(function(d){
           var pc=prioClass(d.priority);
-          return '<article class="rd-card '+(String(d.id)===String(selectedReplyDraftId)?"active":"")+'" data-reply-id="'+escapeHtml(d.id)+'">'
+          var active=String(d.id)===String(selectedReplyDraftId);
+          return '<article class="rd-card '+(active?"active":"")+'" data-reply-id="'+escapeHtml(d.id)+'">'
             + '<div class="rd-card-top"><div class="rd-avatar">'+escapeHtml(initials(d.sender||d.from))+'</div><div><h3>'+escapeHtml(d.sender||d.from||"Unknown sender")+'</h3><div class="rd-sub">'+escapeHtml(d.subject||"No subject")+'</div></div><span class="rd-priority '+pc+'">'+escapeHtml(pc)+'</span></div>'
             + '<div class="rd-excerpt">'+escapeHtml(d.excerpt||d.summary||d.body||"Draft ready for review.")+'</div>'
             + '<div class="rd-card-actions"><button class="rd-mini-btn approve" data-rd-act="approve" data-reply-id="'+escapeHtml(d.id)+'">✓ Approve</button><button class="rd-mini-btn edit" data-rd-act="edit" data-reply-id="'+escapeHtml(d.id)+'">✎ Edit</button><button class="rd-mini-btn clear" data-rd-act="clear" data-reply-id="'+escapeHtml(d.id)+'">🗑 Clear</button></div>'
+            + (active?inlinePreviewHtml(d):'')
           + '</article>';
         }).join("");
         host.querySelectorAll(".rd-card").forEach(function(card){
@@ -6545,17 +6719,12 @@
         }
         selectedReplyDraftId=d.id;
         host.innerHTML=
-          '<div class="rd-meta-grid">'
-            + '<span>To</span><strong>'+escapeHtml(d.sender||d.from||"Unknown")+' &lt;'+escapeHtml(d.email||d.to||"")+'&gt;</strong>'
-            + '<span>Subject</span><strong>'+escapeHtml(d.subject||"No subject")+'</strong>'
-            + '<span>Reference</span><a href="#" onclick="return false;">'+escapeHtml(d.reference||d.subject||"Email thread")+'</a>'
-          + '</div>'
-          + '<div class="rd-draft-text">'+formatBody(d.body||d.draft||d.excerpt||"Draft preview unavailable.")+'</div>'
-          + '<div class="rd-ai-row"><div>Suggested by<strong>Dashboard AI</strong></div><div>Confidence<strong>'+escapeHtml(String(d.confidence||"—"))+'%</strong></div><div>Last scanned<strong>'+escapeHtml(d.scanned||d.created_at||"recently")+'</strong></div></div>'
-          + '<div class="rd-draft-footer"><button class="rd-big-btn approve" data-rd-main="approve">✈ Approve & Send to Drafts</button><button class="rd-big-btn edit" data-rd-main="edit">✎ Edit in Composer</button><button class="rd-big-btn clear" data-rd-main="clear">🗑 Clear Draft</button></div>';
-        host.querySelectorAll("[data-rd-main]").forEach(function(btn){
-          btn.addEventListener("click",function(){ actionDraft(d.id,btn.getAttribute("data-rd-main")); });
-        });
+          '<div class="rd-side-summary">'
+            + '<div class="rd-side-card"><span class="rd-kicker">Selected</span><div class="rd-side-route"><span>✉</span><strong>'+escapeHtml(d.sender||d.from||"Unknown")+'</strong></div><div class="rd-side-copy">'+escapeHtml(d.subject||"No subject")+'</div></div>'
+            + '<div class="rd-side-card"><span class="rd-kicker">Confidence</span><div class="rd-side-big">'+escapeHtml(String(d.confidence||"—"))+'%</div><div class="rd-side-copy">Draft preview now opens directly under the selected email in the queue.</div></div>'
+            + '<div class="rd-side-card"><span class="rd-kicker">Route</span><div class="rd-side-route"><span>G</span><strong>Gmail Scan</strong></div><div class="rd-side-copy">↓</div><div class="rd-side-route"><span>✎</span><strong>Gmail Draft</strong></div></div>'
+            + '<div class="rd-side-card"><span class="rd-kicker">Last scanned</span><div class="rd-side-copy">'+escapeHtml(d.scanned||d.created_at||"recently")+'</div></div>'
+          + '</div>';
       }
       window.renderReplyDesk=function(){
         var list=drafts();
