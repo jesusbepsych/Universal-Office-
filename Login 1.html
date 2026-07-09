@@ -4867,6 +4867,51 @@
     }
   }
 
+
+  /* Signal Garden pod delete controls */
+  .sg-delete{
+    position:absolute;
+    left:10px;
+    bottom:12px;
+    z-index:7;
+    width:22px;
+    height:22px;
+    display:grid;
+    place-items:center;
+    border-radius:8px;
+    border:1px solid rgba(255,107,107,.26);
+    background:rgba(50,8,14,.56);
+    color:rgba(255,157,168,.88);
+    padding:0;
+    opacity:.72;
+    transition:opacity .16s ease, border-color .16s ease, background .16s ease, transform .16s ease;
+  }
+  .sg-delete:hover{
+    opacity:1;
+    border-color:rgba(255,107,107,.52);
+    background:rgba(80,14,22,.68);
+    transform:translateY(-1px);
+  }
+  .sg-delete svg{
+    width:12px;
+    height:12px;
+  }
+  .sg-drawer-delete{
+    width:100%;
+    margin-top:10px;
+    border-radius:12px;
+    padding:10px 12px;
+    border:1px solid rgba(255,107,107,.28);
+    background:rgba(255,107,107,.07);
+    color:#ff9da8;
+    font-size:12px;
+    font-weight:800;
+  }
+  .sg-drawer-delete:hover{
+    border-color:rgba(255,107,107,.48);
+    background:rgba(255,107,107,.11);
+  }
+
 </style>
 </head>
 <body>
@@ -5728,6 +5773,13 @@
       root.querySelectorAll(".hex[data-item]").forEach(h=>h.addEventListener("click",ev=>{ ev.stopPropagation(); toggleItem(h.dataset.item); }));
       root.querySelectorAll("[data-open]").forEach(c=>c.addEventListener("click",()=>openCell(c.dataset.open)));
       root.querySelectorAll("[data-rename]").forEach(b=>b.addEventListener("click",ev=>{ ev.stopPropagation(); openRename(b.dataset.rename); }));
+      root.querySelectorAll("[data-deletepod]").forEach(b=>b.addEventListener("click",ev=>{
+        ev.stopPropagation();
+        const id=b.dataset.deletepod;
+        const f=folders.find(x=>String(x.id)===String(id));
+        const name=f&&f.name?f.name:"this pod";
+        if(confirm("Delete “"+name+"” and all items inside it?")) deleteFolder(id);
+      }));
       root.querySelectorAll("[data-add]").forEach(addc=>addc.addEventListener("click",openCreate));
       root.querySelectorAll("[data-viewall]").forEach(btn=>btn.addEventListener("click",openMatrixAll));
     }
@@ -6328,6 +6380,7 @@
         var c=rgbOf(f.category);
         return '<div class="sg-pod sg-pod-'+((i%visibleCount)+1)+'" style="--c:'+c+'" data-open="'+f.id+'" data-real-index="'+realIndex+'">'
           + '<button class="sg-edit" data-rename="'+f.id+'" aria-label="Rename pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
+          + '<button class="sg-delete" data-deletepod="'+f.id+'" aria-label="Delete pod"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg></button>'
           + '<div class="sg-icon">'+matrixIcon(f.category)+'</div>'
           + '<div class="sg-name">'+escapeHtml(f.name)+'</div>'
           + '<div class="sg-count">'+d+' / '+items.length+'</div>'
@@ -6520,6 +6573,7 @@
             + '<div class="sg-drawer-section"><div class="sg-drawer-label">Completion seeds</div>'+drawerSeedsHtml(f)+'</div>'
             + '<div class="sg-drawer-section"><div class="sg-drawer-label">Incomplete items</div><div class="sg-drawer-list">'+list+'</div></div>'
             + '<div class="sg-drawer-add"><input data-sg-input placeholder="Add to this pod…" autocomplete="off"><button data-sg-add>Add</button></div>'
+            + '<button class="sg-drawer-delete" data-sg-deletepod type="button">Delete pod</button>'
           + '</div>';
         shell.appendChild(drawer);
 
@@ -6528,6 +6582,14 @@
         drawer.querySelector("[data-sg-close]").addEventListener("click",close);
         drawer.querySelector("[data-sg-add]").addEventListener("click",add);
         drawer.querySelector("[data-sg-input]").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); add(); } });
+        var delPod=drawer.querySelector("[data-sg-deletepod]");
+        if(delPod) delPod.addEventListener("click",function(ev){
+          ev.stopPropagation();
+          if(confirm("Delete “"+(f.name||"this pod")+"” and all items inside it?")){
+            close();
+            deleteFolder(f.id);
+          }
+        });
         drawer.querySelectorAll("[data-drawer-tog]").forEach(function(x){ x.addEventListener("click",function(ev){ ev.stopPropagation(); toggleItem(x.getAttribute("data-drawer-tog")); }); });
         drawer.querySelectorAll("[data-drawer-del]").forEach(function(x){ x.addEventListener("click",function(ev){ ev.stopPropagation(); deleteItem(x.getAttribute("data-drawer-del")); }); });
       }
