@@ -6875,10 +6875,36 @@
       ];
 
       function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
-      function drafts(){
-        var arr=window.replyDrafts||window.emailReplyDrafts||window.gmailReplyDrafts||[];
-        return Array.isArray(arr)&&arr.length?arr:defaultReplyDrafts;
+      var sampleDrafts=defaultReplyDrafts.slice();
+      var realDrafts=[];
+      function mapRow(r){
+        var p=r.payload||{};
+        var who=p.to||String(r.title||"").replace(/^Reply to\s*/i,"").split(/\bre:/i)[0].trim()||"Recipient";
+        var when=r.created_at?new Date(r.created_at).toLocaleString():"recent";
+        return {
+          id:r.id, _real:true, status:r.status||"pending",
+          sender:who, email:p.to||"",
+          subject:p.subject||r.title||"Draft reply", reference:r.title||"",
+          priority:"medium",
+          excerpt:r.detail||"Draft ready in Gmail.",
+          body:(p&&p.body)?p.body:(r.detail||"The full draft is in your Gmail Drafts folder, ready to review and send."),
+          confidence:"—", scanned:when, created_at:when
+        };
       }
+      async function loadReplyDraftsFromSupabase(){
+        if(typeof client==="undefined"||!client) return;
+        try{
+          var res=await client.from("staged_actions")
+            .select("id,title,detail,payload,status,created_at")
+            .eq("kind","reply_draft").eq("status","pending")
+            .order("created_at",{ascending:false});
+          if(!res.error&&Array.isArray(res.data)) realDrafts=res.data.map(mapRow);
+        }catch(e){}
+        window.renderReplyDesk();
+      }
+      window.loadReplyDrafts=loadReplyDraftsFromSupabase;
+      function drafts(){ return realDrafts.concat(sampleDrafts); }
+      function findDraft(id){ var a=drafts(); for(var i=0;i<a.length;i++){ if(String(a[i].id)===String(id)) return a[i]; } return null; }
       function initials(name){
         return String(name||"?").split(/\s+/).filter(Boolean).slice(0,2).map(function(x){return x[0];}).join("").toUpperCase()||"?";
       }
@@ -6902,9 +6928,26 @@
         b.hidden=n===0;
       }
       function actionDraft(id,action){
-        var ev=new CustomEvent("replyDraftAction",{detail:{id:id,action:action}});
-        window.dispatchEvent(ev);
-        toast && toast(action==="approve"?"Reply draft approved.":action==="clear"?"Reply draft cleared.":"Opening editor.");
+        var d=findDraft(id);
+        if(!d) return;
+        if(action==="edit"){ toast && toast(d._real?"Open Gmail to edit this draft.":"Sample draft, editing is off."); return; }
+        if(!d._real){
+          sampleDrafts=sampleDrafts.filter(function(x){return String(x.id)!==String(id);});
+          if(String(selectedReplyDraftId)===String(id)) selectedReplyDraftId=null;
+          window.renderReplyDesk();
+          toast && toast(action==="approve"?"Sample approved (removed).":"Sample cleared.");
+          return;
+        }
+        var prev=realDrafts.slice();
+        realDrafts=realDrafts.filter(function(x){return String(x.id)!==String(id);});
+        if(String(selectedReplyDraftId)===String(id)) selectedReplyDraftId=null;
+        window.renderReplyDesk();
+        if(typeof client==="undefined"||!client){ toast && toast("Not connected."); return; }
+        var newStatus=action==="approve"?"approved":"archived";
+        client.from("staged_actions").update({status:newStatus}).eq("id",id).then(function(r){
+          if(r&&r.error){ realDrafts=prev; window.renderReplyDesk(); toast && toast("Couldn't update: "+r.error.message); }
+          else { toast && toast(action==="approve"?"Reply approved. Send it from Gmail.":"Reply cleared."); }
+        });
       }
       function renderList(list){
         var host=document.getElementById("reply-draft-list");
@@ -6991,6 +7034,7 @@
             if(ds) ds.classList.remove("on");
             document.querySelectorAll(".dock-btn").forEach(function(b){ if(b!==btn) b.classList.remove("on"); });
             window.renderReplyDesk();
+            loadReplyDraftsFromSupabase();
             setTimeout(function(){ panel.scrollIntoView({behavior:"smooth",block:"start"}); },40);
           }
         }
@@ -7001,6 +7045,7 @@
         });
         updateReplyBadge();
         window.renderReplyDesk();
+        setTimeout(loadReplyDraftsFromSupabase,2000);
       });
     })();
   </script>
