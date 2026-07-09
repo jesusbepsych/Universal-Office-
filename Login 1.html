@@ -5401,6 +5401,19 @@
     .cg-event{font-size:9.5px;}
   }
 
+
+  /* Calendar Gatekeeper v12 placement fix: replace agenda in main window, never stack below it */
+  .console-primary.caldesk-mode #agenda-panel{
+    display:none!important;
+  }
+  .console-primary.caldesk-mode #caldesk-panel{
+    display:block!important;
+    margin-top:0!important;
+  }
+  .console-primary.caldesk-mode{
+    gap:0!important;
+  }
+
 </style>
 </head>
 <body>
@@ -7463,6 +7476,10 @@
           if(primary) primary.classList.toggle("replydesk-mode",!!on);
           if(btn) btn.classList.toggle("on",!!on);
           if(on){
+            var cal=document.getElementById("caldesk-panel");
+            if(cal) cal.classList.add("hidden");
+            var calbtn=document.getElementById("dock-caldesk");
+            if(calbtn) calbtn.classList.remove("on");
             if(window.setActionPanel) window.setActionPanel(false);
             var sig=document.getElementById("signals-panel");
             if(sig) sig.classList.remove("open");
@@ -7636,6 +7653,11 @@
 
         function setCalDesk(on){
           if(!panel||!agenda) return;
+          if(on){
+            // Close other main-window modes first so they do not re-open the agenda after Calendar hides it.
+            if(window.setReplyDesk) window.setReplyDesk(false);
+            if(window.setActionPanel) window.setActionPanel(false);
+          }
           panel.classList.toggle("hidden",!on);
           panel.setAttribute("aria-hidden",on?"false":"true");
           agenda.classList.toggle("hidden",!!on);
@@ -7643,13 +7665,12 @@
           if(primary) primary.classList.toggle("caldesk-mode",!!on);
           if(btn) btn.classList.toggle("on",!!on);
           if(on){
-            if(window.setReplyDesk) window.setReplyDesk(false);
-            if(window.setActionPanel) window.setActionPanel(false);
             var sig=document.getElementById("signals-panel");
             if(sig) sig.classList.remove("open");
             var ds=document.getElementById("dock-signals");
             if(ds) ds.classList.remove("on");
             document.querySelectorAll(".dock-btn").forEach(function(b){ if(b!==btn) b.classList.remove("on"); });
+            if(btn) btn.classList.add("on");
             renderCalDesk();
             setTimeout(function(){ panel.scrollIntoView({behavior:"smooth",block:"start"}); },40);
           }
