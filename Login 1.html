@@ -5516,6 +5516,174 @@
     .cg-gatekeeper{min-height:350px!important;}
   }
 
+
+  /* Calendar Gatekeeper v14: week view, filter menu, selected-day sidebar */
+  .cg-filter{position:relative;}
+  .cg-filter-menu{
+    position:absolute;
+    z-index:80;
+    right:22px;
+    top:104px;
+    width:230px;
+    border-radius:15px;
+    border:1px solid rgba(132,160,214,.22);
+    background:linear-gradient(180deg,rgba(12,20,38,.96),rgba(5,9,18,.98));
+    box-shadow:0 22px 60px -34px rgba(0,0,0,.9),0 0 46px -34px rgba(106,166,255,.95);
+    padding:10px;
+  }
+  .cg-filter-menu .fg-title{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(190,208,240,.62);
+    margin:4px 5px 8px;
+  }
+  .cg-filter-menu label{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:0;
+    padding:8px 7px;
+    border-radius:10px;
+    color:rgba(230,240,255,.82);
+    font-size:12px;
+  }
+  .cg-filter-menu label:hover{
+    background:rgba(255,255,255,.045);
+  }
+  .cg-filter-menu input{
+    accent-color:#6aa6ff;
+  }
+  .cg-fdot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:rgb(var(--frgb,106,166,255));
+    box-shadow:0 0 10px rgba(var(--frgb,106,166,255),.65);
+  }
+  .cg-filter-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-top:8px;
+  }
+  .cg-filter-actions button{
+    border-radius:9px;
+    padding:8px;
+    font-size:11px;
+    font-weight:800;
+    border:1px solid rgba(132,160,214,.16);
+    background:rgba(255,255,255,.035);
+    color:rgba(226,238,255,.82);
+  }
+  .cg-filter-actions button:first-child{
+    color:#7ff0d0;
+    border-color:rgba(79,209,197,.22);
+    background:rgba(79,209,197,.07);
+  }
+  .cg-week{
+    flex:1;
+    min-height:0;
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    border:1px solid rgba(120,150,205,.13);
+    border-radius:14px;
+    overflow:hidden;
+    background:rgba(2,6,13,.20);
+  }
+  .cg-week-day{
+    min-width:0;
+    border-right:1px solid rgba(120,150,205,.10);
+    padding:11px 9px;
+    overflow:auto;
+    overscroll-behavior:contain;
+  }
+  .cg-week-day:last-child{border-right:0;}
+  .cg-week-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:10px;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(120,150,205,.10);
+  }
+  .cg-week-name{
+    font-family:var(--mono);
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.10em;
+    color:rgba(174,190,224,.58);
+  }
+  .cg-week-num{
+    font-family:var(--mono);
+    font-size:15px;
+    color:#eef7ff;
+  }
+  .cg-week-day.today{
+    background:radial-gradient(ellipse at 50% 0%,rgba(78,147,255,.18),transparent 58%);
+  }
+  .cg-week-day.selected{
+    box-shadow:inset 0 0 0 1px rgba(110,188,255,.72);
+  }
+  .cg-week .cg-event{
+    white-space:normal;
+    line-height:1.25;
+    margin-bottom:7px!important;
+  }
+  .cg-agenda-placeholder{
+    flex:1;
+    display:grid;
+    place-items:center;
+    border:1px dashed rgba(132,160,214,.18);
+    border-radius:14px;
+    color:rgba(205,220,248,.56);
+    font-size:13px;
+    text-align:center;
+    padding:24px;
+  }
+  .cg-gk-tabs button.day-active{
+    color:#8ed0ff;
+    border-color:rgba(78,147,255,.30);
+  }
+  .cg-confirmed-card{
+    border-radius:14px;
+    border:1px solid rgba(132,160,214,.16);
+    background:
+      radial-gradient(ellipse at 100% 0%,rgba(var(--crgb,106,166,255),.10),transparent 40%),
+      linear-gradient(180deg,rgba(13,23,42,.78),rgba(7,12,23,.88));
+    padding:12px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  }
+  .cg-confirmed-tag{
+    display:inline-block;
+    margin-bottom:6px;
+    padding:3px 6px;
+    border-radius:7px;
+    background:rgba(var(--crgb,106,166,255),.13);
+    border:1px solid rgba(var(--crgb,106,166,255),.22);
+    color:rgb(var(--crgb,106,166,255));
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:800;
+  }
+  .cg-confirmed-title{
+    font-family:var(--disp);
+    color:#f0f6ff;
+    font-size:14px;
+    font-weight:700;
+    line-height:1.18;
+    margin-bottom:6px;
+  }
+  .cg-confirmed-meta{
+    color:rgba(196,213,244,.66);
+    font-family:var(--mono);
+    font-size:10.5px;
+    line-height:1.5;
+  }
+
 </style>
 </head>
 <body>
@@ -5630,11 +5798,11 @@
                   <button class="cg-month-title" id="cg-month-title" type="button">Month</button>
                 </div>
                 <div class="cg-view-toggle">
-                  <button type="button">Week</button>
-                  <button type="button" class="on">Month</button>
-                  <button type="button">Agenda</button>
+                  <button type="button" id="cg-week-view">Week</button>
+                  <button type="button" class="on" id="cg-month-view">Month</button>
+                  <button type="button" id="cg-agenda-view">Agenda</button>
                 </div>
-                <button class="cg-filter" type="button">☷ Filter</button>
+                <button class="cg-filter" id="cg-filter-btn" type="button">☷ Filter</button><div class="cg-filter-menu hidden" id="cg-filter-menu"></div>
               </div>
               <div class="cg-calendar" id="cg-calendar"></div>
             </div>
@@ -5648,8 +5816,8 @@
                 </div>
               </div>
               <div class="cg-gk-tabs">
-                <button class="on" type="button">Pending <span id="cg-pending-count">(0)</span></button>
-                <button type="button">Recent <span id="cg-recent-count">(0)</span></button>
+                <button class="on" type="button" id="cg-pending-tab">Pending <span id="cg-pending-count">(0)</span></button>
+                <button type="button" id="cg-day-tab">Selected Day <span id="cg-day-count">(0)</span></button>
               </div>
               <div class="cg-draft-list" id="cg-draft-list"></div>
               <button class="cg-view-all" id="cg-view-all" type="button">View all staged events ›</button>
@@ -7609,8 +7777,15 @@
   <script>
     (function(){
       var cgYear=null, cgMonth=null, cgSelected=null;
+      var cgView="month";
+      var cgSidebarMode="pending";
+      var cgFilters={};
+      var cgFilterReady=false;
 
       function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
+      function pad2(n){ return String(n).padStart(2,"0"); }
+      function makeYMD(y,m,d){ return y+"-"+pad2(m+1)+"-"+pad2(d); }
+      function parseYMD(ymd){ var p=String(ymd||"").split("-").map(Number); return {y:p[0],m:(p[1]||1)-1,d:p[2]||1}; }
       function rgbFromColor(hex){
         var h=String(hex||"#6aa6ff").replace("#","");
         if(h.length===3) h=h.split("").map(function(x){return x+x;}).join("");
@@ -7647,13 +7822,83 @@
         b.textContent=n>99?"99+":String(n);
         b.hidden=n===0;
       }
-      function renderCalGatekeeper(){
+      function allCategoryKeys(){
+        var keys=Object.keys(CATEGORY_META||{});
+        var map=window.tasksByDay||tasksByDay||{};
+        Object.keys(map||{}).forEach(function(day){
+          (map[day]||[]).forEach(function(t){ if(t.category && keys.indexOf(t.category)===-1) keys.push(t.category); });
+        });
+        return keys;
+      }
+      function ensureFilters(){
+        if(cgFilterReady) return;
+        allCategoryKeys().forEach(function(k){ cgFilters[k]=true; });
+        cgFilterReady=true;
+      }
+      function passesFilter(t){
+        ensureFilters();
+        var c=(t&&t.category)||"other";
+        if(!(c in cgFilters)) cgFilters[c]=true;
+        return cgFilters[c]!==false;
+      }
+      function taskOnDay(ymd){
+        var map=window.tasksByDay||tasksByDay||{};
+        var items=(map&&map[ymd]) ? map[ymd].slice().sort(function(a,b){return String(a.due_time||"").localeCompare(String(b.due_time||""));}) : [];
+        return items.filter(passesFilter);
+      }
+      function renderFilterMenu(){
+        ensureFilters();
+        var menu=document.getElementById("cg-filter-menu");
+        if(!menu) return;
+        var keys=allCategoryKeys();
+        menu.innerHTML='<div class="fg-title">Show categories</div>'
+          + keys.map(function(k){
+            var m=catMeta(k), rgb=rgbFromColor(m.color);
+            return '<label><input type="checkbox" data-cgf="'+escapeHtml(k)+'" '+(cgFilters[k]!==false?'checked':'')+'><span class="cg-fdot" style="--frgb:'+rgb+'"></span><span>'+escapeHtml(m.label||k)+'</span></label>';
+          }).join("")
+          + '<div class="cg-filter-actions"><button type="button" data-cg-all>All</button><button type="button" data-cg-none>None</button></div>';
+        menu.querySelectorAll("[data-cgf]").forEach(function(ch){
+          ch.addEventListener("change",function(){
+            cgFilters[ch.getAttribute("data-cgf")]=ch.checked;
+            renderCalendarDesk();
+            if(cgSidebarMode==="day") renderConfirmedForSelectedDay();
+          });
+        });
+        var all=menu.querySelector("[data-cg-all]");
+        var none=menu.querySelector("[data-cg-none]");
+        if(all) all.addEventListener("click",function(){ keys.forEach(function(k){cgFilters[k]=true;}); renderFilterMenu(); renderCalendarDesk(); if(cgSidebarMode==="day") renderConfirmedForSelectedDay(); });
+        if(none) none.addEventListener("click",function(){ keys.forEach(function(k){cgFilters[k]=false;}); renderFilterMenu(); renderCalendarDesk(); if(cgSidebarMode==="day") renderConfirmedForSelectedDay(); });
+      }
+      function updateViewButtons(){
+        var w=document.getElementById("cg-week-view"), m=document.getElementById("cg-month-view"), a=document.getElementById("cg-agenda-view");
+        [w,m,a].forEach(function(b){ if(b) b.classList.remove("on"); });
+        if(cgView==="week"&&w) w.classList.add("on");
+        else if(cgView==="agenda"&&a) a.classList.add("on");
+        else if(m) m.classList.add("on");
+      }
+      function setSelectedDay(ymd){
+        cgSelected=ymd;
+        cgSidebarMode="day";
+        var p=parseYMD(ymd); cgYear=p.y; cgMonth=p.m;
+        renderCalDesk();
+      }
+      function updateDayTab(){
+        var tab=document.getElementById("cg-day-tab");
+        var count=document.getElementById("cg-day-count");
+        if(!tab) return;
+        var selected=cgSelected||pacificYMD();
+        var d=parseYMD(selected);
+        var label=new Date(d.y,d.m,d.d).toLocaleString("en-US",{month:"short",day:"numeric"});
+        var n=taskOnDay(selected).length;
+        tab.childNodes[0].nodeValue=label+" ";
+        if(count) count.textContent="("+n+")";
+        tab.classList.toggle("day-active",cgSidebarMode==="day");
+      }
+      function renderPendingDrafts(){
         var host=document.getElementById("cg-draft-list");
         var pc=document.getElementById("cg-pending-count");
-        var rc=document.getElementById("cg-recent-count");
         var drafts=stagedDrafts();
         if(pc) pc.textContent="("+drafts.length+")";
-        if(rc) rc.textContent="("+(window.calendarRecentDraftsCount||0)+")";
         updateCalBadge();
         if(!host) return;
         if(!drafts.length){
@@ -7681,9 +7926,78 @@
           });
         });
       }
-      function taskOnDay(ymd){
-        var map=window.tasksByDay||tasksByDay||{};
-        return (map&&map[ymd]) ? map[ymd].slice().sort(function(a,b){return String(a.due_time||"").localeCompare(String(b.due_time||""));}) : [];
+      function renderConfirmedForSelectedDay(){
+        var host=document.getElementById("cg-draft-list");
+        var day=cgSelected||pacificYMD();
+        var items=taskOnDay(day);
+        if(!host) return;
+        if(!items.length){
+          host.innerHTML='<div class="cg-empty"><div><strong>No confirmed events.</strong><span>No already-confirmed calendar items are showing for this selected day.</span></div></div>';
+          return;
+        }
+        host.innerHTML=items.map(function(t){
+          var m=catMeta(t.category||"other"), rgb=rgbFromColor(m.color);
+          var time=t.due_time?to12h(String(t.due_time).slice(0,5)):(t.all_day?"All day":"Time pending");
+          return '<article class="cg-confirmed-card" style="--crgb:'+rgb+'">'
+            + '<span class="cg-confirmed-tag">'+escapeHtml(m.label||"Event")+'</span>'
+            + '<div class="cg-confirmed-title">'+escapeHtml(t.title||"Untitled")+'</div>'
+            + '<div class="cg-confirmed-meta">'+escapeHtml(day)+' · '+escapeHtml(time)+'<br>Already confirmed on calendar</div>'
+          + '</article>';
+        }).join("");
+      }
+      function renderCalGatekeeper(){
+        updateDayTab();
+        var ptab=document.getElementById("cg-pending-tab"), dtab=document.getElementById("cg-day-tab");
+        if(ptab) ptab.classList.toggle("on",cgSidebarMode==="pending");
+        if(dtab) dtab.classList.toggle("on",cgSidebarMode==="day");
+        if(cgSidebarMode==="day") renderConfirmedForSelectedDay();
+        else renderPendingDrafts();
+      }
+      function eventHtml(t){
+        var rgb=eventColor(t);
+        var time=t.due_time?to12h(String(t.due_time).slice(0,5)):"";
+        return '<span class="cg-event" style="--evrgb:'+rgb+'">'+escapeHtml(t.title||"Untitled")+(time?'<small>'+escapeHtml(time)+'</small>':'')+'</span>';
+      }
+      function renderMonth(host){
+        var today=pacificYMD();
+        var startWd=new Date(Date.UTC(cgYear,cgMonth,1)).getUTCDay();
+        var daysIn=new Date(Date.UTC(cgYear,cgMonth+1,0)).getUTCDate();
+        var prevDays=new Date(Date.UTC(cgYear,cgMonth,0)).getUTCDate();
+        var cells=[];
+        function cell(ymd,day,muted){
+          var items=taskOnDay(ymd);
+          var html=items.slice(0,2).map(eventHtml).join("");
+          if(items.length>2) html+='<div class="cg-more">+'+(items.length-2)+' more</div>';
+          var cls='cg-day'+(muted?' muted':'')+(ymd===today?' today':'')+(ymd===cgSelected?' selected':'');
+          return '<button class="'+cls+'" type="button" data-cg-day="'+ymd+'"><span class="cg-daynum">'+day+'</span>'+html+'</button>';
+        }
+        for(var i=0;i<startWd;i++){
+          var d=prevDays-startWd+i+1, pm=cgMonth===0?11:cgMonth-1, py=cgMonth===0?cgYear-1:cgYear;
+          cells.push(cell(makeYMD(py,pm,d),d,true));
+        }
+        for(var d=1;d<=daysIn;d++) cells.push(cell(makeYMD(cgYear,cgMonth,d),d,false));
+        var next=1;
+        while(cells.length<42){
+          var nm=cgMonth===11?0:cgMonth+1, ny=cgMonth===11?cgYear+1:cgYear;
+          cells.push(cell(makeYMD(ny,nm,next),next,true)); next++;
+        }
+        host.innerHTML='<div class="cg-wd">'+["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(function(x){return "<div>"+x+"</div>";}).join("")+'</div><div class="cg-days">'+cells.join("")+'</div>';
+      }
+      function renderWeek(host){
+        var today=pacificYMD();
+        var base=parseYMD(cgSelected||makeYMD(cgYear,cgMonth,1));
+        var dt=new Date(base.y,base.m,base.d);
+        var sun=new Date(dt); sun.setDate(dt.getDate()-dt.getDay());
+        var names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+        var cards=[];
+        for(var i=0;i<7;i++){
+          var d=new Date(sun); d.setDate(sun.getDate()+i);
+          var ymd=makeYMD(d.getFullYear(),d.getMonth(),d.getDate());
+          var items=taskOnDay(ymd);
+          var cls='cg-week-day'+(ymd===today?' today':'')+(ymd===cgSelected?' selected':'');
+          cards.push('<button class="'+cls+'" type="button" data-cg-day="'+ymd+'"><div class="cg-week-head"><span class="cg-week-name">'+names[i]+'</span><span class="cg-week-num">'+d.getDate()+'</span></div>'+items.map(eventHtml).join("")+(items.length?'"':'<div class="cg-more">No events</div>')+'</button>');
+        }
+        host.innerHTML='<div class="cg-week">'+cards.join("")+'</div>';
       }
       function renderCalendarDesk(){
         var host=document.getElementById("cg-calendar");
@@ -7691,52 +8005,21 @@
         var today=pacificYMD();
         if(cgYear==null){
           var p=today.split("-");
-          cgYear=+p[0]; cgMonth=+p[1]-1;
+          cgYear=+p[0]; cgMonth=+p[1]-1; cgSelected=today;
         }
         var monthName=new Date(cgYear,cgMonth,1).toLocaleString("en-US",{month:"long"});
         var title=document.getElementById("cg-month-title");
         if(title) title.textContent=monthName+" "+cgYear;
-        var startWd=new Date(Date.UTC(cgYear,cgMonth,1)).getUTCDay();
-        var daysIn=new Date(Date.UTC(cgYear,cgMonth+1,0)).getUTCDate();
-        var prevDays=new Date(Date.UTC(cgYear,cgMonth,0)).getUTCDate();
-        var cells=[];
-        function cell(ymd,day,muted){
-          var items=taskOnDay(ymd);
-          var html=items.slice(0,2).map(function(t){
-            var rgb=eventColor(t);
-            var time=t.due_time?to12h(String(t.due_time).slice(0,5)):"";
-            return '<span class="cg-event" style="--evrgb:'+rgb+'">'+escapeHtml(t.title||"Untitled")+(time?'<small>'+escapeHtml(time)+'</small>':'')+'</span>';
-          }).join("");
-          if(items.length>2) html+='<div class="cg-more">+'+(items.length-2)+' more</div>';
-          var cls='cg-day'+(muted?' muted':'')+(ymd===today?' today':'')+(ymd===cgSelected?' selected':'');
-          return '<button class="'+cls+'" type="button" data-cg-day="'+ymd+'"><span class="cg-daynum">'+day+'</span>'+html+'</button>';
-        }
-        for(var i=0;i<startWd;i++){
-          var d=prevDays-startWd+i+1;
-          var pm=cgMonth===0?11:cgMonth-1, py=cgMonth===0?cgYear-1:cgYear;
-          var ymd=py+'-'+String(pm+1).padStart(2,"0")+'-'+String(d).padStart(2,"0");
-          cells.push(cell(ymd,d,true));
-        }
-        for(var d=1;d<=daysIn;d++){
-          var ymd=cgYear+'-'+String(cgMonth+1).padStart(2,"0")+'-'+String(d).padStart(2,"0");
-          cells.push(cell(ymd,d,false));
-        }
-        var next=1;
-        while(cells.length<42){
-          var nm=cgMonth===11?0:cgMonth+1, ny=cgMonth===11?cgYear+1:cgYear;
-          var ymd=ny+'-'+String(nm+1).padStart(2,"0")+'-'+String(next).padStart(2,"0");
-          cells.push(cell(ymd,next,true));
-          next++;
-        }
-        host.innerHTML='<div class="cg-wd">'+["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(function(x){return "<div>"+x+"</div>";}).join("")+'</div><div class="cg-days">'+cells.join("")+'</div>';
+        updateViewButtons();
+        if(cgView==="week") renderWeek(host);
+        else if(cgView==="agenda") host.innerHTML='<div class="cg-agenda-placeholder"><div><strong>Agenda view placeholder.</strong><br>The month and week views are active. This can become a compact confirmed-events list later.</div></div>';
+        else renderMonth(host);
         host.querySelectorAll("[data-cg-day]").forEach(function(btn){
-          btn.addEventListener("click",function(){
-            cgSelected=btn.getAttribute("data-cg-day");
-            renderCalendarDesk();
-          });
+          btn.addEventListener("click",function(){ setSelectedDay(btn.getAttribute("data-cg-day")); });
         });
       }
       function renderCalDesk(){
+        renderFilterMenu();
         renderCalendarDesk();
         renderCalGatekeeper();
       }
@@ -7756,7 +8039,6 @@
         function setCalDesk(on){
           if(!panel||!agenda) return;
           if(on){
-            // Close other main-window modes first so they do not re-open the agenda after Calendar hides it.
             if(window.setReplyDesk) window.setReplyDesk(false);
             if(window.setActionPanel) window.setActionPanel(false);
           }
@@ -7785,7 +8067,16 @@
         var next=document.getElementById("cg-next-month");
         if(prev) prev.addEventListener("click",function(){ cgMonth--; if(cgMonth<0){cgMonth=11;cgYear--;} renderCalDesk(); });
         if(next) next.addEventListener("click",function(){ cgMonth++; if(cgMonth>11){cgMonth=0;cgYear++;} renderCalDesk(); });
-
+        var week=document.getElementById("cg-week-view"), month=document.getElementById("cg-month-view"), agendaBtn=document.getElementById("cg-agenda-view");
+        if(week) week.addEventListener("click",function(){ cgView="week"; renderCalDesk(); });
+        if(month) month.addEventListener("click",function(){ cgView="month"; renderCalDesk(); });
+        if(agendaBtn) agendaBtn.addEventListener("click",function(){ cgView="agenda"; renderCalDesk(); });
+        var filter=document.getElementById("cg-filter-btn"), menu=document.getElementById("cg-filter-menu");
+        if(filter&&menu) filter.addEventListener("click",function(ev){ ev.stopPropagation(); menu.classList.toggle("hidden"); renderFilterMenu(); });
+        document.addEventListener("click",function(ev){ if(menu && !menu.contains(ev.target) && ev.target!==filter) menu.classList.add("hidden"); });
+        var ptab=document.getElementById("cg-pending-tab"), dtab=document.getElementById("cg-day-tab");
+        if(ptab) ptab.addEventListener("click",function(){ cgSidebarMode="pending"; renderCalGatekeeper(); });
+        if(dtab) dtab.addEventListener("click",function(){ cgSidebarMode="day"; renderCalGatekeeper(); });
         document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions,#dock-replydesk").forEach(function(other){
           other.addEventListener("click",function(){ setCalDesk(false); });
         });
