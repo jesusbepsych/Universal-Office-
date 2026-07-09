@@ -7833,6 +7833,7 @@
             if(cal){ cal.classList.add("hidden"); cal.style.display=""; }
             var calbtn=document.getElementById("dock-caldesk");
             if(calbtn) calbtn.classList.remove("on");
+            if(primary) primary.classList.remove("caldesk-mode");
             if(window.setActionPanel) window.setActionPanel(false);
             var sig=document.getElementById("signals-panel");
             if(sig) sig.classList.remove("open");
@@ -7864,6 +7865,35 @@
       var cgSidebarMode="pending";
       var cgFilters={};
       var cgFilterReady=false;
+      var sampleCalDrafts=[
+        {id:"cal-demo-1",title:"Psych 402 Study Session",category:"class",date:"2025-05-10",time:"2:00 PM",source:"you",age:"1h ago"},
+        {id:"cal-demo-2",title:"Wellness Workshop",category:"clinic",date:"2025-05-11",time:"10:00 AM",source:"Wellness Center",age:"3h ago"},
+        {id:"cal-demo-3",title:"AI in Learning Talk",category:"event",date:"2025-05-15",time:"6:30 PM",source:"Student Org",age:"5h ago"},
+        {id:"cal-demo-4",title:"CS 201 Project Check-in",category:"class",date:"2025-05-17",time:"1:00 PM",source:"you",age:"7h ago"}
+      ];
+      var realCalDrafts=[];
+      function mapCalRow(r){
+        var p=r.payload||{};
+        var when=r.created_at?new Date(r.created_at).toLocaleString():"recent";
+        return {
+          id:r.id, _real:true, status:r.status||"pending",
+          title:r.title||"Untitled event", category:"event",
+          date:r.detail||p.date||"Date pending", time:"",
+          source:"Email scan", age:when
+        };
+      }
+      async function loadStagedEventsFromSupabase(){
+        if(typeof client==="undefined"||!client) return;
+        try{
+          var res=await client.from("staged_actions")
+            .select("id,title,detail,payload,status,created_at")
+            .eq("kind","calendar_event").eq("status","pending")
+            .order("created_at",{ascending:false});
+          if(!res.error&&Array.isArray(res.data)) realCalDrafts=res.data.map(mapCalRow);
+        }catch(e){}
+        if(window.renderCalDesk) renderCalDesk();
+      }
+      window.loadStagedEvents=loadStagedEventsFromSupabase;
 
       function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
       function pad2(n){ return String(n).padStart(2,"0"); }
@@ -7888,15 +7918,27 @@
         if(c.indexOf("personal")>=0) return "79,209,197";
         return "167,139,250";
       }
-      function stagedDrafts(){
-        var arr=window.stagedCalendarDrafts||window.calendarEventDrafts||window.calendarDrafts||[];
-        if(Array.isArray(arr)&&arr.length) return arr;
-        return [
-          {id:"cal-demo-1",title:"Psych 402 Study Session",category:"class",date:"2025-05-10",time:"2:00 PM",source:"you",age:"1h ago"},
-          {id:"cal-demo-2",title:"Wellness Workshop",category:"clinic",date:"2025-05-11",time:"10:00 AM",source:"Wellness Center",age:"3h ago"},
-          {id:"cal-demo-3",title:"AI in Learning Talk",category:"event",date:"2025-05-15",time:"6:30 PM",source:"Student Org",age:"5h ago"},
-          {id:"cal-demo-4",title:"CS 201 Project Check-in",category:"class",date:"2025-05-17",time:"1:00 PM",source:"you",age:"7h ago"}
-        ];
+      function stagedDrafts(){ return realCalDrafts.concat(sampleCalDrafts); }
+      function findCalDraft(id){ var a=stagedDrafts(); for(var i=0;i<a.length;i++){ if(String(a[i].id)===String(id)) return a[i]; } return null; }
+      function cgAction(id,action){
+        var d=findCalDraft(id);
+        if(!d) return;
+        var verb=action==="approve"?"approved":action==="reject"?"rejected":"skipped";
+        if(!d._real){
+          sampleCalDrafts=sampleCalDrafts.filter(function(x){return String(x.id)!==String(id);});
+          renderCalGatekeeper(); updateCalBadge();
+          if(window.toast) toast("Sample event "+verb+".");
+          return;
+        }
+        var prev=realCalDrafts.slice();
+        realCalDrafts=realCalDrafts.filter(function(x){return String(x.id)!==String(id);});
+        renderCalGatekeeper(); updateCalBadge();
+        if(typeof client==="undefined"||!client){ if(window.toast) toast("Not connected."); return; }
+        var newStatus=action==="approve"?"approved":action==="reject"?"rejected":"archived";
+        client.from("staged_actions").update({status:newStatus}).eq("id",id).then(function(r){
+          if(r&&r.error){ realCalDrafts=prev; renderCalGatekeeper(); updateCalBadge(); if(window.toast) toast("Couldn't update: "+r.error.message); }
+          else { if(window.toast) toast(action==="approve"?"Event approved. It will be added on the next scan.":action==="reject"?"Event rejected.":"Event skipped."); }
+        });
       }
       function updateCalBadge(){
         var b=document.getElementById("cal-draft-badge");
@@ -8003,9 +8045,7 @@
         host.querySelectorAll("[data-cg-act]").forEach(function(btn){
           btn.addEventListener("click",function(ev){
             ev.stopPropagation();
-            var detail={id:btn.getAttribute("data-cg-id"),action:btn.getAttribute("data-cg-act")};
-            window.dispatchEvent(new CustomEvent("calendarDraftAction",{detail:detail}));
-            if(window.toast) toast(detail.action==="approve"?"Calendar draft approved.":detail.action==="reject"?"Calendar draft rejected.":"Calendar draft skipped.");
+            cgAction(btn.getAttribute("data-cg-id"),btn.getAttribute("data-cg-act"));
           });
         });
       }
@@ -8135,7 +8175,7 @@
           panel.setAttribute("aria-hidden",on?"false":"true");
           agenda.classList.toggle("hidden",!!on);
           agenda.style.display=on?"none":"";
-          if(reply){ reply.classList.add("hidden"); reply.style.display=""; }
+          if(on && reply){ reply.classList.add("hidden"); reply.style.display=""; }
           if(primary) primary.classList.toggle("caldesk-mode",!!on);
           if(btn) btn.classList.toggle("on",!!on);
           if(on){
@@ -8146,6 +8186,7 @@
             document.querySelectorAll(".dock-btn").forEach(function(b){ if(b!==btn) b.classList.remove("on"); });
             if(btn) btn.classList.add("on");
             renderCalDesk();
+            loadStagedEventsFromSupabase();
             setTimeout(function(){ panel.scrollIntoView({behavior:"smooth",block:"start"}); },40);
           }
         }
@@ -8165,10 +8206,11 @@
         var ptab=document.getElementById("cg-pending-tab"), dtab=document.getElementById("cg-day-tab");
         if(ptab) ptab.addEventListener("click",function(){ cgSidebarMode="pending"; renderCalGatekeeper(); });
         if(dtab) dtab.addEventListener("click",function(){ cgSidebarMode="day"; renderCalGatekeeper(); });
-        document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions,#dock-replydesk").forEach(function(other){
+        document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions").forEach(function(other){
           other.addEventListener("click",function(){ setCalDesk(false); });
         });
         updateCalBadge();
+        setTimeout(loadStagedEventsFromSupabase,2200);
       });
     })();
   </script>
