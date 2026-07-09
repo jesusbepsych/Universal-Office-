@@ -4793,6 +4793,80 @@
     }
   }
 
+
+  /* Reply Desk v6: remove route/settings strip and make draft queue an internal 4-card scroll window */
+  .replydesk-panel .rd-flow,
+  .replydesk-panel .rd-settings{
+    display:none!important;
+  }
+  .replydesk-panel .rd-top{
+    grid-template-columns:1fr!important;
+    padding:2px 6px 6px!important;
+    min-height:48px!important;
+  }
+  .replydesk-panel .rd-title-block{
+    min-height:42px!important;
+  }
+  .replydesk-panel .rd-title-block h2{
+    font-size:20px!important;
+  }
+  .replydesk-panel .rd-title-block p{
+    margin-top:2px!important;
+    font-size:12px!important;
+  }
+  .replydesk-panel .rd-grid{
+    flex:1!important;
+    min-height:0!important;
+    align-items:stretch!important;
+  }
+  .replydesk-panel .rd-queue,
+  .replydesk-panel .rd-preview{
+    height:626px!important;
+    max-height:626px!important;
+  }
+  .replydesk-panel .rd-list{
+    height:calc(100% - 60px)!important;
+    max-height:calc(100% - 60px)!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding-bottom:20px!important;
+  }
+  .replydesk-panel .rd-card{
+    min-height:118px!important;
+  }
+  .replydesk-panel .rd-card:not(.active){
+    max-height:126px!important;
+  }
+  .replydesk-panel .rd-card:not(.active) .rd-excerpt{
+    -webkit-line-clamp:2!important;
+  }
+  .replydesk-panel .rd-inline-preview{
+    max-height:282px!important;
+  }
+  .replydesk-panel .rd-inline-body{
+    max-height:128px!important;
+  }
+  .replydesk-panel .rd-preview-body{
+    max-height:calc(100% - 60px)!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+  }
+  @media(max-width:1220px){
+    .replydesk-panel{
+      min-height:860px!important;
+    }
+    .replydesk-panel .replydesk-shell{
+      min-height:820px!important;
+    }
+    .replydesk-panel .rd-queue,
+    .replydesk-panel .rd-preview{
+      height:560px!important;
+      max-height:560px!important;
+    }
+  }
+
 </style>
 </head>
 <body>
