@@ -6549,7 +6549,7 @@
               </div>
             </div>
 
-            <div class="deadline-monitor-list">
+            <div class="deadline-monitor-list" id="deadline-monitor-list">
               <div class="deadline-monitor-row safe">
                 <div class="deadline-flag"><span class="deadline-glyph">⬡</span><span>Safe</span></div>
                 <div class="deadline-task">PSY 102 review</div>
@@ -6994,7 +6994,85 @@
       el("legend").innerHTML=legendCats.map(c=>{ const m=catMeta(c); return '<span><i style="background:'+m.color+'"></i>'+m.label+'</span>'; }).join("");
     }
 
-    function refreshViews(){ renderRibbon(false); renderGauge(); renderAgenda(); }
+    function renderDeadlineMonitor(){
+      var host=el("deadline-monitor-list"); if(!host) return;
+      var META={
+        safe:{g:"\u2B21",label:"Safe"}, watch:{g:"\u25C9",label:"Watch"},
+        risky:{g:"\u25B3",label:"Risky"}, critical:{g:"!",label:"Critical"}
+      };
+      var today=pacificYMD();
+      var TY=+today.slice(0,4);
+      function daysLeftOf(ymd){
+        var a=new Date(today+"T00:00:00Z").getTime();
+        var b=new Date(String(ymd)+"T00:00:00Z").getTime();
+        return Math.round((b-a)/86400000);
+      }
+      var MONTHS={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+      function buildYMD(mo,da,yr){
+        if(!mo||!da||mo<1||mo>12||da<1||da>31) return null;
+        function ymd(y){ return y+"-"+String(mo).padStart(2,"0")+"-"+String(da).padStart(2,"0"); }
+        if(yr) return ymd(yr<100?2000+yr:yr);
+        var cand=ymd(TY);
+        if(daysLeftOf(cand) < -180) return ymd(TY+1);
+        return cand;
+      }
+      function parseDate(text){
+        if(!text) return null;
+        var s=String(text);
+        var m=s.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/);
+        if(m) return buildYMD(+m[1],+m[2],m[3]?+m[3]:null);
+        var mn=s.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})/i);
+        if(mn) return buildYMD(MONTHS[mn[1].slice(0,3).toLowerCase()],+mn[2],null);
+        return null;
+      }
+      function cleanLabel(text){
+        var s=String(text||"");
+        s=s.replace(/\(\s*(due|by|deadline)?\s*\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\s*\)/ig,"");
+        s=s.replace(/\b(due|by|deadline)\s*:?\s*\d{1,2}\/\d{1,2}(?:\/\d{2,4})?/ig,"");
+        s=s.replace(/\(\s*(due|by|deadline)?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\s*\)/ig,"");
+        s=s.replace(/\b(due|by|deadline)\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?/ig,"");
+        s=s.replace(/\(\s*\)/g,"").replace(/[\s\-\u2013\u2014:]+$/,"").trim();
+        return s||String(text||"");
+      }
+      function riskOf(dl){ return dl<0?"critical":dl===0?"critical":dl===1?"risky":dl<=4?"watch":"safe"; }
+      function chipOf(dl){ return dl<0?((-dl)===1?"1d overdue":(-dl)+"d overdue"):dl===0?"today":dl===1?"1d left":dl+"d left"; }
+      function folderName(fid){ var a=folders||[]; for(var i=0;i<a.length;i++){ if(String(a[i].id)===String(fid)) return a[i].name||""; } return ""; }
+
+      // Pool 1 (primary): Signal Garden folder items, incomplete, with a date in the text
+      var sg=[];
+      (folderItems||[]).forEach(function(it){
+        if(it.done) return;
+        var d=parseDate(it.title); if(!d) return;
+        var fn=folderName(it.folder_id), label=cleanLabel(it.title);
+        sg.push({ label:(fn?fn+" \u00b7 "+label:label), due:d, dl:daysLeftOf(d) });
+      });
+      // Pool 2 (fills remaining slots): Action Items with a date in title/summary
+      var ai=[];
+      (inboxTodos||[]).forEach(function(t){
+        var d=parseDate((t.title||"")+" "+(t.summary||"")); if(!d) return;
+        ai.push({ label:cleanLabel(t.title||t.summary||"Action item"), due:d, dl:daysLeftOf(d) });
+      });
+      function byDue(a,b){ return a.due<b.due?-1:a.due>b.due?1:0; }
+      sg.sort(byDue); ai.sort(byDue);
+      var MAX=5;
+      var shown=sg.concat(ai).slice(0,MAX);  // Signal Garden claims slots first
+      shown.sort(byDue);                      // most urgent on top
+
+      if(!shown.length){
+        host.innerHTML='<div class="deadline-monitor-row safe"><div class="deadline-flag"><span class="deadline-glyph">\u2B21</span><span>Clear</span></div><div class="deadline-task">No dated items yet</div><div class="deadline-chip">all set</div></div>';
+        return;
+      }
+      host.innerHTML=shown.map(function(it){
+        var risk=riskOf(it.dl), m=META[risk];
+        return '<div class="deadline-monitor-row '+risk+'">'
+          +'<div class="deadline-flag"><span class="deadline-glyph">'+m.g+'</span><span>'+m.label+'</span></div>'
+          +'<div class="deadline-task">'+escapeHtml(it.label)+'</div>'
+          +'<div class="deadline-chip">'+escapeHtml(chipOf(it.dl))+'</div>'
+        +'</div>';
+      }).join("");
+    }
+
+    function refreshViews(){ renderRibbon(false); renderGauge(); renderAgenda(); renderDeadlineMonitor(); }
 
     /* ---------- Notes & folders (own data, separate tables) ---------- */
     let notes=[], folders=[], folderItems=[];
@@ -7027,6 +7105,7 @@
         if(noteMode==="tasks") renderQuickTasks();
         try{ const aiRes=await client.from("inbox_todos").select("id,title,summary,source_ref,status,created_at").eq("status","open").order("created_at",{ascending:false}); if(!aiRes.error) inboxTodos=aiRes.data||[]; }catch(e){}
         renderActionItems();
+        renderDeadlineMonitor();
       }catch(e){ toast("Couldn't load notes / folders."); }
     }
 
@@ -7174,9 +7253,9 @@
       else markActionDone(id);
     }
     async function markActionDone(id){
-      const prev=inboxTodos.slice(); inboxTodos=inboxTodos.filter(t=>t.id!==id); renderActionItems();
-      try{ const { error }=await client.from("inbox_todos").update({status:"done"}).eq("id",id); if(error){ inboxTodos=prev; renderActionItems(); toast("Couldn't update: "+error.message); } }
-      catch(e){ inboxTodos=prev; renderActionItems(); toast("Couldn't update action item."); }
+      const prev=inboxTodos.slice(); inboxTodos=inboxTodos.filter(t=>t.id!==id); renderActionItems(); renderDeadlineMonitor();
+      try{ const { error }=await client.from("inbox_todos").update({status:"done"}).eq("id",id); if(error){ inboxTodos=prev; renderActionItems(); renderDeadlineMonitor(); toast("Couldn't update: "+error.message); } }
+      catch(e){ inboxTodos=prev; renderActionItems(); renderDeadlineMonitor(); toast("Couldn't update action item."); }
     }
 
     let dragState=null;
@@ -7457,7 +7536,7 @@
     async function toggleItem(id){
       const it=folderItems.find(x=>String(x.id)===String(id)); if(!it||!client) return;
       const prev=it.done; it.done=!prev; justLit=it.done?(it.folder_id+":"+it.id):null;
-      renderMatrix(); if(cellRedraw)cellRedraw();
+      renderMatrix(); if(cellRedraw)cellRedraw(); renderDeadlineMonitor();
       try{ const { error }=await client.from("folder_items").update({ done:it.done }).eq("id",id); if(error){ it.done=prev; renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't update: "+error.message); } }
       catch(e){ it.done=prev; renderMatrix(); if(cellRedraw)cellRedraw(); toast("Couldn't update item."); }
     }
