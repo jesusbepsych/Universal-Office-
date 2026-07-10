@@ -5856,6 +5856,100 @@
     margin-top:8px!important;
   }
 
+
+
+  /* v18 — rebalance summary / deadline monitor / progress row */
+  .console-stack{
+    display:grid!important;
+    grid-template-columns:minmax(420px,1.14fr) minmax(330px,.84fr) minmax(280px,.70fr)!important;
+    grid-template-areas:
+      "summary deadline progress"
+      "notes notes notes"!important;
+    gap:12px!important;
+    align-items:start!important;
+  }
+  #console-summary{grid-area:summary;min-width:0;}
+  #console-placeholder{grid-area:deadline;min-width:0;}
+  #console-progress{grid-area:progress;min-width:0;}
+  #console-notes{grid-area:notes;}
+  .console-mini-grid{display:contents!important;}
+
+  #console-summary .ds-stage,
+  #console-summary .ds-card{
+    min-height:194px!important;
+  }
+  #console-summary .ds-stage{height:100%;}
+
+  #console-placeholder.console-mini-card,
+  #console-progress.console-mini-card{
+    min-height:194px!important;
+    height:100%;
+  }
+
+  .deadline-monitor-card{
+    padding:14px!important;
+    gap:9px;
+  }
+  .deadline-monitor-head{margin-bottom:2px;}
+  .deadline-monitor-title{font-size:13px;line-height:1.15;}
+  .deadline-monitor-sub{font-size:10.5px;}
+  .deadline-monitor-list{gap:7px;}
+  .deadline-monitor-row{
+    grid-template-columns:118px minmax(0,1fr) auto;
+    min-height:42px;
+    border-radius:13px;
+  }
+  .deadline-flag{
+    min-height:42px;
+    padding:0 12px;
+    gap:8px;
+    font-size:12.5px;
+    letter-spacing:.10em;
+  }
+  .deadline-flag .deadline-glyph{font-size:13px;}
+  .deadline-task{
+    padding:0 12px;
+    font-size:12.5px;
+  }
+  .deadline-chip{
+    margin-right:10px;
+    padding:6px 10px;
+    font-size:10.5px;
+  }
+  .deadline-monitor-foot{
+    min-height:34px;
+    font-size:11.5px;
+    padding:0 10px;
+  }
+
+  .console-progress-card #gauge svg{max-height:186px;}
+  .console-progress-card .gauge-wrap{min-height:214px;}
+
+  @media(max-width:1380px){
+    .console-stack{
+      grid-template-columns:minmax(360px,1fr) minmax(300px,.84fr) minmax(250px,.64fr)!important;
+    }
+  }
+  @media(max-width:1220px){
+    .console-stack{
+      grid-template-columns:1fr 1fr!important;
+      grid-template-areas:
+        "summary deadline"
+        "progress progress"
+        "notes notes"!important;
+    }
+  }
+  @media(max-width:900px){
+    .console-stack{
+      grid-template-columns:1fr!important;
+      grid-template-areas:
+        "summary"
+        "deadline"
+        "progress"
+        "notes"!important;
+    }
+    .console-mini-grid{display:grid!important;grid-template-columns:1fr!important;gap:12px;}
+  }
 </style>
 </head>
 <body>
