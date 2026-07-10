@@ -5950,6 +5950,118 @@
     }
     .console-mini-grid{display:grid!important;grid-template-columns:1fr!important;gap:12px;}
   }
+
+
+  /* v19 — keep summary + deadline + progress on the same top row, and tighten the monitor */
+  .console-stack{
+    display:grid!important;
+    grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)!important;
+    grid-template-areas:
+      "summary side"
+      "notes notes"!important;
+    gap:14px!important;
+    align-items:start!important;
+  }
+  #console-summary{grid-area:summary!important;min-width:0;}
+  #console-notes{grid-area:notes!important;}
+  .console-mini-grid{
+    grid-area:side!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,.96fr) minmax(0,.92fr)!important;
+    gap:14px!important;
+    align-items:stretch!important;
+    min-width:0;
+  }
+  #console-placeholder,#console-progress{min-width:0;}
+
+  #console-summary .ds-stage,
+  #console-summary .ds-card{
+    min-height:196px!important;
+    height:100%!important;
+  }
+  #console-placeholder.console-mini-card,
+  #console-progress.console-mini-card{
+    min-height:196px!important;
+    height:100%!important;
+  }
+
+  .deadline-monitor-card{
+    padding:12px!important;
+    gap:8px!important;
+  }
+  .deadline-monitor-head{
+    gap:10px!important;
+    margin-bottom:1px!important;
+  }
+  .deadline-monitor-icon{
+    width:38px!important;
+    height:38px!important;
+    font-size:16px!important;
+  }
+  .deadline-monitor-title{
+    font-size:12.5px!important;
+    line-height:1.05!important;
+  }
+  .deadline-monitor-sub{
+    font-size:10px!important;
+  }
+  .deadline-monitor-list{
+    gap:6px!important;
+  }
+  .deadline-monitor-row{
+    grid-template-columns:106px minmax(0,1fr) auto!important;
+    min-height:38px!important;
+    border-radius:12px!important;
+  }
+  .deadline-flag{
+    min-height:38px!important;
+    padding:0 11px!important;
+    gap:7px!important;
+    font-size:12px!important;
+    letter-spacing:.09em!important;
+  }
+  .deadline-flag .deadline-glyph{font-size:12.5px!important;}
+  .deadline-task{
+    padding:0 10px!important;
+    font-size:12px!important;
+  }
+  .deadline-chip{
+    margin-right:9px!important;
+    padding:5px 9px!important;
+    font-size:10px!important;
+  }
+  .deadline-monitor-foot{
+    min-height:30px!important;
+    padding:0 10px!important;
+    font-size:11px!important;
+  }
+
+  .console-progress-card .panel-head h2{font-size:14px!important;}
+  .console-progress-card #gauge svg{max-height:176px!important;}
+  .console-progress-card .gauge-wrap{min-height:204px!important;}
+
+  @media(max-width:1380px){
+    .console-stack{
+      grid-template-columns:minmax(0,.98fr) minmax(0,1.02fr)!important;
+    }
+  }
+  @media(max-width:1240px){
+    .console-stack{
+      grid-template-columns:1fr!important;
+      grid-template-areas:
+        "summary"
+        "side"
+        "notes"!important;
+    }
+    .console-mini-grid{
+      grid-template-columns:1fr 1fr!important;
+    }
+  }
+  @media(max-width:900px){
+    .console-mini-grid{
+      grid-template-columns:1fr!important;
+    }
+  }
 </style>
 </head>
 <body>
