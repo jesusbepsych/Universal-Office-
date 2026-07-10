@@ -6169,6 +6169,74 @@
   #console-summary .ds-brief::-webkit-scrollbar{
     display:none!important;
   }
+
+  /* v24 — stable Day briefing scroll: stop nested translated content from creating fake scroll stops */
+  #console-summary,
+  #console-summary .ds-stage,
+  #console-summary .ds-card{
+    overflow:hidden!important;
+  }
+
+  #console-summary .ds-stage.result,
+  #console-summary .ds-stage.result .ds-card{
+    height:226px!important;
+    min-height:226px!important;
+    max-height:226px!important;
+  }
+
+  #console-summary .ds-c{
+    position:relative!important;
+    transform:none!important;
+    animation:none!important;
+    opacity:1!important;
+    height:100%!important;
+    max-height:214px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:auto!important;
+    padding-right:8px!important;
+    touch-action:pan-y!important;
+    contain:content!important;
+  }
+
+  #console-summary .ds-c.ds-fade{
+    animation:none!important;
+    transform:none!important;
+  }
+
+  #console-summary .ds-c > *{
+    transform:none!important;
+  }
+
+  #console-summary .ds-brief{
+    position:static!important;
+    transform:none!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding-right:0!important;
+    padding-bottom:18px!important;
+  }
+
+  #console-summary .ds-brief *{
+    transform:none!important;
+  }
+
+  #console-summary .ds-c::-webkit-scrollbar{
+    width:6px;
+  }
+  #console-summary .ds-c::-webkit-scrollbar-thumb{
+    background:rgba(79,209,197,.30);
+    border-radius:999px;
+  }
+  #console-summary .ds-c::-webkit-scrollbar-track{
+    background:rgba(255,255,255,.03);
+    border-radius:999px;
+  }
+
+  #console-summary .ds-brief::-webkit-scrollbar{
+    display:none!important;
+  }
 </style>
 </head>
 <body>
