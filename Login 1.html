@@ -6237,6 +6237,74 @@
   #console-summary .ds-brief::-webkit-scrollbar{
     display:none!important;
   }
+
+  /* v25 — final Day briefing scroll fix: ONE scrollbar only, on the actual briefing body */
+  #console-summary,
+  #console-summary .ds-stage,
+  #console-summary .ds-card{
+    overflow:hidden!important;
+  }
+
+  #console-summary .ds-stage.full,
+  #console-summary .ds-stage.full .ds-card{
+    height:226px!important;
+    min-height:226px!important;
+    max-height:226px!important;
+  }
+
+  /* The wrapper must NOT scroll in full mode, otherwise iPad creates the fake stop / second scrollbar. */
+  #console-summary .ds-stage.full .ds-c{
+    height:100%!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    padding-right:0!important;
+    -webkit-overflow-scrolling:auto!important;
+    touch-action:auto!important;
+    contain:paint!important;
+  }
+
+  #console-summary .ds-stage.full .ds-c::-webkit-scrollbar{
+    display:none!important;
+    width:0!important;
+  }
+
+  #console-summary .ds-stage.full .ds-fhead{
+    height:34px!important;
+    min-height:34px!important;
+    margin-bottom:8px!important;
+    flex:none!important;
+  }
+
+  /* This is now the ONLY scroll area for the expanded text. */
+  #console-summary .ds-stage.full .ds-fbody{
+    height:148px!important;
+    max-height:148px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-y!important;
+    padding-right:8px!important;
+    padding-bottom:16px!important;
+  }
+
+  #console-summary .ds-stage.full .ds-fbody::-webkit-scrollbar{
+    width:6px!important;
+    display:block!important;
+  }
+  #console-summary .ds-stage.full .ds-fbody::-webkit-scrollbar-thumb{
+    background:rgba(79,209,197,.32)!important;
+    border-radius:999px!important;
+  }
+  #console-summary .ds-stage.full .ds-fbody::-webkit-scrollbar-track{
+    background:rgba(255,255,255,.025)!important;
+    border-radius:999px!important;
+  }
+
+  /* Non-full states stay clipped and clean. */
+  #console-summary .ds-stage:not(.full) .ds-c{
+    overflow:hidden!important;
+  }
 </style>
 </head>
 <body>
