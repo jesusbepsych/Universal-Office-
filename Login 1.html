@@ -6509,6 +6509,26 @@
   .mb-health-note{margin-top:8px;padding:6px 9px;border-radius:7px;background:rgba(5,12,24,.45);font:500 9px var(--mono);color:#7f90ad;}
 
   .mb-positions{position:relative;z-index:2;border:1px solid rgba(96,139,205,.32);border-radius:13px;overflow:hidden;background:rgba(8,16,29,.74);}
+  #mb-position-list{max-height:330px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(103,155,230,.45) transparent;}
+  #mb-position-list::-webkit-scrollbar{width:8px;}
+  #mb-position-list::-webkit-scrollbar-track{background:transparent;}
+  #mb-position-list::-webkit-scrollbar-thumb{background:rgba(103,155,230,.32);border-radius:999px;border:2px solid transparent;background-clip:padding-box;}
+  .mb-manual-row{background:linear-gradient(90deg,rgba(41,93,158,.08),rgba(8,16,29,.18));}
+  .mb-manual-row.credit{background:linear-gradient(90deg,rgba(130,64,119,.08),rgba(8,16,29,.18));}
+  .mb-manual-input{
+    width:100%;min-width:95px;padding:8px 10px;border-radius:8px;
+    border:1px solid rgba(104,155,225,.34);background:rgba(7,14,26,.72);
+    color:#e8f1ff;font:600 12px var(--mono);outline:0;
+  }
+  .mb-manual-input:focus{border-color:rgba(111,179,255,.74);box-shadow:0 0 0 2px rgba(82,147,235,.12);}
+  .mb-manual-note{font:500 8px var(--mono);color:#70809a;margin-top:3px;}
+  .mb-manual-badge{
+    justify-self:start;padding:5px 8px;border-radius:6px;
+    border:1px solid rgba(81,194,159,.23);background:rgba(81,194,159,.08);
+    color:#65e2b9;font:600 10px var(--mono);
+  }
+  .mb-manual-badge.credit{border-color:rgba(212,103,155,.24);background:rgba(212,103,155,.08);color:#ff93bf;}
+
   .mb-positions-head{display:flex;align-items:center;justify-content:space-between;padding:12px 17px;border-bottom:1px solid rgba(96,139,205,.25);}
   .mb-positions-head strong{font:600 11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#a8bad4;}
   .mb-positions-head span{font:500 9px var(--mono);color:#687b99;}
@@ -6749,7 +6769,7 @@
             </section>
 
             <section class="mb-positions">
-              <div class="mb-positions-head"><strong>Your positions</strong><span id="mb-market-count">0 active markets</span></div>
+              <div class="mb-positions-head"><strong>Your positions</strong><span id="mb-market-count">0 tracked positions · scroll for more</span></div>
               <div class="mb-table-head"><span>Market</span><span>Supplied</span><span>Borrowed</span><span>Net value</span><span>Portfolio share</span></div>
               <div id="mb-position-list">
                 <div class="mb-empty"><strong>Connect a wallet</strong>Enter the public wallet address used on Base and Ethereum, then press Refresh.</div>
@@ -9214,6 +9234,10 @@
     const E36=1000000000000000000000000000000000000n;
     const E45=1000000000000000000000000000000000000000000000n;
     let mbLoading=false, mbTimer=null, mbData=null;
+    let mbManualBalances={
+      debit:Number(localStorage.getItem("moneybuddy-debit-balance")||0),
+      credit:Number(localStorage.getItem("moneybuddy-credit-balance")||0)
+    };
 
     const $=id=>document.getElementById(id);
     const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -9228,6 +9252,21 @@
         maximumFractionDigits:n>=1000?2:n>=1?4:8
       }).format(n);
     };
+    function sanitizeManualAmount(value){
+      const n=Number(String(value??"").replace(/[^0-9.-]/g,""));
+      return Number.isFinite(n)?Math.max(0,n):0;
+    }
+    function saveManualBalances(){
+      localStorage.setItem("moneybuddy-debit-balance",String(mbManualBalances.debit));
+      localStorage.setItem("moneybuddy-credit-balance",String(mbManualBalances.credit));
+    }
+    function combinedTotals(data){
+      return {
+        supplied:data.totalSupplied+mbManualBalances.debit,
+        borrowed:data.totalBorrowed+mbManualBalances.credit,
+        netWorth:data.netEquity+(data.sky?data.sky.netAssets:0)+mbManualBalances.debit-mbManualBalances.credit
+      };
+    }
     const padAddress=a=>"000000000000000000000000"+a.toLowerCase().replace(/^0x/,"");
     const isAddress=a=>/^0x[a-fA-F0-9]{40}$/.test(String(a||"").trim());
     const word=(hex,i)=>"0x"+hex.slice(2+i*64,2+(i+1)*64);
@@ -9462,8 +9501,10 @@
         b:data.totalBorrowed,
         n:data.netEquity,
         r:data.healthFactor,
-        w:data.totalNetWorth,
-        sky:data.sky?data.sky.netAssets:0
+        w:combinedTotals(data).netWorth,
+        sky:data.sky?data.sky.netAssets:0,
+        debit:mbManualBalances.debit,
+        credit:mbManualBalances.credit
       });
       h=h.filter(x=>Date.now()-x.t<30*24*3600*1000).slice(-30);
       localStorage.setItem("moonwell-history",JSON.stringify(h));
@@ -9491,20 +9532,23 @@
     }
     function render(data){
       mbData=data;
-      $("mb-total-supplied").textContent=shortMoney(data.totalSupplied);
-      $("mb-total-borrowed").textContent=shortMoney(data.totalBorrowed);
+      const combined=combinedTotals(data);
+      data.totalNetWorth=combined.netWorth;
+      $("mb-total-supplied").textContent=shortMoney(combined.supplied);
+      $("mb-total-borrowed").textContent=shortMoney(combined.borrowed);
       $("mb-net-equity").textContent=shortMoney(data.netEquity);
-      $("mb-total-net-worth").textContent=shortMoney(data.totalNetWorth);
+      $("mb-total-net-worth").textContent=shortMoney(combined.netWorth);
       $("mb-health-value").textContent=(data.healthFactor>=99?"∞":data.healthFactor.toFixed(2));
       $("mb-last-updated").textContent=new Date(data.lastUpdated).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+" · today";
-      $("mb-market-count").textContent=(data.positions.length+(data.sky&&data.sky.netAssets!==0?1:0))+" tracked position"+((data.positions.length+(data.sky&&data.sky.netAssets!==0?1:0))===1?"":"s");
-      $("mb-supplied-sub").textContent=data.positions.length+" Moonwell markets";
-      $("mb-borrowed-sub").textContent=data.positions.filter(p=>p.borrowed>.01).length+" borrowed assets";
+      const trackedCount=data.positions.length+(data.sky&&data.sky.netAssets!==0?1:0)+2;
+      $("mb-market-count").textContent=trackedCount+" tracked positions · scroll for more";
+      $("mb-supplied-sub").textContent=data.positions.length+" Moonwell markets + debit";
+      $("mb-borrowed-sub").textContent=data.positions.filter(p=>p.borrowed>.01).length+" borrowed assets + credit";
       $("mb-net-sub").textContent=data.netEquity>=0?"Moonwell net equity":"Moonwell net liability";
       const sky=data.sky;
       $("mb-net-worth-sub").textContent=sky
-        ? "Moonwell "+money(data.netEquity)+" · Sky "+money(sky.netAssets)
-        : "Moonwell only · Sky unavailable";
+        ? "Moonwell "+money(data.netEquity)+" · Sky "+money(sky.netAssets)+" · Cards "+money(mbManualBalances.debit-mbManualBalances.credit)
+        : "Moonwell "+money(data.netEquity)+" · Cards "+money(mbManualBalances.debit-mbManualBalances.credit);
       const ratio=data.healthFactor;
       const state=ratio>=1.5?"Healthy":ratio>=1.2?"Caution":ratio>=1?"Risky":"Critical";
       $("mb-health-state").innerHTML=esc(state)+' <small>position ratio</small>';
@@ -9536,7 +9580,34 @@
             +'<div class="mb-impact '+(neg?"negative":"")+'">'+skyShare.toFixed(1)+'%</div>'
           +'</div>');
         }
+
+        rows.push('<div class="mb-row mb-manual-row">'
+          +'<div class="mb-asset"><span class="mb-token" style="--tok:74,193,160">DBT</span><div><strong>Debit Cards</strong><small>Personal cash balance</small></div></div>'
+          +'<div class="mb-cell"><input class="mb-manual-input" id="mb-debit-input" inputmode="decimal" value="'+mbManualBalances.debit.toFixed(2)+'" aria-label="Debit card balance"><div class="mb-manual-note">manual total</div></div>'
+          +'<div class="mb-cell">'+money(0)+'<small>not borrowed</small></div>'
+          +'<div class="mb-cell net" id="mb-debit-net">'+money(mbManualBalances.debit)+'<small>adds to net worth</small></div>'
+          +'<div class="mb-manual-badge">Cash</div>'
+        +'</div>');
+
+        rows.push('<div class="mb-row mb-manual-row credit">'
+          +'<div class="mb-asset"><span class="mb-token" style="--tok:218,100,153">CRD</span><div><strong>Credit Cards</strong><small>Outstanding balance owed</small></div></div>'
+          +'<div class="mb-cell">'+money(0)+'<small>not supplied</small></div>'
+          +'<div class="mb-cell"><input class="mb-manual-input" id="mb-credit-input" inputmode="decimal" value="'+mbManualBalances.credit.toFixed(2)+'" aria-label="Credit card balance"><div class="mb-manual-note">manual total</div></div>'
+          +'<div class="mb-cell net negative" id="mb-credit-net">'+money(-mbManualBalances.credit)+'<small>subtracts from net worth</small></div>'
+          +'<div class="mb-manual-badge credit">Debt</div>'
+        +'</div>');
+
         list.innerHTML=rows.join("");
+
+        const debitInput=$("mb-debit-input"),creditInput=$("mb-credit-input");
+        const updateManual=()=>{
+          mbManualBalances.debit=sanitizeManualAmount(debitInput&&debitInput.value);
+          mbManualBalances.credit=sanitizeManualAmount(creditInput&&creditInput.value);
+          saveManualBalances();
+          render(data);
+        };
+        if(debitInput) debitInput.addEventListener("change",updateManual);
+        if(creditInput) creditInput.addEventListener("change",updateManual);
       }
       const h=saveHistory(data);
       spark("mb-spark-supplied",h.map(x=>x.s));
