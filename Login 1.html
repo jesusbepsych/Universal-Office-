@@ -6724,11 +6724,11 @@
                 <div class="mb-kpi-sub" id="mb-net-sub">Awaiting wallet</div>
                 <svg class="mb-spark" id="mb-spark-net" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
               </article>
-              <article class="mb-kpi amber">
-                <div class="mb-kpi-label">Supply / borrow ratio</div>
-                <div class="mb-kpi-value" id="mb-ratio">—</div>
-                <div class="mb-kpi-sub" id="mb-ratio-sub">Estimated position ratio</div>
-                <svg class="mb-spark" id="mb-spark-ratio" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
+              <article class="mb-kpi amber" title="Moonwell net equity plus Sky staking value, liquid SKY, and claimable rewards, minus detected Sky debt">
+                <div class="mb-kpi-label">Total net worth</div>
+                <div class="mb-kpi-value" id="mb-total-net-worth">$0.00</div>
+                <div class="mb-kpi-sub" id="mb-net-worth-sub">Moonwell + Sky</div>
+                <svg class="mb-spark" id="mb-spark-net-worth" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
               </article>
             </div>
 
@@ -6744,7 +6744,7 @@
               <div class="mb-health-scale">
                 <div class="mb-scale-track"><span class="mb-scale-marker" id="mb-health-marker" style="--pos:0%"></span></div>
                 <div class="mb-scale-labels"><span></span><span><b>1.50</b>Caution</span><span><b>1.20</b>Risky</span><span><b>1.00</b>Liquidation</span></div>
-                <div class="mb-health-note">* Estimated as total supplied ÷ total borrowed. Moonwell collateral factors are not included in this simplified ratio.</div>
+                <div class="mb-health-note">* Moonwell health remains the simplified supplied ÷ borrowed ratio. Total Net Worth separately adds the live Sky staking position and subtracts detected Sky debt.</div>
               </div>
             </section>
 
@@ -6752,13 +6752,13 @@
               <div class="mb-positions-head"><strong>Your positions</strong><span id="mb-market-count">0 active markets</span></div>
               <div class="mb-table-head"><span>Market</span><span>Supplied</span><span>Borrowed</span><span>Net value</span><span>Portfolio share</span></div>
               <div id="mb-position-list">
-                <div class="mb-empty"><strong>Connect a wallet</strong>Enter a public Base wallet address above, then press Refresh.</div>
+                <div class="mb-empty"><strong>Connect a wallet</strong>Enter the public wallet address used on Base and Ethereum, then press Refresh.</div>
               </div>
             </section>
             <div class="mb-foot">
               <span><i class="mb-status-dot" id="mb-rpc-dot"></i><b id="mb-rpc-status">Direct RPC ready</b></span>
               <span>Read-only calls to Moonwell contracts on Base</span>
-              <span>No API key · wallet saved locally · auto-refresh 60s</span>
+              <span>Base + Ethereum direct RPC · wallet saved locally · auto-refresh 60s</span>
             </div>
           </div>
         </div>
@@ -9179,13 +9179,35 @@
   (function(){
     "use strict";
     const RPCS=["https://mainnet.base.org","https://base-rpc.publicnode.com","https://1rpc.io/base"];
+    const ETH_RPCS=["https://ethereum-rpc.publicnode.com","https://cloudflare-eth.com","https://1rpc.io/eth"];
     const COMPTROLLER="0xfBb21d0380beE3312B33c4353c8936a0F13EF26C";
+
+    // Official Sky Ethereum deployments.
+    const SKY_TOKEN="0x56072C95FAA701256059aa122697B133aDEd9279";
+    const LSSKY_TOKEN="0xf9A9cfD3229E985B91F99Bc866d42938044FFa1C";
+    const SKY_STAKING_ENGINE="0xCe01C90dE7FD1bcFa39e237FE6D8D9F569e8A6a3";
+    const SKY_USDS_REWARDS="0x38E4254bD82ED5Ee97CD1C4278FAae748d998865";
+    const SKY_USD_FEED="0xc2ffbbDCCF1466Eb8968a846179191cb881eCdff";
+
     const SEL={
       assets:"0xabfceffc",oracle:"0x7dc0d1d0",balance:"0x70a08231",
-      borrowed:"0x95dd9193",exchange:"0x182df0f5",symbol:"0x95d89b41",price:"0xfc57d4df"
+      borrowed:"0x95dd9193",exchange:"0x182df0f5",symbol:"0x95d89b41",price:"0xfc57d4df",
+
+      // Sky Staking Engine / Ethereum selectors.
+      ownerUrnsCount:"0xa1c03731",
+      ownerUrns:"0xd9f06192",
+      urnFarms:"0x2a95b45d",
+      vat:"0x36569e77",
+      ilk:"0xc5ce281e",
+      earned:"0x008cc262",
+      latestRoundData:"0xfeaf968c",
+      decimals:"0x313ce567",
+      vatUrns:"0x2424be5c",
+      vatIlks:"0xd9638d36"
     };
     const E18=1000000000000000000n;
     const E36=1000000000000000000000000000000000000n;
+    const E45=1000000000000000000000000000000000000000000000n;
     let mbLoading=false, mbTimer=null, mbData=null;
 
     const $=id=>document.getElementById(id);
@@ -9238,6 +9260,35 @@
       }
       throw lastErr||new Error("All Base RPC endpoints failed");
     }
+    async function rpcCallFrom(endpoints,to,data,label){
+      let lastErr=null;
+      for(const rpc of endpoints){
+        try{
+          const res=await fetch(rpc,{
+            method:"POST",headers:{"Content-Type":"application/json"},
+            cache:"no-store",body:JSON.stringify({jsonrpc:"2.0",method:"eth_call",params:[{to,data},"latest"],id:Date.now()})
+          });
+          if(!res.ok) throw new Error("HTTP "+res.status);
+          const json=await res.json();
+          if(json.error) throw new Error(json.error.message||"RPC error");
+          if(!json.result||json.result==="0x") throw new Error("Empty RPC result");
+          return json.result;
+        }catch(err){ lastErr=err; }
+      }
+      throw lastErr||new Error("All "+(label||"RPC")+" endpoints failed");
+    }
+    const ethCall=(to,data)=>rpcCallFrom(ETH_RPCS,to,data,"Ethereum");
+    const padUint=n=>BigInt(n).toString(16).padStart(64,"0");
+    const zeroAddress=a=>!a||/^0x0{40}$/i.test(a);
+    function decodeSignedWord(raw,index=0){
+      const v=asBig(word(raw,index));
+      const limit=1n<<255n;
+      return v>=limit?v-(1n<<256n):v;
+    }
+    function decodeTupleWords(raw){
+      const count=Math.max(0,Math.floor((raw.length-2)/64));
+      return Array.from({length:count},(_,i)=>asBig(word(raw,i)));
+    }
     async function readMoonwell(wallet){
       const arg=padAddress(wallet);
       const [assetsRaw,oracleRaw]=await Promise.all([
@@ -9270,6 +9321,94 @@
       const healthFactor=Math.min(99,totalBorrowed>0?totalSupplied/totalBorrowed:99);
       return {positions:kept,totalSupplied,totalBorrowed,netEquity,healthFactor,lastUpdated:new Date().toISOString()};
     }
+
+    async function readSky(wallet){
+      const walletArg=padAddress(wallet);
+
+      // Read the current SKY/USD oracle value and decimals.
+      const [roundRaw,decimalsRaw,liquidRaw,countRaw,vatRaw,ilkRaw]=await Promise.all([
+        ethCall(SKY_USD_FEED,SEL.latestRoundData),
+        ethCall(SKY_USD_FEED,SEL.decimals),
+        ethCall(SKY_TOKEN,SEL.balance+walletArg),
+        ethCall(SKY_STAKING_ENGINE,SEL.ownerUrnsCount+walletArg),
+        ethCall(SKY_STAKING_ENGINE,SEL.vat),
+        ethCall(SKY_STAKING_ENGINE,SEL.ilk)
+      ]);
+
+      const oracleAnswer=decodeSignedWord(roundRaw,1);
+      const oracleDecimals=Number(asBig(decimalsRaw));
+      if(oracleAnswer<=0n||oracleDecimals<0||oracleDecimals>36) throw new Error("Sky price feed returned an invalid value.");
+      const skyPrice=scaled(oracleAnswer,10n**BigInt(oracleDecimals),8);
+      const liquidSky=scaled(asBig(liquidRaw),E18,8);
+      const urnCount=Math.min(Number(asBig(countRaw)),50);
+      const vatAddress=decodeAddress(vatRaw);
+      const ilkWord=word(ilkRaw,0);
+
+      // The Vat rate is shared by every urn of this collateral type.
+      const ilkState=decodeTupleWords(await ethCall(vatAddress,SEL.vatIlks+ilkWord.slice(2)));
+      const debtRate=ilkState[1]||0n;
+
+      const urns=[];
+      let stakedSky=0;
+      let rewardsUSDS=0;
+      let debtUSDS=0;
+
+      for(let i=0;i<urnCount;i++){
+        const urnRaw=await ethCall(SKY_STAKING_ENGINE,SEL.ownerUrns+walletArg+padUint(i));
+        const urn=decodeAddress(urnRaw);
+        if(zeroAddress(urn)) continue;
+
+        const farmRaw=await ethCall(SKY_STAKING_ENGINE,SEL.urnFarms+padAddress(urn));
+        const selectedFarm=decodeAddress(farmRaw);
+        const farm=zeroAddress(selectedFarm)?SKY_USDS_REWARDS:selectedFarm;
+
+        const calls=[
+          ethCall(LSSKY_TOKEN,SEL.balance+padAddress(urn)).catch(()=> "0x0"),
+          ethCall(farm,SEL.balance+padAddress(urn)).catch(()=> "0x0"),
+          ethCall(farm,SEL.earned+padAddress(urn)).catch(()=> "0x0"),
+          ethCall(vatAddress,SEL.vatUrns+ilkWord.slice(2)+padAddress(urn)).catch(()=> "0x")
+        ];
+        const [idleLsRaw,farmLsRaw,earnedRaw,urnStateRaw]=await Promise.all(calls);
+
+        // LSSKY held by the urn plus LSSKY deposited by the urn into its selected farm.
+        const idleLs=scaled(asBig(idleLsRaw),E18,8);
+        const farmLs=scaled(asBig(farmLsRaw),E18,8);
+        const earned=scaled(asBig(earnedRaw),E18,8);
+
+        let normalizedDebt=0n;
+        if(urnStateRaw&&urnStateRaw!=="0x"){
+          const state=decodeTupleWords(urnStateRaw);
+          normalizedDebt=state[1]||0n;
+        }
+        const currentDebt=debtRate>0n?scaled(normalizedDebt*debtRate,E45,8):0;
+
+        const locked=idleLs+farmLs;
+        stakedSky+=locked;
+        rewardsUSDS+=earned;
+        debtUSDS+=currentDebt;
+        urns.push({urn,farm,lockedSky:locked,rewardsUSDS:earned,debtUSDS:currentDebt});
+      }
+
+      const stakedValueUSD=stakedSky*skyPrice;
+      const liquidValueUSD=liquidSky*skyPrice;
+      const netAssets=stakedValueUSD+liquidValueUSD+rewardsUSDS-debtUSDS;
+
+      return {
+        wallet,
+        urns,
+        urnCount,
+        skyPrice,
+        stakedSky,
+        liquidSky,
+        rewardsUSDS,
+        debtUSDS,
+        stakedValueUSD,
+        liquidValueUSD,
+        netAssets,
+        lastUpdated:new Date().toISOString()
+      };
+    }
+
     function tokenRgb(symbol){
       const s=String(symbol).toUpperCase();
       if(s.includes("USDC")) return "58,145,255";
@@ -9286,7 +9425,15 @@
     function saveHistory(data){
       let h=[];
       try{ h=JSON.parse(localStorage.getItem("moonwell-history")||"[]"); }catch(_){}
-      h.push({t:Date.now(),s:data.totalSupplied,b:data.totalBorrowed,n:data.netEquity,r:data.healthFactor});
+      h.push({
+        t:Date.now(),
+        s:data.totalSupplied,
+        b:data.totalBorrowed,
+        n:data.netEquity,
+        r:data.healthFactor,
+        w:data.totalNetWorth,
+        sky:data.sky?data.sky.netAssets:0
+      });
       h=h.filter(x=>Date.now()-x.t<30*24*3600*1000).slice(-30);
       localStorage.setItem("moonwell-history",JSON.stringify(h));
       return h;
@@ -9316,14 +9463,17 @@
       $("mb-total-supplied").textContent=shortMoney(data.totalSupplied);
       $("mb-total-borrowed").textContent=shortMoney(data.totalBorrowed);
       $("mb-net-equity").textContent=shortMoney(data.netEquity);
-      $("mb-ratio").textContent=(data.healthFactor>=99?"∞":data.healthFactor.toFixed(2)+"x");
+      $("mb-total-net-worth").textContent=shortMoney(data.totalNetWorth);
       $("mb-health-value").textContent=(data.healthFactor>=99?"∞":data.healthFactor.toFixed(2));
       $("mb-last-updated").textContent=new Date(data.lastUpdated).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+" · today";
-      $("mb-market-count").textContent=data.positions.length+" active market"+(data.positions.length===1?"":"s");
-      $("mb-supplied-sub").textContent=data.positions.length+" entered markets";
+      $("mb-market-count").textContent=(data.positions.length+(data.sky&&data.sky.netAssets!==0?1:0))+" tracked position"+((data.positions.length+(data.sky&&data.sky.netAssets!==0?1:0))===1?"":"s");
+      $("mb-supplied-sub").textContent=data.positions.length+" Moonwell markets";
       $("mb-borrowed-sub").textContent=data.positions.filter(p=>p.borrowed>.01).length+" borrowed assets";
-      $("mb-net-sub").textContent=data.netEquity>=0?"Positive net position":"Negative net position";
-      $("mb-ratio-sub").textContent=data.totalBorrowed>0?"Supplied ÷ borrowed":"No active borrowing";
+      $("mb-net-sub").textContent=data.netEquity>=0?"Moonwell net equity":"Moonwell net liability";
+      const sky=data.sky;
+      $("mb-net-worth-sub").textContent=sky
+        ? "Moonwell "+money(data.netEquity)+" · Sky "+money(sky.netAssets)
+        : "Moonwell only · Sky unavailable";
       const ratio=data.healthFactor;
       const state=ratio>=1.5?"Healthy":ratio>=1.2?"Caution":ratio>=1?"Risky":"Critical";
       $("mb-health-state").innerHTML=esc(state)+' <small>position ratio</small>';
@@ -9334,7 +9484,7 @@
       if(!data.positions.length){
         list.innerHTML='<div class="mb-empty"><strong>No entered Moonwell markets found</strong>This wallet has no position returned by getAssetsIn, or its supplied markets were never enabled as collateral.</div>';
       }else{
-        list.innerHTML=data.positions.sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)).map(p=>{
+        const rows=data.positions.sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)).map(p=>{
           const neg=p.net<0,share=Math.abs(p.net)/totalAbs*100;
           return '<div class="mb-row">'
             +'<div class="mb-asset"><span class="mb-token" style="--tok:'+tokenRgb(p.symbol)+'">'+esc(tokenText(p.symbol))+'</span><div><strong>'+esc(p.symbol)+'</strong><small>Moonwell market</small></div></div>'
@@ -9343,14 +9493,26 @@
             +'<div class="mb-cell net '+(neg?"negative":"")+'>'+money(p.net)+'<small>'+(neg?"net liability":"net position")+'</small></div>'
             +'<div class="mb-impact '+(neg?"negative":"")+'">'+share.toFixed(1)+'%</div>'
           +'</div>';
-        }).join("");
+        });
+        if(data.sky){
+          const sky=data.sky,neg=sky.netAssets<0;
+          const skyShare=Math.abs(sky.netAssets)/(Math.abs(data.totalNetWorth)||1)*100;
+          rows.unshift('<div class="mb-row" title="Staked SKY + liquid SKY + claimable USDS rewards − detected Sky debt">'
+            +'<div class="mb-asset"><span class="mb-token" style="--tok:245,184,78">SKY</span><div><strong>SKY Staking</strong><small>'+sky.stakedSky.toLocaleString(undefined,{maximumFractionDigits:2})+' SKY · '+sky.urnCount+' urn'+(sky.urnCount===1?"":"s")+'</small></div></div>'
+            +'<div class="mb-cell">'+money(sky.stakedValueUSD+sky.liquidValueUSD+sky.rewardsUSDS)+'<small>stake + liquid + rewards</small></div>'
+            +'<div class="mb-cell">'+money(sky.debtUSDS)+'<small>detected USDS debt</small></div>'
+            +'<div class="mb-cell net '+(neg?"negative":"")+'>'+money(sky.netAssets)+'<small>SKY @ '+money(sky.skyPrice)+'</small></div>'
+            +'<div class="mb-impact '+(neg?"negative":"")+'">'+skyShare.toFixed(1)+'%</div>'
+          +'</div>');
+        }
+        list.innerHTML=rows.join("");
       }
       const h=saveHistory(data);
       spark("mb-spark-supplied",h.map(x=>x.s));
       spark("mb-spark-borrowed",h.map(x=>x.b));
       spark("mb-spark-net",h.map(x=>x.n));
-      spark("mb-spark-ratio",h.map(x=>x.r));
-      setStatus("Connected to Base RPC");
+      spark("mb-spark-net-worth",h.map(x=>Number.isFinite(x.w)?x.w:x.n));
+      setStatus(data.sky?"Base + Ethereum RPC connected":"Base connected · Sky unavailable",!data.sky);
     }
     function renderError(err){
       $("mb-position-list").innerHTML='<div class="mb-error"><strong>Moonwell data could not be loaded</strong>'+esc(err&&err.message?err.message:String(err))+'<br>Try Refresh again; the integration automatically rotates through three public Base RPC endpoints.</div>';
@@ -9368,8 +9530,23 @@
       localStorage.setItem("moonwell-wallet",wallet);
       mbLoading=true;
       const btn=$("mb-refresh"); if(btn){btn.disabled=true;btn.querySelector("span:last-child").textContent="Loading…";}
-      setStatus("Querying Moonwell contracts");
-      try{ render(await readMoonwell(wallet)); }
+      setStatus("Querying Moonwell + Sky contracts");
+      try{
+        const [moonwellResult,skyResult]=await Promise.allSettled([
+          readMoonwell(wallet),
+          readSky(wallet)
+        ]);
+        if(moonwellResult.status!=="fulfilled") throw moonwellResult.reason;
+        const moonwell=moonwellResult.value;
+        const sky=skyResult.status==="fulfilled"?skyResult.value:null;
+        render({
+          ...moonwell,
+          sky,
+          skyError:skyResult.status==="rejected"?String(skyResult.reason&&skyResult.reason.message||skyResult.reason):"",
+          totalNetWorth:moonwell.netEquity+(sky?sky.netAssets:0),
+          lastUpdated:new Date().toISOString()
+        });
+      }
       catch(err){ renderError(err); }
       finally{
         mbLoading=false;
@@ -9408,7 +9585,7 @@
     function ready(){
       const panel=$("moneybuddy-panel"),btn=$("dock-moneybuddy"),input=$("mb-wallet");
       if(!panel||!btn) return;
-      if(input) input.value=localStorage.getItem("moonwell-wallet")||"";
+      if(input) input.value=localStorage.getItem("moonwell-wallet")||"0xDf801516A083050559C205c9f86F7C4DfBb5A7fd";
       btn.addEventListener("click",()=>setMoneyBuddy(panel.classList.contains("hidden")));
       $("mb-refresh").addEventListener("click",refresh);
       if(input) input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();refresh();}});
