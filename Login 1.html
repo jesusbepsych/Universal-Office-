@@ -374,7 +374,12 @@
   .rw-gate.lv0 .runway-actions{right:19%;}
   .rw-gate.lv1 .runway-actions{right:25%;}
   .rw-gate.lv2 .runway-actions{right:30%;}
-  .rw-gate.lv3 .runway-actions,.rw-gate.lv4 .runway-actions{display:none;}
+  .rw-gate.lv3 .runway-actions{right:33.5%;}
+  .rw-gate.lv4 .runway-actions{right:35.5%;}
+  .rw-gate.lv3 .runway-iconbtn{width:19px;height:19px;border-radius:6px;}
+  .rw-gate.lv4 .runway-iconbtn{width:17px;height:17px;border-radius:5px;}
+  .rw-gate.lv3 .runway-iconbtn svg{width:9px;height:9px;}
+  .rw-gate.lv4 .runway-iconbtn svg{width:8px;height:8px;}
   .runway-iconbtn{
     width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
     background:rgba(8,14,26,.66);border:1px solid rgba(var(--c,95,160,255),.42);
@@ -383,6 +388,37 @@
   .runway-iconbtn svg{width:11px;height:11px;}
   .runway-done[aria-pressed="true"]{background:rgba(47,214,176,.22);border-color:rgba(47,214,176,.6);color:#6ef0c9;}
   .runway-remove.armed{width:auto;padding:0 9px;border-radius:999px;font-size:10px;font-weight:700;color:#ff9aa2;border-color:rgba(255,111,125,.55);background:rgba(20,8,12,.72);}
+
+
+  /* one-day agenda navigator */
+  .runway-daynav{
+    position:absolute;top:4.1%;right:3.3%;z-index:12;
+    display:flex;align-items:center;gap:6px;
+    padding:5px 6px;border-radius:12px;
+    background:rgba(5,10,21,.58);
+    border:1px solid rgba(101,173,255,.24);
+    box-shadow:0 0 18px rgba(72,143,255,.10),inset 0 1px 0 rgba(255,255,255,.04);
+    backdrop-filter:blur(7px);
+  }
+  .runway-daybtn{
+    width:28px;height:28px;border-radius:8px;
+    display:grid;place-items:center;
+    background:rgba(10,18,34,.78);
+    border:1px solid rgba(112,183,255,.38);
+    color:#9bd6ff;font-family:var(--mono);font-size:17px;line-height:1;
+    box-shadow:0 0 12px rgba(78,159,255,.10);
+    touch-action:manipulation;
+  }
+  .runway-daybtn:active{transform:scale(.94);background:rgba(29,55,91,.82);}
+  .runway-daylabel{
+    min-width:92px;text-align:center;
+    font-family:var(--mono);font-size:9px;line-height:1.25;
+    letter-spacing:.08em;text-transform:uppercase;color:#d7e8ff;
+  }
+  .runway-daylabel span{display:block;margin-top:2px;color:#7891b4;font-size:8px;letter-spacing:.05em;}
+  @media(max-width:720px){
+    .runway-daynav{top:3%;right:2.5%;transform:scale(.88);transform-origin:top right;}
+  }
 
   /* footer / legend across the bottom of the plate */
   .runway-footer{
@@ -6754,7 +6790,7 @@
     function pickRunwayPivot(list,today,nowHM){ let idx=list.findIndex(t=>isCurrentWindowTask(t,today,nowHM)); if(idx!==-1) return idx; idx=list.findIndex(t=>isUpcomingTask(t,today,nowHM)); return idx===-1?0:idx; }
 
     // state
-    let allTasks=[], tasksByDay={}, activeTier="today", activeFilter="all", currentPage=1;
+    let allTasks=[], tasksByDay={}, activeTier="today", activeFilter="all", currentPage=1, agendaDayOffset=0;
     let calYear=null, calMonth=null, selectedDay=null;
 
     async function loadTasks(){
@@ -6765,7 +6801,7 @@
           .in("status",["open","done"]).order("due_date",{ascending:true});
         if(error){ el("agenda").innerHTML='<div class="empty">Could not load items: '+error.message+'</div>'; return; }
         allTasks = data || [];
-        activeTier="today"; activeFilter="all"; currentPage=1; selectedDay=null; calYear=null; calMonth=null;
+        activeTier="today"; activeFilter="all"; currentPage=1; agendaDayOffset=0; selectedDay=null; calYear=null; calMonth=null;
         buildByDay();
         renderRibbon(true); renderFilters(); renderGauge(); renderFooter(); renderAgenda();
         if(window.renderTopo) window.renderTopo();
@@ -6799,7 +6835,7 @@
       kpis.forEach(k=>{ if(animate)countUp(el("kpi-"+k.tier),k.n); else el("kpi-"+k.tier).textContent=k.n; el("ribbon").querySelector('[data-tier="'+k.tier+'"]').addEventListener("click",()=>onTier(k.tier)); });
     }
     function updateTierActive(){ el("ribbon").querySelectorAll(".kpi").forEach(b=>b.classList.toggle("active", b.dataset.tier===activeTier)); }
-    function onTier(tier){ if(tier===activeTier && tier!=="all") activeTier="all"; else activeTier=tier; currentPage=1; updateTierActive(); renderAgenda(); }
+    function onTier(tier){ agendaDayOffset=null; if(tier===activeTier && tier!=="all") activeTier="all"; else activeTier=tier; currentPage=1; updateTierActive(); renderAgenda(); }
 
     function renderFilters(){
       const cats=Array.from(new Set(allTasks.map(t=>t.category).filter(Boolean))).sort();
@@ -6838,12 +6874,34 @@
       return map[cat] || "•";
     }
 
+    function agendaTargetDate(today){
+      return addDays(today, agendaDayOffset===null ? 0 : agendaDayOffset);
+    }
+    function agendaDayLabel(ymd,today){
+      const diff=dayDiff(ymd,today);
+      const d=new Date(ymd+"T12:00:00Z");
+      const weekday=new Intl.DateTimeFormat("en-US",{weekday:"short",timeZone:"UTC"}).format(d);
+      const date=new Intl.DateTimeFormat("en-US",{month:"short",day:"numeric",timeZone:"UTC"}).format(d);
+      const lead=diff===0?"Today":diff===1?"Tomorrow":diff===-1?"Yesterday":weekday;
+      return {lead:lead,date:date};
+    }
+    function shiftAgendaDay(delta){
+      if(agendaDayOffset===null) agendaDayOffset=0;
+      agendaDayOffset+=delta;
+      activeTier="all";
+      currentPage=1;
+      updateTierActive();
+      renderAgenda();
+    }
+
     function renderAgenda(){
       const {today,weekEnd}=computeDates();
       const nowHM=pacificHM();
+      const targetDate=agendaTargetDate(today);
+      const exactDayMode=agendaDayOffset!==null;
       let list=allTasks.filter(t=>{
         const x=tierOf(t,today,weekEnd);
-        const tierOk = activeTier==="all" ? true : x===activeTier;
+        const tierOk = exactDayMode ? t.due_date===targetDate : (activeTier==="all" ? true : x===activeTier);
         const catOk  = activeFilter==="all" ? true : t.category===activeFilter;
         return tierOk && catOk;
       });
@@ -6854,7 +6912,7 @@
         return taskSortKey(a).localeCompare(taskSortKey(b));
       });
 
-      if(activeTier!=="past" && list.length>1){
+      if(!exactDayMode && activeTier!=="past" && list.length>1){
         const pivot=pickRunwayPivot(list,today,nowHM);
         if(pivot>0) list=list.slice(pivot).concat(list.slice(0,pivot));
       }
@@ -6866,7 +6924,12 @@
 
       const slice=list.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
       if(!slice.length){
-        el("agenda").innerHTML='<div class="runway-empty">Nothing matches here. Try another tier or category, or wait for the next scan.</div>';
+        const dl=agendaDayLabel(targetDate,today);
+        const nav='<div class="runway-daynav"><button class="runway-daybtn" id="runway-day-prev" aria-label="Previous day">&#8249;</button><div class="runway-daylabel">'+escapeHtml(dl.lead)+'<span>'+escapeHtml(dl.date)+'</span></div><button class="runway-daybtn" id="runway-day-next" aria-label="Next day">&#8250;</button></div>';
+        el("agenda").innerHTML='<div class="runway-shell"><div class="runway-stage">'+nav+'<div class="runway-empty" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,78%);">No agenda items for this day.</div><div class="runway-footer"><div class="runway-stamp"><span class="warn">&#9651;</span><div class="copy"><strong>Signal runway agenda</strong><span>Daily navigation active</span></div></div></div></div></div>';
+        const dp=el("runway-day-prev"), dn=el("runway-day-next");
+        if(dp) dp.addEventListener("click",()=>shiftAgendaDay(-1));
+        if(dn) dn.addEventListener("click",()=>shiftAgendaDay(1));
         return;
       }
 
@@ -6915,8 +6978,9 @@
       const html=''
         +'<div class="runway-shell">'
           +'<div class="runway-stage">'
+            +(function(){ const dl=agendaDayLabel(targetDate,today); return '<div class="runway-daynav"><button class="runway-daybtn" id="runway-day-prev" aria-label="Previous day">&#8249;</button><div class="runway-daylabel">'+escapeHtml(dl.lead)+'<span>'+escapeHtml(dl.date)+'</span></div><button class="runway-daybtn" id="runway-day-next" aria-label="Next day">&#8250;</button></div>'; })()
             +gatesHtml
-            +'<div class="runway-footer"><div class="runway-stamp"><span class="warn">&#9651;</span><div class="copy"><strong>Signal runway agenda</strong><span>Live queue &middot; current view</span></div></div><div class="runway-legend">'+legendHtml+'</div></div>'
+            +'<div class="runway-footer"><div class="runway-stamp"><span class="warn">&#9651;</span><div class="copy"><strong>Signal runway agenda</strong><span>'+(exactDayMode?'Daily navigation':'Live queue')+' &middot; current view</span></div></div><div class="runway-legend">'+legendHtml+'</div></div>'
           +'</div>'
         +'</div>'+pager;
 
@@ -6924,6 +6988,24 @@
       const pv=el('prev'), nx=el('next');
       if(pv) pv.addEventListener('click',()=>{ currentPage--; renderAgenda(); });
       if(nx) nx.addEventListener('click',()=>{ currentPage++; renderAgenda(); });
+      const dayPrev=el('runway-day-prev'), dayNext=el('runway-day-next');
+      if(dayPrev) dayPrev.addEventListener('click',()=>shiftAgendaDay(-1));
+      if(dayNext) dayNext.addEventListener('click',()=>shiftAgendaDay(1));
+      const runwayStage=el('agenda').querySelector('.runway-stage');
+      if(runwayStage){
+        let swipeX=null, swipeY=null;
+        runwayStage.addEventListener('touchstart',(e)=>{
+          if(e.touches.length!==1 || e.target.closest('button')) return;
+          swipeX=e.touches[0].clientX; swipeY=e.touches[0].clientY;
+        },{passive:true});
+        runwayStage.addEventListener('touchend',(e)=>{
+          if(swipeX===null || !e.changedTouches.length) return;
+          const dx=e.changedTouches[0].clientX-swipeX;
+          const dy=e.changedTouches[0].clientY-swipeY;
+          swipeX=swipeY=null;
+          if(Math.abs(dx)>=55 && Math.abs(dx)>Math.abs(dy)*1.25) shiftAgendaDay(dx<0?1:-1);
+        },{passive:true});
+      }
       el('agenda').querySelectorAll('.runway-done').forEach(b=>b.addEventListener('click',(e)=>{ e.stopPropagation(); toggleDone(b.dataset.id); }));
       el('agenda').querySelectorAll('.runway-remove').forEach(b=>{
         let armed=false, tmr;
