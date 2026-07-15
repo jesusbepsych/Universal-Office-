@@ -8783,11 +8783,14 @@
         function setReplyDesk(on){
           if(!panel||!agenda) return;
           panel.classList.toggle("hidden",!on);
+          panel.style.display=on?"block":"";
           panel.setAttribute("aria-hidden",on?"false":"true");
           agenda.classList.toggle("hidden",!!on);
+          agenda.style.display=on?"none":"";
           if(primary) primary.classList.toggle("replydesk-mode",!!on);
           if(btn) btn.classList.toggle("on",!!on);
           if(on){
+            if(window.setMoneyBuddy) window.setMoneyBuddy(false,false);
             var cal=document.getElementById("caldesk-panel");
             if(cal){ cal.classList.add("hidden"); cal.style.display=""; }
             var calbtn=document.getElementById("dock-caldesk");
@@ -9126,6 +9129,7 @@
         function setCalDesk(on){
           if(!panel||!agenda) return;
           if(on){
+            if(window.setMoneyBuddy) window.setMoneyBuddy(false,false);
             if(window.setReplyDesk) window.setReplyDesk(false);
             if(window.setActionPanel) window.setActionPanel(false);
           }
@@ -9192,6 +9196,7 @@
     const SEL={
       assets:"0xabfceffc",oracle:"0x7dc0d1d0",balance:"0x70a08231",
       borrowed:"0x95dd9193",exchange:"0x182df0f5",symbol:"0x95d89b41",price:"0xfc57d4df",
+      underlying:"0x6f307dc3",decimals:"0x313ce567",
 
       // Sky Staking Engine / Ethereum selectors.
       ownerUrnsCount:"0xa1c03731",
@@ -9216,6 +9221,12 @@
     const shortMoney=n=>{
       if(!Number.isFinite(n)) return "$0.00";
       return money(n);
+    };
+    const tokenAmount=n=>{
+      if(!Number.isFinite(n)) return "0";
+      return new Intl.NumberFormat("en-US",{
+        maximumFractionDigits:n>=1000?2:n>=1?4:8
+      }).format(n);
     };
     const padAddress=a=>"000000000000000000000000"+a.toLowerCase().replace(/^0x/,"");
     const isAddress=a=>/^0x[a-fA-F0-9]{40}$/.test(String(a||"").trim());
@@ -9299,12 +9310,13 @@
       const oracle=decodeAddress(oracleRaw);
       const positions=await Promise.all(markets.map(async mToken=>{
         const mArg=padAddress(mToken);
-        const [balRaw,borrowRaw,rateRaw,symRaw,priceRaw]=await Promise.all([
+        const [balRaw,borrowRaw,rateRaw,symRaw,priceRaw,underlyingRaw]=await Promise.all([
           rpcCall(mToken,SEL.balance+arg),
           rpcCall(mToken,SEL.borrowed+arg),
           rpcCall(mToken,SEL.exchange),
           rpcCall(mToken,SEL.symbol),
-          rpcCall(oracle,SEL.price+mArg)
+          rpcCall(oracle,SEL.price+mArg),
+          rpcCall(mToken,SEL.underlying).catch(()=>null)
         ]);
         const balance=asBig(balRaw), borrowed=asBig(borrowRaw), rate=asBig(rateRaw), price=asBig(priceRaw);
         const underlying=balance*rate/E18;
@@ -9312,7 +9324,26 @@
         const borrowedUSD=scaled(borrowed*price,E36,6);
         let symbol=decodeString(symRaw)||mToken.slice(0,6);
         symbol=symbol.replace(/^m/,"");
-        return {mToken,symbol,supplied:suppliedUSD,borrowed:borrowedUSD,net:suppliedUSD-borrowedUSD};
+
+        let underlyingAddress=null;
+        let underlyingDecimals=18;
+        if(underlyingRaw){
+          try{
+            underlyingAddress=decodeAddress(underlyingRaw);
+            const decimalsRaw=await rpcCall(underlyingAddress,SEL.decimals);
+            const parsed=Number(asBig(decimalsRaw));
+            if(Number.isInteger(parsed)&&parsed>=0&&parsed<=36) underlyingDecimals=parsed;
+          }catch(_){}
+        }
+        const unit=10n**BigInt(underlyingDecimals);
+        const suppliedAmount=scaled(underlying,unit,8);
+        const borrowedAmount=scaled(borrowed,unit,8);
+
+        return {
+          mToken,underlyingAddress,underlyingDecimals,symbol,
+          supplied:suppliedUSD,borrowed:borrowedUSD,net:suppliedUSD-borrowedUSD,
+          suppliedAmount,borrowedAmount
+        };
       }));
       const kept=positions.filter(p=>p.supplied>.01||p.borrowed>.01);
       const totalSupplied=kept.reduce((a,p)=>a+p.supplied,0);
@@ -9487,7 +9518,7 @@
         const rows=data.positions.sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)).map(p=>{
           const neg=p.net<0,share=Math.abs(p.net)/totalAbs*100;
           return '<div class="mb-row">'
-            +'<div class="mb-asset"><span class="mb-token" style="--tok:'+tokenRgb(p.symbol)+'">'+esc(tokenText(p.symbol))+'</span><div><strong>'+esc(p.symbol)+'</strong><small>Moonwell market</small></div></div>'
+            +'<div class="mb-asset"><span class="mb-token" style="--tok:'+tokenRgb(p.symbol)+'">'+esc(tokenText(p.symbol))+'</span><div><strong>'+esc(p.symbol)+'</strong><small>'+tokenAmount(p.suppliedAmount)+' '+esc(p.symbol)+' supplied'+(p.borrowedAmount>.00000001?' · '+tokenAmount(p.borrowedAmount)+' borrowed':'')+'</small></div></div>'
             +'<div class="mb-cell">'+money(p.supplied)+'<small>supplied value</small></div>'
             +'<div class="mb-cell">'+money(p.borrowed)+'<small>borrowed value</small></div>'
             +'<div class="mb-cell net '+(neg?"negative":"")+'>'+money(p.net)+'<small>'+(neg?"net liability":"net position")+'</small></div>'
@@ -9553,7 +9584,7 @@
         if(btn){btn.disabled=false;btn.querySelector("span:last-child").textContent="Refresh";}
       }
     }
-    function setMoneyBuddy(on){
+    function setMoneyBuddy(on,restoreAgenda=true){
       const panel=$("moneybuddy-panel"),agenda=$("agenda-panel"),btn=$("dock-moneybuddy"),primary=$("console-overview");
       if(!panel||!agenda) return;
       if(on){
@@ -9569,9 +9600,17 @@
       panel.classList.toggle("hidden",!on);
       panel.style.display=on?"block":"";
       panel.setAttribute("aria-hidden",on?"false":"true");
-      agenda.classList.toggle("hidden",on);
-      agenda.style.display=on?"none":"";
-      if(primary) primary.classList.toggle("moneybuddy-mode",on);
+
+      if(on||restoreAgenda){
+        agenda.classList.toggle("hidden",on);
+        agenda.style.display=on?"none":"";
+      }
+      if(primary){
+        primary.classList.toggle("moneybuddy-mode",on);
+        if(!on&&restoreAgenda){
+          primary.classList.remove("replydesk-mode","caldesk-mode","action-panel-mode");
+        }
+      }
       if(btn) btn.classList.toggle("on",on);
       if(on){
         const saved=localStorage.getItem("moonwell-wallet")||"";
@@ -9595,7 +9634,7 @@
         try{await navigator.clipboard.writeText(val);$("mb-copy-wallet").textContent="✓";setTimeout(()=>$("mb-copy-wallet").textContent="▢",900);}catch(_){}
       });
       document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions,#dock-replydesk,#dock-caldesk").forEach(other=>{
-        if(other!==btn) other.addEventListener("click",()=>setMoneyBuddy(false));
+        if(other!==btn) other.addEventListener("click",()=>setMoneyBuddy(false,false));
       });
       mbTimer=setInterval(()=>{
         if(!panel.classList.contains("hidden")&&document.visibilityState==="visible"&&isAddress(input&&input.value)) refresh();
