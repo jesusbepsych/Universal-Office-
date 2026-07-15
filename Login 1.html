@@ -6420,6 +6420,129 @@
   #console-summary .ds-stage:not(.full) .ds-c{
     overflow:hidden!important;
   }
+
+  /* Money Buddy — Moonwell portfolio monitor */
+  .dock-moneybuddy .dock-ico{color:#7fb9ff;}
+  .dock-moneybuddy.on{
+    border-color:rgba(74,145,255,.92)!important;
+    background:linear-gradient(180deg,rgba(34,72,132,.62),rgba(12,24,48,.92))!important;
+    box-shadow:inset 0 0 0 1px rgba(126,190,255,.24),0 0 24px rgba(55,130,255,.32)!important;
+  }
+  .moneybuddy-panel{
+    padding:0!important;overflow:hidden;min-height:700px;
+    background:
+      radial-gradient(circle at 18% 0%,rgba(54,129,255,.09),transparent 34%),
+      linear-gradient(180deg,#0c1424,#08101d)!important;
+    border-color:rgba(74,119,188,.42)!important;
+  }
+  .mb-shell{
+    --mb-blue:88,166,255;--mb-violet:178,106,255;--mb-green:78,223,176;--mb-amber:245,184,78;
+    position:relative;min-height:700px;padding:25px;
+    background:
+      linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+    background-size:36px 36px;
+  }
+  .mb-shell::before{
+    content:"";position:absolute;inset:12px;border-radius:18px;pointer-events:none;
+    border:1px solid rgba(95,162,255,.34);
+    box-shadow:inset 0 0 42px rgba(52,116,222,.07),0 0 24px rgba(52,116,222,.08);
+  }
+  .mb-head{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px;}
+  .mb-brand-kicker{font:600 10px/1 var(--mono);letter-spacing:.17em;text-transform:uppercase;color:#62e39b;margin-bottom:7px;}
+  .mb-brand{display:flex;align-items:center;gap:11px;}
+  .mb-brand h2{font-family:var(--disp);font-size:29px;letter-spacing:-.03em;margin:0;color:#f2f6ff;}
+  .mb-brand .mb-on{font:500 15px var(--mono);color:#8b9ab7;}
+  .mb-brand .mb-base{font:600 15px var(--mono);color:#72aaff;}
+  .mb-base-dot{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#2468e8;color:white;font-size:10px;box-shadow:0 0 14px rgba(55,125,255,.48);}
+  .mb-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .mb-wallet-wrap{display:flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid rgba(96,139,205,.33);border-radius:10px;background:rgba(15,28,50,.82);}
+  .mb-wallet-input{width:172px;background:transparent;border:0;color:#dce8ff;font:500 12px var(--mono);outline:0;}
+  .mb-icon-btn,.mb-refresh{
+    min-height:37px;border-radius:9px;border:1px solid rgba(96,139,205,.35);
+    color:#bcd3f7;background:rgba(15,28,50,.84);padding:0 12px;font-weight:600;
+  }
+  .mb-icon-btn{padding:0 9px;}
+  .mb-refresh{display:flex;align-items:center;gap:7px;}
+  .mb-refresh[disabled]{opacity:.55;cursor:wait;}
+  .mb-statusline{font:500 10px var(--mono);color:#7787a5;min-width:112px;}
+  .mb-statusline strong{display:block;color:#afbed8;margin-bottom:3px;text-transform:uppercase;letter-spacing:.08em;font-size:9px;}
+  .mb-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4ee0a5;box-shadow:0 0 9px #4ee0a5;margin-right:5px;}
+  .mb-status-dot.bad{background:#ff7a83;box-shadow:0 0 9px #ff7a83;}
+
+  .mb-kpis{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-bottom:12px;}
+  .mb-kpi{
+    --rgb:var(--mb-blue);position:relative;min-height:150px;padding:19px 18px 46px;overflow:hidden;
+    border-radius:13px;border:1px solid rgba(var(--rgb),.64);
+    background:linear-gradient(180deg,rgba(var(--rgb),.10),rgba(9,18,34,.9));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 14px 35px -28px rgba(var(--rgb),.9);
+  }
+  .mb-kpi.violet{--rgb:var(--mb-violet)} .mb-kpi.green{--rgb:var(--mb-green)} .mb-kpi.amber{--rgb:var(--mb-amber)}
+  .mb-kpi-label{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#92a9cb;}
+  .mb-kpi-value{margin-top:12px;font:600 25px/1.05 var(--mono);letter-spacing:-.04em;color:#eef5ff;white-space:nowrap;}
+  .mb-kpi-sub{margin-top:9px;font:500 11px var(--mono);color:rgb(var(--rgb));}
+  .mb-spark{position:absolute;left:0;right:0;bottom:0;width:100%;height:54px;opacity:.9;}
+  .mb-spark path.area{fill:rgba(var(--rgb),.10)}
+  .mb-spark path.line{fill:none;stroke:rgb(var(--rgb));stroke-width:2;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 5px rgba(var(--rgb),.7));}
+
+  .mb-health{
+    position:relative;z-index:2;display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;
+    padding:17px 20px;margin-bottom:12px;border-radius:13px;border:1px solid rgba(96,139,205,.32);
+    background:linear-gradient(100deg,rgba(18,34,59,.93),rgba(10,20,36,.93));
+  }
+  .mb-health-main{display:flex;align-items:center;gap:16px;}
+  .mb-shield{
+    width:73px;height:82px;display:grid;place-items:center;color:#5ce0b8;font-size:30px;
+    clip-path:polygon(50% 0,91% 16%,86% 70%,50% 100%,14% 70%,9% 16%);
+    background:rgba(57,214,170,.11);border:2px solid rgba(77,231,186,.72);
+    filter:drop-shadow(0 0 13px rgba(67,225,183,.32));
+  }
+  .mb-health-label{font:600 11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#9fb2cf;}
+  .mb-health-value{font:600 40px/1 var(--mono);color:#78edc9;margin:7px 0;}
+  .mb-health-state{font:600 13px var(--mono);color:#66e2bb;}
+  .mb-health-state small{color:#8492ac;margin-left:8px;font-weight:500;}
+  .mb-health-scale{display:flex;flex-direction:column;justify-content:center;}
+  .mb-scale-track{position:relative;height:12px;border-radius:999px;background:linear-gradient(90deg,#29e0b1 0 45%,#9bb36c 57%,#a66b71 75%,#642c3a 100%);box-shadow:0 0 12px rgba(47,224,177,.22);}
+  .mb-scale-marker{position:absolute;top:-4px;width:2px;height:20px;background:#ecf7ff;box-shadow:0 0 8px white;left:var(--pos,45%);}
+  .mb-scale-labels{display:grid;grid-template-columns:45% 22% 18% 15%;text-align:center;margin-top:9px;font:500 10px var(--mono);color:#8ea0ba;}
+  .mb-scale-labels b{display:block;color:#b9c8dd;font-weight:600;margin-bottom:2px;}
+  .mb-health-note{margin-top:8px;padding:6px 9px;border-radius:7px;background:rgba(5,12,24,.45);font:500 9px var(--mono);color:#7f90ad;}
+
+  .mb-positions{position:relative;z-index:2;border:1px solid rgba(96,139,205,.32);border-radius:13px;overflow:hidden;background:rgba(8,16,29,.74);}
+  .mb-positions-head{display:flex;align-items:center;justify-content:space-between;padding:12px 17px;border-bottom:1px solid rgba(96,139,205,.25);}
+  .mb-positions-head strong{font:600 11px var(--mono);letter-spacing:.13em;text-transform:uppercase;color:#a8bad4;}
+  .mb-positions-head span{font:500 9px var(--mono);color:#687b99;}
+  .mb-table-head,.mb-row{display:grid;grid-template-columns:1.35fr .82fr .82fr .92fr .72fr;align-items:center;gap:9px;}
+  .mb-table-head{padding:9px 17px;font:600 9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#7588a7;border-bottom:1px solid rgba(96,139,205,.18);}
+  .mb-row{min-height:58px;padding:8px 17px;border-bottom:1px solid rgba(96,139,205,.16);transition:.18s ease;}
+  .mb-row:last-child{border-bottom:0}.mb-row:hover{background:rgba(44,93,161,.09);}
+  .mb-asset{display:flex;align-items:center;gap:10px;min-width:0;}
+  .mb-token{--tok:76,153,255;width:33px;height:33px;border-radius:50%;display:grid;place-items:center;background:rgba(var(--tok),.16);border:1px solid rgba(var(--tok),.7);color:#eef6ff;font:700 11px var(--mono);box-shadow:0 0 12px rgba(var(--tok),.22);flex:0 0 auto;}
+  .mb-asset strong{display:block;color:#e8eefb;font:600 13px var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .mb-asset small,.mb-cell small{display:block;color:#72829f;font:500 9px var(--mono);margin-top:3px;}
+  .mb-cell{font:600 12px var(--mono);color:#d9e4f5;min-width:0;}
+  .mb-cell.net{color:#65e2b9}.mb-cell.negative{color:#ff7b86;}
+  .mb-impact{justify-self:start;padding:5px 8px;border-radius:6px;background:rgba(67,215,170,.09);border:1px solid rgba(67,215,170,.22);font:600 10px var(--mono);color:#65e2b9;}
+  .mb-impact.negative{background:rgba(255,91,106,.09);border-color:rgba(255,91,106,.23);color:#ff7b86;}
+  .mb-empty,.mb-error{padding:42px 24px;text-align:center;color:#8392ad;font:500 12px/1.6 var(--mono);}
+  .mb-empty strong,.mb-error strong{display:block;color:#dce7fa;font:600 16px var(--disp);margin-bottom:7px;}
+  .mb-error{color:#ff8d96}
+  .mb-foot{position:relative;z-index:2;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font:500 9px var(--mono);color:#6f829e;}
+  .mb-foot span{display:flex;align-items:center;gap:6px}.mb-foot b{color:#9db2d1;font-weight:600;}
+  @media(max-width:980px){
+    .mb-kpis{grid-template-columns:repeat(2,1fr)}
+    .mb-health{grid-template-columns:1fr}
+    .mb-table-head,.mb-row{grid-template-columns:1.25fr .8fr .8fr .9fr}
+    .mb-table-head>*:last-child,.mb-row>*:last-child{display:none}
+  }
+  @media(max-width:650px){
+    .mb-shell{padding:16px}.mb-head{align-items:flex-start;flex-direction:column}
+    .mb-controls{justify-content:flex-start}.mb-wallet-input{width:150px}
+    .mb-kpis{grid-template-columns:1fr}.mb-kpi{min-height:125px}
+    .mb-table-head,.mb-row{grid-template-columns:1.35fr 1fr 1fr}
+    .mb-table-head>*:nth-child(4),.mb-row>*:nth-child(4){display:none}
+  }
+
 </style>
 </head>
 <body>
@@ -6562,6 +6685,85 @@
         </div>
 
 
+        <div class="panel moneybuddy-panel hidden" id="moneybuddy-panel" aria-hidden="true">
+          <div class="mb-shell">
+            <div class="mb-head">
+              <div>
+                <div class="mb-brand-kicker">● Money Buddy</div>
+                <div class="mb-brand">
+                  <h2>Moonwell</h2><span class="mb-on">on</span><span class="mb-base"><span class="mb-base-dot">—</span> BASE</span>
+                </div>
+              </div>
+              <div class="mb-controls">
+                <label class="mb-wallet-wrap" title="Public Base wallet address">
+                  <span aria-hidden="true">▣</span>
+                  <input class="mb-wallet-input" id="mb-wallet" inputmode="text" autocomplete="off" spellcheck="false" placeholder="0x wallet address">
+                  <button class="mb-icon-btn" id="mb-copy-wallet" type="button" title="Copy wallet">▢</button>
+                </label>
+                <button class="mb-refresh" id="mb-refresh" type="button"><span>↻</span><span>Refresh</span></button>
+                <div class="mb-statusline"><strong>Last updated</strong><span id="mb-last-updated">Not connected</span></div>
+              </div>
+            </div>
+
+            <div class="mb-kpis">
+              <article class="mb-kpi">
+                <div class="mb-kpi-label">Total supplied</div>
+                <div class="mb-kpi-value" id="mb-total-supplied">$0.00</div>
+                <div class="mb-kpi-sub" id="mb-supplied-sub">Awaiting wallet</div>
+                <svg class="mb-spark" id="mb-spark-supplied" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
+              </article>
+              <article class="mb-kpi violet">
+                <div class="mb-kpi-label">Total borrowed</div>
+                <div class="mb-kpi-value" id="mb-total-borrowed">$0.00</div>
+                <div class="mb-kpi-sub" id="mb-borrowed-sub">Awaiting wallet</div>
+                <svg class="mb-spark" id="mb-spark-borrowed" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
+              </article>
+              <article class="mb-kpi green">
+                <div class="mb-kpi-label">Net position</div>
+                <div class="mb-kpi-value" id="mb-net-equity">$0.00</div>
+                <div class="mb-kpi-sub" id="mb-net-sub">Awaiting wallet</div>
+                <svg class="mb-spark" id="mb-spark-net" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
+              </article>
+              <article class="mb-kpi amber">
+                <div class="mb-kpi-label">Supply / borrow ratio</div>
+                <div class="mb-kpi-value" id="mb-ratio">—</div>
+                <div class="mb-kpi-sub" id="mb-ratio-sub">Estimated position ratio</div>
+                <svg class="mb-spark" id="mb-spark-ratio" viewBox="0 0 240 54" preserveAspectRatio="none"><path class="area"></path><path class="line"></path></svg>
+              </article>
+            </div>
+
+            <section class="mb-health">
+              <div class="mb-health-main">
+                <div class="mb-shield">◆</div>
+                <div>
+                  <div class="mb-health-label">Health factor*</div>
+                  <div class="mb-health-value" id="mb-health-value">—</div>
+                  <div class="mb-health-state" id="mb-health-state">Waiting <small>position ratio</small></div>
+                </div>
+              </div>
+              <div class="mb-health-scale">
+                <div class="mb-scale-track"><span class="mb-scale-marker" id="mb-health-marker" style="--pos:0%"></span></div>
+                <div class="mb-scale-labels"><span></span><span><b>1.50</b>Caution</span><span><b>1.20</b>Risky</span><span><b>1.00</b>Liquidation</span></div>
+                <div class="mb-health-note">* Estimated as total supplied ÷ total borrowed. Moonwell collateral factors are not included in this simplified ratio.</div>
+              </div>
+            </section>
+
+            <section class="mb-positions">
+              <div class="mb-positions-head"><strong>Your positions</strong><span id="mb-market-count">0 active markets</span></div>
+              <div class="mb-table-head"><span>Market</span><span>Supplied</span><span>Borrowed</span><span>Net value</span><span>Portfolio share</span></div>
+              <div id="mb-position-list">
+                <div class="mb-empty"><strong>Connect a wallet</strong>Enter a public Base wallet address above, then press Refresh.</div>
+              </div>
+            </section>
+            <div class="mb-foot">
+              <span><i class="mb-status-dot" id="mb-rpc-dot"></i><b id="mb-rpc-status">Direct RPC ready</b></span>
+              <span>Read-only calls to Moonwell contracts on Base</span>
+              <span>No API key · wallet saved locally · auto-refresh 60s</span>
+            </div>
+          </div>
+        </div>
+
+
       </main>
 
       <aside class="console-stack">
@@ -6662,6 +6864,7 @@
         <button class="dock-btn" type="button" data-scroll="console-matrix" title="Garden"><span class="dock-ico">⬡</span><span>Garden</span></button>
         <button class="dock-btn dock-replydesk" id="dock-replydesk" type="button" title="Reply Desk"><span class="dock-ico">✉</span><span>Reply<br>Desk</span><span class="dock-badge reply-badge" id="reply-draft-badge" hidden>0</span></button>
         <button class="dock-btn dock-action-items" id="dock-actions" type="button" title="Action Items"><span class="dock-ico">▤</span><span>Action Items</span><span class="dock-badge" id="action-count-badge" hidden>0</span></button>
+        <button class="dock-btn dock-moneybuddy" id="dock-moneybuddy" type="button" title="Money Buddy"><span class="dock-ico">◐</span><span>Money<br>Buddy</span></button>
         <button class="dock-collapse" type="button" data-scroll="console-overview">‹ Collapse</button>
       </nav>
     </section>
@@ -8969,6 +9172,260 @@
         setTimeout(loadStagedEventsFromSupabase,2200);
       });
     })();
+  </script>
+
+
+  <script>
+  (function(){
+    "use strict";
+    const RPCS=["https://mainnet.base.org","https://base-rpc.publicnode.com","https://1rpc.io/base"];
+    const COMPTROLLER="0xfBb21d0380beE3312B33c4353c8936a0F13EF26C";
+    const SEL={
+      assets:"0xabfceffc",oracle:"0x7dc0d1d0",balance:"0x70a08231",
+      borrowed:"0x95dd9193",exchange:"0x182df0f5",symbol:"0x95d89b41",price:"0xfc57d4df"
+    };
+    const E18=1000000000000000000n;
+    const E36=1000000000000000000000000000000000000n;
+    let mbLoading=false, mbTimer=null, mbData=null;
+
+    const $=id=>document.getElementById(id);
+    const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
+    const shortMoney=n=>{
+      if(!Number.isFinite(n)) return "$0.00";
+      return money(n);
+    };
+    const padAddress=a=>"000000000000000000000000"+a.toLowerCase().replace(/^0x/,"");
+    const isAddress=a=>/^0x[a-fA-F0-9]{40}$/.test(String(a||"").trim());
+    const word=(hex,i)=>"0x"+hex.slice(2+i*64,2+(i+1)*64);
+    const asBig=hex=>BigInt(hex&&hex!=="0x"?hex:"0x0");
+    function scaled(big,denom,precision=6){
+      const scale=10n**BigInt(precision);
+      return Number((big*scale)/denom)/Number(scale);
+    }
+    function decodeAddress(raw){ return "0x"+word(raw,0).slice(-40); }
+    function decodeAddresses(raw){
+      if(!raw||raw==="0x"||raw.length<130) return [];
+      const n=Number(asBig(word(raw,1)));
+      if(!n||n>20) return [];
+      const out=[];
+      for(let i=0;i<n;i++) out.push("0x"+word(raw,i+2).slice(-40));
+      return out;
+    }
+    function decodeString(raw){
+      try{
+        const offset=Number(asBig(word(raw,0)))*2+2;
+        const len=parseInt(raw.slice(offset,offset+64),16);
+        let s="";
+        for(let i=0;i<len&&i<24;i++) s+=String.fromCharCode(parseInt(raw.slice(offset+64+i*2,offset+66+i*2),16));
+        return s.replace(/\0/g,"").trim();
+      }catch(_){ return ""; }
+    }
+    async function rpcCall(to,data){
+      let lastErr=null;
+      for(const rpc of RPCS){
+        try{
+          const res=await fetch(rpc,{
+            method:"POST",headers:{"Content-Type":"application/json"},
+            cache:"no-store",body:JSON.stringify({jsonrpc:"2.0",method:"eth_call",params:[{to,data},"latest"],id:Date.now()})
+          });
+          if(!res.ok) throw new Error("HTTP "+res.status);
+          const json=await res.json();
+          if(json.error) throw new Error(json.error.message||"RPC error");
+          if(!json.result||json.result==="0x") throw new Error("Empty RPC result");
+          return json.result;
+        }catch(err){ lastErr=err; }
+      }
+      throw lastErr||new Error("All Base RPC endpoints failed");
+    }
+    async function readMoonwell(wallet){
+      const arg=padAddress(wallet);
+      const [assetsRaw,oracleRaw]=await Promise.all([
+        rpcCall(COMPTROLLER,SEL.assets+arg),
+        rpcCall(COMPTROLLER,SEL.oracle)
+      ]);
+      const markets=decodeAddresses(assetsRaw);
+      const oracle=decodeAddress(oracleRaw);
+      const positions=await Promise.all(markets.map(async mToken=>{
+        const mArg=padAddress(mToken);
+        const [balRaw,borrowRaw,rateRaw,symRaw,priceRaw]=await Promise.all([
+          rpcCall(mToken,SEL.balance+arg),
+          rpcCall(mToken,SEL.borrowed+arg),
+          rpcCall(mToken,SEL.exchange),
+          rpcCall(mToken,SEL.symbol),
+          rpcCall(oracle,SEL.price+mArg)
+        ]);
+        const balance=asBig(balRaw), borrowed=asBig(borrowRaw), rate=asBig(rateRaw), price=asBig(priceRaw);
+        const underlying=balance*rate/E18;
+        const suppliedUSD=scaled(underlying*price,E36,6);
+        const borrowedUSD=scaled(borrowed*price,E36,6);
+        let symbol=decodeString(symRaw)||mToken.slice(0,6);
+        symbol=symbol.replace(/^m/,"");
+        return {mToken,symbol,supplied:suppliedUSD,borrowed:borrowedUSD,net:suppliedUSD-borrowedUSD};
+      }));
+      const kept=positions.filter(p=>p.supplied>.01||p.borrowed>.01);
+      const totalSupplied=kept.reduce((a,p)=>a+p.supplied,0);
+      const totalBorrowed=kept.reduce((a,p)=>a+p.borrowed,0);
+      const netEquity=totalSupplied-totalBorrowed;
+      const healthFactor=Math.min(99,totalBorrowed>0?totalSupplied/totalBorrowed:99);
+      return {positions:kept,totalSupplied,totalBorrowed,netEquity,healthFactor,lastUpdated:new Date().toISOString()};
+    }
+    function tokenRgb(symbol){
+      const s=String(symbol).toUpperCase();
+      if(s.includes("USDC")) return "58,145,255";
+      if(s.includes("ETH")) return "164,142,255";
+      if(s.includes("BTC")) return "255,164,50";
+      if(s.includes("DAI")) return "248,185,55";
+      if(s.includes("WELL")) return "64,184,255";
+      return "82,216,177";
+    }
+    function tokenText(symbol){
+      const s=String(symbol||"?").replace(/[^A-Za-z0-9]/g,"");
+      return s.length<=4?s:s.slice(0,3);
+    }
+    function saveHistory(data){
+      let h=[];
+      try{ h=JSON.parse(localStorage.getItem("moonwell-history")||"[]"); }catch(_){}
+      h.push({t:Date.now(),s:data.totalSupplied,b:data.totalBorrowed,n:data.netEquity,r:data.healthFactor});
+      h=h.filter(x=>Date.now()-x.t<30*24*3600*1000).slice(-30);
+      localStorage.setItem("moonwell-history",JSON.stringify(h));
+      return h;
+    }
+    function spark(id,vals){
+      const svg=$(id); if(!svg) return;
+      let arr=vals.filter(Number.isFinite);
+      if(!arr.length) arr=[0,0];
+      if(arr.length===1) arr=[arr[0],arr[0]];
+      const min=Math.min(...arr), max=Math.max(...arr), range=(max-min)||1;
+      const pts=arr.map((v,i)=>{
+        const x=(i/(arr.length-1))*240, y=43-((v-min)/range)*28;
+        return [x,y];
+      });
+      const line="M"+pts.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" L");
+      const area=line+" L240,54 L0,54 Z";
+      svg.querySelector(".line").setAttribute("d",line);
+      svg.querySelector(".area").setAttribute("d",area);
+    }
+    function setStatus(text,bad=false){
+      const s=$("mb-rpc-status"),d=$("mb-rpc-dot");
+      if(s) s.textContent=text;
+      if(d) d.classList.toggle("bad",bad);
+    }
+    function render(data){
+      mbData=data;
+      $("mb-total-supplied").textContent=shortMoney(data.totalSupplied);
+      $("mb-total-borrowed").textContent=shortMoney(data.totalBorrowed);
+      $("mb-net-equity").textContent=shortMoney(data.netEquity);
+      $("mb-ratio").textContent=(data.healthFactor>=99?"∞":data.healthFactor.toFixed(2)+"x");
+      $("mb-health-value").textContent=(data.healthFactor>=99?"∞":data.healthFactor.toFixed(2));
+      $("mb-last-updated").textContent=new Date(data.lastUpdated).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+" · today";
+      $("mb-market-count").textContent=data.positions.length+" active market"+(data.positions.length===1?"":"s");
+      $("mb-supplied-sub").textContent=data.positions.length+" entered markets";
+      $("mb-borrowed-sub").textContent=data.positions.filter(p=>p.borrowed>.01).length+" borrowed assets";
+      $("mb-net-sub").textContent=data.netEquity>=0?"Positive net position":"Negative net position";
+      $("mb-ratio-sub").textContent=data.totalBorrowed>0?"Supplied ÷ borrowed":"No active borrowing";
+      const ratio=data.healthFactor;
+      const state=ratio>=1.5?"Healthy":ratio>=1.2?"Caution":ratio>=1?"Risky":"Critical";
+      $("mb-health-state").innerHTML=esc(state)+' <small>position ratio</small>';
+      const pos=ratio>=2?45:ratio>=1.5?45+(2-ratio)/.5*10:ratio>=1.2?55+(1.5-ratio)/.3*20:ratio>=1?75+(1.2-ratio)/.2*15:95;
+      $("mb-health-marker").style.setProperty("--pos",Math.max(1,Math.min(98,pos))+"%");
+      const totalAbs=data.positions.reduce((a,p)=>a+Math.abs(p.net),0)||1;
+      const list=$("mb-position-list");
+      if(!data.positions.length){
+        list.innerHTML='<div class="mb-empty"><strong>No entered Moonwell markets found</strong>This wallet has no position returned by getAssetsIn, or its supplied markets were never enabled as collateral.</div>';
+      }else{
+        list.innerHTML=data.positions.sort((a,b)=>Math.abs(b.net)-Math.abs(a.net)).map(p=>{
+          const neg=p.net<0,share=Math.abs(p.net)/totalAbs*100;
+          return '<div class="mb-row">'
+            +'<div class="mb-asset"><span class="mb-token" style="--tok:'+tokenRgb(p.symbol)+'">'+esc(tokenText(p.symbol))+'</span><div><strong>'+esc(p.symbol)+'</strong><small>Moonwell market</small></div></div>'
+            +'<div class="mb-cell">'+money(p.supplied)+'<small>supplied value</small></div>'
+            +'<div class="mb-cell">'+money(p.borrowed)+'<small>borrowed value</small></div>'
+            +'<div class="mb-cell net '+(neg?"negative":"")+'>'+money(p.net)+'<small>'+(neg?"net liability":"net position")+'</small></div>'
+            +'<div class="mb-impact '+(neg?"negative":"")+'">'+share.toFixed(1)+'%</div>'
+          +'</div>';
+        }).join("");
+      }
+      const h=saveHistory(data);
+      spark("mb-spark-supplied",h.map(x=>x.s));
+      spark("mb-spark-borrowed",h.map(x=>x.b));
+      spark("mb-spark-net",h.map(x=>x.n));
+      spark("mb-spark-ratio",h.map(x=>x.r));
+      setStatus("Connected to Base RPC");
+    }
+    function renderError(err){
+      $("mb-position-list").innerHTML='<div class="mb-error"><strong>Moonwell data could not be loaded</strong>'+esc(err&&err.message?err.message:String(err))+'<br>Try Refresh again; the integration automatically rotates through three public Base RPC endpoints.</div>';
+      $("mb-last-updated").textContent="Refresh failed";
+      setStatus("RPC connection failed",true);
+    }
+    async function refresh(){
+      if(mbLoading) return;
+      const input=$("mb-wallet");
+      const wallet=(input&&input.value||"").trim();
+      if(!isAddress(wallet)){
+        renderError(new Error("Enter a valid 42-character Base wallet address."));
+        return;
+      }
+      localStorage.setItem("moonwell-wallet",wallet);
+      mbLoading=true;
+      const btn=$("mb-refresh"); if(btn){btn.disabled=true;btn.querySelector("span:last-child").textContent="Loading…";}
+      setStatus("Querying Moonwell contracts");
+      try{ render(await readMoonwell(wallet)); }
+      catch(err){ renderError(err); }
+      finally{
+        mbLoading=false;
+        if(btn){btn.disabled=false;btn.querySelector("span:last-child").textContent="Refresh";}
+      }
+    }
+    function setMoneyBuddy(on){
+      const panel=$("moneybuddy-panel"),agenda=$("agenda-panel"),btn=$("dock-moneybuddy"),primary=$("console-overview");
+      if(!panel||!agenda) return;
+      if(on){
+        if(window.setReplyDesk) window.setReplyDesk(false);
+        if(window.setActionPanel) window.setActionPanel(false);
+        if(window.setCalDesk) window.setCalDesk(false);
+        const sig=$("signals-panel"); if(sig) sig.classList.remove("open");
+        const ds=$("dock-signals"); if(ds) ds.classList.remove("on");
+        const reply=$("replydesk-panel"); if(reply){reply.classList.add("hidden");reply.style.display="";}
+        const cal=$("caldesk-panel"); if(cal){cal.classList.add("hidden");cal.style.display="";}
+        document.querySelectorAll(".dock-btn").forEach(b=>b.classList.toggle("on",b===btn));
+      }
+      panel.classList.toggle("hidden",!on);
+      panel.style.display=on?"block":"";
+      panel.setAttribute("aria-hidden",on?"false":"true");
+      agenda.classList.toggle("hidden",on);
+      agenda.style.display=on?"none":"";
+      if(primary) primary.classList.toggle("moneybuddy-mode",on);
+      if(btn) btn.classList.toggle("on",on);
+      if(on){
+        const saved=localStorage.getItem("moonwell-wallet")||"";
+        if($("mb-wallet")&&!$("mb-wallet").value) $("mb-wallet").value=saved;
+        setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);
+        if(saved&&!mbData) refresh();
+      }
+    }
+    window.setMoneyBuddy=setMoneyBuddy;
+
+    function ready(){
+      const panel=$("moneybuddy-panel"),btn=$("dock-moneybuddy"),input=$("mb-wallet");
+      if(!panel||!btn) return;
+      if(input) input.value=localStorage.getItem("moonwell-wallet")||"";
+      btn.addEventListener("click",()=>setMoneyBuddy(panel.classList.contains("hidden")));
+      $("mb-refresh").addEventListener("click",refresh);
+      if(input) input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();refresh();}});
+      $("mb-copy-wallet").addEventListener("click",async e=>{
+        e.preventDefault();
+        const val=(input&&input.value||"").trim(); if(!val) return;
+        try{await navigator.clipboard.writeText(val);$("mb-copy-wallet").textContent="✓";setTimeout(()=>$("mb-copy-wallet").textContent="▢",900);}catch(_){}
+      });
+      document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions,#dock-replydesk,#dock-caldesk").forEach(other=>{
+        if(other!==btn) other.addEventListener("click",()=>setMoneyBuddy(false));
+      });
+      mbTimer=setInterval(()=>{
+        if(!panel.classList.contains("hidden")&&document.visibilityState==="visible"&&isAddress(input&&input.value)) refresh();
+      },60000);
+    }
+    if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ready); else ready();
+  })();
   </script>
 
 </body>
