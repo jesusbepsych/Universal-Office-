@@ -7428,6 +7428,45 @@
     }
   }
 
+
+  /* Glass Vault v21 — soothing carousel motion */
+  #bv-profile-stage .bv-profile-card{
+    transition:
+      transform .72s cubic-bezier(.16,.82,.22,1),
+      opacity .58s ease,
+      filter .58s ease,
+      box-shadow .48s ease;
+  }
+  #bv-profile-stage.is-animating .bv-profile-card,
+  #bv-profile-stage.is-dragging .bv-profile-card{
+    transition:none!important;
+  }
+  #bv-profile-stage.is-animating{
+    pointer-events:none;
+  }
+  .bv-carousel-orbit{
+    transition:opacity .4s ease,filter .4s ease;
+  }
+  .bv-stage.carousel-dragging .bv-carousel-orbit,
+  #bv-profile-stage.is-animating ~ .bv-profile-dots{
+    opacity:.94;
+  }
+  .bv-vault-nav{
+    transition:opacity .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease;
+  }
+  .bv-vault-nav:active{
+    transform:scale(.94);
+  }
+  @media(prefers-reduced-motion:reduce){
+    #bv-profile-stage .bv-profile-card{
+      transition-duration:.18s!important;
+    }
+    .bv-carousel-orbit span,
+    .bv-ai-orb{
+      animation:none!important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -10753,6 +10792,7 @@
     }
     let state=loadState(), clockTicker=null, lastSuggestions=[], profileSwipeUntil=0;
     let profileCarouselPosition=0, profileCarouselGesture=null, profileCarouselWheelTimer=null, profileCarouselSettleTimer=null;
+    let profileCarouselAnimation=null, profileCarouselWheelVelocity=0, profileCarouselLastWheelAt=0;
     function ensurePeriod(k=state.activeMonth){
       if(!state.periods[k])state.periods[k]={month:k,status:"draft",locked:false,entries:[],ignored:[],audit:[],rollover:{enabled:true,carryDrafts:true,autoMove:true},createdAt:new Date().toISOString()};
       const p=state.periods[k];p.entries=Array.isArray(p.entries)?p.entries:[];p.ignored=Array.isArray(p.ignored)?p.ignored:[];p.audit=Array.isArray(p.audit)?p.audit:[];p.rollover=p.rollover||{enabled:true,carryDrafts:true,autoMove:true};return p;
@@ -11032,29 +11072,72 @@
 
       if(instant)requestAnimationFrame(()=>host.classList.remove("is-instant"));
     }
+    function cancelProfileCarouselAnimation(){
+      if(profileCarouselAnimation!==null){
+        cancelAnimationFrame(profileCarouselAnimation);
+        profileCarouselAnimation=null;
+      }
+      const host=$("bv-profile-stage");
+      if(host)host.classList.remove("is-animating");
+    }
+    function carouselEase(t){
+      // A soft quintic ease: slow departure, long glide, gentle landing.
+      return t<.5
+        ?16*t*t*t*t*t
+        :1-Math.pow(-2*t+2,5)/2;
+    }
     function finishProfileCarousel(targetPosition,announce=true){
       if(!state.profiles.length)return;
       clearTimeout(profileCarouselSettleTimer);
-      profileSwipeUntil=Date.now()+560;
-      const host=$("bv-profile-stage");
-      if(host)host.classList.remove("is-dragging");
-      applyProfileCarousel(targetPosition,false,false);
+      cancelProfileCarouselAnimation();
 
-      profileCarouselSettleTimer=setTimeout(()=>{
+      const host=$("bv-profile-stage");
+      const stage=$("bv-stage");
+      if(host){
+        host.classList.remove("is-dragging");
+        host.classList.add("is-animating");
+      }
+      if(stage)stage.classList.remove("carousel-dragging");
+
+      const start=profileCarouselPosition;
+      const distance=targetPosition-start;
+      const duration=Math.max(660,Math.min(980,690+Math.abs(distance)*145));
+      const began=performance.now();
+      profileSwipeUntil=Date.now()+duration+120;
+
+      const frame=now=>{
+        const elapsed=Math.min(1,(now-began)/duration);
+        const position=start+distance*carouselEase(elapsed);
+        applyProfileCarousel(position,false,false);
+
+        if(elapsed<1){
+          profileCarouselAnimation=requestAnimationFrame(frame);
+          return;
+        }
+
+        profileCarouselAnimation=null;
+        if(host)host.classList.remove("is-animating");
+
         const index=normalizedProfileIndex(targetPosition);
-        profileCarouselPosition=index;
+        profileCarouselPosition=targetPosition;
         state.activeProfileId=state.profiles[index].id;
         save("profile selected");
-        render();
-        if(announce){
-          const p=state.profiles[index];
-          notice(p.name+" selected.");
-        }
-      },520);
+
+        // Re-render only after the glide is fully complete.
+        requestAnimationFrame(()=>{
+          render();
+          if(announce){
+            const p=state.profiles[index];
+            notice(p.name+" selected.");
+          }
+        });
+      };
+      profileCarouselAnimation=requestAnimationFrame(frame);
     }
     function rotateProfile(delta){
       const count=state.profiles.length;
       if(count<2)return;
+      cancelProfileCarouselAnimation();
       finishProfileCarousel(Math.round(profileCarouselPosition)+delta,false);
     }
 
@@ -11090,7 +11173,11 @@
     function renderStage(){
       const host=$("bv-profile-stage"),presets=$("bv-profile-presets");if(!host||!presets)return;
       const activeIndex=activeProfileIndex();
-      profileCarouselPosition=activeIndex;
+      const count=Math.max(1,state.profiles.length);
+      let nearestEquivalent=activeIndex;
+      while(nearestEquivalent-profileCarouselPosition>count/2)nearestEquivalent-=count;
+      while(nearestEquivalent-profileCarouselPosition<-count/2)nearestEquivalent+=count;
+      profileCarouselPosition=nearestEquivalent;
 
       host.innerHTML=state.profiles.map((p,index)=>{
         const t=profileTotal(p.id),c=profileColor(p.id);
@@ -11138,7 +11225,7 @@
       $("bv-new-profile").addEventListener("click",()=>openProfile(null));
 
       host.classList.add("is-instant");
-      applyProfileCarousel(activeIndex,false,true);
+      applyProfileCarousel(profileCarouselPosition,false,true);
     }
     function reassignEntry(id,profileId){if(activeLocked()){notice("Unlock this billing period before reassigning entries.");return;}const e=period().entries.find(x=>x.id===id);if(!e)return;e.profileId=profileId;if(!e.description)e.description=profile(profileId).name;audit("entry_reassigned",e.id+" → "+profile(profileId).name);save("entry moved");render();}
 
@@ -11213,6 +11300,9 @@
         vaultStage.addEventListener("pointerdown",ev=>{
           if(state.profiles.length<2||ev.button!==0||ev.target.closest("button,input,select,textarea"))return;
           clearTimeout(profileCarouselSettleTimer);
+          clearTimeout(profileCarouselWheelTimer);
+          cancelProfileCarouselAnimation();
+          profileCarouselWheelVelocity=0;
           profileCarouselGesture={
             pointerId:ev.pointerId,
             startX:ev.clientX,
@@ -11240,7 +11330,8 @@
           g.moved=true;
           ev.preventDefault();
           const now=performance.now(),elapsed=Math.max(1,now-g.lastTime);
-          g.velocity=(ev.clientX-g.lastX)/elapsed;
+          const instantaneous=(ev.clientX-g.lastX)/elapsed;
+          g.velocity=g.velocity*.72+instantaneous*.28;
           g.lastX=ev.clientX;g.lastTime=now;
           const position=g.startPosition-dx/pixelsPerProfile;
           applyProfileCarousel(position,true,false);
@@ -11256,12 +11347,8 @@
             applyProfileCarousel(profileCarouselPosition,false,false);
             return;
           }
-          profileSwipeUntil=Date.now()+600;
-          let projected=profileCarouselPosition-g.velocity*105;
-          const travelled=Math.abs(ev.clientX-g.startX);
-          if(travelled>34&&Math.abs(projected-g.startPosition)<.42){
-            projected=g.startPosition+(ev.clientX<g.startX?1:-1);
-          }
+          profileSwipeUntil=Date.now()+760;
+          const projected=profileCarouselPosition-g.velocity*62;
           finishProfileCarousel(Math.round(projected),false);
         };
         vaultStage.addEventListener("pointerup",endPointerCarousel);
@@ -11279,15 +11366,30 @@
           const shiftedVertical=ev.shiftKey&&Math.abs(ev.deltaY)>8;
           if(!horizontal&&!shiftedVertical)return;
           ev.preventDefault();
+
           clearTimeout(profileCarouselWheelTimer);
           clearTimeout(profileCarouselSettleTimer);
+          cancelProfileCarouselAnimation();
+
+          const now=performance.now();
+          const elapsed=Math.max(8,now-profileCarouselLastWheelAt);
           const delta=horizontal?ev.deltaX:ev.deltaY;
-          profileCarouselPosition+=delta/310;
-          profileSwipeUntil=Date.now()+280;
+          const units=delta/440;
+          const instantaneous=units/elapsed;
+          profileCarouselWheelVelocity=profileCarouselWheelVelocity*.76+instantaneous*.24;
+          profileCarouselLastWheelAt=now;
+
+          profileCarouselPosition+=units;
+          profileSwipeUntil=Date.now()+620;
           applyProfileCarousel(profileCarouselPosition,true,false);
+
+          // A relaxed idle window prevents settling between slow swipe packets.
           profileCarouselWheelTimer=setTimeout(()=>{
-            finishProfileCarousel(Math.round(profileCarouselPosition),false);
-          },145);
+            const projected=profileCarouselPosition+
+              Math.max(-.34,Math.min(.34,profileCarouselWheelVelocity*58));
+            profileCarouselWheelVelocity=0;
+            finishProfileCarousel(Math.round(projected),false);
+          },430);
         },{passive:false});
       }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
       $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
