@@ -6750,6 +6750,231 @@
     .bv-shell{padding:10px}.bv-header{grid-template-columns:1fr}.bv-monthnav{justify-self:stretch;justify-content:center}.bv-head-actions{justify-content:space-between}.bv-grid{grid-template-columns:1fr}.bv-left{display:grid;grid-template-columns:1fr 1fr}.bv-missing{grid-column:1/-1}.bv-stage{min-height:340px}.bv-profile-card{width:185px;margin-left:-92px}.bv-profile-card.slot-left{transform:translateX(-115px) translateY(30px) scale(.78)}.bv-profile-card.slot-right{transform:translateX(115px) translateY(30px) scale(.78)}.bv-right{grid-column:auto;display:block}.bv-rollover{grid-template-columns:1fr}.bv-rollover>div{border-right:0;border-bottom:1px solid rgba(93,136,199,.18)}.bv-profile-row{grid-template-columns:repeat(2,1fr)}.bv-form-grid{grid-template-columns:1fr}.bv-field.full{grid-column:auto}.bv-brand h2{white-space:normal}.bv-left{display:flex}
   }
 
+
+  /* Glass Vault v18 — scrollable detections, full-height atelier, compact dock */
+  .console-main,
+  .console-dock{
+    transition:grid-template-columns .28s ease,gap .28s ease,padding .28s ease,
+               transform .28s ease,border-radius .28s ease;
+  }
+
+  .console-main.billing-open{
+    grid-template-columns:minmax(570px,1.22fr) minmax(430px,.92fr) 62px;
+    gap:10px;
+  }
+
+  .console-dock.billing-compact{
+    width:62px;
+    min-width:62px;
+    padding:12px 5px;
+    gap:8px;
+    border-radius:16px 0 0 16px;
+    transform:translateX(12px);
+    overflow:visible;
+  }
+  .console-dock.billing-compact::before{
+    border-radius:16px 0 0 16px;
+  }
+  .console-dock.billing-compact .dock-label{
+    height:66px;
+    padding:0;
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    display:grid;
+    place-items:center;
+    font-size:8px;
+    letter-spacing:.14em;
+  }
+  .console-dock.billing-compact .dock-btn{
+    min-height:64px;
+    width:48px;
+    align-self:center;
+    padding:5px 2px;
+    gap:0;
+    border-radius:12px;
+  }
+  .console-dock.billing-compact .dock-btn > span:not(.dock-ico):not(.dock-badge){
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    overflow:hidden!important;
+    clip:rect(0 0 0 0)!important;
+    white-space:nowrap!important;
+  }
+  .console-dock.billing-compact .dock-ico{
+    width:35px;
+    height:35px;
+    border-radius:11px;
+  }
+  .console-dock.billing-compact .dock-badge{
+    right:-4px;
+    top:4px;
+  }
+  .console-dock.billing-compact .dock-collapse{
+    width:48px;
+    min-height:39px;
+    align-self:center;
+    padding:8px 0;
+    font-size:0;
+  }
+  .console-dock.billing-compact .dock-collapse::before{
+    content:"‹";
+    font-size:20px;
+    line-height:1;
+  }
+
+  .console-main.billing-open .billing-vault-panel{
+    width:100%;
+  }
+  .billing-vault-panel{
+    min-height:780px;
+  }
+  .bv-shell{
+    min-height:780px;
+    display:flex;
+    flex-direction:column;
+  }
+  .bv-grid{
+    flex:1 1 auto;
+    min-height:0;
+    align-items:stretch;
+  }
+  .bv-column{
+    min-height:0;
+    height:100%;
+  }
+
+  /* Consume the previously unused lower portion of the Billing window. */
+  .bv-left .bv-missing{
+    flex:1 1 190px;
+    min-height:190px;
+    display:flex;
+    flex-direction:column;
+  }
+  .bv-center .bv-stage{
+    flex:1 1 405px;
+    min-height:405px;
+  }
+  .bv-right > .bv-box{
+    height:100%;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .bv-invoice-wrap{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .bv-invoice-doc{
+    flex:1 1 auto;
+    min-height:440px;
+    display:flex;
+    flex-direction:column;
+  }
+  .bv-doc-actions{
+    margin-top:auto;
+    padding-top:12px;
+  }
+
+  /* Missing Entries gets its own momentum-scroll viewport. */
+  .bv-missing-list{
+    flex:1 1 auto;
+    min-height:0;
+    max-height:278px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior:contain;
+    touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(255,132,145,.45) rgba(34,13,22,.28);
+    padding-right:7px;
+  }
+  .bv-missing-list::-webkit-scrollbar{width:8px;}
+  .bv-missing-list::-webkit-scrollbar-track{
+    background:rgba(34,13,22,.24);
+    border-radius:999px;
+  }
+  .bv-missing-list::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg,rgba(255,157,168,.62),rgba(185,65,88,.48));
+    border-radius:999px;
+    border:2px solid transparent;
+    background-clip:padding-box;
+  }
+  .bv-missing-list::-webkit-scrollbar-thumb:hover{
+    background:linear-gradient(180deg,rgba(255,177,186,.78),rgba(214,75,101,.66));
+    background-clip:padding-box;
+  }
+  .bv-missing-row:last-child{margin-bottom:0;}
+
+  /* Give the recovered dock width to the three Billing work zones. */
+  .console-main.billing-open .bv-grid{
+    grid-template-columns:minmax(222px,.66fr) minmax(430px,1.62fr) minmax(310px,.94fr);
+    gap:14px;
+  }
+
+  @media(max-width:1220px){
+    .console-main.billing-open{
+      grid-template-columns:minmax(0,1fr) 58px;
+      gap:8px;
+    }
+    .console-dock.billing-compact{
+      width:58px;
+      min-width:58px;
+      transform:translateX(10px);
+    }
+    .console-main.billing-open .bv-grid{
+      grid-template-columns:minmax(214px,.66fr) minmax(405px,1.58fr) minmax(296px,.92fr);
+      gap:10px;
+    }
+  }
+
+  @media(max-width:980px){
+    .console-main.billing-open .bv-grid{
+      grid-template-columns:210px minmax(0,1fr);
+    }
+    .bv-right > .bv-box{
+      height:auto;
+    }
+    .bv-missing-list{
+      max-height:250px;
+    }
+  }
+
+  @media(max-width:900px){
+    .console-main.billing-open{
+      display:flex;
+      grid-template-columns:none;
+      gap:14px;
+    }
+    .console-dock.billing-compact{
+      width:100%;
+      min-width:0;
+      transform:none;
+      padding:13px 10px;
+      border-radius:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+    }
+    .console-dock.billing-compact::before{border-radius:18px;}
+    .console-dock.billing-compact .dock-label,
+    .console-dock.billing-compact .dock-collapse{display:none;}
+    .console-dock.billing-compact .dock-btn{
+      width:auto;
+      min-height:64px;
+    }
+    .console-dock.billing-compact .dock-btn > span:not(.dock-ico):not(.dock-badge){
+      position:static!important;
+      width:auto!important;
+      height:auto!important;
+      overflow:visible!important;
+      clip:auto!important;
+      white-space:normal!important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -10118,9 +10343,11 @@
     }
     function renderMissing(){
       const host=$("bv-missing-list"),ss=scanSuggestions();if(!host)return;
+      const previousScroll=host.scrollTop;
       if(!ss.length){host.innerHTML='<div class="bv-empty-mini">No unlogged billable calendar events were detected for this month.</div>';return;}
-      host.innerHTML=ss.slice(0,4).map(s=>'<div class="bv-missing-row"><div><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h suggested · '+esc(s.profile.name)+'</small></div><button class="bv-mini-add" data-bv-suggest="'+esc(s.key)+'" title="Add as draft">＋</button></div>').join("");
+      host.innerHTML=ss.map(s=>'<div class="bv-missing-row"><div><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h suggested · '+esc(s.profile.name)+'</small></div><button class="bv-mini-add" data-bv-suggest="'+esc(s.key)+'" title="Add as draft">＋</button></div>').join("");
       host.querySelectorAll("[data-bv-suggest]").forEach(b=>b.addEventListener("click",()=>openSuggestion(b.dataset.bvSuggest)));
+      requestAnimationFrame(()=>{host.scrollTop=Math.min(previousScroll,Math.max(0,host.scrollHeight-host.clientHeight));});
     }
     function stageSlots(profiles,activeId){
       const a=profiles.findIndex(p=>p.id===activeId),rot=profiles.slice(a).concat(profiles.slice(0,a));const slots=["slot-center","slot-left","slot-right","slot-far-left","slot-far-right"];return rot.slice(0,5).map((p,i)=>({p,slot:slots[i]}));
@@ -10189,10 +10416,13 @@
       const prof=profile(),rows=dailyRows(prof),total=rows.reduce((a,r)=>a+r.hours,0);try{await loadScript("https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",()=>window.XLSX);const aoa=[["",monthLabel(state.activeMonth),""],["Payroll Period",state.activeMonth+"-01 to "+state.activeMonth+"-"+String(daysInMonth(state.activeMonth)).padStart(2,"0"),""],["Employee: "+(prof.employee||"Jesus Garcia"),"Hours:",""],...rows.map(r=>[new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),r.hours||"",r.description]),["Total",total,""]];const ws=XLSX.utils.aoa_to_sheet(aoa);ws["!merges"]=[{s:{r:0,c:1},e:{r:0,c:2}},{s:{r:1,c:1},e:{r:1,c:2}}];ws["!cols"]=[{wch:18},{wch:12},{wch:54}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,monthShort(state.activeMonth));XLSX.writeFile(wb,(prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".xlsx");audit("spreadsheet_exported",prof.name);save("table exported");}catch(err){const csv=[["Date","Hours","Service Description"],...rows.map(r=>[new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),r.hours||"",r.description]),["Total",total,""]].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"),blob=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".csv";a.click();URL.revokeObjectURL(a.href);notice("Spreadsheet library was unavailable, so a CSV table was exported.");}}
 
     function bind(){
-      const panel=$("billing-vault-panel"),agenda=$("agenda-panel"),btn=$("dock-billing"),primary=$("console-overview");if(!panel||!agenda||!btn)return;
+      const panel=$("billing-vault-panel"),agenda=$("agenda-panel"),btn=$("dock-billing"),primary=$("console-overview");
+      const consoleMain=primary&&primary.closest(".console-main");
+      const consoleDock=btn&&btn.closest(".console-dock");
+      if(!panel||!agenda||!btn)return;
       function setBillingVault(on,restoreAgenda=true){
         if(on){if(window.setReplyDesk)window.setReplyDesk(false);if(window.setCalDesk)window.setCalDesk(false);if(window.setMoneyBuddy)window.setMoneyBuddy(false,false);if(window.setActionPanel)window.setActionPanel(false);const sig=$("signals-panel");if(sig)sig.classList.remove("open");const ds=$("dock-signals");if(ds)ds.classList.remove("on");document.querySelectorAll(".dock-btn").forEach(b=>b.classList.toggle("on",b===btn));}
-        panel.classList.toggle("hidden",!on);panel.style.display=on?"block":"";panel.setAttribute("aria-hidden",on?"false":"true");if(on||restoreAgenda){agenda.classList.toggle("hidden",on);agenda.style.display=on?"none":"";}primary.classList.toggle("billing-mode",on);btn.classList.toggle("on",on);if(on){render();setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);if(state.pendingTaskId){const t=(typeof allTasks!=="undefined"?allTasks:[]).find(x=>String(x.id)===String(state.pendingTaskId));state.pendingTaskId=null;save();if(t&&confirm("Log the completed event ‘"+(t.title||"Calendar work")+"’ for billing?")){const key=taskKey(t),pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}}
+        panel.classList.toggle("hidden",!on);panel.style.display=on?"block":"";panel.setAttribute("aria-hidden",on?"false":"true");if(on||restoreAgenda){agenda.classList.toggle("hidden",on);agenda.style.display=on?"none":"";}primary.classList.toggle("billing-mode",on);if(consoleMain)consoleMain.classList.toggle("billing-open",on);if(consoleDock)consoleDock.classList.toggle("billing-compact",on);btn.classList.toggle("on",on);if(on){render();setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);if(state.pendingTaskId){const t=(typeof allTasks!=="undefined"?allTasks:[]).find(x=>String(x.id)===String(state.pendingTaskId));state.pendingTaskId=null;save();if(t&&confirm("Log the completed event ‘"+(t.title||"Calendar work")+"’ for billing?")){const key=taskKey(t),pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}}
       }
       window.setBillingVault=setBillingVault;
       btn.addEventListener("click",()=>setBillingVault(panel.classList.contains("hidden")));
