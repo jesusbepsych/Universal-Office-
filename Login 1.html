@@ -7467,6 +7467,19 @@
     }
   }
 
+
+  /* Glass Vault v22 — bounded one-profile carousel travel */
+  .bv-stage{
+    overscroll-behavior-x:contain;
+  }
+  #bv-profile-stage .bv-profile-card{
+    transition:
+      transform .78s cubic-bezier(.18,.78,.22,1),
+      opacity .6s ease,
+      filter .6s ease,
+      box-shadow .5s ease;
+  }
+
 </style>
 </head>
 <body>
@@ -10793,6 +10806,7 @@
     let state=loadState(), clockTicker=null, lastSuggestions=[], profileSwipeUntil=0;
     let profileCarouselPosition=0, profileCarouselGesture=null, profileCarouselWheelTimer=null, profileCarouselSettleTimer=null;
     let profileCarouselAnimation=null, profileCarouselWheelVelocity=0, profileCarouselLastWheelAt=0;
+    let profileCarouselWheelAnchor=null, profileCarouselWheelTravel=0;
     function ensurePeriod(k=state.activeMonth){
       if(!state.periods[k])state.periods[k]={month:k,status:"draft",locked:false,entries:[],ignored:[],audit:[],rollover:{enabled:true,carryDrafts:true,autoMove:true},createdAt:new Date().toISOString()};
       const p=state.periods[k];p.entries=Array.isArray(p.entries)?p.entries:[];p.ignored=Array.isArray(p.ignored)?p.ignored:[];p.audit=Array.isArray(p.audit)?p.audit:[];p.rollover=p.rollover||{enabled:true,carryDrafts:true,autoMove:true};return p;
@@ -11086,10 +11100,34 @@
         ?16*t*t*t*t*t
         :1-Math.pow(-2*t+2,5)/2;
     }
+    function nearestEquivalentProfilePosition(index,reference,count=state.profiles.length){
+      if(!count)return 0;
+      let candidate=index;
+      while(candidate-reference>count/2)candidate-=count;
+      while(candidate-reference<-count/2)candidate+=count;
+      return candidate;
+    }
+    function adjacentProfileTarget(reference,direction){
+      const count=state.profiles.length;
+      if(!count)return reference;
+      const currentIndex=normalizedProfileIndex(reference,count);
+      const targetIndex=normalizedProfileIndex(currentIndex+direction,count);
+      return nearestEquivalentProfilePosition(targetIndex,reference,count);
+    }
+    function constrainedProfileTarget(reference,rawTarget){
+      const delta=rawTarget-reference;
+      if(Math.abs(delta)<.34)return Math.round(reference);
+      return adjacentProfileTarget(reference,delta>0?1:-1);
+    }
+
     function finishProfileCarousel(targetPosition,announce=true){
       if(!state.profiles.length)return;
       clearTimeout(profileCarouselSettleTimer);
       cancelProfileCarouselAnimation();
+
+      const count=state.profiles.length;
+      const targetIndex=normalizedProfileIndex(targetPosition,count);
+      targetPosition=nearestEquivalentProfilePosition(targetIndex,profileCarouselPosition,count);
 
       const host=$("bv-profile-stage");
       const stage=$("bv-stage");
@@ -11138,7 +11176,8 @@
       const count=state.profiles.length;
       if(count<2)return;
       cancelProfileCarouselAnimation();
-      finishProfileCarousel(Math.round(profileCarouselPosition)+delta,false);
+      const direction=delta<0?-1:1;
+      finishProfileCarousel(adjacentProfileTarget(profileCarouselPosition,direction),false);
     }
 
     function renderHeader(){
@@ -11308,6 +11347,7 @@
             startX:ev.clientX,
             startY:ev.clientY,
             startPosition:profileCarouselPosition,
+            anchorPosition:Math.round(profileCarouselPosition),
             lastX:ev.clientX,
             lastTime:performance.now(),
             velocity:0,
@@ -11333,7 +11373,8 @@
           const instantaneous=(ev.clientX-g.lastX)/elapsed;
           g.velocity=g.velocity*.72+instantaneous*.28;
           g.lastX=ev.clientX;g.lastTime=now;
-          const position=g.startPosition-dx/pixelsPerProfile;
+          const rawPosition=g.startPosition-dx/pixelsPerProfile;
+          const position=Math.max(g.anchorPosition-1.12,Math.min(g.anchorPosition+1.12,rawPosition));
           applyProfileCarousel(position,true,false);
         });
 
@@ -11348,8 +11389,15 @@
             return;
           }
           profileSwipeUntil=Date.now()+760;
-          const projected=profileCarouselPosition-g.velocity*62;
-          finishProfileCarousel(Math.round(projected),false);
+          const travelledProfiles=profileCarouselPosition-g.anchorPosition;
+          const distancePx=ev.clientX-g.startX;
+          const velocityIntent=Math.abs(g.velocity)>.42;
+          let direction=0;
+          if(Math.abs(travelledProfiles)>.28||Math.abs(distancePx)>44||velocityIntent){
+            direction=(travelledProfiles!==0?Math.sign(travelledProfiles):(distancePx<0?1:-1));
+          }
+          const target=direction?adjacentProfileTarget(g.anchorPosition,direction):g.anchorPosition;
+          finishProfileCarousel(target,false);
         };
         vaultStage.addEventListener("pointerup",endPointerCarousel);
         vaultStage.addEventListener("pointercancel",endPointerCarousel);
@@ -11372,24 +11420,38 @@
           cancelProfileCarouselAnimation();
 
           const now=performance.now();
-          const elapsed=Math.max(8,now-profileCarouselLastWheelAt);
           const delta=horizontal?ev.deltaX:ev.deltaY;
-          const units=delta/440;
+
+          if(profileCarouselWheelAnchor===null||now-profileCarouselLastWheelAt>520){
+            profileCarouselWheelAnchor=Math.round(profileCarouselPosition);
+            profileCarouselWheelTravel=0;
+            profileCarouselWheelVelocity=0;
+          }
+
+          const elapsed=Math.max(8,now-profileCarouselLastWheelAt||16);
+          const units=delta/620;
           const instantaneous=units/elapsed;
-          profileCarouselWheelVelocity=profileCarouselWheelVelocity*.76+instantaneous*.24;
+          profileCarouselWheelVelocity=profileCarouselWheelVelocity*.82+instantaneous*.18;
+          profileCarouselWheelTravel=Math.max(-1.08,Math.min(1.08,profileCarouselWheelTravel+units));
           profileCarouselLastWheelAt=now;
 
-          profileCarouselPosition+=units;
-          profileSwipeUntil=Date.now()+620;
+          profileCarouselPosition=profileCarouselWheelAnchor+profileCarouselWheelTravel;
+          profileSwipeUntil=Date.now()+700;
           applyProfileCarousel(profileCarouselPosition,true,false);
 
-          // A relaxed idle window prevents settling between slow swipe packets.
           profileCarouselWheelTimer=setTimeout(()=>{
-            const projected=profileCarouselPosition+
-              Math.max(-.34,Math.min(.34,profileCarouselWheelVelocity*58));
+            const anchor=profileCarouselWheelAnchor;
+            const travel=profileCarouselWheelTravel;
+            const velocityIntent=Math.abs(profileCarouselWheelVelocity)>.0032;
+            let direction=0;
+            if(Math.abs(travel)>.24||velocityIntent)direction=Math.sign(travel||profileCarouselWheelVelocity);
+            const target=direction?adjacentProfileTarget(anchor,direction):anchor;
+
+            profileCarouselWheelAnchor=null;
+            profileCarouselWheelTravel=0;
             profileCarouselWheelVelocity=0;
-            finishProfileCarousel(Math.round(projected),false);
-          },430);
+            finishProfileCarousel(target,false);
+          },520);
         },{passive:false});
       }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
       $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
