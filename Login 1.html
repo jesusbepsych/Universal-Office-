@@ -7480,6 +7480,131 @@
       box-shadow .5s ease;
   }
 
+
+  /* Glass Vault v23 — calm profile-dependent content transitions */
+  .bv-save-state{
+    min-width:104px;
+    padding:6px 9px;
+    border-radius:10px;
+    transition:
+      background .42s ease,
+      border-color .42s ease,
+      box-shadow .42s ease,
+      transform .42s cubic-bezier(.2,.75,.2,1);
+  }
+  .bv-save-state b,
+  .bv-save-state span{
+    transition:opacity .3s ease,transform .38s cubic-bezier(.2,.75,.2,1),color .38s ease;
+  }
+  .bv-save-state.is-changing{
+    background:rgba(229,176,80,.07);
+    border-color:rgba(229,176,80,.20);
+    box-shadow:0 0 20px rgba(229,176,80,.08);
+    transform:translateY(-1px);
+  }
+  .bv-save-state.is-changing span{
+    color:#e8c57d;
+    animation:bv-save-breathe 1.15s ease-in-out infinite;
+  }
+  .bv-save-state.is-saved{
+    background:rgba(75,208,166,.07);
+    border-color:rgba(75,208,166,.18);
+    box-shadow:0 0 18px rgba(75,208,166,.07);
+  }
+  .bv-save-state.is-saved span{color:#7ddfbd;}
+  @keyframes bv-save-breathe{
+    0%,100%{opacity:.62;transform:translateY(0)}
+    50%{opacity:1;transform:translateY(-1px)}
+  }
+
+  .bv-invoice-wrap{
+    position:relative;
+    transform-origin:52% 28%;
+    will-change:transform,opacity,filter;
+    transition:
+      opacity .42s ease,
+      transform .56s cubic-bezier(.2,.78,.2,1),
+      filter .48s ease;
+  }
+  .bv-invoice-wrap::after{
+    content:"";
+    position:absolute;
+    z-index:8;
+    inset:48px 12px 12px;
+    border-radius:13px;
+    pointer-events:none;
+    opacity:0;
+    transform:translateX(-38%);
+    background:
+      linear-gradient(112deg,
+        transparent 18%,
+        rgba(152,211,255,.025) 33%,
+        rgba(223,241,255,.16) 46%,
+        rgba(167,211,255,.035) 58%,
+        transparent 73%);
+    mix-blend-mode:screen;
+  }
+  .bv-invoice-wrap.profile-leaving{
+    opacity:.58;
+    filter:blur(2.6px) saturate(.82);
+    transform:translate3d(7px,2px,0) scale(.992);
+  }
+  .bv-invoice-wrap.profile-entering{
+    opacity:.28;
+    filter:blur(4.5px) saturate(.76);
+    transform:translate3d(-9px,3px,0) scale(.988);
+  }
+  .bv-invoice-wrap.profile-entering::after{
+    opacity:.7;
+  }
+  .bv-invoice-wrap.profile-settled::after{
+    animation:bv-invoice-sheen .72s cubic-bezier(.2,.72,.2,1) both;
+  }
+  @keyframes bv-invoice-sheen{
+    0%{opacity:0;transform:translateX(-42%)}
+    32%{opacity:.65}
+    100%{opacity:0;transform:translateX(46%)}
+  }
+
+  .bv-invoice-wrap.profile-leaving .bv-invoice-head,
+  .bv-invoice-wrap.profile-leaving .bv-invoice-doc{
+    transition:opacity .32s ease,transform .42s ease;
+  }
+  .bv-invoice-wrap.profile-leaving .bv-invoice-head{
+    opacity:.56;
+    transform:translateY(-2px);
+  }
+  .bv-invoice-wrap.profile-leaving .bv-invoice-doc{
+    opacity:.65;
+    transform:translateY(3px);
+  }
+  .bv-invoice-wrap.profile-entering .bv-invoice-head{
+    opacity:.25;
+    transform:translateY(3px);
+  }
+  .bv-invoice-wrap.profile-entering .bv-invoice-doc{
+    opacity:.28;
+    transform:translateY(6px);
+  }
+  .bv-invoice-wrap.profile-settled .bv-invoice-head,
+  .bv-invoice-wrap.profile-settled .bv-invoice-doc{
+    opacity:1;
+    transform:translateY(0);
+    transition:
+      opacity .52s ease,
+      transform .62s cubic-bezier(.16,.82,.22,1);
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .bv-save-state.is-changing span{animation:none!important;}
+    .bv-invoice-wrap,
+    .bv-invoice-wrap .bv-invoice-head,
+    .bv-invoice-wrap .bv-invoice-doc{
+      transition-duration:.16s!important;
+    }
+    .bv-invoice-wrap.profile-settled::after{animation:none!important;}
+  }
+
 </style>
 </head>
 <body>
@@ -10807,11 +10932,18 @@
     let profileCarouselPosition=0, profileCarouselGesture=null, profileCarouselWheelTimer=null, profileCarouselSettleTimer=null;
     let profileCarouselAnimation=null, profileCarouselWheelVelocity=0, profileCarouselLastWheelAt=0;
     let profileCarouselWheelAnchor=null, profileCarouselWheelTravel=0;
+    let profilePreviewTimer=null, profilePreviewCleanupTimer=null, profileSaveLabelTimer=null, profileTransitionToken=0;
     function ensurePeriod(k=state.activeMonth){
       if(!state.periods[k])state.periods[k]={month:k,status:"draft",locked:false,entries:[],ignored:[],audit:[],rollover:{enabled:true,carryDrafts:true,autoMove:true},createdAt:new Date().toISOString()};
       const p=state.periods[k];p.entries=Array.isArray(p.entries)?p.entries:[];p.ignored=Array.isArray(p.ignored)?p.ignored:[];p.audit=Array.isArray(p.audit)?p.audit:[];p.rollover=p.rollover||{enabled:true,carryDrafts:true,autoMove:true};return p;
     }
-    function save(note){state.lastSaved=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));const n=$("bv-save-time");if(n)n.textContent=timeNow()+(note?" · "+note:"");}
+    function save(note,options={}){
+      state.lastSaved=new Date().toISOString();
+      localStorage.setItem(KEY,JSON.stringify(state));
+      if(options&&options.quiet)return;
+      const n=$("bv-save-time");
+      if(n)n.textContent=timeNow()+(note?" · "+note:"");
+    }
     function audit(type,detail){const p=ensurePeriod();p.audit.unshift({id:uid("audit"),at:new Date().toISOString(),type,detail:detail||""});p.audit=p.audit.slice(0,100);}
     function profile(id=state.activeProfileId){return state.profiles.find(p=>p.id===id)||state.profiles[0];}
     function period(){return ensurePeriod(state.activeMonth);}
@@ -11158,17 +11290,10 @@
 
         const index=normalizedProfileIndex(targetPosition);
         profileCarouselPosition=targetPosition;
-        state.activeProfileId=state.profiles[index].id;
-        save("profile selected");
 
-        // Re-render only after the glide is fully complete.
-        requestAnimationFrame(()=>{
-          render();
-          if(announce){
-            const p=state.profiles[index];
-            notice(p.name+" selected.");
-          }
-        });
+        // Keep the carousel visually continuous and transition only the
+        // profile-dependent invoice content and Auto-save state.
+        requestAnimationFrame(()=>animateProfilePreviewCommit(index,announce));
       };
       profileCarouselAnimation=requestAnimationFrame(frame);
     }
@@ -11178,6 +11303,79 @@
       cancelProfileCarouselAnimation();
       const direction=delta<0?-1:1;
       finishProfileCarousel(adjacentProfileTarget(profileCarouselPosition,direction),false);
+    }
+
+    function updateProfileSelectionIndicators(index){
+      document.querySelectorAll("[data-bv-profile-dot]").forEach(dot=>{
+        dot.classList.toggle("on",Number(dot.dataset.bvProfileIndex)===index);
+      });
+      document.querySelectorAll("[data-bv-preset]").forEach(button=>{
+        button.classList.toggle("on",Number(button.dataset.bvProfileIndex)===index);
+      });
+    }
+    function setProfileSaveLabel(text,mode=""){
+      const wrap=document.querySelector(".bv-save-state");
+      const value=$("bv-save-time");
+      if(!wrap||!value)return;
+      wrap.classList.remove("is-saving","is-saved","is-changing");
+      if(mode)wrap.classList.add(mode);
+      value.textContent=text;
+    }
+    function animateProfilePreviewCommit(index,announce=false){
+      const target=state.profiles[index];
+      if(!target)return;
+
+      const token=++profileTransitionToken;
+      clearTimeout(profilePreviewTimer);
+      clearTimeout(profilePreviewCleanupTimer);
+      clearTimeout(profileSaveLabelTimer);
+
+      const invoice=document.querySelector(".bv-invoice-wrap");
+      const invoiceDoc=document.querySelector(".bv-invoice-doc");
+
+      if(invoice){
+        invoice.classList.remove("profile-entering","profile-settled");
+        invoice.classList.add("profile-leaving");
+      }
+      if(invoiceDoc)invoiceDoc.setAttribute("aria-busy","true");
+      setProfileSaveLabel("Saving profile…","is-changing");
+
+      profilePreviewTimer=setTimeout(()=>{
+        if(token!==profileTransitionToken)return;
+
+        state.activeProfileId=target.id;
+        save("profile selected",{quiet:true});
+        updateProfileSelectionIndicators(index);
+        renderInvoice();
+
+        if(invoice){
+          invoice.classList.remove("profile-leaving");
+          // Force the entering state to begin after the new content is painted.
+          invoice.classList.add("profile-entering");
+          requestAnimationFrame(()=>requestAnimationFrame(()=>{
+            if(token!==profileTransitionToken)return;
+            invoice.classList.remove("profile-entering");
+            invoice.classList.add("profile-settled");
+          }));
+        }
+        if(invoiceDoc)invoiceDoc.setAttribute("aria-busy","false");
+        setProfileSaveLabel("Saved · "+timeNow(),"is-saved");
+
+        profilePreviewCleanupTimer=setTimeout(()=>{
+          if(token!==profileTransitionToken)return;
+          if(invoice)invoice.classList.remove("profile-settled");
+        },720);
+
+        profileSaveLabelTimer=setTimeout(()=>{
+          if(token!==profileTransitionToken)return;
+          const value=$("bv-save-time");
+          const wrap=document.querySelector(".bv-save-state");
+          if(wrap)wrap.classList.remove("is-saving","is-saved","is-changing");
+          if(value)value.textContent=timeNow();
+        },1250);
+
+        if(announce)notice(target.name+" selected.");
+      },185);
     }
 
     function renderHeader(){
@@ -11239,9 +11437,7 @@
           const index=Number(card.dataset.bvProfileIndex);
           const distance=wrappedProfileDistance(index,profileCarouselPosition);
           if(Math.abs(distance)<.34){
-            state.activeProfileId=card.dataset.bvProfileCard;
-            save("profile selected");
-            render();
+            animateProfilePreviewCommit(index,false);
           }else{
             finishProfileCarousel(profileCarouselPosition+distance,false);
           }
