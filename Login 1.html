@@ -6563,6 +6563,193 @@
     .mb-table-head>*:nth-child(4),.mb-row>*:nth-child(4){display:none}
   }
 
+
+
+  /* Glass Vault / Invoice Atelier ------------------------------------------------ */
+  .dock-billing .dock-ico{color:#78d7ff;filter:drop-shadow(0 0 8px rgba(85,192,255,.38));}
+  .dock-billing.on{
+    border-color:rgba(70,161,255,.92)!important;
+    background:linear-gradient(180deg,rgba(31,83,150,.68),rgba(10,25,50,.96))!important;
+    box-shadow:inset 0 0 0 1px rgba(137,209,255,.24),0 0 26px rgba(51,139,255,.34)!important;
+  }
+  .bv-dock-badge{background:linear-gradient(180deg,#ffca6a,#ef8f37)!important;color:#201000!important;}
+  .console-primary.billing-mode #agenda-panel{display:none!important;}
+  .console-primary.billing-mode #billing-vault-panel{display:block!important;margin-top:0!important;}
+  .console-primary.billing-mode{gap:0!important;}
+
+  .billing-vault-panel{
+    padding:0!important;min-height:760px;overflow:hidden;
+    border-color:rgba(80,131,204,.42)!important;
+    background:
+      radial-gradient(circle at 38% 18%,rgba(66,136,255,.13),transparent 31%),
+      radial-gradient(circle at 72% 18%,rgba(255,184,82,.07),transparent 26%),
+      linear-gradient(180deg,#0a1323 0%,#07101d 100%)!important;
+  }
+  .bv-shell{
+    --bv-blue:77,170,255;--bv-cyan:77,224,232;--bv-violet:166,104,255;
+    --bv-gold:255,198,91;--bv-red:255,102,112;--bv-green:78,224,169;
+    position:relative;min-height:760px;padding:20px;
+    background:
+      linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+    background-size:34px 34px;
+  }
+  .bv-shell::before{
+    content:"";position:absolute;inset:10px;border-radius:18px;pointer-events:none;
+    border:1px solid rgba(111,166,242,.25);
+    box-shadow:inset 0 0 60px rgba(39,99,188,.06),0 0 24px rgba(40,105,207,.08);
+  }
+  .bv-header{position:relative;z-index:3;display:grid;grid-template-columns:minmax(260px,1fr) auto minmax(210px,1fr);align-items:center;gap:16px;margin:0 8px 14px;}
+  .bv-brand{display:flex;align-items:center;gap:12px;min-width:0;}
+  .bv-mark{display:flex;align-items:flex-end;gap:4px;width:32px;height:38px;filter:drop-shadow(0 0 10px rgba(78,200,255,.38));}
+  .bv-mark i{display:block;width:5px;border-radius:4px 4px 1px 1px;background:linear-gradient(180deg,#63eaff,#2695ff);transform:skewY(-22deg);}
+  .bv-mark i:nth-child(1){height:21px}.bv-mark i:nth-child(2){height:29px}.bv-mark i:nth-child(3){height:37px}
+  .bv-brand h2{margin:0;font:600 22px/1.05 var(--disp);letter-spacing:.06em;text-transform:uppercase;color:#f0f5ff;white-space:nowrap;}
+  .bv-brand h2 span{font-weight:500;color:#a9b8d2;}
+  .bv-brand p{margin:5px 0 0;font:500 10px var(--mono);color:#7989a8;letter-spacing:.04em;}
+  .bv-monthnav{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:999px;border:1px solid rgba(95,145,215,.28);background:rgba(7,15,30,.68);}
+  .bv-navbtn{width:33px;height:33px;border-radius:50%;display:grid;place-items:center;background:rgba(16,30,53,.88);border:1px solid rgba(96,151,226,.32);color:#a7cdf7;font-size:18px;}
+  .bv-monthlabel{min-width:148px;text-align:center;color:#eef5ff;font:600 15px var(--mono);letter-spacing:.03em;}
+  .bv-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0;}
+  .bv-save-state{font:500 9px/1.35 var(--mono);color:#7587a8;text-align:left;white-space:nowrap;}
+  .bv-save-state b{display:block;color:#aabbd6;font-weight:600;}
+  .bv-ai-btn{height:38px;padding:0 13px;border-radius:9px;border:1px solid rgba(var(--bv-gold),.44);background:linear-gradient(180deg,rgba(var(--bv-gold),.14),rgba(33,22,17,.76));color:#ffd584;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;box-shadow:0 0 17px rgba(var(--bv-gold),.10);}
+  .bv-ai-btn em{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:5px;border-radius:999px;background:#f4a43e;color:#1f1100;font-style:normal;}
+
+  .bv-grid{position:relative;z-index:2;display:grid;grid-template-columns:220px minmax(420px,1fr) 310px;gap:12px;align-items:stretch;}
+  .bv-column{display:flex;flex-direction:column;gap:10px;min-width:0;}
+  .bv-box{position:relative;border:1px solid rgba(94,137,202,.27);border-radius:13px;background:linear-gradient(180deg,rgba(15,27,47,.82),rgba(7,14,27,.9));box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 18px 36px -32px rgba(62,136,255,.5);overflow:hidden;}
+  .bv-box-title{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:12px 13px 8px;font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#9eb1d1;}
+  .bv-box-title small{color:#657693;font-size:8px;letter-spacing:.03em;text-transform:none;font-weight:500;}
+
+  .bv-quick{padding:0 12px 12px;}
+  .bv-quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .bv-quick-btn{min-height:62px;border-radius:11px;border:1px solid rgba(83,143,221,.28);background:linear-gradient(180deg,rgba(26,50,85,.74),rgba(10,20,38,.84));color:#a9c7ef;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;font:600 9px var(--mono);}
+  .bv-quick-btn i{font-style:normal;font-size:21px;color:#6cc9ff;filter:drop-shadow(0 0 8px rgba(82,184,255,.42));}
+  .bv-quick-btn.running{border-color:rgba(var(--bv-green),.72);color:#72e7bd;box-shadow:0 0 18px rgba(var(--bv-green),.17);}
+  .bv-quick-btn.running i{color:#67e3ba;}
+  .bv-clock-mini{margin-top:8px;text-align:center;color:#69dfb6;font:600 10px var(--mono);min-height:14px;}
+
+  .bv-chips{padding:0 11px 10px;max-height:226px;overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(104,151,219,.35) transparent;}
+  .bv-entry-chip{--chip:84,176,255;display:grid;grid-template-columns:20px minmax(0,1fr) auto auto;align-items:center;gap:7px;min-height:38px;padding:7px 8px;margin-bottom:6px;border-radius:9px;border:1px solid rgba(var(--chip),.22);background:linear-gradient(90deg,rgba(var(--chip),.11),rgba(8,16,30,.38));cursor:grab;}
+  .bv-entry-chip:active{cursor:grabbing}.bv-entry-chip .ico{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:rgba(var(--chip),.16);color:rgb(var(--chip));font-size:9px;}
+  .bv-entry-chip strong{font:600 10px var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#dce7f8;}
+  .bv-entry-chip small{font:500 9px var(--mono);color:#8fa0bc;white-space:nowrap;}
+  .bv-entry-chip .amt{font:500 9px var(--mono);color:#bbc8dd;}
+  .bv-empty-mini{padding:15px 9px;text-align:center;color:#6f809d;font:500 9px/1.55 var(--mono);}
+  .bv-add-custom{width:calc(100% - 22px);margin:0 11px 11px;height:34px;border-radius:8px;background:rgba(16,29,49,.66);border:1px dashed rgba(112,158,222,.28);color:#91a7c7;font:500 9px var(--mono);}
+
+  .bv-missing{border-color:rgba(var(--bv-red),.28);background:linear-gradient(180deg,rgba(48,17,28,.48),rgba(15,11,21,.84));}
+  .bv-missing .bv-box-title{color:#ff9da8;}
+  .bv-alert-count{display:grid;place-items:center;min-width:21px;height:21px;border-radius:999px;background:linear-gradient(180deg,#ffc15e,#ed8739);color:#241000;font:700 10px var(--mono);box-shadow:0 0 12px rgba(255,164,62,.28);}
+  .bv-missing-list{padding:0 11px 8px;}
+  .bv-missing-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;align-items:center;margin-bottom:6px;padding:8px;border-radius:8px;background:rgba(69,20,35,.26);border:1px solid rgba(255,96,112,.14);}
+  .bv-missing-row strong{display:block;color:#e7b0b8;font:600 9.5px var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .bv-missing-row small{color:#8b7484;font:500 8px var(--mono);}
+  .bv-mini-add{width:25px;height:25px;border-radius:7px;background:rgba(55,111,183,.32);border:1px solid rgba(82,157,255,.38);color:#9bd4ff;}
+  .bv-scan-btn{width:calc(100% - 22px);margin:0 11px 11px;height:32px;border-radius:8px;background:rgba(54,25,65,.62);border:1px solid rgba(177,99,255,.25);color:#c7a4ef;font:600 9px var(--mono);}
+
+  .bv-stage{position:relative;min-height:365px;border:1px solid rgba(86,135,203,.22);border-radius:14px;overflow:hidden;background:
+      radial-gradient(ellipse at 50% 77%,rgba(40,111,238,.28),transparent 35%),
+      radial-gradient(ellipse at 50% 38%,rgba(111,81,183,.11),transparent 44%),
+      linear-gradient(180deg,rgba(9,18,34,.82),rgba(5,10,20,.96));}
+  .bv-stage::before{content:"";position:absolute;left:-12%;right:-12%;bottom:22px;height:140px;background:repeating-linear-gradient(90deg,rgba(70,136,230,.09) 0 1px,transparent 1px 44px),repeating-linear-gradient(0deg,rgba(70,136,230,.08) 0 1px,transparent 1px 28px);transform:perspective(420px) rotateX(63deg);transform-origin:bottom;opacity:.55;}
+  .bv-stage-title{position:absolute;left:15px;top:13px;color:#6e82a1;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;z-index:4;}
+  .bv-stage-help{position:absolute;left:0;right:0;bottom:8px;text-align:center;color:#647697;font:500 8px var(--mono);z-index:5;}
+  .bv-platform{position:absolute;left:50%;bottom:30px;width:300px;height:72px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(60,123,228,.35),rgba(8,20,43,.8) 58%,rgba(3,8,17,.2) 72%);border:1px solid rgba(87,151,255,.38);box-shadow:0 0 16px rgba(62,131,255,.4),0 0 44px rgba(62,131,255,.18),inset 0 0 25px rgba(82,159,255,.2);}
+  .bv-platform::after{content:"";position:absolute;inset:13px 25px;border-radius:50%;border:1px solid rgba(116,181,255,.48);box-shadow:0 0 16px rgba(87,152,255,.35);}
+  .bv-profile-card{--pc:78,205,231;position:absolute;left:50%;top:76px;width:205px;height:238px;margin-left:-102px;border-radius:19px;padding:19px 16px 15px;color:#dfeaff;background:linear-gradient(145deg,rgba(var(--pc),.18),rgba(14,27,47,.70) 45%,rgba(5,11,22,.78));border:1px solid rgba(var(--pc),.58);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 20px rgba(var(--pc),.24),0 24px 45px -30px rgba(var(--pc),.78);backdrop-filter:blur(12px);transition:.32s ease;cursor:pointer;transform-origin:50% 100%;overflow:hidden;}
+  .bv-profile-card::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.10) 42%,transparent 60%);transform:translateX(-120%);transition:.7s ease;pointer-events:none;}
+  .bv-profile-card:hover::after{transform:translateX(120%)}
+  .bv-profile-card.slot-center{--pc:255,198,91;z-index:5;transform:translateX(0) scale(1.02);}
+  .bv-profile-card.slot-left{--pc:167,103,255;z-index:3;transform:translateX(-145px) translateY(22px) scale(.86);opacity:.86;}
+  .bv-profile-card.slot-far-left{--pc:72,211,228;z-index:2;transform:translateX(-235px) translateY(45px) scale(.72);opacity:.74;}
+  .bv-profile-card.slot-right{--pc:70,213,230;z-index:3;transform:translateX(145px) translateY(22px) scale(.86);opacity:.86;}
+  .bv-profile-card.slot-far-right{--pc:90,164,255;z-index:2;transform:translateX(235px) translateY(45px) scale(.72);opacity:.65;}
+  .bv-profile-card.drag-target{box-shadow:0 0 0 3px rgba(var(--pc),.24),0 0 35px rgba(var(--pc),.5);}
+  .bv-profile-card h3{margin:0 25px 7px 0;font:600 14px/1.1 var(--disp);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .bv-profile-card .tag{display:inline-block;padding:4px 7px;border-radius:6px;background:rgba(var(--pc),.13);border:1px solid rgba(var(--pc),.32);color:rgb(var(--pc));font:600 8px var(--mono);}
+  .bv-profile-card .hours{font:500 45px/1 var(--mono);color:#d9ecff;margin:24px 0 12px;letter-spacing:-.06em;text-shadow:0 0 18px rgba(var(--pc),.36);}
+  .bv-profile-card .hours span{font-size:16px;color:#8ea3c1;letter-spacing:0;}
+  .bv-profile-metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px;}
+  .bv-profile-metrics small{display:block;color:#7d8dab;font:500 8px var(--mono);margin-bottom:3px;}
+  .bv-profile-metrics strong{font:600 12px var(--mono);color:#e7effd;}
+  .bv-card-close{position:absolute;right:9px;top:9px;width:23px;height:23px;border-radius:7px;background:rgba(7,14,27,.45);border:1px solid rgba(var(--pc),.25);color:#87a0c0;}
+
+  .bv-profiles{padding:0 12px 12px;}
+  .bv-profile-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}
+  .bv-profile-preset{min-height:55px;padding:8px;border-radius:9px;border:1px solid rgba(91,139,205,.24);background:rgba(10,20,36,.65);text-align:left;color:#b9c9df;}
+  .bv-profile-preset.on{border-color:rgba(var(--bv-gold),.55);background:rgba(var(--bv-gold),.09);box-shadow:0 0 14px rgba(var(--bv-gold),.10);}
+  .bv-profile-preset strong{display:block;font:600 9px var(--disp);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .bv-profile-preset small{display:block;margin-top:4px;color:#6e809e;font:500 8px var(--mono);}
+  .bv-new-profile{display:grid;place-items:center;border-style:dashed;color:#8699b7;text-align:center!important;}
+
+  .bv-rollover{display:grid;grid-template-columns:1.05fr 1.35fr 1fr;gap:0;min-height:93px;}
+  .bv-rollover > div{padding:14px;border-right:1px solid rgba(93,136,199,.18);}
+  .bv-rollover > div:last-child{border-right:0;}
+  .bv-rollover h4{margin:0 0 9px;color:#92a6c5;font:600 9px var(--mono);letter-spacing:.12em;text-transform:uppercase;}
+  .bv-switchline{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#c4d0e2;font:500 10px var(--mono);}
+  .bv-switch{width:44px;height:24px;border-radius:999px;padding:3px;background:#202d43;border:1px solid rgba(100,146,210,.25);}
+  .bv-switch i{display:block;width:16px;height:16px;border-radius:50%;background:#7b8ba5;transition:.2s ease;}
+  .bv-switch.on{background:#2468de;box-shadow:0 0 15px rgba(50,123,255,.28)}.bv-switch.on i{transform:translateX(18px);background:#e6f3ff;}
+  .bv-checkline{display:flex;align-items:center;gap:7px;margin-bottom:7px;color:#93a4bf;font:500 9px var(--mono);}
+  .bv-checkline input{accent-color:#4a95ff;}
+  .bv-rollover-preview{display:grid;grid-template-columns:1fr auto;gap:5px;color:#8394af;font:500 8px var(--mono);}
+  .bv-rollover-preview strong{color:#d0dbea;font-size:10px;}
+  .bv-roll-btn{grid-column:1/-1;height:27px;margin-top:5px;border-radius:7px;border:1px solid rgba(91,155,238,.26);background:rgba(20,42,72,.54);color:#9fc8f5;font:600 8px var(--mono);}
+
+  .bv-right{min-width:0;}
+  .bv-invoice-wrap{padding:12px;}
+  .bv-invoice-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+  .bv-invoice-head strong{display:block;color:#b4c2d7;font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;}
+  .bv-invoice-head small{display:block;margin-top:4px;color:#72839f;font:500 8px var(--mono);}
+  .bv-invoice-doc{min-height:407px;border-radius:11px;padding:18px;background:linear-gradient(160deg,rgba(20,29,48,.98),rgba(9,15,27,.98));border:1px solid rgba(155,170,202,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 20px 35px -28px rgba(0,0,0,.9);}
+  .bv-doc-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:17px;}
+  .bv-doc-logo{display:flex;align-items:center;gap:8px;color:#cbd6e7;font:600 9px/1.1 var(--mono);text-transform:uppercase;}
+  .bv-doc-logo i{font-style:normal;font-size:25px;color:#9db1ce;}
+  .bv-doc-invoice{text-align:right;color:#d2d9e7;font:600 11px var(--mono);letter-spacing:.08em;}.bv-doc-invoice small{display:block;color:#6f7e98;font-size:8px;margin-top:4px;}
+  .bv-doc-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;padding-bottom:12px;border-bottom:1px solid rgba(126,149,185,.18);font:500 8px var(--mono);color:#7889a4;}
+  .bv-doc-meta strong{display:block;color:#b9c7da;font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .bv-doc-table{margin-top:12px;font:500 8px var(--mono);}
+  .bv-doc-row{display:grid;grid-template-columns:minmax(0,1.6fr) .52fr .72fr;gap:5px;align-items:center;min-height:25px;border-bottom:1px solid rgba(121,144,179,.11);color:#aebbd0;}
+  .bv-doc-row.head{min-height:22px;color:#70819d;text-transform:uppercase;font-size:7px;letter-spacing:.05em;}
+  .bv-doc-row span:nth-child(2),.bv-doc-row span:nth-child(3){text-align:right;}
+  .bv-doc-empty{padding:28px 8px;text-align:center;color:#647490;font:500 8px/1.5 var(--mono);}
+  .bv-doc-total{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:13px;color:#8fa1bd;font:600 8px var(--mono);text-transform:uppercase;}.bv-doc-total strong{font-size:19px;color:#e9effa;letter-spacing:0;}
+  .bv-doc-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:12px;}
+  .bv-doc-actions button{height:33px;border-radius:8px;border:1px solid rgba(90,143,214,.28);background:rgba(13,29,52,.68);color:#91acd0;font:600 8px var(--mono);}
+  .bv-doc-actions button.primary{border-color:rgba(75,167,255,.65);background:linear-gradient(180deg,rgba(38,110,198,.75),rgba(19,54,105,.85));color:#d9efff;box-shadow:0 0 16px rgba(52,140,255,.18);}
+
+  .bv-workflow{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:0 12px 12px;}
+  .bv-status-btn{min-height:35px;border-radius:8px;border:1px solid rgba(102,143,203,.18);background:rgba(8,17,31,.66);color:#7386a5;font:600 8px var(--mono);}
+  .bv-status-btn.on{color:#e4efff;border-color:rgba(81,159,255,.55);background:rgba(36,92,164,.32);box-shadow:0 0 14px rgba(65,143,255,.13);}
+  .bv-status-btn[data-status="reviewed"].on{border-color:rgba(var(--bv-gold),.5);background:rgba(var(--bv-gold),.1);color:#ffd47e;}
+  .bv-status-btn[data-status="submitted"].on{border-color:rgba(var(--bv-violet),.5);background:rgba(var(--bv-violet),.1);color:#c5a8ff;}
+  .bv-status-btn[data-status="paid"].on{border-color:rgba(var(--bv-green),.5);background:rgba(var(--bv-green),.1);color:#7be8c0;}
+  .bv-lock{margin:0 12px 12px;width:calc(100% - 24px);min-height:61px;border-radius:11px;border:1px solid rgba(var(--bv-gold),.57);background:linear-gradient(180deg,rgba(var(--bv-gold),.18),rgba(58,38,16,.58));color:#ffe0a4;box-shadow:0 0 21px rgba(var(--bv-gold),.15),inset 0 1px 0 rgba(255,255,255,.08);font:600 12px var(--disp);}
+  .bv-lock small{display:block;margin-top:5px;color:#a39177;font:500 8px var(--mono);}
+  .bv-lock.locked{border-color:rgba(var(--bv-green),.52);background:rgba(var(--bv-green),.10);color:#7be8c0;}
+
+  .bv-modal{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:20px;background:rgba(2,6,13,.76);backdrop-filter:blur(8px);}
+  .bv-modal.hidden{display:none!important;}
+  .bv-modal-card{width:min(680px,96vw);max-height:88vh;overflow:auto;border-radius:17px;border:1px solid rgba(95,159,238,.43);background:linear-gradient(180deg,#101d31,#07101e);box-shadow:0 30px 90px rgba(0,0,0,.58),0 0 45px rgba(44,124,235,.18);padding:20px;}
+  .bv-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:17px;}.bv-modal-head h3{margin:0;color:#edf4ff;font:600 20px var(--disp);}.bv-modal-head p{margin:5px 0 0;color:#7183a1;font:500 9px var(--mono);}.bv-close{width:32px;height:32px;border-radius:8px;background:rgba(16,31,53,.78);border:1px solid rgba(100,149,216,.25);color:#9ab0ce;font-size:18px;}
+  .bv-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}.bv-field.full{grid-column:1/-1}.bv-field label{display:block;margin-bottom:6px;color:#8ea2c1;font:600 8px var(--mono);letter-spacing:.09em;text-transform:uppercase;}.bv-field input,.bv-field select,.bv-field textarea{width:100%;min-height:39px;border-radius:8px;border:1px solid rgba(92,142,211,.26);background:rgba(6,14,26,.72);color:#dfe9f8;padding:9px 10px;font:500 11px var(--mono);outline:0;}.bv-field textarea{min-height:74px;resize:vertical}.bv-field input:focus,.bv-field select:focus,.bv-field textarea:focus{border-color:rgba(77,166,255,.68);box-shadow:0 0 0 2px rgba(77,166,255,.10)}
+  .bv-service-checks{display:flex;flex-wrap:wrap;gap:7px;}.bv-service-checks label{display:flex;align-items:center;gap:6px;margin:0;padding:7px 9px;border-radius:8px;border:1px solid rgba(102,148,211,.22);background:rgba(12,24,43,.68);color:#a8bad3;font:500 9px var(--mono);text-transform:none;letter-spacing:0;}.bv-service-checks input{width:auto;min-height:0;accent-color:#5aa9ff;}
+  .bv-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:17px;}.bv-modal-actions button{min-width:105px;height:39px;border-radius:9px;border:1px solid rgba(91,148,221,.27);background:rgba(14,29,51,.75);color:#a8bad5;font-weight:600;}.bv-modal-actions .primary{background:linear-gradient(180deg,#277edd,#154d99);border-color:#4ca4ff;color:white;box-shadow:0 0 18px rgba(55,143,255,.24)}.bv-modal-actions .danger{border-color:rgba(255,105,116,.36);color:#ff929d;background:rgba(85,23,32,.34);margin-right:auto;}
+  .bv-toast-note{margin-top:9px;color:#6f819e;font:500 8px var(--mono);}
+  .bv-locked-note{display:none;margin:0 12px 10px;padding:8px 10px;border-radius:8px;border:1px solid rgba(var(--bv-green),.25);background:rgba(var(--bv-green),.07);color:#73d9b6;font:500 8px var(--mono);}.bv-locked-note.show{display:block;}
+
+  @media(max-width:1220px){
+    .bv-grid{grid-template-columns:210px minmax(380px,1fr) 280px;gap:9px}.bv-shell{padding:14px}.bv-header{margin-left:4px;margin-right:4px}.bv-profile-card.slot-far-left{transform:translateX(-205px) translateY(50px) scale(.68)}.bv-profile-card.slot-far-right{transform:translateX(205px) translateY(50px) scale(.68)}
+  }
+  @media(max-width:980px){
+    .billing-vault-panel{min-height:1020px}.bv-grid{grid-template-columns:210px minmax(0,1fr)}.bv-right{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:10px}.bv-invoice-wrap{grid-row:1/4}.bv-lock{align-self:start}.bv-profile-card.slot-far-left,.bv-profile-card.slot-far-right{display:none}.bv-header{grid-template-columns:1fr auto}.bv-head-actions{grid-column:1/-1;justify-content:flex-end}.bv-brand h2{font-size:19px}
+  }
+  @media(max-width:720px){
+    .bv-shell{padding:10px}.bv-header{grid-template-columns:1fr}.bv-monthnav{justify-self:stretch;justify-content:center}.bv-head-actions{justify-content:space-between}.bv-grid{grid-template-columns:1fr}.bv-left{display:grid;grid-template-columns:1fr 1fr}.bv-missing{grid-column:1/-1}.bv-stage{min-height:340px}.bv-profile-card{width:185px;margin-left:-92px}.bv-profile-card.slot-left{transform:translateX(-115px) translateY(30px) scale(.78)}.bv-profile-card.slot-right{transform:translateX(115px) translateY(30px) scale(.78)}.bv-right{grid-column:auto;display:block}.bv-rollover{grid-template-columns:1fr}.bv-rollover>div{border-right:0;border-bottom:1px solid rgba(93,136,199,.18)}.bv-profile-row{grid-template-columns:repeat(2,1fr)}.bv-form-grid{grid-template-columns:1fr}.bv-field.full{grid-column:auto}.bv-brand h2{white-space:normal}.bv-left{display:flex}
+  }
+
 </style>
 </head>
 <body>
@@ -6613,6 +6800,157 @@
           </div>
           <div class="filters" id="filters"></div>
           <div id="agenda"></div>
+        </div>
+
+        <div class="panel billing-vault-panel hidden" id="billing-vault-panel" aria-hidden="true">
+          <div class="bv-shell">
+            <header class="bv-header">
+              <div class="bv-brand">
+                <span class="bv-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+                <div><h2>Glass Vault <span>/ Invoice Atelier</span></h2><p>Craft. Curate. Close with confidence.</p></div>
+              </div>
+              <div class="bv-monthnav">
+                <button class="bv-navbtn" id="bv-prev-month" type="button" aria-label="Previous billing month">‹</button>
+                <div class="bv-monthlabel" id="bv-month-label">Month</div>
+                <button class="bv-navbtn" id="bv-next-month" type="button" aria-label="Next billing month">›</button>
+              </div>
+              <div class="bv-head-actions">
+                <div class="bv-save-state"><b>Auto-save</b><span id="bv-save-time">Ready</span></div>
+                <button class="bv-ai-btn" id="bv-ai-btn" type="button">AI Suggestions <em id="bv-ai-count">0</em></button>
+              </div>
+            </header>
+
+            <div class="bv-grid">
+              <aside class="bv-column bv-left">
+                <section class="bv-box">
+                  <div class="bv-box-title"><span>Quick Capture</span><small>Log work in seconds</small></div>
+                  <div class="bv-quick">
+                    <div class="bv-quick-grid">
+                      <button class="bv-quick-btn" id="bv-clock-btn" type="button"><i>ϟ</i><span>Clock Out</span></button>
+                      <button class="bv-quick-btn" id="bv-manual-btn" type="button"><i>✎</i><span>Manual</span></button>
+                      <button class="bv-quick-btn" id="bv-calendar-btn" type="button"><i>▦</i><span>Calendar</span></button>
+                    </div>
+                    <div class="bv-clock-mini" id="bv-clock-mini"></div>
+                  </div>
+                </section>
+
+                <section class="bv-box">
+                  <div class="bv-box-title"><span>Drag Entry Chips</span><small>Add to invoice atelier</small></div>
+                  <div class="bv-chips" id="bv-entry-chips"></div>
+                  <button class="bv-add-custom" id="bv-create-entry" type="button">＋ Create Custom Entry</button>
+                </section>
+
+                <section class="bv-box bv-missing" id="bv-missing-box">
+                  <div class="bv-box-title"><span>△ Missing Entries</span><span class="bv-alert-count" id="bv-missing-count">0</span></div>
+                  <div class="bv-missing-list" id="bv-missing-list"></div>
+                  <button class="bv-scan-btn" id="bv-scan-calendar" type="button">Scan Calendar</button>
+                </section>
+              </aside>
+
+              <section class="bv-column bv-center">
+                <div class="bv-stage" id="bv-stage">
+                  <div class="bv-stage-title">Interactive job profile vault</div>
+                  <div class="bv-platform"></div>
+                  <div id="bv-profile-stage"></div>
+                  <div class="bv-stage-help">Tap a glass card to focus it · Drag an entry chip onto a card to reassign it</div>
+                </div>
+
+                <section class="bv-box">
+                  <div class="bv-box-title"><span>Job Profile Presets</span><small>Load a profile to speed up billing</small></div>
+                  <div class="bv-profiles"><div class="bv-profile-row" id="bv-profile-presets"></div></div>
+                </section>
+
+                <section class="bv-box bv-rollover">
+                  <div>
+                    <h4>Month Rollover</h4>
+                    <div class="bv-switchline"><span id="bv-roll-label">Rollover enabled</span><button class="bv-switch" id="bv-roll-switch" type="button" aria-pressed="true"><i></i></button></div>
+                  </div>
+                  <div>
+                    <h4>Prepare &amp; carry over</h4>
+                    <label class="bv-checkline"><input id="bv-carry-drafts" type="checkbox"> Carry over unfinished draft entries</label>
+                    <label class="bv-checkline"><input id="bv-auto-move" type="checkbox"> Auto-create the next billing month</label>
+                  </div>
+                  <div>
+                    <h4>Rollover Preview</h4>
+                    <div class="bv-rollover-preview"><span>Draft entries</span><strong id="bv-roll-drafts">0</strong><span>Target month</span><strong id="bv-roll-target">Next</strong></div>
+                    <button class="bv-roll-btn" id="bv-roll-now" type="button">Create / Roll Over</button>
+                  </div>
+                </section>
+              </section>
+
+              <aside class="bv-column bv-right">
+                <section class="bv-box">
+                  <div class="bv-invoice-wrap">
+                    <div class="bv-invoice-head"><div><strong>Invoice Preview</strong><small id="bv-invoice-state">Draft · Ready to build</small></div><button class="bv-close" id="bv-history-btn" type="button" title="Audit history">⋯</button></div>
+                    <div class="bv-invoice-doc">
+                      <div class="bv-doc-top"><div class="bv-doc-logo"><i>╫</i><span id="bv-doc-brand">Jesus Garcia<br>Billing Record</span></div><div class="bv-doc-invoice">Invoice<small id="bv-doc-number">INV</small></div></div>
+                      <div class="bv-doc-meta" id="bv-doc-meta"></div>
+                      <div class="bv-doc-table"><div class="bv-doc-row head"><span>Description</span><span>Hours</span><span>Amount</span></div><div id="bv-doc-rows"></div></div>
+                      <div class="bv-doc-total"><span>Total</span><strong id="bv-doc-total">$0.00</strong></div>
+                      <div class="bv-doc-actions">
+                        <button id="bv-open-pdf" type="button">Open PDF</button>
+                        <button id="bv-export-table" type="button">Table</button>
+                        <button class="primary" id="bv-download-pdf" type="button">Download</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bv-workflow" id="bv-workflow">
+                    <button class="bv-status-btn" data-status="draft" type="button">Draft</button>
+                    <button class="bv-status-btn" data-status="reviewed" type="button">Reviewed</button>
+                    <button class="bv-status-btn" data-status="submitted" type="button">Submitted</button>
+                    <button class="bv-status-btn" data-status="paid" type="button">Paid</button>
+                  </div>
+                  <div class="bv-locked-note" id="bv-locked-note">This billing period is locked. Exporting remains available, but entries cannot be changed.</div>
+                  <button class="bv-lock" id="bv-lock-btn" type="button">▣ Lock &amp; Finalize Month<small>Once locked, this month cannot be edited without a correction reason.</small></button>
+                </section>
+              </aside>
+            </div>
+          </div>
+
+          <div class="bv-modal hidden" id="bv-entry-modal" aria-hidden="true">
+            <form class="bv-modal-card" id="bv-entry-form">
+              <div class="bv-modal-head"><div><h3 id="bv-entry-title">New Billing Entry</h3><p>Capture the work once; the ledger and exports update automatically.</p></div><button class="bv-close" data-bv-close type="button">×</button></div>
+              <input type="hidden" id="bv-entry-id">
+              <input type="hidden" id="bv-entry-source-id">
+              <div class="bv-form-grid">
+                <div class="bv-field"><label>Job profile</label><select id="bv-entry-profile"></select></div>
+                <div class="bv-field"><label>Date</label><input id="bv-entry-date" type="date" required></div>
+                <div class="bv-field"><label>Start time</label><input id="bv-entry-start" type="time"></div>
+                <div class="bv-field"><label>End time</label><input id="bv-entry-end" type="time"></div>
+                <div class="bv-field"><label>Hours</label><input id="bv-entry-hours" type="number" min="0" max="24" step="0.25" required></div>
+                <div class="bv-field"><label>Entry status</label><select id="bv-entry-status"><option value="draft">Draft</option><option value="reviewed">Reviewed</option><option value="submitted">Submitted</option></select></div>
+                <div class="bv-field full"><label>Service types</label><div class="bv-service-checks" id="bv-entry-services"></div></div>
+                <div class="bv-field full"><label>Description</label><input id="bv-entry-description" placeholder="Service description"></div>
+                <div class="bv-field full"><label>Notes</label><textarea id="bv-entry-notes" placeholder="Optional internal note"></textarea></div>
+              </div>
+              <div class="bv-modal-actions"><button class="danger hidden" id="bv-delete-entry" type="button">Delete</button><button data-bv-close type="button">Cancel</button><button class="primary" type="submit">Save Entry</button></div>
+              <div class="bv-toast-note">Data is stored locally in this browser. No private employer system access is required.</div>
+            </form>
+          </div>
+
+          <div class="bv-modal hidden" id="bv-profile-modal" aria-hidden="true">
+            <form class="bv-modal-card" id="bv-profile-form">
+              <div class="bv-modal-head"><div><h3 id="bv-profile-title">Job Profile</h3><p>Reusable rates, service labels, matching keywords, and export identity.</p></div><button class="bv-close" data-bv-close type="button">×</button></div>
+              <input type="hidden" id="bv-profile-id">
+              <div class="bv-form-grid">
+                <div class="bv-field"><label>Profile name</label><input id="bv-profile-name" required></div>
+                <div class="bv-field"><label>Default hourly rate</label><input id="bv-profile-rate" type="number" min="0" step="0.01"></div>
+                <div class="bv-field"><label>Employee / provider</label><input id="bv-profile-employee"></div>
+                <div class="bv-field"><label>Employer / client</label><input id="bv-profile-employer"></div>
+                <div class="bv-field full"><label>Service labels (comma separated)</label><input id="bv-profile-services" placeholder="CDS, SLP, O.T, P.T"></div>
+                <div class="bv-field full"><label>Calendar matching keywords</label><input id="bv-profile-keywords" placeholder="translation, clinic work, SLP, O.T, P.T"></div>
+              </div>
+              <div class="bv-modal-actions"><button class="danger hidden" id="bv-delete-profile" type="button">Delete Profile</button><button data-bv-close type="button">Cancel</button><button class="primary" type="submit">Save Profile</button></div>
+            </form>
+          </div>
+
+          <div class="bv-modal hidden" id="bv-history-modal" aria-hidden="true">
+            <div class="bv-modal-card">
+              <div class="bv-modal-head"><div><h3>Billing Period History</h3><p>Review status changes, locks, corrections, exports, and rollover actions.</p></div><button class="bv-close" data-bv-close type="button">×</button></div>
+              <div id="bv-history-list"></div>
+              <div class="bv-modal-actions"><button data-bv-close type="button">Close</button></div>
+            </div>
+          </div>
         </div>
         <div class="panel replydesk-panel inline-reply-mode hidden" id="replydesk-panel" aria-hidden="true">
           <div class="replydesk-shell">
@@ -6881,7 +7219,7 @@
         <button class="dock-btn on" type="button" data-scroll="console-overview" title="Overview"><span class="dock-ico">◎</span><span>Overview</span></button>
         <button class="dock-btn" id="dock-signals" type="button" title="Signals / free-time topography"><span class="dock-ico">⌁</span><span>Signals</span></button>
         <button class="dock-btn dock-caldesk" id="dock-caldesk" type="button" title="Calendar Gatekeeper"><span class="dock-ico">▦</span><span>Calendar</span><span class="dock-badge cal-draft-badge" id="cal-draft-badge" hidden>0</span></button>
-        <button class="dock-btn" type="button" data-scroll="console-matrix" title="Garden"><span class="dock-ico">⬡</span><span>Garden</span></button>
+        <button class="dock-btn dock-billing" id="dock-billing" type="button" title="Glass Vault Billing"><span class="dock-ico">▥</span><span>Billing</span><span class="dock-badge bv-dock-badge" id="bv-dock-badge" hidden>0</span></button>
         <button class="dock-btn dock-replydesk" id="dock-replydesk" type="button" title="Reply Desk"><span class="dock-ico">✉</span><span>Reply<br>Desk</span><span class="dock-badge reply-badge" id="reply-draft-badge" hidden>0</span></button>
         <button class="dock-btn dock-action-items" id="dock-actions" type="button" title="Action Items"><span class="dock-ico">▤</span><span>Action Items</span><span class="dock-badge" id="action-count-badge" hidden>0</span></button>
         <button class="dock-btn dock-moneybuddy" id="dock-moneybuddy" type="button" title="Money Buddy"><span class="dock-ico">◐</span><span>Money<br>Buddy</span></button>
@@ -7029,6 +7367,7 @@
         renderRibbon(true); renderFilters(); renderGauge(); renderFooter(); renderAgenda();
         if(window.renderTopo) window.renderTopo();
         if(window.renderDaySummary) window.renderDaySummary();
+        if(window.renderBillingVault) window.renderBillingVault();
       }catch(e){ el("agenda").innerHTML='<div class="empty">Unexpected error: '+(e&&e.message?e.message:e)+'</div>'; }
     }
 
@@ -7864,6 +8203,9 @@
       try{
         const { error } = await client.from("tasks").update({ status: t.status }).eq("id", id);
         if(error){ t.status = prev; refreshViews(); toast("Couldn't save: "+error.message); }
+        else {
+          try{ document.dispatchEvent(new CustomEvent("dashboard-task-status",{detail:{task:t,previousStatus:prev}})); }catch(_e){}
+        }
       }catch(e){ t.status = prev; refreshViews(); toast("Couldn't save that change."); }
     }
 
@@ -8588,73 +8930,7 @@
   <script>
     (function(){
       var selectedReplyDraftId=null;
-      var defaultReplyDrafts=[
-        {
-          id:"demo-reply-1",
-          sender:"James Bennett",
-          email:"james.bennett@acme.com",
-          subject:"Re: Q2 Project Update & Next Steps",
-          reference:"Q2 Project Update & Next Steps",
-          priority:"high",
-          status:"Drafted",
-          excerpt:"Thanks for the detailed update, James. The progress looks strong and aligns with our objectives...",
-          body:"Hi James,\n\nThanks for the detailed update. The progress looks strong and aligns well with our objectives for the quarter.\n\nI especially appreciate the clarity around the milestones and the risk mitigation plan—it gives me confidence we’re on track.\n\nA couple of follow-up items on my end:\n\n• Can you confirm the resource allocation for Phase 2?\n• Let’s schedule a quick sync later this week to review dependencies.\n\nOverall, great momentum from the team. Looking forward to our continued collaboration.\n\nBest regards,\nJesus",
-          confidence:92,
-          scanned:"2 min ago"
-        },
-        {
-          id:"demo-reply-2",
-          sender:"Sarah Lin",
-          email:"sarah.lin@example.com",
-          subject:"Re: Budget Proposal Review",
-          reference:"Budget Proposal Review",
-          priority:"medium",
-          status:"Drafted",
-          excerpt:"I appreciate the thorough breakdown of the budget proposal. A few notes from my side...",
-          body:"Hi Sarah,\n\nI appreciate the thorough breakdown of the budget proposal. A few notes from my side are included below, but overall the structure looks reasonable.\n\nPlease let me know whether the timeline is flexible, especially around the review period.\n\nBest,\nJesus",
-          confidence:88,
-          scanned:"8 min ago"
-        },
-        {
-          id:"demo-reply-3",
-          sender:"David Rodriguez",
-          email:"david.rodriguez@example.com",
-          subject:"Re: Partnership Opportunity",
-          reference:"Partnership Opportunity",
-          priority:"medium",
-          status:"Drafted",
-          excerpt:"Thanks for reaching out, David. The partnership opportunity is very interesting...",
-          body:"Hi David,\n\nThanks for reaching out. The partnership opportunity is very interesting, and I would be happy to learn more about the next steps.\n\nCould you send over the basic timeline and expectations when you have a chance?\n\nBest,\nJesus",
-          confidence:84,
-          scanned:"14 min ago"
-        },
-        {
-          id:"demo-reply-4",
-          sender:"Maria Williams",
-          email:"maria.williams@example.com",
-          subject:"Re: Event Collaboration",
-          reference:"Event Collaboration",
-          priority:"low",
-          status:"Drafted",
-          excerpt:"Sounds great, Maria. We’d be happy to collaborate on the upcoming event...",
-          body:"Hi Maria,\n\nSounds great. We’d be happy to collaborate on the upcoming event.\n\nPlease send over the details when they are ready and I can review them.\n\nBest,\nJesus",
-          confidence:79,
-          scanned:"24 min ago"
-        },
-        {
-          id:"demo-reply-5",
-          sender:"Tommy Kim",
-          email:"tommy.kim@example.com",
-          subject:"Re: Access to Report",
-          reference:"Access to Report",
-          priority:"low",
-          status:"Drafted",
-          excerpt:"Sure thing, Tommy. I’ve attached the latest report and granted access...",
-          body:"Hi Tommy,\n\nSure thing. I’ve attached the latest report and granted access on my end.\n\nLet me know if you still have trouble opening it.\n\nBest,\nJesus",
-          confidence:77,
-          scanned:"31 min ago"
-        }
-      ];
+      var defaultReplyDrafts=[];  /* samples removed - real drafts load from Supabase */
 
       function ready(fn){ if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",fn); else fn(); }
       var sampleDrafts=defaultReplyDrafts.slice();
@@ -8847,12 +9123,7 @@
       var cgSidebarMode="pending";
       var cgFilters={};
       var cgFilterReady=false;
-      var sampleCalDrafts=[
-        {id:"cal-demo-1",title:"Psych 402 Study Session",category:"class",date:"2025-05-10",time:"2:00 PM",source:"you",age:"1h ago"},
-        {id:"cal-demo-2",title:"Wellness Workshop",category:"clinic",date:"2025-05-11",time:"10:00 AM",source:"Wellness Center",age:"3h ago"},
-        {id:"cal-demo-3",title:"AI in Learning Talk",category:"event",date:"2025-05-15",time:"6:30 PM",source:"Student Org",age:"5h ago"},
-        {id:"cal-demo-4",title:"CS 201 Project Check-in",category:"class",date:"2025-05-17",time:"1:00 PM",source:"you",age:"7h ago"}
-      ];
+      var sampleCalDrafts=[];  /* samples removed - real staged events load from Supabase */
       var realCalDrafts=[];
       function mapCalRow(r){
         var p=r.payload||{};
@@ -9712,6 +9983,232 @@
       },60000);
     }
     if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ready); else ready();
+  })();
+  </script>
+
+
+  <script>
+  (function(){
+    "use strict";
+    const KEY="billing-vault-state-v2";
+    const VERSION=2;
+    const COLORS=["78,205,231","167,103,255","255,198,91","78,224,169","84,154,255","244,117,181"];
+    const $=id=>document.getElementById(id);
+    const esc=s=>String(s??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;","'":"&#39;"}[c]));
+    const uid=p=>(p||"bv")+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+    const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2}).format(Number.isFinite(+n)?+n:0);
+    const roundQuarter=n=>Math.max(.25,Math.round((+n||0)*4)/4);
+    const todayYMD=()=>{
+      try{return typeof pacificYMD==="function"?pacificYMD():new Date().toISOString().slice(0,10);}catch(_){return new Date().toISOString().slice(0,10);}
+    };
+    const currentMonth=()=>todayYMD().slice(0,7);
+    const monthLabel=k=>{const [y,m]=String(k).split("-").map(Number);return new Date(y,m-1,1).toLocaleString("en-US",{month:"long",year:"numeric"});};
+    const monthShort=k=>{const [y,m]=String(k).split("-").map(Number);return new Date(y,m-1,1).toLocaleString("en-US",{month:"short",year:"numeric"});};
+    const daysInMonth=k=>{const [y,m]=String(k).split("-").map(Number);return new Date(y,m,0).getDate();};
+    const shiftMonthKey=(k,d)=>{const [y,m]=String(k).split("-").map(Number),dt=new Date(y,m-1+d,1);return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0");};
+    const timeNow=()=>new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+    const time24=()=>{const d=new Date();return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");};
+    const mins=(s)=>{if(!s)return null;const p=String(s).split(":").map(Number);return p[0]*60+p[1];};
+    const duration=(a,b)=>{const x=mins(a),y=mins(b);if(x===null||y===null)return 0;let d=y-x;if(d<0)d+=1440;return d/60;};
+    const safeNum=v=>{const n=Number(v);return Number.isFinite(n)?n:0;};
+
+    function defaultProfiles(){
+      return [
+        {id:"translation",name:"Translation Services",employee:"Jesus Garcia",employer:"",rate:0,color:COLORS[0],keywords:["translation","slp","o.t","ot ","p.t","pt ","cds"],services:[
+          {id:"CDS",label:"CDS",description:"CDS Translation Services"},
+          {id:"SLP",label:"SLP",description:"SLP Translation Services"},
+          {id:"OT",label:"O.T",description:"O.T Translation Services"},
+          {id:"PT",label:"P.T",description:"P.T Translation Services"}
+        ]},
+        {id:"clinic-jessica",name:"Clinic Work: Jessica",employee:"Jesus Garcia",employer:"Jessica",rate:0,color:COLORS[2],keywords:["clinic work","jessica","clinic"],services:[{id:"CLINIC",label:"Clinic",description:"Clinic Translation Services"}]},
+        {id:"aba",name:"ABA Therapy",employee:"Jesus Garcia",employer:"",rate:0,color:COLORS[1],keywords:["aba","behavioral","therapy"],services:[{id:"ABA",label:"ABA",description:"ABA Services"}]},
+        {id:"tutoring",name:"Tutoring",employee:"Jesus Garcia",employer:"",rate:0,color:COLORS[3],keywords:["tutor","tutoring","education"],services:[{id:"TUTOR",label:"Tutoring",description:"Tutoring Services"}]}
+      ];
+    }
+    function freshState(){return {version:VERSION,activeMonth:currentMonth(),activeProfileId:"translation",profiles:defaultProfiles(),periods:{},timer:null,lastSaved:null,pendingTaskId:null};}
+    function loadState(){
+      let s=null;try{s=JSON.parse(localStorage.getItem(KEY)||"null");}catch(_){s=null;}
+      if(!s||typeof s!=="object")s=freshState();
+      s.version=VERSION;s.profiles=Array.isArray(s.profiles)&&s.profiles.length?s.profiles:defaultProfiles();s.periods=s.periods||{};s.activeMonth=/^\d{4}-\d{2}$/.test(s.activeMonth||"")?s.activeMonth:currentMonth();
+      if(!s.profiles.some(p=>p.id===s.activeProfileId))s.activeProfileId=s.profiles[0].id;
+      return s;
+    }
+    let state=loadState(), clockTicker=null, lastSuggestions=[];
+    function ensurePeriod(k=state.activeMonth){
+      if(!state.periods[k])state.periods[k]={month:k,status:"draft",locked:false,entries:[],ignored:[],audit:[],rollover:{enabled:true,carryDrafts:true,autoMove:true},createdAt:new Date().toISOString()};
+      const p=state.periods[k];p.entries=Array.isArray(p.entries)?p.entries:[];p.ignored=Array.isArray(p.ignored)?p.ignored:[];p.audit=Array.isArray(p.audit)?p.audit:[];p.rollover=p.rollover||{enabled:true,carryDrafts:true,autoMove:true};return p;
+    }
+    function save(note){state.lastSaved=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));const n=$("bv-save-time");if(n)n.textContent=timeNow()+(note?" · "+note:"");}
+    function audit(type,detail){const p=ensurePeriod();p.audit.unshift({id:uid("audit"),at:new Date().toISOString(),type,detail:detail||""});p.audit=p.audit.slice(0,100);}
+    function profile(id=state.activeProfileId){return state.profiles.find(p=>p.id===id)||state.profiles[0];}
+    function period(){return ensurePeriod(state.activeMonth);}
+    function entries(profId=null){return period().entries.filter(e=>!profId||e.profileId===profId).sort((a,b)=>String(a.date||"").localeCompare(String(b.date||""))||String(a.start||"").localeCompare(String(b.start||"")));}
+    function profileTotal(id){const p=profile(id),es=entries(id),hours=es.reduce((a,e)=>a+safeNum(e.hours),0);return {hours,amount:hours*safeNum(p.rate),count:es.length};}
+    function periodTotal(){const es=entries(),hours=es.reduce((a,e)=>a+safeNum(e.hours),0),amount=es.reduce((a,e)=>a+safeNum(e.hours)*safeNum(profile(e.profileId).rate),0);return {hours,amount,count:es.length};}
+    function invoiceNumber(p){return "INV-"+state.activeMonth.replace("-","")+"-"+String((p.name||"JOB").replace(/[^A-Za-z0-9]/g,"").slice(0,4)||"JOB").toUpperCase();}
+    function activeLocked(){return !!period().locked;}
+    function notice(msg){if(typeof toast==="function")toast(msg);else alert(msg);}
+    function formatDate(ymd){if(!ymd)return "";const [y,m,d]=ymd.split("-").map(Number);return new Date(y,m-1,d).toLocaleString("en-US",{month:"short",day:"numeric"});}
+    function profileColor(id){const p=profile(id);return p.color||COLORS[state.profiles.indexOf(p)%COLORS.length];}
+
+    function inferProfile(task){
+      const txt=((task&&task.title)||"").toLowerCase();let best=null,bestScore=0;
+      state.profiles.forEach(p=>{let score=0;(p.keywords||[]).forEach(k=>{if(k&&txt.includes(String(k).toLowerCase()))score+=2;});if(task&&task.category&&String(task.category).includes(p.id))score++;if(score>bestScore){best=p;bestScore=score;}});
+      if(best)return best;
+      if(task&&["clinic-work","behavioral-work","side-gig","work","appointment"].includes(task.category))return profile();
+      return null;
+    }
+    function isBillableTask(task){
+      if(!task||!task.due_date)return false;
+      const txt=String(task.title||"").toLowerCase();
+      if(["class","personal","admin"].includes(task.category))return false;
+      return !!inferProfile(task)||/(clinic|work|translation|slp|o\.t|p\.t|therapy|tutor|session|appointment)/i.test(txt);
+    }
+    function taskHours(t){
+      if(t.due_time&&t.end_time){const h=duration(String(t.due_time).slice(0,5),String(t.end_time).slice(0,5));if(h>0)return roundQuarter(h);}
+      return 1;
+    }
+    function serviceForTask(p,t){
+      const txt=String(t.title||"").toLowerCase();const ss=p.services||[];
+      const match=ss.find(s=>txt.includes(String(s.label||"").toLowerCase())||txt.includes(String(s.id||"").toLowerCase()));
+      if(match)return [match.id];
+      if(p.id==="translation"){
+        if(/slp/.test(txt))return ["SLP"];if(/o\.t|\bot\b/.test(txt))return ["OT"];if(/p\.t|\bpt\b/.test(txt))return ["PT"];if(/cds/.test(txt))return ["CDS"];
+      }
+      return ss.length?[ss[0].id]:[];
+    }
+    function generatedDescription(p,serviceIds){
+      const selected=(p.services||[]).filter(s=>(serviceIds||[]).includes(s.id));
+      if(!selected.length)return p.name;
+      if(p.id==="translation")return selected.map(s=>s.label).join(" & ")+" Translation Services";
+      return selected.map(s=>s.description||s.label).join(" & ");
+    }
+    function taskKey(t){return "task:"+String(t.id||[t.due_date,t.due_time,t.title].join("|"));}
+    function scanSuggestions(){
+      const p=period(),tasks=(typeof allTasks!=="undefined"&&Array.isArray(allTasks))?allTasks:[];
+      const existing=new Set(p.entries.map(e=>e.sourceId).filter(Boolean)),ignored=new Set(p.ignored||[]);
+      lastSuggestions=tasks.filter(t=>String(t.due_date||"").slice(0,7)===state.activeMonth&&isBillableTask(t)).map(t=>{
+        const key=taskKey(t),pr=inferProfile(t)||profile();return {key,task:t,profile:pr,hours:taskHours(t),services:serviceForTask(pr,t)};
+      }).filter(s=>!existing.has(s.key)&&!ignored.has(s.key));
+      return lastSuggestions;
+    }
+    function suggestionByKey(key){return scanSuggestions().find(s=>s.key===key);}
+    function hasDuplicate(candidate,skipId){return period().entries.some(e=>e.id!==skipId&&e.date===candidate.date&&e.profileId===candidate.profileId&&Math.abs(safeNum(e.hours)-safeNum(candidate.hours))<.01&&String(e.description||"").toLowerCase()===String(candidate.description||"").toLowerCase());}
+
+    function renderHeader(){
+      $("bv-month-label").textContent=monthLabel(state.activeMonth);
+      const p=period();const s=$("bv-save-time");if(s)s.textContent=state.lastSaved?new Date(state.lastSaved).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"Ready";
+      const suggestions=scanSuggestions();$("bv-ai-count").textContent=suggestions.length;const badge=$("bv-dock-badge");if(badge){badge.textContent=suggestions.length;badge.hidden=suggestions.length===0;}
+      $("bv-missing-count").textContent=suggestions.length;
+    }
+    function renderQuick(){
+      const b=$("bv-clock-btn"),m=$("bv-clock-mini");if(!b||!m)return;
+      if(state.timer&&state.timer.running){b.classList.add("running");b.querySelector("span").textContent="Clock Out";m.textContent=elapsedText();startTicker();}
+      else{b.classList.remove("running");b.querySelector("span").textContent="Start Clock";m.textContent="";stopTicker();}
+    }
+    function elapsedText(){if(!state.timer||!state.timer.running)return "";const sec=Math.max(0,Math.floor((Date.now()-state.timer.startedAt)/1000)),h=Math.floor(sec/3600),mi=Math.floor((sec%3600)/60),s=sec%60;return [h,mi,s].map(x=>String(x).padStart(2,"0")).join(":")+" · "+profile(state.timer.profileId).name;}
+    function startTicker(){if(clockTicker)return;clockTicker=setInterval(()=>{const n=$("bv-clock-mini");if(n)n.textContent=elapsedText();},1000);}
+    function stopTicker(){clearInterval(clockTicker);clockTicker=null;}
+
+    function renderChips(){
+      const host=$("bv-entry-chips"),es=entries().slice().reverse().slice(0,8);if(!host)return;
+      if(!es.length){host.innerHTML='<div class="bv-empty-mini">No entries yet. Add one manually, start a clock, or scan the calendar.</div>';return;}
+      host.innerHTML=es.map(e=>{const p=profile(e.profileId),amt=safeNum(e.hours)*safeNum(p.rate),c=profileColor(p.id);return '<article class="bv-entry-chip" draggable="true" data-bv-entry="'+esc(e.id)+'" style="--chip:'+c+'"><span class="ico">◉</span><strong>'+esc(e.description||p.name)+'</strong><small>'+safeNum(e.hours).toFixed(2)+'h</small><span class="amt">'+money(amt)+'</span></article>';}).join("");
+      host.querySelectorAll("[data-bv-entry]").forEach(ch=>{ch.addEventListener("click",()=>openEntry(ch.dataset.bvEntry));ch.addEventListener("dragstart",ev=>{ev.dataTransfer.setData("text/billing-entry",ch.dataset.bvEntry);});});
+    }
+    function renderMissing(){
+      const host=$("bv-missing-list"),ss=scanSuggestions();if(!host)return;
+      if(!ss.length){host.innerHTML='<div class="bv-empty-mini">No unlogged billable calendar events were detected for this month.</div>';return;}
+      host.innerHTML=ss.slice(0,4).map(s=>'<div class="bv-missing-row"><div><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h suggested · '+esc(s.profile.name)+'</small></div><button class="bv-mini-add" data-bv-suggest="'+esc(s.key)+'" title="Add as draft">＋</button></div>').join("");
+      host.querySelectorAll("[data-bv-suggest]").forEach(b=>b.addEventListener("click",()=>openSuggestion(b.dataset.bvSuggest)));
+    }
+    function stageSlots(profiles,activeId){
+      const a=profiles.findIndex(p=>p.id===activeId),rot=profiles.slice(a).concat(profiles.slice(0,a));const slots=["slot-center","slot-left","slot-right","slot-far-left","slot-far-right"];return rot.slice(0,5).map((p,i)=>({p,slot:slots[i]}));
+    }
+    function renderStage(){
+      const host=$("bv-profile-stage"),presets=$("bv-profile-presets");if(!host||!presets)return;
+      host.innerHTML=stageSlots(state.profiles,state.activeProfileId).map(({p,slot})=>{const t=profileTotal(p.id),c=profileColor(p.id);return '<article class="bv-profile-card '+slot+'" data-bv-profile-card="'+esc(p.id)+'" style="--pc:'+c+'"><button class="bv-card-close" data-bv-edit-profile="'+esc(p.id)+'" type="button" title="Edit profile">×</button><h3>'+esc(p.name)+'</h3><span class="tag">'+esc((p.services&&p.services[0]&&p.services[0].label)||"Profile")+'</span><div class="hours">'+t.hours.toFixed(t.hours%1?2:0)+' <span>hrs</span></div><div class="bv-profile-metrics"><div><small>Rate</small><strong>'+(p.rate?money(p.rate)+"/hr":"Not set")+'</strong></div><div><small>Amount</small><strong>'+money(t.amount)+'</strong></div></div></article>';}).join("");
+      host.querySelectorAll("[data-bv-profile-card]").forEach(card=>{
+        card.addEventListener("click",ev=>{if(ev.target.closest("[data-bv-edit-profile]"))return;state.activeProfileId=card.dataset.bvProfileCard;save("profile selected");render();});
+        card.addEventListener("dragover",ev=>{ev.preventDefault();card.classList.add("drag-target");});card.addEventListener("dragleave",()=>card.classList.remove("drag-target"));
+        card.addEventListener("drop",ev=>{ev.preventDefault();card.classList.remove("drag-target");const id=ev.dataTransfer.getData("text/billing-entry");reassignEntry(id,card.dataset.bvProfileCard);});
+      });
+      host.querySelectorAll("[data-bv-edit-profile]").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();openProfile(b.dataset.bvEditProfile);}));
+      presets.innerHTML=state.profiles.slice(0,4).map(p=>'<button class="bv-profile-preset '+(p.id===state.activeProfileId?"on":"")+'" data-bv-preset="'+esc(p.id)+'" type="button"><strong>'+esc(p.name)+'</strong><small>'+(p.rate?money(p.rate)+" / hr":"Default rates")+'</small></button>').join("")+'<button class="bv-profile-preset bv-new-profile" id="bv-new-profile" type="button">＋ New<br>Profile</button>';
+      presets.querySelectorAll("[data-bv-preset]").forEach(b=>b.addEventListener("click",()=>{state.activeProfileId=b.dataset.bvPreset;save("profile selected");render();}));
+      $("bv-new-profile").addEventListener("click",()=>openProfile(null));
+    }
+    function reassignEntry(id,profileId){if(activeLocked()){notice("Unlock this billing period before reassigning entries.");return;}const e=period().entries.find(x=>x.id===id);if(!e)return;e.profileId=profileId;if(!e.description)e.description=profile(profileId).name;audit("entry_reassigned",e.id+" → "+profile(profileId).name);save("entry moved");render();}
+
+    function renderRollover(){
+      const p=period(),r=p.rollover||{};$("bv-roll-switch").classList.toggle("on",r.enabled!==false);$("bv-roll-switch").setAttribute("aria-pressed",r.enabled!==false?"true":"false");$("bv-carry-drafts").checked=r.carryDrafts!==false;$("bv-auto-move").checked=r.autoMove!==false;$("bv-roll-drafts").textContent=p.entries.filter(e=>(e.status||"draft")==="draft").length;$("bv-roll-target").textContent=monthShort(shiftMonthKey(state.activeMonth,1));$("bv-roll-label").textContent=r.enabled!==false?"Rollover enabled":"Rollover disabled";
+    }
+    function renderInvoice(){
+      const p=profile(),per=period(),es=entries(p.id),total=profileTotal(p.id);$("bv-invoice-state").textContent=(per.locked?"Locked":""+(per.status||"draft").replace(/^./,c=>c.toUpperCase()))+" · "+(es.length?es.length+" entries":"Ready to build");$("bv-doc-number").textContent=invoiceNumber(p);$("bv-doc-brand").innerHTML=esc(p.employee||"Jesus Garcia")+"<br>Billing Record";
+      $("bv-doc-meta").innerHTML='<div>Billing to<strong>'+esc(p.employer||p.name)+'</strong></div><div>Month<strong>'+esc(monthLabel(state.activeMonth))+'</strong></div><div>Payroll period<strong>'+esc(state.activeMonth+"-01 to "+state.activeMonth+"-"+String(daysInMonth(state.activeMonth)).padStart(2,"0"))+'</strong></div><div>Rate<strong>'+(p.rate?money(p.rate)+" / hr":"Hours only")+'</strong></div>';
+      const grouped={};es.forEach(e=>{const k=e.description||p.name;grouped[k]=(grouped[k]||0)+safeNum(e.hours);});const rows=Object.entries(grouped).sort((a,b)=>b[1]-a[1]);$("bv-doc-rows").innerHTML=rows.length?rows.slice(0,7).map(([d,h])=>'<div class="bv-doc-row"><span>'+esc(d)+'</span><span>'+h.toFixed(h%1?2:0)+'</span><span>'+money(h*safeNum(p.rate))+'</span></div>').join(""):'<div class="bv-doc-empty">No entries are assigned to this profile for the selected month.</div>';$("bv-doc-total").textContent=money(total.amount);
+      $("bv-workflow").querySelectorAll("[data-status]").forEach(b=>b.classList.toggle("on",b.dataset.status===per.status));$("bv-locked-note").classList.toggle("show",!!per.locked);const lock=$("bv-lock-btn");lock.classList.toggle("locked",!!per.locked);lock.innerHTML=per.locked?'✓ Final Version Locked<small>Tap to unlock for a documented correction.</small>':'▣ Lock &amp; Finalize Month<small>Once locked, this month cannot be edited without a correction reason.</small>';
+    }
+    function renderHistory(){const host=$("bv-history-list"),a=period().audit||[];host.innerHTML=a.length?a.map(x=>'<div class="bv-missing-row"><div><strong>'+esc(String(x.type||"Activity").replace(/_/g," "))+'</strong><small>'+esc(new Date(x.at).toLocaleString())+(x.detail?" · "+esc(x.detail):"")+'</small></div></div>').join(""):'<div class="bv-empty-mini">No history has been recorded for this billing period yet.</div>';}
+    function render(){if(!$("billing-vault-panel"))return;ensurePeriod();renderHeader();renderQuick();renderChips();renderMissing();renderStage();renderRollover();renderInvoice();}
+    window.renderBillingVault=render;
+
+    function showModal(id,on=true){const n=$(id);if(!n)return;n.classList.toggle("hidden",!on);n.setAttribute("aria-hidden",on?"false":"true");}
+    function populateProfileSelect(selected){const s=$("bv-entry-profile");s.innerHTML=state.profiles.map(p=>'<option value="'+esc(p.id)+'" '+(p.id===selected?"selected":"")+'>'+esc(p.name)+'</option>').join("");}
+    function renderServiceChecks(selectedIds=[]){const p=profile($("bv-entry-profile").value||state.activeProfileId),host=$("bv-entry-services");host.innerHTML=(p.services||[]).map(s=>'<label><input type="checkbox" value="'+esc(s.id)+'" '+(selectedIds.includes(s.id)?"checked":"")+'> '+esc(s.label)+'</label>').join("")||'<span class="bv-empty-mini">No service labels configured.</span>';host.querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{$("bv-entry-description").value=generatedDescription(p,[...host.querySelectorAll("input:checked")].map(x=>x.value));}));}
+    function openEntry(id=null,prefill=null){
+      if(activeLocked()){notice("This period is locked. Unlock it before changing entries.");return;}
+      const e=id?period().entries.find(x=>x.id===id):null,base=e||prefill||{};$("bv-entry-title").textContent=e?"Edit Billing Entry":"New Billing Entry";$("bv-entry-id").value=e?e.id:"";$("bv-entry-source-id").value=base.sourceId||"";populateProfileSelect(base.profileId||state.activeProfileId);$("bv-entry-date").value=base.date||todayYMD();$("bv-entry-start").value=base.start||"";$("bv-entry-end").value=base.end||"";$("bv-entry-hours").value=safeNum(base.hours||1);$("bv-entry-status").value=base.status||"draft";$("bv-entry-description").value=base.description||"";$("bv-entry-notes").value=base.notes||"";renderServiceChecks(base.serviceIds||[]);$("bv-delete-entry").classList.toggle("hidden",!e);showModal("bv-entry-modal",true);
+    }
+    function openSuggestion(key){const s=suggestionByKey(key);if(!s)return;openEntry(null,{sourceId:s.key,profileId:s.profile.id,date:s.task.due_date,start:s.task.due_time?String(s.task.due_time).slice(0,5):"",end:s.task.end_time?String(s.task.end_time).slice(0,5):"",hours:s.hours,serviceIds:s.services,description:generatedDescription(s.profile,s.services),notes:"Calendar-assisted entry: "+(s.task.title||"")});}
+    function saveEntryForm(ev){ev.preventDefault();if(activeLocked())return;const id=$("bv-entry-id").value,prof=profile($("bv-entry-profile").value),serviceIds=[...$("bv-entry-services").querySelectorAll("input:checked")].map(x=>x.value),candidate={id:id||uid("entry"),profileId:prof.id,date:$("bv-entry-date").value,start:$("bv-entry-start").value,end:$("bv-entry-end").value,hours:safeNum($("bv-entry-hours").value),status:$("bv-entry-status").value,serviceIds,description:$("bv-entry-description").value.trim()||generatedDescription(prof,serviceIds),notes:$("bv-entry-notes").value.trim(),sourceId:$("bv-entry-source-id").value||null,updatedAt:new Date().toISOString()};if(!candidate.date||candidate.hours<=0){notice("Enter a valid date and number of hours.");return;}if(hasDuplicate(candidate,id)){if(!confirm("A very similar entry already exists. Save this duplicate anyway?"))return;}const arr=period().entries,index=arr.findIndex(x=>x.id===id);if(index>=0)arr[index]={...arr[index],...candidate};else arr.push({...candidate,createdAt:new Date().toISOString()});audit(index>=0?"entry_updated":"entry_added",candidate.description+" · "+candidate.hours+"h");save("entry saved");showModal("bv-entry-modal",false);render();}
+    function deleteEntry(){const id=$("bv-entry-id").value;if(!id||activeLocked())return;if(!confirm("Delete this billing entry?"))return;period().entries=period().entries.filter(e=>e.id!==id);audit("entry_deleted",id);save("entry deleted");showModal("bv-entry-modal",false);render();}
+    function openProfile(id=null){if(activeLocked()){notice("Unlock the period before changing job profiles.");return;}const p=id?profile(id):null;$("bv-profile-title").textContent=p?"Edit Job Profile":"New Job Profile";$("bv-profile-id").value=p?p.id:"";$("bv-profile-name").value=p?p.name:"";$("bv-profile-rate").value=p?p.rate||0:0;$("bv-profile-employee").value=p?p.employee||"Jesus Garcia":"Jesus Garcia";$("bv-profile-employer").value=p?p.employer||"":"";$("bv-profile-services").value=p?(p.services||[]).map(s=>s.label).join(", "):"";$("bv-profile-keywords").value=p?(p.keywords||[]).join(", "):"";$("bv-delete-profile").classList.toggle("hidden",!p||state.profiles.length<=1);showModal("bv-profile-modal",true);}
+    function saveProfileForm(ev){ev.preventDefault();const oldId=$("bv-profile-id").value,name=$("bv-profile-name").value.trim();if(!name)return;const labels=$("bv-profile-services").value.split(",").map(x=>x.trim()).filter(Boolean),services=labels.map((label,i)=>({id:label.toUpperCase().replace(/[^A-Z0-9]/g,"")||"S"+i,label,description:label+(name.toLowerCase().includes("translation")?" Translation Services":" Services")}));const p={id:oldId||uid("profile"),name,rate:safeNum($("bv-profile-rate").value),employee:$("bv-profile-employee").value.trim()||"Jesus Garcia",employer:$("bv-profile-employer").value.trim(),services:services.length?services:[{id:"SERVICE",label:"Service",description:name}],keywords:$("bv-profile-keywords").value.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean),color:oldId?profile(oldId).color:COLORS[state.profiles.length%COLORS.length]};const i=state.profiles.findIndex(x=>x.id===oldId);if(i>=0)state.profiles[i]=p;else state.profiles.push(p);state.activeProfileId=p.id;audit(i>=0?"profile_updated":"profile_created",p.name);save("profile saved");showModal("bv-profile-modal",false);render();}
+    function deleteProfile(){const id=$("bv-profile-id").value;if(!id||state.profiles.length<=1)return;if(period().entries.some(e=>e.profileId===id)){notice("Move or delete entries assigned to this profile first.");return;}if(!confirm("Delete this reusable job profile?"))return;state.profiles=state.profiles.filter(p=>p.id!==id);state.activeProfileId=state.profiles[0].id;audit("profile_deleted",id);save("profile deleted");showModal("bv-profile-modal",false);render();}
+
+    function startOrStopClock(){
+      if(activeLocked()){notice("Unlock this period before clocking work.");return;}
+      if(state.timer&&state.timer.running){const t=state.timer,end=Date.now(),hours=roundQuarter((end-t.startedAt)/3600000),start=new Date(t.startedAt),finish=new Date(end);state.timer=null;save("clock stopped");renderQuick();openEntry(null,{profileId:t.profileId,date:t.date,start:String(start.getHours()).padStart(2,"0")+":"+String(start.getMinutes()).padStart(2,"0"),end:String(finish.getHours()).padStart(2,"0")+":"+String(finish.getMinutes()).padStart(2,"0"),hours,serviceIds:(profile(t.profileId).services||[]).slice(0,1).map(s=>s.id),description:profile(t.profileId).name,notes:"Clock-out capture"});}
+      else{state.timer={running:true,startedAt:Date.now(),profileId:state.activeProfileId,date:todayYMD()};save("clock started");renderQuick();notice("Billing clock started.");}
+    }
+    function changeMonth(delta){state.activeMonth=shiftMonthKey(state.activeMonth,delta);ensurePeriod();save("month changed");render();}
+    function setStatus(status){const p=period();if(p.locked&&status!==p.status){notice("Unlock this period before changing its workflow status.");return;}p.status=status;p[status+"At"]=new Date().toISOString();if(status!=="draft")p.entries.forEach(e=>{if(e.status==="draft")e.status=status;});audit("status_changed",status);save("status updated");render();}
+    function toggleLock(){const p=period();if(!p.locked){if(!confirm("Lock and finalize this billing period? Entries will become read-only until you document a correction."))return;p.locked=true;if(p.status==="draft"||p.status==="reviewed")p.status="submitted";p.lockedAt=new Date().toISOString();p.snapshot=JSON.parse(JSON.stringify(p.entries));audit("period_locked","Final version created");save("period locked");render();}else{const reason=prompt("Reason for unlocking this finalized billing period:");if(!reason)return;p.locked=false;p.status="reviewed";audit("period_unlocked",reason);save("correction opened");render();}}
+    function doRollover(){const p=period(),next=shiftMonthKey(state.activeMonth,1);if(p.rollover.enabled===false){notice("Enable month rollover first.");return;}const target=ensurePeriod(next),drafts=p.entries.filter(e=>(e.status||"draft")==="draft");let copied=0;if(p.rollover.carryDrafts&&drafts.length){if(confirm("Carry "+drafts.length+" unfinished draft entr"+(drafts.length===1?"y":"ies")+" into "+monthLabel(next)+" for review?")){drafts.forEach(e=>{target.entries.push({...e,id:uid("carry"),date:next+"-01",status:"draft",notes:(e.notes?e.notes+" · ":"")+"Carried from "+e.date+"; verify the date before submission.",sourceId:null,carriedFrom:e.id,createdAt:new Date().toISOString()});copied++;});}}audit("month_rollover",monthLabel(next)+" · "+copied+" drafts copied");state.activeMonth=next;save("month rolled over");render();}
+
+    function dailyRows(prof){
+      const es=entries(prof.id),map={};es.forEach(e=>{const d=Number(String(e.date).slice(-2));if(!map[d])map[d]={hours:0,descs:[]};map[d].hours+=safeNum(e.hours);if(e.description&&!map[d].descs.includes(e.description))map[d].descs.push(e.description);});return Array.from({length:daysInMonth(state.activeMonth)},(_,i)=>({date:state.activeMonth+"-"+String(i+1).padStart(2,"0"),hours:map[i+1]?map[i+1].hours:0,description:map[i+1]?map[i+1].descs.join(" & "):""}));
+    }
+    function printableSheet(prof){const rows=dailyRows(prof),total=rows.reduce((a,r)=>a+r.hours,0),[y,m]=state.activeMonth.split("-").map(Number),title=new Date(y,m-1,1).toLocaleString("en-US",{month:"long",year:"numeric"}),periodText=(m)+"/01/"+y+" to "+m+"/"+String(daysInMonth(state.activeMonth)).padStart(2,"0")+"/"+y;return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(prof.name+" "+title)+'</title><style>@page{size:letter portrait;margin:.45in}body{font-family:Arial,sans-serif;color:#111;margin:0}.actions{margin:0 0 15px}.actions button{padding:8px 14px}table{width:100%;border-collapse:collapse;font-size:10px}td,th{border:1px solid #d6d6d6;height:18px;padding:2px 5px}.month{background:#d5a4bd;font-weight:bold;text-align:center;font-size:15px;height:30px}.label{font-weight:bold}.center{text-align:center}.hours{width:70px}.date{width:125px}.total{font-weight:bold}@media print{.actions{display:none}}</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><table><tr><td></td><td class="month">'+esc(title)+'</td><td></td></tr><tr><td class="label">Payroll Period</td><td colspan="2">'+esc(periodText)+'</td></tr><tr><td class="label">Employee: '+esc(prof.employee||"Jesus Garcia")+'</td><td class="label">Hours:</td><td></td></tr>'+rows.map(r=>'<tr><td class="date center">'+esc(new Date(r.date+"T12:00:00").toLocaleDateString("en-US"))+'</td><td class="hours">'+(r.hours?r.hours.toFixed(r.hours%1?2:0):"")+'</td><td>'+esc(r.description)+'</td></tr>').join("")+'<tr><td class="total center">Total</td><td class="total">'+total.toFixed(total%1?2:0)+'</td><td></td></tr></table></body></html>';}
+    function openPrint(){const w=window.open("","_blank");if(!w){notice("Allow pop-ups to open the PDF preview.");return;}w.document.open();w.document.write(printableSheet(profile()));w.document.close();audit("pdf_preview_opened",profile().name);save("PDF opened");}
+    function loadScript(src,test){return new Promise((resolve,reject)=>{if(test())return resolve();const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error("Could not load export library"));document.head.appendChild(s);});}
+    async function downloadPDF(){
+      const prof=profile(),rows=dailyRows(prof);try{await loadScript("https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",()=>window.jspdf&&window.jspdf.jsPDF);const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"pt",format:"letter"}),W=612,L=46,top=42,rowH=14,dateW=110,hourW=55,descW=W-L*2-dateW-hourW;doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setFillColor(213,164,189);doc.rect(L+dateW,top,150,28,"F");doc.setFont("helvetica","bold");doc.setFontSize(14);doc.text(monthLabel(state.activeMonth),L+dateW+75,top+19,{align:"center"});doc.setFontSize(9);let y=top+36;const endDay=String(daysInMonth(state.activeMonth)).padStart(2,"0"),[yy,mm]=state.activeMonth.split("-");doc.text("Payroll Period",L,y);doc.setFont("helvetica","normal");doc.text(mm+"/01/"+yy+" to "+mm+"/"+endDay+"/"+yy,L+dateW,y);y+=14;doc.setFont("helvetica","bold");doc.text("Employee: "+(prof.employee||"Jesus Garcia"),L,y);doc.text("Hours:",L+dateW,y);y+=9;doc.setFont("helvetica","normal");doc.setFontSize(8);rows.forEach(r=>{doc.setDrawColor(210);doc.rect(L,y,dateW,rowH);doc.rect(L+dateW,y,hourW,rowH);doc.rect(L+dateW+hourW,y,descW,rowH);doc.text(new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),L+dateW-5,y+10,{align:"right"});if(r.hours)doc.text(r.hours.toFixed(r.hours%1?2:0),L+dateW+5,y+10);if(r.description)doc.text(String(r.description).slice(0,80),L+dateW+hourW+5,y+10);y+=rowH;});const total=rows.reduce((a,r)=>a+r.hours,0);doc.setFont("helvetica","bold");doc.rect(L,y,dateW,rowH);doc.rect(L+dateW,y,hourW,rowH);doc.rect(L+dateW+hourW,y,descW,rowH);doc.text("Total",L+dateW-5,y+10,{align:"right"});doc.text(total.toFixed(total%1?2:0),L+dateW+5,y+10);doc.save((prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".pdf");audit("pdf_downloaded",prof.name);save("PDF downloaded");}catch(err){notice("PDF download library was unavailable. Opening the printable version instead.");openPrint();}}
+    async function exportTable(){
+      const prof=profile(),rows=dailyRows(prof),total=rows.reduce((a,r)=>a+r.hours,0);try{await loadScript("https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",()=>window.XLSX);const aoa=[["",monthLabel(state.activeMonth),""],["Payroll Period",state.activeMonth+"-01 to "+state.activeMonth+"-"+String(daysInMonth(state.activeMonth)).padStart(2,"0"),""],["Employee: "+(prof.employee||"Jesus Garcia"),"Hours:",""],...rows.map(r=>[new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),r.hours||"",r.description]),["Total",total,""]];const ws=XLSX.utils.aoa_to_sheet(aoa);ws["!merges"]=[{s:{r:0,c:1},e:{r:0,c:2}},{s:{r:1,c:1},e:{r:1,c:2}}];ws["!cols"]=[{wch:18},{wch:12},{wch:54}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,monthShort(state.activeMonth));XLSX.writeFile(wb,(prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".xlsx");audit("spreadsheet_exported",prof.name);save("table exported");}catch(err){const csv=[["Date","Hours","Service Description"],...rows.map(r=>[new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),r.hours||"",r.description]),["Total",total,""]].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"),blob=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".csv";a.click();URL.revokeObjectURL(a.href);notice("Spreadsheet library was unavailable, so a CSV table was exported.");}}
+
+    function bind(){
+      const panel=$("billing-vault-panel"),agenda=$("agenda-panel"),btn=$("dock-billing"),primary=$("console-overview");if(!panel||!agenda||!btn)return;
+      function setBillingVault(on,restoreAgenda=true){
+        if(on){if(window.setReplyDesk)window.setReplyDesk(false);if(window.setCalDesk)window.setCalDesk(false);if(window.setMoneyBuddy)window.setMoneyBuddy(false,false);if(window.setActionPanel)window.setActionPanel(false);const sig=$("signals-panel");if(sig)sig.classList.remove("open");const ds=$("dock-signals");if(ds)ds.classList.remove("on");document.querySelectorAll(".dock-btn").forEach(b=>b.classList.toggle("on",b===btn));}
+        panel.classList.toggle("hidden",!on);panel.style.display=on?"block":"";panel.setAttribute("aria-hidden",on?"false":"true");if(on||restoreAgenda){agenda.classList.toggle("hidden",on);agenda.style.display=on?"none":"";}primary.classList.toggle("billing-mode",on);btn.classList.toggle("on",on);if(on){render();setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);if(state.pendingTaskId){const t=(typeof allTasks!=="undefined"?allTasks:[]).find(x=>String(x.id)===String(state.pendingTaskId));state.pendingTaskId=null;save();if(t&&confirm("Log the completed event ‘"+(t.title||"Calendar work")+"’ for billing?")){const key=taskKey(t),pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}}
+      }
+      window.setBillingVault=setBillingVault;
+      btn.addEventListener("click",()=>setBillingVault(panel.classList.contains("hidden")));
+      document.querySelectorAll("#dock-replydesk,#dock-caldesk,#dock-moneybuddy").forEach(b=>b&&b.addEventListener("click",()=>setBillingVault(false,false)));
+      document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions").forEach(b=>b&&b.addEventListener("click",()=>setBillingVault(false,true)));
+
+      $("bv-prev-month").addEventListener("click",()=>changeMonth(-1));$("bv-next-month").addEventListener("click",()=>changeMonth(1));$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});notice(lastSuggestions.length?"Review the highlighted calendar suggestions.":"No AI suggestions need attention.");});$("bv-clock-btn").addEventListener("click",startOrStopClock);
+      $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
+      $("bv-profile-form").addEventListener("submit",saveProfileForm);$("bv-delete-profile").addEventListener("click",deleteProfile);
+      document.querySelectorAll("[data-bv-close]").forEach(b=>b.addEventListener("click",()=>{const modal=b.closest(".bv-modal");if(modal)showModal(modal.id,false);}));document.querySelectorAll(".bv-modal").forEach(m=>m.addEventListener("click",ev=>{if(ev.target===m)showModal(m.id,false);}));
+      $("bv-roll-switch").addEventListener("click",()=>{period().rollover.enabled=period().rollover.enabled===false;save("rollover updated");renderRollover();});$("bv-carry-drafts").addEventListener("change",()=>{period().rollover.carryDrafts=$("bv-carry-drafts").checked;save("rollover updated");});$("bv-auto-move").addEventListener("change",()=>{period().rollover.autoMove=$("bv-auto-move").checked;save("rollover updated");});$("bv-roll-now").addEventListener("click",doRollover);
+      $("bv-workflow").querySelectorAll("[data-status]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.status)));$("bv-lock-btn").addEventListener("click",toggleLock);$("bv-history-btn").addEventListener("click",()=>{renderHistory();showModal("bv-history-modal",true);});$("bv-open-pdf").addEventListener("click",openPrint);$("bv-download-pdf").addEventListener("click",downloadPDF);$("bv-export-table").addEventListener("click",exportTable);
+      document.addEventListener("dashboard-task-status",ev=>{const d=ev.detail||{},t=d.task;if(!t||d.previousStatus==="done"||t.status!=="done"||!isBillableTask(t))return;const key=taskKey(t);if(Object.values(state.periods).some(p=>(p.entries||[]).some(e=>e.sourceId===key)))return;state.pendingTaskId=t.id;save("capture suggested");if(!panel.classList.contains("hidden")){if(confirm("This completed event looks billable. Capture it now?")){state.pendingTaskId=null;const pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}else notice("Completed work may need billing. Open Billing to capture it.");renderHeader();});
+      render();
+    }
+    if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind);else bind();
   })();
   </script>
 
