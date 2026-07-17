@@ -6975,6 +6975,294 @@
     }
   }
 
+
+  /* Glass Vault v19 — richer material, swipe carousel, functional Smart Review */
+  .bv-field-help{
+    display:block;
+    margin-top:6px;
+    color:#6f82a2;
+    font:500 8px/1.45 var(--mono);
+  }
+
+  .bv-stage{
+    perspective:1100px;
+    isolation:isolate;
+    touch-action:pan-y;
+    background:
+      radial-gradient(circle at 50% 28%,rgba(154,113,255,.17),transparent 32%),
+      radial-gradient(ellipse at 50% 82%,rgba(42,138,255,.38),transparent 39%),
+      radial-gradient(circle at 18% 34%,rgba(43,221,239,.09),transparent 26%),
+      linear-gradient(180deg,rgba(10,21,42,.92),rgba(3,8,18,.985));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.06),
+      inset 0 -70px 90px rgba(4,11,26,.62),
+      0 18px 42px -30px rgba(53,142,255,.72);
+  }
+  .bv-stage::after{
+    content:"";
+    position:absolute;
+    inset:-15% -8% 28%;
+    z-index:0;
+    pointer-events:none;
+    background:
+      conic-gradient(from 210deg at 50% 70%,transparent 0 25%,rgba(69,179,255,.11) 31%,transparent 38% 54%,rgba(182,104,255,.10) 62%,transparent 70%),
+      radial-gradient(ellipse at 50% 100%,rgba(113,190,255,.15),transparent 54%);
+    filter:blur(8px);
+    animation:bv-aurora-shift 8s ease-in-out infinite alternate;
+  }
+  @keyframes bv-aurora-shift{
+    from{transform:translate3d(-1.5%,0,0) scale(1);opacity:.62}
+    to{transform:translate3d(1.5%,-1%,0) scale(1.03);opacity:.95}
+  }
+
+  .bv-platform{
+    width:330px;
+    height:80px;
+    background:
+      radial-gradient(ellipse at 50% 30%,rgba(130,202,255,.30),rgba(39,100,210,.20) 36%,rgba(6,17,38,.9) 67%,transparent 74%);
+    border:1px solid rgba(132,197,255,.58);
+    box-shadow:
+      0 0 12px rgba(92,165,255,.72),
+      0 0 50px rgba(61,128,255,.28),
+      0 30px 80px rgba(24,69,156,.24),
+      inset 0 3px 7px rgba(211,238,255,.22),
+      inset 0 -15px 30px rgba(4,12,28,.72);
+  }
+  .bv-platform::before{
+    content:"";
+    position:absolute;
+    inset:4px 16px;
+    border-radius:50%;
+    border:1px solid rgba(180,223,255,.28);
+    background:linear-gradient(180deg,rgba(180,223,255,.08),transparent 48%);
+    box-shadow:inset 0 0 24px rgba(92,165,255,.14);
+  }
+  .bv-platform::after{
+    inset:15px 31px;
+    border-color:rgba(137,205,255,.64);
+    box-shadow:0 0 21px rgba(87,161,255,.5),inset 0 0 16px rgba(130,202,255,.18);
+  }
+
+  .bv-profile-card{
+    top:68px;
+    width:216px;
+    height:250px;
+    margin-left:-108px;
+    padding:21px 18px 16px;
+    border-radius:23px;
+    border:1px solid rgba(var(--pc),.70);
+    background:
+      radial-gradient(circle at 16% 4%,rgba(255,255,255,.20),transparent 24%),
+      radial-gradient(circle at 82% 94%,rgba(var(--pc),.18),transparent 37%),
+      linear-gradient(145deg,rgba(var(--pc),.25),rgba(16,31,55,.72) 39%,rgba(4,10,22,.84) 79%);
+    -webkit-backdrop-filter:blur(25px) saturate(175%);
+    backdrop-filter:blur(25px) saturate(175%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.34),
+      inset 1px 0 0 rgba(255,255,255,.10),
+      inset 0 -1px 0 rgba(var(--pc),.28),
+      0 0 0 1px rgba(5,11,23,.58),
+      0 0 24px rgba(var(--pc),.36),
+      0 26px 64px -31px rgba(var(--pc),.95);
+    transition:transform .38s cubic-bezier(.2,.8,.2,1),opacity .32s ease,filter .32s ease,box-shadow .32s ease;
+    transform-style:preserve-3d;
+  }
+  .bv-profile-card::before{
+    content:"";
+    position:absolute;
+    inset:5px;
+    border-radius:18px;
+    pointer-events:none;
+    border:1px solid rgba(255,255,255,.095);
+    background:
+      linear-gradient(155deg,rgba(255,255,255,.09),transparent 25% 71%,rgba(var(--pc),.075)),
+      repeating-linear-gradient(90deg,transparent 0 38px,rgba(255,255,255,.012) 39px 40px);
+    box-shadow:inset 0 0 28px rgba(var(--pc),.045);
+    z-index:0;
+  }
+  .bv-profile-card::after{
+    z-index:1;
+    background:linear-gradient(115deg,transparent 16%,rgba(255,255,255,.035) 32%,rgba(255,255,255,.23) 44%,rgba(255,255,255,.045) 54%,transparent 72%);
+    transform:translateX(-145%) skewX(-12deg);
+    transition:transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  .bv-profile-card:hover::after,
+  .bv-profile-card.slot-center::after{transform:translateX(135%) skewX(-12deg);}
+  .bv-profile-card > *{position:relative;z-index:2;}
+  .bv-profile-card.slot-center{
+    z-index:6;
+    transform:translateX(0) translateY(-8px) scale(1.075);
+    filter:brightness(1.08) saturate(1.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.42),
+      inset 0 -1px 0 rgba(var(--pc),.34),
+      0 0 0 1px rgba(var(--pc),.18),
+      0 0 30px rgba(var(--pc),.49),
+      0 36px 76px -34px rgba(var(--pc),1);
+  }
+  .bv-profile-card.slot-left{transform:translateX(-158px) translateY(22px) scale(.86) rotateY(10deg);opacity:.82;}
+  .bv-profile-card.slot-right{transform:translateX(158px) translateY(22px) scale(.86) rotateY(-10deg);opacity:.82;}
+  .bv-profile-card.slot-far-left{transform:translateX(-246px) translateY(48px) scale(.68) rotateY(15deg);opacity:.53;filter:brightness(.82);}
+  .bv-profile-card.slot-far-right{transform:translateX(246px) translateY(48px) scale(.68) rotateY(-15deg);opacity:.53;filter:brightness(.82);}
+  .bv-profile-card.drag-target{
+    box-shadow:0 0 0 3px rgba(var(--pc),.31),0 0 45px rgba(var(--pc),.72),inset 0 0 30px rgba(var(--pc),.11);
+  }
+  .bv-profile-card h3{
+    margin-top:7px;
+    font-size:15px;
+    color:#f3f7ff;
+    text-shadow:0 1px 12px rgba(var(--pc),.22);
+  }
+  .bv-glass-kicker{
+    min-height:14px;
+    color:rgba(220,235,255,.68);
+    font:600 7.5px var(--mono);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .bv-profile-card .tag{
+    background:linear-gradient(180deg,rgba(var(--pc),.20),rgba(var(--pc),.08));
+    border-color:rgba(var(--pc),.48);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 0 10px rgba(var(--pc),.13);
+  }
+  .bv-profile-card .hours{
+    margin:21px 0 14px;
+    font-size:48px;
+    color:#eaf5ff;
+    text-shadow:0 0 13px rgba(224,244,255,.18),0 0 24px rgba(var(--pc),.38);
+  }
+  .bv-profile-metrics{
+    padding-top:12px;
+    border-top:1px solid rgba(255,255,255,.075);
+  }
+  .bv-card-close{
+    z-index:8!important;
+    width:26px;
+    height:26px;
+    color:#c8dbf3;
+    background:linear-gradient(180deg,rgba(32,54,87,.82),rgba(7,16,31,.72));
+    border-color:rgba(var(--pc),.43);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 12px rgba(var(--pc),.16);
+  }
+
+  .bv-vault-nav{
+    position:absolute;
+    top:50%;
+    z-index:10;
+    width:39px;
+    height:58px;
+    margin-top:-29px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    color:#a8d8ff;
+    font-size:27px;
+    background:linear-gradient(180deg,rgba(24,49,84,.82),rgba(6,15,30,.79));
+    border:1px solid rgba(103,174,248,.34);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 18px rgba(59,145,255,.13);
+    opacity:.76;
+  }
+  .bv-vault-nav:hover{opacity:1;border-color:rgba(118,190,255,.64);box-shadow:0 0 22px rgba(70,153,255,.26);}
+  .bv-vault-nav.prev{left:10px;}
+  .bv-vault-nav.next{right:10px;}
+  .bv-profile-dots{
+    position:absolute;
+    z-index:10;
+    left:50%;
+    bottom:26px;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:5px 8px;
+    border-radius:999px;
+    background:rgba(5,13,27,.56);
+    border:1px solid rgba(94,153,226,.16);
+    -webkit-backdrop-filter:blur(12px);
+    backdrop-filter:blur(12px);
+  }
+  .bv-profile-dots button{
+    width:6px;
+    height:6px;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:#445572;
+    box-shadow:none;
+    transition:.24s ease;
+  }
+  .bv-profile-dots button.on{
+    width:20px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#66c8ff,#9a75ff);
+    box-shadow:0 0 12px rgba(100,187,255,.55);
+  }
+  .bv-stage-help{bottom:7px;}
+
+  .bv-ai-modal-card{width:min(860px,96vw);}
+  .bv-ai-hero{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:15px;
+    margin-bottom:12px;
+    border-radius:14px;
+    border:1px solid rgba(64,198,238,.27);
+    background:
+      radial-gradient(circle at 12% 50%,rgba(55,205,239,.13),transparent 28%),
+      linear-gradient(100deg,rgba(9,34,53,.84),rgba(13,21,42,.82));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 25px rgba(55,168,239,.08);
+  }
+  .bv-ai-orb{
+    width:58px;
+    height:58px;
+    flex:0 0 auto;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    color:#7be8ff;
+    font-size:22px;
+    background:
+      radial-gradient(circle at 38% 32%,#b7f4ff 0 4%,#42d9ef 7%,#247ee4 31%,rgba(61,70,188,.34) 55%,rgba(8,17,35,.88) 70%);
+    border:1px solid rgba(109,218,255,.58);
+    box-shadow:0 0 18px rgba(56,207,239,.48),inset 0 0 17px rgba(255,255,255,.16);
+    animation:bv-ai-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes bv-ai-pulse{50%{transform:scale(1.04);box-shadow:0 0 28px rgba(56,207,239,.62),inset 0 0 18px rgba(255,255,255,.19)}}
+  .bv-ai-hero strong{display:block;color:#e9f7ff;font:600 16px var(--disp);}
+  .bv-ai-hero p{margin:5px 0 0;color:#8497b7;font:500 9px/1.5 var(--mono);}
+  .bv-ai-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+  .bv-ai-metrics div{padding:11px;border-radius:11px;border:1px solid rgba(95,148,218,.22);background:rgba(8,17,31,.65);text-align:center;}
+  .bv-ai-metrics span{display:block;color:#e7f2ff;font:600 20px var(--mono);}
+  .bv-ai-metrics small{display:block;margin-top:3px;color:#7588a7;font:500 8px var(--mono);}
+  .bv-ai-review-list{max-height:48vh;overflow:auto;padding-right:5px;scrollbar-width:thin;scrollbar-color:rgba(86,157,234,.38) transparent;}
+  .bv-ai-section{margin-bottom:12px;border:1px solid rgba(91,142,210,.20);border-radius:12px;overflow:hidden;background:rgba(6,14,27,.46);}
+  .bv-ai-section-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid rgba(91,142,210,.17);background:rgba(16,29,49,.62);}
+  .bv-ai-section-head strong{color:#aebfda;font:600 9px var(--mono);letter-spacing:.09em;text-transform:uppercase;}
+  .bv-ai-section-head span{display:grid;place-items:center;min-width:22px;height:22px;border-radius:999px;background:rgba(62,132,222,.18);color:#9ed2ff;font:700 9px var(--mono);}
+  .bv-ai-item{display:grid;grid-template-columns:33px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(91,142,210,.12);}
+  .bv-ai-item:last-child{border-bottom:0;}
+  .bv-ai-item-icon{width:31px;height:31px;border-radius:9px;display:grid;place-items:center;color:#83d9ff;background:rgba(48,139,216,.13);border:1px solid rgba(73,167,238,.25);font:700 13px var(--mono);}
+  .bv-ai-item.rate .bv-ai-item-icon{color:#ffd17b;background:rgba(202,140,40,.11);border-color:rgba(237,173,70,.24);}
+  .bv-ai-item.duplicate .bv-ai-item-icon,.bv-ai-item.incomplete .bv-ai-item-icon{color:#ff9da8;background:rgba(188,59,76,.11);border-color:rgba(234,90,107,.24);}
+  .bv-ai-item-copy strong{display:block;color:#dce8f8;font:600 11px var(--disp);}
+  .bv-ai-item-copy small{display:block;margin-top:3px;color:#7588a5;font:500 8.5px var(--mono);}
+  .bv-ai-item-actions{display:flex;gap:6px;align-items:center;}
+  .bv-ai-item-actions button{height:31px;padding:0 10px;border-radius:8px;border:1px solid rgba(76,151,234,.29);background:rgba(15,34,58,.78);color:#a8cff4;font:600 8px var(--mono);}
+  .bv-ai-item-actions button:last-child:not(:only-child){border-color:rgba(129,110,160,.23);color:#8d9ab0;background:rgba(17,23,38,.72);}
+  .bv-ai-clear{padding:34px;text-align:center;border:1px solid rgba(75,209,164,.20);border-radius:13px;background:rgba(18,68,55,.12);}
+  .bv-ai-clear span{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 10px;border-radius:50%;background:rgba(73,220,170,.13);color:#69e3b8;font-size:22px;border:1px solid rgba(73,220,170,.26);}
+  .bv-ai-clear strong{display:block;color:#dff9ef;font:600 15px var(--disp);}
+  .bv-ai-clear p{margin:5px 0 0;color:#7f9c91;font:500 9px var(--mono);}
+  #bv-ai-add-all:disabled{opacity:.42;cursor:not-allowed;}
+
+  @media(max-width:760px){
+    .bv-ai-metrics{grid-template-columns:repeat(2,1fr);}
+    .bv-ai-item{grid-template-columns:31px minmax(0,1fr);}
+    .bv-ai-item-actions{grid-column:2;justify-content:flex-start;}
+    .bv-vault-nav{width:34px;height:50px;}
+  }
+
 </style>
 </head>
 <body>
@@ -7041,7 +7329,7 @@
               </div>
               <div class="bv-head-actions">
                 <div class="bv-save-state"><b>Auto-save</b><span id="bv-save-time">Ready</span></div>
-                <button class="bv-ai-btn" id="bv-ai-btn" type="button">AI Suggestions <em id="bv-ai-count">0</em></button>
+                <button class="bv-ai-btn" id="bv-ai-btn" type="button" aria-controls="bv-ai-modal" title="Open a complete smart billing review">AI Suggestions <em id="bv-ai-count">0</em></button>
               </div>
             </header>
 
@@ -7075,9 +7363,12 @@
               <section class="bv-column bv-center">
                 <div class="bv-stage" id="bv-stage">
                   <div class="bv-stage-title">Interactive job profile vault</div>
+                  <button class="bv-vault-nav prev" id="bv-profile-prev" type="button" aria-label="Previous job profile">‹</button>
+                  <button class="bv-vault-nav next" id="bv-profile-next" type="button" aria-label="Next job profile">›</button>
                   <div class="bv-platform"></div>
                   <div id="bv-profile-stage"></div>
-                  <div class="bv-stage-help">Tap a glass card to focus it · Drag an entry chip onto a card to reassign it</div>
+                  <div class="bv-profile-dots" id="bv-profile-dots" aria-label="Job profile position"></div>
+                  <div class="bv-stage-help">Swipe across the vault or use the arrows · Tap to focus · Drag chips to reassign</div>
                 </div>
 
                 <section class="bv-box">
@@ -7138,7 +7429,7 @@
               <input type="hidden" id="bv-entry-id">
               <input type="hidden" id="bv-entry-source-id">
               <div class="bv-form-grid">
-                <div class="bv-field"><label>Job profile</label><select id="bv-entry-profile"></select></div>
+                <div class="bv-field"><label>Job profile</label><select id="bv-entry-profile"></select><small class="bv-field-help" id="bv-entry-rate-hint">Rate is inherited from the selected profile.</small></div>
                 <div class="bv-field"><label>Date</label><input id="bv-entry-date" type="date" required></div>
                 <div class="bv-field"><label>Start time</label><input id="bv-entry-start" type="time"></div>
                 <div class="bv-field"><label>End time</label><input id="bv-entry-end" type="time"></div>
@@ -7159,7 +7450,7 @@
               <input type="hidden" id="bv-profile-id">
               <div class="bv-form-grid">
                 <div class="bv-field"><label>Profile name</label><input id="bv-profile-name" required></div>
-                <div class="bv-field"><label>Default hourly rate</label><input id="bv-profile-rate" type="number" min="0" step="0.01"></div>
+                <div class="bv-field"><label>Hourly pay rate ($ / hour)</label><input id="bv-profile-rate" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 35.00"><small class="bv-field-help">Used to calculate projected earnings, invoice totals, and exported summaries.</small></div>
                 <div class="bv-field"><label>Employee / provider</label><input id="bv-profile-employee"></div>
                 <div class="bv-field"><label>Employer / client</label><input id="bv-profile-employer"></div>
                 <div class="bv-field full"><label>Service labels (comma separated)</label><input id="bv-profile-services" placeholder="CDS, SLP, O.T, P.T"></div>
@@ -7167,6 +7458,42 @@
               </div>
               <div class="bv-modal-actions"><button class="danger hidden" id="bv-delete-profile" type="button">Delete Profile</button><button data-bv-close type="button">Cancel</button><button class="primary" type="submit">Save Profile</button></div>
             </form>
+          </div>
+
+
+          <div class="bv-modal hidden" id="bv-ai-modal" aria-hidden="true">
+            <div class="bv-modal-card bv-ai-modal-card">
+              <div class="bv-modal-head">
+                <div>
+                  <h3>AI Billing Review</h3>
+                  <p>A local smart review of calendar gaps, rates, duplicates, incomplete entries, and active timers.</p>
+                </div>
+                <button class="bv-close" data-bv-close type="button">×</button>
+              </div>
+
+              <div class="bv-ai-hero">
+                <div class="bv-ai-orb" aria-hidden="true"><span>✦</span></div>
+                <div>
+                  <strong id="bv-ai-lead">Reviewing this billing cycle…</strong>
+                  <p id="bv-ai-sublead">The review uses the calendar and billing data already stored in this dashboard.</p>
+                </div>
+              </div>
+
+              <div class="bv-ai-metrics">
+                <div><span id="bv-ai-calendar-count">0</span><small>Calendar drafts</small></div>
+                <div><span id="bv-ai-rate-count">0</span><small>Rates missing</small></div>
+                <div><span id="bv-ai-duplicate-count">0</span><small>Duplicate groups</small></div>
+                <div><span id="bv-ai-incomplete-count">0</span><small>Incomplete entries</small></div>
+              </div>
+
+              <div class="bv-ai-review-list" id="bv-ai-review-list"></div>
+
+              <div class="bv-modal-actions">
+                <button id="bv-ai-rescan" type="button">Run Review Again</button>
+                <button class="primary" id="bv-ai-add-all" type="button">Add Calendar Suggestions as Drafts</button>
+              </div>
+              <div class="bv-toast-note">Suggestions remain reviewable drafts. Nothing is submitted or locked automatically.</div>
+            </div>
           </div>
 
           <div class="bv-modal hidden" id="bv-history-modal" aria-hidden="true">
@@ -10258,7 +10585,7 @@
       if(!s.profiles.some(p=>p.id===s.activeProfileId))s.activeProfileId=s.profiles[0].id;
       return s;
     }
-    let state=loadState(), clockTicker=null, lastSuggestions=[];
+    let state=loadState(), clockTicker=null, lastSuggestions=[], profileSwipeUntil=0;
     function ensurePeriod(k=state.activeMonth){
       if(!state.periods[k])state.periods[k]={month:k,status:"draft",locked:false,entries:[],ignored:[],audit:[],rollover:{enabled:true,carryDrafts:true,autoMove:true},createdAt:new Date().toISOString()};
       const p=state.periods[k];p.entries=Array.isArray(p.entries)?p.entries:[];p.ignored=Array.isArray(p.ignored)?p.ignored:[];p.audit=Array.isArray(p.audit)?p.audit:[];p.rollover=p.rollover||{enabled:true,carryDrafts:true,autoMove:true};return p;
@@ -10320,10 +10647,175 @@
     function suggestionByKey(key){return scanSuggestions().find(s=>s.key===key);}
     function hasDuplicate(candidate,skipId){return period().entries.some(e=>e.id!==skipId&&e.date===candidate.date&&e.profileId===candidate.profileId&&Math.abs(safeNum(e.hours)-safeNum(candidate.hours))<.01&&String(e.description||"").toLowerCase()===String(candidate.description||"").toLowerCase());}
 
+    function duplicateEntryGroups(){
+      const groups=new Map();
+      entries().forEach(e=>{
+        const key=[
+          e.date||"",
+          e.profileId||"",
+          safeNum(e.hours).toFixed(2),
+          String(e.description||"").trim().toLowerCase()
+        ].join("|");
+        if(!groups.has(key))groups.set(key,[]);
+        groups.get(key).push(e);
+      });
+      return [...groups.values()].filter(group=>group.length>1);
+    }
+    function incompleteEntries(){
+      return entries().filter(e=>
+        !e.date||
+        !e.profileId||
+        safeNum(e.hours)<=0||
+        !String(e.description||"").trim()
+      );
+    }
+    function billingReview(){
+      const suggestions=scanSuggestions();
+      const rates=state.profiles.filter(p=>safeNum(p.rate)<=0);
+      const duplicates=duplicateEntryGroups();
+      const incomplete=incompleteEntries();
+      const timerRunning=!!(state.timer&&state.timer.running);
+      return {
+        suggestions,
+        rates,
+        duplicates,
+        incomplete,
+        timerRunning,
+        count:suggestions.length+rates.length+duplicates.length+incomplete.length+(timerRunning?1:0)
+      };
+    }
+    function suggestionCandidate(s){
+      return {
+        id:uid("entry"),
+        profileId:s.profile.id,
+        date:s.task.due_date,
+        start:s.task.due_time?String(s.task.due_time).slice(0,5):"",
+        end:s.task.end_time?String(s.task.end_time).slice(0,5):"",
+        hours:safeNum(s.hours),
+        status:"draft",
+        serviceIds:s.services||[],
+        description:generatedDescription(s.profile,s.services||[]),
+        notes:"Calendar-assisted draft: "+(s.task.title||"Calendar work"),
+        sourceId:s.key,
+        createdAt:new Date().toISOString(),
+        updatedAt:new Date().toISOString()
+      };
+    }
+    function addSuggestionDraft(s){
+      if(!s||activeLocked())return false;
+      const candidate=suggestionCandidate(s);
+      if(hasDuplicate(candidate,null))return false;
+      period().entries.push(candidate);
+      return true;
+    }
+    function ignoreBillingSuggestion(key){
+      const p=period();
+      if(!p.ignored.includes(key))p.ignored.push(key);
+      audit("calendar_suggestion_ignored",key);
+      save("suggestion ignored");
+      render();
+      renderAIReview();
+    }
+    function addAllSuggestionDrafts(){
+      if(activeLocked()){notice("Unlock this billing period before adding drafts.");return;}
+      const review=billingReview();
+      if(!review.suggestions.length){notice("There are no calendar suggestions to add.");return;}
+      if(!confirm("Add "+review.suggestions.length+" calendar suggestion"+(review.suggestions.length===1?"":"s")+" as reviewable draft billing entries?"))return;
+      let added=0;
+      review.suggestions.forEach(s=>{if(addSuggestionDraft(s))added++;});
+      if(added){
+        audit("calendar_suggestions_added",added+" drafts");
+        save("calendar drafts added");
+      }
+      render();
+      renderAIReview();
+      notice(added+" calendar draft"+(added===1?" was":"s were")+" added for review.");
+    }
+    function renderAIReview(){
+      const host=$("bv-ai-review-list");
+      if(!host)return;
+      const review=billingReview();
+      $("bv-ai-calendar-count").textContent=review.suggestions.length;
+      $("bv-ai-rate-count").textContent=review.rates.length;
+      $("bv-ai-duplicate-count").textContent=review.duplicates.length;
+      $("bv-ai-incomplete-count").textContent=review.incomplete.length;
+      $("bv-ai-lead").textContent=review.count
+        ? "I found "+review.count+" item"+(review.count===1?"":"s")+" worth reviewing."
+        : "This billing cycle looks clear.";
+      $("bv-ai-sublead").textContent=review.count
+        ? "Use the actions below to create drafts, set wages, or inspect questionable entries."
+        : "No calendar gaps, missing rates, duplicate groups, or incomplete entries were detected.";
+      const addAll=$("bv-ai-add-all");
+      if(addAll)addAll.disabled=!review.suggestions.length||activeLocked();
+
+      const sections=[];
+
+      if(review.suggestions.length){
+        sections.push('<section class="bv-ai-section"><div class="bv-ai-section-head"><strong>Calendar-assisted drafts</strong><span>'+review.suggestions.length+'</span></div>'
+          +review.suggestions.map(s=>'<article class="bv-ai-item calendar"><div class="bv-ai-item-icon">▦</div><div class="bv-ai-item-copy"><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h · '+esc(s.profile.name)+' · matched from calendar</small></div><div class="bv-ai-item-actions"><button data-bv-ai-add="'+esc(s.key)+'" type="button">Review draft</button><button data-bv-ai-ignore="'+esc(s.key)+'" type="button">Ignore</button></div></article>').join("")
+          +'</section>');
+      }
+
+      if(review.rates.length){
+        sections.push('<section class="bv-ai-section"><div class="bv-ai-section-head"><strong>Hourly pay rates needed</strong><span>'+review.rates.length+'</span></div>'
+          +review.rates.map(p=>'<article class="bv-ai-item rate"><div class="bv-ai-item-icon">$</div><div class="bv-ai-item-copy"><strong>'+esc(p.name)+'</strong><small>No wage is set, so projected earnings currently show $0.00.</small></div><div class="bv-ai-item-actions"><button data-bv-ai-rate="'+esc(p.id)+'" type="button">Set hourly rate</button></div></article>').join("")
+          +'</section>');
+      }
+
+      if(review.duplicates.length){
+        sections.push('<section class="bv-ai-section"><div class="bv-ai-section-head"><strong>Possible duplicate groups</strong><span>'+review.duplicates.length+'</span></div>'
+          +review.duplicates.map(group=>{const e=group[0],p=profile(e.profileId);return '<article class="bv-ai-item duplicate"><div class="bv-ai-item-icon">⧉</div><div class="bv-ai-item-copy"><strong>'+esc(formatDate(e.date)+' · '+(e.description||p.name))+'</strong><small>'+group.length+' very similar entries · '+safeNum(e.hours).toFixed(2)+'h each</small></div><div class="bv-ai-item-actions"><button data-bv-ai-entry="'+esc(e.id)+'" type="button">Inspect</button></div></article>';}).join("")
+          +'</section>');
+      }
+
+      if(review.incomplete.length){
+        sections.push('<section class="bv-ai-section"><div class="bv-ai-section-head"><strong>Incomplete billing entries</strong><span>'+review.incomplete.length+'</span></div>'
+          +review.incomplete.map(e=>'<article class="bv-ai-item incomplete"><div class="bv-ai-item-icon">!</div><div class="bv-ai-item-copy"><strong>'+esc(formatDate(e.date)||"Date missing")+' · '+esc(e.description||"Description missing")+'</strong><small>Check the date, hours, profile, and service description.</small></div><div class="bv-ai-item-actions"><button data-bv-ai-entry="'+esc(e.id)+'" type="button">Fix entry</button></div></article>').join("")
+          +'</section>');
+      }
+
+      if(review.timerRunning){
+        sections.push('<section class="bv-ai-section"><div class="bv-ai-section-head"><strong>Active clock</strong><span>1</span></div><article class="bv-ai-item timer"><div class="bv-ai-item-icon">◷</div><div class="bv-ai-item-copy"><strong>'+esc(profile(state.timer.profileId).name)+'</strong><small>'+esc(elapsedText())+' · clock out when the work session ends.</small></div><div class="bv-ai-item-actions"><button data-bv-ai-clock type="button">Clock out</button></div></article></section>');
+      }
+
+      host.innerHTML=sections.length?sections.join(""):'<div class="bv-ai-clear"><span>✓</span><strong>No action needed</strong><p>Your current month has no detected billing issues.</p></div>';
+
+      host.querySelectorAll("[data-bv-ai-add]").forEach(b=>b.addEventListener("click",()=>{
+        showModal("bv-ai-modal",false);
+        openSuggestion(b.dataset.bvAiAdd);
+      }));
+      host.querySelectorAll("[data-bv-ai-ignore]").forEach(b=>b.addEventListener("click",()=>ignoreBillingSuggestion(b.dataset.bvAiIgnore)));
+      host.querySelectorAll("[data-bv-ai-rate]").forEach(b=>b.addEventListener("click",()=>{
+        showModal("bv-ai-modal",false);
+        openProfile(b.dataset.bvAiRate);
+      }));
+      host.querySelectorAll("[data-bv-ai-entry]").forEach(b=>b.addEventListener("click",()=>{
+        showModal("bv-ai-modal",false);
+        openEntry(b.dataset.bvAiEntry);
+      }));
+      host.querySelectorAll("[data-bv-ai-clock]").forEach(b=>b.addEventListener("click",()=>{
+        showModal("bv-ai-modal",false);
+        startOrStopClock();
+      }));
+    }
+    function openAIReview(){
+      renderAIReview();
+      showModal("bv-ai-modal",true);
+    }
+    function rotateProfile(delta){
+      const count=state.profiles.length;
+      if(count<2)return;
+      const index=Math.max(0,state.profiles.findIndex(p=>p.id===state.activeProfileId));
+      state.activeProfileId=state.profiles[(index+delta+count)%count].id;
+      profileSwipeUntil=Date.now()+420;
+      save("profile selected");
+      render();
+    }
+
     function renderHeader(){
       $("bv-month-label").textContent=monthLabel(state.activeMonth);
       const p=period();const s=$("bv-save-time");if(s)s.textContent=state.lastSaved?new Date(state.lastSaved).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"Ready";
-      const suggestions=scanSuggestions();$("bv-ai-count").textContent=suggestions.length;const badge=$("bv-dock-badge");if(badge){badge.textContent=suggestions.length;badge.hidden=suggestions.length===0;}
+      const review=billingReview(),suggestions=review.suggestions;$("bv-ai-count").textContent=review.count;const badge=$("bv-dock-badge");if(badge){badge.textContent=review.count;badge.hidden=review.count===0;}
       $("bv-missing-count").textContent=suggestions.length;
     }
     function renderQuick(){
@@ -10354,14 +10846,17 @@
     }
     function renderStage(){
       const host=$("bv-profile-stage"),presets=$("bv-profile-presets");if(!host||!presets)return;
-      host.innerHTML=stageSlots(state.profiles,state.activeProfileId).map(({p,slot})=>{const t=profileTotal(p.id),c=profileColor(p.id);return '<article class="bv-profile-card '+slot+'" data-bv-profile-card="'+esc(p.id)+'" style="--pc:'+c+'"><button class="bv-card-close" data-bv-edit-profile="'+esc(p.id)+'" type="button" title="Edit profile">×</button><h3>'+esc(p.name)+'</h3><span class="tag">'+esc((p.services&&p.services[0]&&p.services[0].label)||"Profile")+'</span><div class="hours">'+t.hours.toFixed(t.hours%1?2:0)+' <span>hrs</span></div><div class="bv-profile-metrics"><div><small>Rate</small><strong>'+(p.rate?money(p.rate)+"/hr":"Not set")+'</strong></div><div><small>Amount</small><strong>'+money(t.amount)+'</strong></div></div></article>';}).join("");
+      host.innerHTML=stageSlots(state.profiles,state.activeProfileId).map(({p,slot})=>{const t=profileTotal(p.id),c=profileColor(p.id);return '<article class="bv-profile-card '+slot+'" data-bv-profile-card="'+esc(p.id)+'" style="--pc:'+c+'"><button class="bv-card-close" data-bv-edit-profile="'+esc(p.id)+'" type="button" title="Edit job profile and hourly rate">✎</button><div class="bv-glass-kicker">'+(p.rate?money(p.rate)+" / hour":"Hourly rate not set")+'</div><h3>'+esc(p.name)+'</h3><span class="tag">'+esc((p.services&&p.services[0]&&p.services[0].label)||"Profile")+'</span><div class="hours">'+t.hours.toFixed(t.hours%1?2:0)+' <span>hrs</span></div><div class="bv-profile-metrics"><div><small>Hourly Pay</small><strong>'+(p.rate?money(p.rate)+"/hr":"Set rate")+'</strong></div><div><small>Projected</small><strong>'+money(t.amount)+'</strong></div></div></article>';}).join("");
+      const dots=$("bv-profile-dots");
+      if(dots)dots.innerHTML=state.profiles.map(p=>'<button type="button" class="'+(p.id===state.activeProfileId?"on":"")+'" data-bv-profile-dot="'+esc(p.id)+'" aria-label="Show '+esc(p.name)+'"></button>').join("");
       host.querySelectorAll("[data-bv-profile-card]").forEach(card=>{
-        card.addEventListener("click",ev=>{if(ev.target.closest("[data-bv-edit-profile]"))return;state.activeProfileId=card.dataset.bvProfileCard;save("profile selected");render();});
+        card.addEventListener("click",ev=>{if(Date.now()<profileSwipeUntil||ev.target.closest("[data-bv-edit-profile]"))return;state.activeProfileId=card.dataset.bvProfileCard;save("profile selected");render();});
         card.addEventListener("dragover",ev=>{ev.preventDefault();card.classList.add("drag-target");});card.addEventListener("dragleave",()=>card.classList.remove("drag-target"));
         card.addEventListener("drop",ev=>{ev.preventDefault();card.classList.remove("drag-target");const id=ev.dataTransfer.getData("text/billing-entry");reassignEntry(id,card.dataset.bvProfileCard);});
       });
       host.querySelectorAll("[data-bv-edit-profile]").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();openProfile(b.dataset.bvEditProfile);}));
-      presets.innerHTML=state.profiles.slice(0,4).map(p=>'<button class="bv-profile-preset '+(p.id===state.activeProfileId?"on":"")+'" data-bv-preset="'+esc(p.id)+'" type="button"><strong>'+esc(p.name)+'</strong><small>'+(p.rate?money(p.rate)+" / hr":"Default rates")+'</small></button>').join("")+'<button class="bv-profile-preset bv-new-profile" id="bv-new-profile" type="button">＋ New<br>Profile</button>';
+      if(dots)dots.querySelectorAll("[data-bv-profile-dot]").forEach(b=>b.addEventListener("click",()=>{state.activeProfileId=b.dataset.bvProfileDot;save("profile selected");render();}));
+      presets.innerHTML=state.profiles.slice(0,4).map(p=>'<button class="bv-profile-preset '+(p.id===state.activeProfileId?"on":"")+'" data-bv-preset="'+esc(p.id)+'" type="button"><strong>'+esc(p.name)+'</strong><small>'+(p.rate?money(p.rate)+" / hour":"Set hourly rate")+'</small></button>').join("")+'<button class="bv-profile-preset bv-new-profile" id="bv-new-profile" type="button">＋ New<br>Profile</button>';
       presets.querySelectorAll("[data-bv-preset]").forEach(b=>b.addEventListener("click",()=>{state.activeProfileId=b.dataset.bvPreset;save("profile selected");render();}));
       $("bv-new-profile").addEventListener("click",()=>openProfile(null));
     }
@@ -10382,10 +10877,11 @@
 
     function showModal(id,on=true){const n=$(id);if(!n)return;n.classList.toggle("hidden",!on);n.setAttribute("aria-hidden",on?"false":"true");}
     function populateProfileSelect(selected){const s=$("bv-entry-profile");s.innerHTML=state.profiles.map(p=>'<option value="'+esc(p.id)+'" '+(p.id===selected?"selected":"")+'>'+esc(p.name)+'</option>').join("");}
+    function renderEntryRateHint(){const hint=$("bv-entry-rate-hint"),select=$("bv-entry-profile");if(!hint||!select)return;const p=profile(select.value);hint.textContent=p.rate?money(p.rate)+" per hour · amount is calculated automatically":"No hourly rate is set · edit this job profile to calculate earnings";}
     function renderServiceChecks(selectedIds=[]){const p=profile($("bv-entry-profile").value||state.activeProfileId),host=$("bv-entry-services");host.innerHTML=(p.services||[]).map(s=>'<label><input type="checkbox" value="'+esc(s.id)+'" '+(selectedIds.includes(s.id)?"checked":"")+'> '+esc(s.label)+'</label>').join("")||'<span class="bv-empty-mini">No service labels configured.</span>';host.querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{$("bv-entry-description").value=generatedDescription(p,[...host.querySelectorAll("input:checked")].map(x=>x.value));}));}
     function openEntry(id=null,prefill=null){
       if(activeLocked()){notice("This period is locked. Unlock it before changing entries.");return;}
-      const e=id?period().entries.find(x=>x.id===id):null,base=e||prefill||{};$("bv-entry-title").textContent=e?"Edit Billing Entry":"New Billing Entry";$("bv-entry-id").value=e?e.id:"";$("bv-entry-source-id").value=base.sourceId||"";populateProfileSelect(base.profileId||state.activeProfileId);$("bv-entry-date").value=base.date||todayYMD();$("bv-entry-start").value=base.start||"";$("bv-entry-end").value=base.end||"";$("bv-entry-hours").value=safeNum(base.hours||1);$("bv-entry-status").value=base.status||"draft";$("bv-entry-description").value=base.description||"";$("bv-entry-notes").value=base.notes||"";renderServiceChecks(base.serviceIds||[]);$("bv-delete-entry").classList.toggle("hidden",!e);showModal("bv-entry-modal",true);
+      const e=id?period().entries.find(x=>x.id===id):null,base=e||prefill||{};$("bv-entry-title").textContent=e?"Edit Billing Entry":"New Billing Entry";$("bv-entry-id").value=e?e.id:"";$("bv-entry-source-id").value=base.sourceId||"";populateProfileSelect(base.profileId||state.activeProfileId);$("bv-entry-date").value=base.date||todayYMD();$("bv-entry-start").value=base.start||"";$("bv-entry-end").value=base.end||"";$("bv-entry-hours").value=safeNum(base.hours||1);$("bv-entry-status").value=base.status||"draft";$("bv-entry-description").value=base.description||"";$("bv-entry-notes").value=base.notes||"";renderServiceChecks(base.serviceIds||[]);renderEntryRateHint();$("bv-delete-entry").classList.toggle("hidden",!e);showModal("bv-entry-modal",true);
     }
     function openSuggestion(key){const s=suggestionByKey(key);if(!s)return;openEntry(null,{sourceId:s.key,profileId:s.profile.id,date:s.task.due_date,start:s.task.due_time?String(s.task.due_time).slice(0,5):"",end:s.task.end_time?String(s.task.end_time).slice(0,5):"",hours:s.hours,serviceIds:s.services,description:generatedDescription(s.profile,s.services),notes:"Calendar-assisted entry: "+(s.task.title||"")});}
     function saveEntryForm(ev){ev.preventDefault();if(activeLocked())return;const id=$("bv-entry-id").value,prof=profile($("bv-entry-profile").value),serviceIds=[...$("bv-entry-services").querySelectorAll("input:checked")].map(x=>x.value),candidate={id:id||uid("entry"),profileId:prof.id,date:$("bv-entry-date").value,start:$("bv-entry-start").value,end:$("bv-entry-end").value,hours:safeNum($("bv-entry-hours").value),status:$("bv-entry-status").value,serviceIds,description:$("bv-entry-description").value.trim()||generatedDescription(prof,serviceIds),notes:$("bv-entry-notes").value.trim(),sourceId:$("bv-entry-source-id").value||null,updatedAt:new Date().toISOString()};if(!candidate.date||candidate.hours<=0){notice("Enter a valid date and number of hours.");return;}if(hasDuplicate(candidate,id)){if(!confirm("A very similar entry already exists. Save this duplicate anyway?"))return;}const arr=period().entries,index=arr.findIndex(x=>x.id===id);if(index>=0)arr[index]={...arr[index],...candidate};else arr.push({...candidate,createdAt:new Date().toISOString()});audit(index>=0?"entry_updated":"entry_added",candidate.description+" · "+candidate.hours+"h");save("entry saved");showModal("bv-entry-modal",false);render();}
@@ -10429,8 +10925,26 @@
       document.querySelectorAll("#dock-replydesk,#dock-caldesk,#dock-moneybuddy").forEach(b=>b&&b.addEventListener("click",()=>setBillingVault(false,false)));
       document.querySelectorAll(".dock-btn[data-scroll],.dock-collapse[data-scroll],#dock-signals,#dock-actions").forEach(b=>b&&b.addEventListener("click",()=>setBillingVault(false,true)));
 
-      $("bv-prev-month").addEventListener("click",()=>changeMonth(-1));$("bv-next-month").addEventListener("click",()=>changeMonth(1));$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});notice(lastSuggestions.length?"Review the highlighted calendar suggestions.":"No AI suggestions need attention.");});$("bv-clock-btn").addEventListener("click",startOrStopClock);
-      $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
+      $("bv-prev-month").addEventListener("click",()=>changeMonth(-1));$("bv-next-month").addEventListener("click",()=>changeMonth(1));$("bv-profile-prev").addEventListener("click",()=>rotateProfile(-1));$("bv-profile-next").addEventListener("click",()=>rotateProfile(1));
+      const vaultStage=$("bv-stage");
+      if(vaultStage){
+        let startX=null,startY=null,wheelReady=true;
+        vaultStage.addEventListener("touchstart",ev=>{
+          if(ev.touches.length!==1||ev.target.closest("button"))return;
+          startX=ev.touches[0].clientX;startY=ev.touches[0].clientY;
+        },{passive:true});
+        vaultStage.addEventListener("touchend",ev=>{
+          if(startX===null||!ev.changedTouches.length)return;
+          const dx=ev.changedTouches[0].clientX-startX,dy=ev.changedTouches[0].clientY-startY;
+          startX=startY=null;
+          if(Math.abs(dx)>=46&&Math.abs(dx)>Math.abs(dy)*1.2)rotateProfile(dx<0?1:-1);
+        },{passive:true});
+        vaultStage.addEventListener("wheel",ev=>{
+          if(!wheelReady||Math.abs(ev.deltaX)<35||Math.abs(ev.deltaX)<=Math.abs(ev.deltaY))return;
+          ev.preventDefault();wheelReady=false;rotateProfile(ev.deltaX>0?1:-1);setTimeout(()=>wheelReady=true,360);
+        },{passive:false});
+      }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
+      $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
       $("bv-profile-form").addEventListener("submit",saveProfileForm);$("bv-delete-profile").addEventListener("click",deleteProfile);
       document.querySelectorAll("[data-bv-close]").forEach(b=>b.addEventListener("click",()=>{const modal=b.closest(".bv-modal");if(modal)showModal(modal.id,false);}));document.querySelectorAll(".bv-modal").forEach(m=>m.addEventListener("click",ev=>{if(ev.target===m)showModal(m.id,false);}));
       $("bv-roll-switch").addEventListener("click",()=>{period().rollover.enabled=period().rollover.enabled===false;save("rollover updated");renderRollover();});$("bv-carry-drafts").addEventListener("change",()=>{period().rollover.carryDrafts=$("bv-carry-drafts").checked;save("rollover updated");});$("bv-auto-move").addEventListener("change",()=>{period().rollover.autoMove=$("bv-auto-move").checked;save("rollover updated");});$("bv-roll-now").addEventListener("click",doRollover);
