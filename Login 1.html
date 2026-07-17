@@ -7263,6 +7263,171 @@
     .bv-vault-nav{width:34px;height:50px;}
   }
 
+
+  /* Glass Vault v20 — continuous circular 3D profile carousel */
+  .bv-stage{
+    --bv-orbit-turn:0;
+    cursor:grab;
+    perspective:1050px;
+    perspective-origin:50% 48%;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .bv-stage.carousel-dragging{
+    cursor:grabbing;
+  }
+  .bv-stage.carousel-dragging .bv-stage-help{
+    color:#92c8f4;
+  }
+
+  #bv-profile-stage{
+    position:absolute;
+    inset:0;
+    z-index:5;
+    transform-style:preserve-3d;
+    perspective:inherit;
+    pointer-events:none;
+  }
+  #bv-profile-stage .bv-profile-card{
+    pointer-events:auto;
+    transform-style:preserve-3d;
+    will-change:transform,opacity,filter;
+    transition:
+      transform .52s cubic-bezier(.18,.78,.18,1),
+      opacity .38s ease,
+      filter .38s ease,
+      box-shadow .32s ease;
+  }
+  #bv-profile-stage.is-dragging .bv-profile-card{
+    transition:none!important;
+    cursor:grabbing;
+  }
+  #bv-profile-stage.is-instant .bv-profile-card{
+    transition:none!important;
+  }
+
+  /* Supersede the previous five fixed slot transforms. */
+  #bv-profile-stage .bv-profile-card.slot-center,
+  #bv-profile-stage .bv-profile-card.slot-left,
+  #bv-profile-stage .bv-profile-card.slot-right,
+  #bv-profile-stage .bv-profile-card.slot-far-left,
+  #bv-profile-stage .bv-profile-card.slot-far-right{
+    transform:none;
+  }
+
+  #bv-profile-stage .bv-profile-card.is-front{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.46),
+      inset 0 -1px 0 rgba(var(--pc),.38),
+      0 0 0 1px rgba(var(--pc),.22),
+      0 0 38px rgba(var(--pc),.57),
+      0 44px 92px -38px rgba(var(--pc),1);
+  }
+  #bv-profile-stage .bv-profile-card.is-front::after{
+    transform:translateX(135%) skewX(-12deg);
+  }
+  #bv-profile-stage .bv-profile-card.is-near{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.25),
+      inset 0 -1px 0 rgba(var(--pc),.22),
+      0 0 23px rgba(var(--pc),.29),
+      0 27px 58px -36px rgba(var(--pc),.82);
+  }
+  #bv-profile-stage .bv-profile-card.is-far .hours,
+  #bv-profile-stage .bv-profile-card.is-far .bv-profile-metrics{
+    opacity:.72;
+  }
+
+  .bv-carousel-orbit{
+    position:absolute;
+    z-index:1;
+    left:50%;
+    top:74px;
+    width:min(91%,700px);
+    height:286px;
+    transform:translateX(-50%) perspective(820px) rotateX(68deg);
+    transform-origin:50% 58%;
+    border-radius:50%;
+    border:1px solid rgba(112,186,255,.24);
+    background:
+      radial-gradient(ellipse at center,transparent 0 42%,rgba(67,147,241,.045) 43% 44%,transparent 45% 62%,rgba(154,104,255,.035) 63% 64%,transparent 65%),
+      repeating-conic-gradient(from calc(var(--bv-orbit-turn) * -16deg),rgba(105,183,255,.16) 0 1deg,transparent 1.5deg 14deg);
+    box-shadow:
+      0 0 28px rgba(70,143,242,.12),
+      inset 0 0 26px rgba(72,151,249,.08);
+    opacity:.82;
+    pointer-events:none;
+    transition:background-position .28s ease;
+  }
+  .bv-carousel-orbit::before,
+  .bv-carousel-orbit::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    border:1px solid rgba(123,190,255,.16);
+  }
+  .bv-carousel-orbit::before{inset:29px 62px;}
+  .bv-carousel-orbit::after{inset:66px 129px;border-color:rgba(187,120,255,.15);}
+  .bv-carousel-orbit span{
+    position:absolute;
+    inset:-3px;
+    border-radius:50%;
+    background:conic-gradient(from calc(var(--bv-orbit-turn) * -31deg),transparent 0 19%,rgba(83,180,255,.58) 23%,transparent 27% 52%,rgba(181,104,255,.40) 57%,transparent 62%);
+    filter:blur(1px);
+    opacity:.65;
+    animation:bv-carousel-ring-pulse 4.2s ease-in-out infinite;
+  }
+  .bv-carousel-orbit i{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:8px;
+    height:8px;
+    margin:-4px;
+    border-radius:50%;
+    background:#b8e9ff;
+    box-shadow:
+      0 0 9px #b8e9ff,
+      0 0 24px rgba(84,177,255,.86),
+      145px 0 0 -2px rgba(117,193,255,.85),
+      -145px 0 0 -2px rgba(178,112,255,.8);
+    opacity:.72;
+  }
+  @keyframes bv-carousel-ring-pulse{
+    50%{opacity:1;filter:blur(1.5px) brightness(1.2)}
+  }
+
+  .bv-platform{
+    transform:translateX(-50%) perspective(650px) rotateX(3deg);
+    transition:filter .25s ease,box-shadow .25s ease;
+  }
+  .bv-stage.carousel-dragging .bv-platform{
+    filter:brightness(1.18) saturate(1.18);
+    box-shadow:
+      0 0 18px rgba(90,173,255,.82),
+      0 0 72px rgba(70,135,255,.31),
+      0 34px 90px rgba(26,73,165,.31),
+      inset 0 3px 8px rgba(222,242,255,.27),
+      inset 0 -15px 30px rgba(4,12,28,.72);
+  }
+
+  .bv-stage-help{
+    padding:0 70px;
+  }
+
+  @media(max-width:760px){
+    .bv-carousel-orbit{
+      width:105%;
+      height:250px;
+      top:79px;
+    }
+    .bv-stage-help{padding:0 48px;}
+    #bv-profile-stage .bv-profile-card{
+      width:185px;
+      margin-left:-92px;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -7365,6 +7530,7 @@
                   <div class="bv-stage-title">Interactive job profile vault</div>
                   <button class="bv-vault-nav prev" id="bv-profile-prev" type="button" aria-label="Previous job profile">‹</button>
                   <button class="bv-vault-nav next" id="bv-profile-next" type="button" aria-label="Next job profile">›</button>
+                  <div class="bv-carousel-orbit" aria-hidden="true"><span></span><i></i></div>
                   <div class="bv-platform"></div>
                   <div id="bv-profile-stage"></div>
                   <div class="bv-profile-dots" id="bv-profile-dots" aria-label="Job profile position"></div>
@@ -10586,6 +10752,7 @@
       return s;
     }
     let state=loadState(), clockTicker=null, lastSuggestions=[], profileSwipeUntil=0;
+    let profileCarouselPosition=0, profileCarouselGesture=null, profileCarouselWheelTimer=null, profileCarouselSettleTimer=null;
     function ensurePeriod(k=state.activeMonth){
       if(!state.periods[k])state.periods[k]={month:k,status:"draft",locked:false,entries:[],ignored:[],audit:[],rollover:{enabled:true,carryDrafts:true,autoMove:true},createdAt:new Date().toISOString()};
       const p=state.periods[k];p.entries=Array.isArray(p.entries)?p.entries:[];p.ignored=Array.isArray(p.ignored)?p.ignored:[];p.audit=Array.isArray(p.audit)?p.audit:[];p.rollover=p.rollover||{enabled:true,carryDrafts:true,autoMove:true};return p;
@@ -10802,14 +10969,93 @@
       renderAIReview();
       showModal("bv-ai-modal",true);
     }
+    function normalizedProfileIndex(value,count=state.profiles.length){
+      if(!count)return 0;
+      return ((Math.round(value)%count)+count)%count;
+    }
+    function activeProfileIndex(){
+      const i=state.profiles.findIndex(p=>p.id===state.activeProfileId);
+      return i<0?0:i;
+    }
+    function wrappedProfileDistance(index,position,count=state.profiles.length){
+      if(!count)return 0;
+      let distance=index-position;
+      while(distance>count/2)distance-=count;
+      while(distance<-count/2)distance+=count;
+      return distance;
+    }
+    function applyProfileCarousel(position,dragging=false,instant=false){
+      const host=$("bv-profile-stage"),stage=$("bv-stage");
+      if(!host||!state.profiles.length)return;
+      profileCarouselPosition=position;
+      host.classList.toggle("is-dragging",!!dragging);
+      host.classList.toggle("is-instant",!!instant);
+      if(stage){
+        stage.classList.toggle("carousel-dragging",!!dragging);
+        stage.style.setProperty("--bv-orbit-turn",String(position));
+      }
+
+      const count=state.profiles.length;
+      host.querySelectorAll("[data-bv-profile-card]").forEach(card=>{
+        const index=Number(card.dataset.bvProfileIndex);
+        const relative=wrappedProfileDistance(index,position,count);
+        const abs=Math.abs(relative);
+        const angle=relative*31.5;
+        const radians=angle*Math.PI/180;
+
+        // Cards travel on a curved horizontal ring rather than sliding in a line.
+        const x=Math.sin(radians)*272;
+        const z=(Math.cos(radians)-1)*355;
+        const y=(1-Math.cos(radians))*55 + abs*3;
+        const tilt=-angle*.72;
+        const scale=Math.max(.64,1-abs*.075);
+        const opacity=Math.max(.08,1-abs*.205);
+        const blur=abs>2.55?Math.min(2.4,(abs-2.55)*1.8):0;
+        const brightness=Math.max(.64,1-abs*.085);
+
+        card.style.transform=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,${z.toFixed(2)}px) rotateY(${tilt.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        card.style.opacity=String(opacity);
+        card.style.filter=`brightness(${brightness.toFixed(3)}) saturate(${Math.max(.72,1-abs*.045).toFixed(3)}) blur(${blur.toFixed(2)}px)`;
+        card.style.zIndex=String(Math.max(1,100-Math.round(abs*18)));
+        card.style.pointerEvents=abs<2.75?"auto":"none";
+        card.classList.toggle("is-front",abs<.34);
+        card.classList.toggle("is-near",abs>=.34&&abs<1.45);
+        card.classList.toggle("is-far",abs>=1.45);
+        card.setAttribute("aria-hidden",abs>2.75?"true":"false");
+      });
+
+      const nearest=normalizedProfileIndex(position,count);
+      const dots=$("bv-profile-dots");
+      if(dots)dots.querySelectorAll("[data-bv-profile-dot]").forEach(dot=>{
+        dot.classList.toggle("on",Number(dot.dataset.bvProfileIndex)===nearest);
+      });
+
+      if(instant)requestAnimationFrame(()=>host.classList.remove("is-instant"));
+    }
+    function finishProfileCarousel(targetPosition,announce=true){
+      if(!state.profiles.length)return;
+      clearTimeout(profileCarouselSettleTimer);
+      profileSwipeUntil=Date.now()+560;
+      const host=$("bv-profile-stage");
+      if(host)host.classList.remove("is-dragging");
+      applyProfileCarousel(targetPosition,false,false);
+
+      profileCarouselSettleTimer=setTimeout(()=>{
+        const index=normalizedProfileIndex(targetPosition);
+        profileCarouselPosition=index;
+        state.activeProfileId=state.profiles[index].id;
+        save("profile selected");
+        render();
+        if(announce){
+          const p=state.profiles[index];
+          notice(p.name+" selected.");
+        }
+      },520);
+    }
     function rotateProfile(delta){
       const count=state.profiles.length;
       if(count<2)return;
-      const index=Math.max(0,state.profiles.findIndex(p=>p.id===state.activeProfileId));
-      state.activeProfileId=state.profiles[(index+delta+count)%count].id;
-      profileSwipeUntil=Date.now()+420;
-      save("profile selected");
-      render();
+      finishProfileCarousel(Math.round(profileCarouselPosition)+delta,false);
     }
 
     function renderHeader(){
@@ -10841,24 +11087,58 @@
       host.querySelectorAll("[data-bv-suggest]").forEach(b=>b.addEventListener("click",()=>openSuggestion(b.dataset.bvSuggest)));
       requestAnimationFrame(()=>{host.scrollTop=Math.min(previousScroll,Math.max(0,host.scrollHeight-host.clientHeight));});
     }
-    function stageSlots(profiles,activeId){
-      const a=profiles.findIndex(p=>p.id===activeId),rot=profiles.slice(a).concat(profiles.slice(0,a));const slots=["slot-center","slot-left","slot-right","slot-far-left","slot-far-right"];return rot.slice(0,5).map((p,i)=>({p,slot:slots[i]}));
-    }
     function renderStage(){
       const host=$("bv-profile-stage"),presets=$("bv-profile-presets");if(!host||!presets)return;
-      host.innerHTML=stageSlots(state.profiles,state.activeProfileId).map(({p,slot})=>{const t=profileTotal(p.id),c=profileColor(p.id);return '<article class="bv-profile-card '+slot+'" data-bv-profile-card="'+esc(p.id)+'" style="--pc:'+c+'"><button class="bv-card-close" data-bv-edit-profile="'+esc(p.id)+'" type="button" title="Edit job profile and hourly rate">✎</button><div class="bv-glass-kicker">'+(p.rate?money(p.rate)+" / hour":"Hourly rate not set")+'</div><h3>'+esc(p.name)+'</h3><span class="tag">'+esc((p.services&&p.services[0]&&p.services[0].label)||"Profile")+'</span><div class="hours">'+t.hours.toFixed(t.hours%1?2:0)+' <span>hrs</span></div><div class="bv-profile-metrics"><div><small>Hourly Pay</small><strong>'+(p.rate?money(p.rate)+"/hr":"Set rate")+'</strong></div><div><small>Projected</small><strong>'+money(t.amount)+'</strong></div></div></article>';}).join("");
+      const activeIndex=activeProfileIndex();
+      profileCarouselPosition=activeIndex;
+
+      host.innerHTML=state.profiles.map((p,index)=>{
+        const t=profileTotal(p.id),c=profileColor(p.id);
+        return '<article class="bv-profile-card" data-bv-profile-card="'+esc(p.id)+'" data-bv-profile-index="'+index+'" style="--pc:'+c+'" aria-label="'+esc(p.name)+' job profile">'
+          +'<button class="bv-card-close" data-bv-edit-profile="'+esc(p.id)+'" type="button" title="Edit job profile and hourly rate">✎</button>'
+          +'<div class="bv-glass-kicker">'+(p.rate?money(p.rate)+" / hour":"Hourly rate not set")+'</div>'
+          +'<h3>'+esc(p.name)+'</h3>'
+          +'<span class="tag">'+esc((p.services&&p.services[0]&&p.services[0].label)||"Profile")+'</span>'
+          +'<div class="hours">'+t.hours.toFixed(t.hours%1?2:0)+' <span>hrs</span></div>'
+          +'<div class="bv-profile-metrics"><div><small>Hourly Pay</small><strong>'+(p.rate?money(p.rate)+"/hr":"Set rate")+'</strong></div><div><small>Projected</small><strong>'+money(t.amount)+'</strong></div></div>'
+          +'</article>';
+      }).join("");
+
       const dots=$("bv-profile-dots");
-      if(dots)dots.innerHTML=state.profiles.map(p=>'<button type="button" class="'+(p.id===state.activeProfileId?"on":"")+'" data-bv-profile-dot="'+esc(p.id)+'" aria-label="Show '+esc(p.name)+'"></button>').join("");
+      if(dots)dots.innerHTML=state.profiles.map((p,index)=>'<button type="button" class="'+(index===activeIndex?"on":"")+'" data-bv-profile-dot="'+esc(p.id)+'" data-bv-profile-index="'+index+'" aria-label="Show '+esc(p.name)+'"></button>').join("");
+
       host.querySelectorAll("[data-bv-profile-card]").forEach(card=>{
-        card.addEventListener("click",ev=>{if(Date.now()<profileSwipeUntil||ev.target.closest("[data-bv-edit-profile]"))return;state.activeProfileId=card.dataset.bvProfileCard;save("profile selected");render();});
-        card.addEventListener("dragover",ev=>{ev.preventDefault();card.classList.add("drag-target");});card.addEventListener("dragleave",()=>card.classList.remove("drag-target"));
-        card.addEventListener("drop",ev=>{ev.preventDefault();card.classList.remove("drag-target");const id=ev.dataTransfer.getData("text/billing-entry");reassignEntry(id,card.dataset.bvProfileCard);});
+        card.addEventListener("click",ev=>{
+          if(Date.now()<profileSwipeUntil||ev.target.closest("[data-bv-edit-profile]"))return;
+          const index=Number(card.dataset.bvProfileIndex);
+          const distance=wrappedProfileDistance(index,profileCarouselPosition);
+          if(Math.abs(distance)<.34){
+            state.activeProfileId=card.dataset.bvProfileCard;
+            save("profile selected");
+            render();
+          }else{
+            finishProfileCarousel(profileCarouselPosition+distance,false);
+          }
+        });
+        card.addEventListener("dragover",ev=>{ev.preventDefault();card.classList.add("drag-target");});
+        card.addEventListener("dragleave",()=>card.classList.remove("drag-target"));
+        card.addEventListener("drop",ev=>{
+          ev.preventDefault();card.classList.remove("drag-target");
+          const id=ev.dataTransfer.getData("text/billing-entry");
+          reassignEntry(id,card.dataset.bvProfileCard);
+        });
       });
       host.querySelectorAll("[data-bv-edit-profile]").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();openProfile(b.dataset.bvEditProfile);}));
-      if(dots)dots.querySelectorAll("[data-bv-profile-dot]").forEach(b=>b.addEventListener("click",()=>{state.activeProfileId=b.dataset.bvProfileDot;save("profile selected");render();}));
-      presets.innerHTML=state.profiles.slice(0,4).map(p=>'<button class="bv-profile-preset '+(p.id===state.activeProfileId?"on":"")+'" data-bv-preset="'+esc(p.id)+'" type="button"><strong>'+esc(p.name)+'</strong><small>'+(p.rate?money(p.rate)+" / hour":"Set hourly rate")+'</small></button>').join("")+'<button class="bv-profile-preset bv-new-profile" id="bv-new-profile" type="button">＋ New<br>Profile</button>';
-      presets.querySelectorAll("[data-bv-preset]").forEach(b=>b.addEventListener("click",()=>{state.activeProfileId=b.dataset.bvPreset;save("profile selected");render();}));
+      if(dots)dots.querySelectorAll("[data-bv-profile-dot]").forEach(b=>b.addEventListener("click",()=>{
+        finishProfileCarousel(Number(b.dataset.bvProfileIndex),false);
+      }));
+
+      presets.innerHTML=state.profiles.slice(0,4).map((p,index)=>'<button class="bv-profile-preset '+(p.id===state.activeProfileId?"on":"")+'" data-bv-preset="'+esc(p.id)+'" data-bv-profile-index="'+state.profiles.findIndex(x=>x.id===p.id)+'" type="button"><strong>'+esc(p.name)+'</strong><small>'+(p.rate?money(p.rate)+" / hour":"Set hourly rate")+'</small></button>').join("")+'<button class="bv-profile-preset bv-new-profile" id="bv-new-profile" type="button">＋ New<br>Profile</button>';
+      presets.querySelectorAll("[data-bv-preset]").forEach(b=>b.addEventListener("click",()=>finishProfileCarousel(Number(b.dataset.bvProfileIndex),false)));
       $("bv-new-profile").addEventListener("click",()=>openProfile(null));
+
+      host.classList.add("is-instant");
+      applyProfileCarousel(activeIndex,false,true);
     }
     function reassignEntry(id,profileId){if(activeLocked()){notice("Unlock this billing period before reassigning entries.");return;}const e=period().entries.find(x=>x.id===id);if(!e)return;e.profileId=profileId;if(!e.description)e.description=profile(profileId).name;audit("entry_reassigned",e.id+" → "+profile(profileId).name);save("entry moved");render();}
 
@@ -10928,20 +11208,86 @@
       $("bv-prev-month").addEventListener("click",()=>changeMonth(-1));$("bv-next-month").addEventListener("click",()=>changeMonth(1));$("bv-profile-prev").addEventListener("click",()=>rotateProfile(-1));$("bv-profile-next").addEventListener("click",()=>rotateProfile(1));
       const vaultStage=$("bv-stage");
       if(vaultStage){
-        let startX=null,startY=null,wheelReady=true;
-        vaultStage.addEventListener("touchstart",ev=>{
-          if(ev.touches.length!==1||ev.target.closest("button"))return;
-          startX=ev.touches[0].clientX;startY=ev.touches[0].clientY;
-        },{passive:true});
-        vaultStage.addEventListener("touchend",ev=>{
-          if(startX===null||!ev.changedTouches.length)return;
-          const dx=ev.changedTouches[0].clientX-startX,dy=ev.changedTouches[0].clientY-startY;
-          startX=startY=null;
-          if(Math.abs(dx)>=46&&Math.abs(dx)>Math.abs(dy)*1.2)rotateProfile(dx<0?1:-1);
-        },{passive:true});
+        const pixelsPerProfile=158;
+
+        vaultStage.addEventListener("pointerdown",ev=>{
+          if(state.profiles.length<2||ev.button!==0||ev.target.closest("button,input,select,textarea"))return;
+          clearTimeout(profileCarouselSettleTimer);
+          profileCarouselGesture={
+            pointerId:ev.pointerId,
+            startX:ev.clientX,
+            startY:ev.clientY,
+            startPosition:profileCarouselPosition,
+            lastX:ev.clientX,
+            lastTime:performance.now(),
+            velocity:0,
+            moved:false
+          };
+          vaultStage.setPointerCapture(ev.pointerId);
+          vaultStage.classList.add("carousel-dragging");
+        });
+
+        vaultStage.addEventListener("pointermove",ev=>{
+          const g=profileCarouselGesture;
+          if(!g||g.pointerId!==ev.pointerId)return;
+          const dx=ev.clientX-g.startX,dy=ev.clientY-g.startY;
+          if(!g.moved&&Math.abs(dx)<5&&Math.abs(dy)<5)return;
+          if(!g.moved&&Math.abs(dy)>Math.abs(dx)*1.15){
+            profileCarouselGesture=null;
+            try{vaultStage.releasePointerCapture(ev.pointerId);}catch(_){}
+            return;
+          }
+          g.moved=true;
+          ev.preventDefault();
+          const now=performance.now(),elapsed=Math.max(1,now-g.lastTime);
+          g.velocity=(ev.clientX-g.lastX)/elapsed;
+          g.lastX=ev.clientX;g.lastTime=now;
+          const position=g.startPosition-dx/pixelsPerProfile;
+          applyProfileCarousel(position,true,false);
+        });
+
+        const endPointerCarousel=ev=>{
+          const g=profileCarouselGesture;
+          if(!g||g.pointerId!==ev.pointerId)return;
+          profileCarouselGesture=null;
+          try{vaultStage.releasePointerCapture(ev.pointerId);}catch(_){}
+          vaultStage.classList.remove("carousel-dragging");
+          if(!g.moved){
+            applyProfileCarousel(profileCarouselPosition,false,false);
+            return;
+          }
+          profileSwipeUntil=Date.now()+600;
+          let projected=profileCarouselPosition-g.velocity*105;
+          const travelled=Math.abs(ev.clientX-g.startX);
+          if(travelled>34&&Math.abs(projected-g.startPosition)<.42){
+            projected=g.startPosition+(ev.clientX<g.startX?1:-1);
+          }
+          finishProfileCarousel(Math.round(projected),false);
+        };
+        vaultStage.addEventListener("pointerup",endPointerCarousel);
+        vaultStage.addEventListener("pointercancel",endPointerCarousel);
+        vaultStage.addEventListener("lostpointercapture",ev=>{
+          if(profileCarouselGesture&&profileCarouselGesture.pointerId===ev.pointerId){
+            profileCarouselGesture=null;
+            finishProfileCarousel(Math.round(profileCarouselPosition),false);
+          }
+        });
+
         vaultStage.addEventListener("wheel",ev=>{
-          if(!wheelReady||Math.abs(ev.deltaX)<35||Math.abs(ev.deltaX)<=Math.abs(ev.deltaY))return;
-          ev.preventDefault();wheelReady=false;rotateProfile(ev.deltaX>0?1:-1);setTimeout(()=>wheelReady=true,360);
+          if(state.profiles.length<2)return;
+          const horizontal=Math.abs(ev.deltaX)>Math.abs(ev.deltaY)*.75;
+          const shiftedVertical=ev.shiftKey&&Math.abs(ev.deltaY)>8;
+          if(!horizontal&&!shiftedVertical)return;
+          ev.preventDefault();
+          clearTimeout(profileCarouselWheelTimer);
+          clearTimeout(profileCarouselSettleTimer);
+          const delta=horizontal?ev.deltaX:ev.deltaY;
+          profileCarouselPosition+=delta/310;
+          profileSwipeUntil=Date.now()+280;
+          applyProfileCarousel(profileCarouselPosition,true,false);
+          profileCarouselWheelTimer=setTimeout(()=>{
+            finishProfileCarousel(Math.round(profileCarouselPosition),false);
+          },145);
         },{passive:false});
       }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
       $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
