@@ -7945,29 +7945,179 @@
     .dp-top{flex-direction:column;}
   }
 
-  /* v29 override — compact deadline pressure placement */
+  /* v30 override — compact deadline pressure mini-display */
   .console-stack{
     display:grid!important;
-    grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr)!important;
+    grid-template-columns:minmax(0,1.22fr) minmax(0,1.04fr)!important;
+    grid-template-areas:
+      "summary mini"
+      "pressure mini"
+      "notes notes"!important;
     grid-template-rows:auto auto auto!important;
-    grid-template-areas:none!important;
     gap:12px!important;
     align-items:start!important;
   }
-  #console-summary{grid-column:1!important;grid-row:1!important;grid-area:auto!important;min-width:0!important;}
-  #console-pressure{grid-column:1!important;grid-row:2!important;grid-area:auto!important;order:1!important;}
-  .console-mini-grid{grid-column:2!important;grid-row:1 / span 2!important;grid-area:auto!important;display:grid!important;grid-template-columns:1fr!important;gap:12px!important;align-self:start!important;order:2!important;}
-  #console-placeholder{grid-area:auto!important;min-height:290px!important;height:auto!important;}
-  #console-progress{grid-area:auto!important;min-height:220px!important;height:auto!important;}
-  #console-notes{grid-column:1 / -1!important;grid-row:3!important;grid-area:auto!important;}
+  .console-ds-wrap{grid-area:summary!important;grid-column:auto!important;grid-row:auto!important;min-width:0!important;}
+  .console-mini-grid{
+    grid-area:mini!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1.05fr) minmax(0,.92fr)!important;
+    gap:12px!important;
+    align-self:start!important;
+    min-width:0!important;
+  }
+  #console-placeholder{min-height:264px!important;height:auto!important;}
+  #console-progress{min-height:264px!important;height:auto!important;}
+  #console-pressure{grid-area:pressure!important;grid-column:auto!important;grid-row:auto!important;order:0!important;min-width:0!important;}
+  #console-notes{grid-area:notes!important;grid-column:auto!important;grid-row:auto!important;}
+
+  .deadline-pressure-card.compact-blackhole{
+    --dpc-a:#73dcff;
+    --dpc-b:#4f88ff;
+    --dpc-c:#d6f8ff;
+    --dpc-rgb:115,220,255;
+    padding:0!important;
+    overflow:hidden!important;
+    min-height:254px!important;
+    border-radius:20px!important;
+    border:1px solid rgba(116,140,192,.22)!important;
+    background:
+      radial-gradient(100% 120% at 0% 0%, rgba(var(--dpc-rgb),.12), transparent 32%),
+      radial-gradient(120% 100% at 100% 100%, rgba(var(--dpc-rgb),.05), transparent 44%),
+      linear-gradient(180deg, rgba(8,12,24,.98), rgba(5,8,18,.99))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 22px 50px -40px rgba(0,0,0,.9)!important;
+  }
+  .deadline-pressure-card.compact-blackhole.level-calm{--dpc-a:#72ddff;--dpc-b:#4786ff;--dpc-c:#d8fbff;--dpc-rgb:114,221,255;}
+  .deadline-pressure-card.compact-blackhole.level-active{--dpc-a:#90f08d;--dpc-b:#36d3b0;--dpc-c:#d8ffd6;--dpc-rgb:144,240,141;}
+  .deadline-pressure-card.compact-blackhole.level-tight{--dpc-a:#ffd46a;--dpc-b:#ff9f48;--dpc-c:#fff3b4;--dpc-rgb:255,212,106;}
+  .deadline-pressure-card.compact-blackhole.level-crammed{--dpc-a:#ff9a5a;--dpc-b:#ff5757;--dpc-c:#ffd1a9;--dpc-rgb:255,154,90;}
+  .deadline-pressure-card.compact-blackhole.level-critical{--dpc-a:#ff7fc0;--dpc-b:#b26bff;--dpc-c:#ffd7f0;--dpc-rgb:255,127,192;}
+
+  .dpc-wrap{
+    position:relative;
+    min-height:254px;
+    padding:12px 14px 10px;
+    display:grid;
+    grid-template-rows:auto 1fr 62px;
+    gap:8px;
+  }
+  .dpc-wrap::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px) 0 0/46px 100%,
+      linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px) 0 0/100% 46px;
+    opacity:.28;
+    pointer-events:none;
+  }
+  .dpc-head,.dpc-main,.dpc-bottom{position:relative;z-index:1;}
+  .dpc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .dpc-kicker{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#dbe4ff;opacity:.9;}
+  .dpc-title-row{display:flex;align-items:center;gap:8px;margin-top:3px;}
+  .dpc-title-row h2{margin:0;font-size:17px;line-height:1.05;color:#fff;font-weight:800;}
+  .dpc-info{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10px;color:#c1ccec;border:1px solid rgba(181,193,232,.25);background:rgba(18,26,42,.56);}
+  .dpc-sub{font-size:11px;color:#c2cbea;opacity:.8;margin-top:2px;}
+  .dpc-peak{font-size:12px;color:#dfe8ff;font-weight:700;padding-top:2px;white-space:nowrap;}
+  .dpc-peak b{color:var(--dpc-a);font-weight:800;}
+
+  .dpc-main{display:grid;grid-template-columns:minmax(0,1.15fr) 178px;gap:12px;align-items:center;min-height:0;}
+  .dpc-core-zone{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:10px;min-width:0;}
+  .dpc-scale{display:flex;flex-direction:column;gap:6px;align-self:center;}
+  .dpc-scale-row{display:flex;align-items:center;gap:7px;opacity:.55;transition:.2s ease;}
+  .dpc-scale-row.is-on{opacity:1;transform:translateX(2px);}
+  .dpc-dot{width:10px;height:10px;border-radius:50%;display:inline-block;box-shadow:0 0 10px currentColor;flex:0 0 auto;background:radial-gradient(circle at 35% 32%, rgba(255,255,255,.95), rgba(255,255,255,.26) 26%, currentColor 58%, rgba(0,0,0,.2) 82%);}
+  .dpc-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:currentColor;}
+  .dpc-scale-row.calm{color:#73dcff;}
+  .dpc-scale-row.tight{color:#ffd46a;}
+  .dpc-scale-row.crammed{color:#ff8d5f;}
+  .dpc-scale-row.critical{color:#d28aff;}
+  .dpc-scale-row.active{color:#90f08d;}
+  .dpc-scale-row.is-on.active{color:#90f08d;}
+  .dpc-scale-row.is-on .dpc-dot{transform:scale(1.12);}
+  .dpc-scale-row.is-on .dpc-label{text-shadow:0 0 10px currentColor;}
+  .dpc-scale-row.is-on{opacity:1;filter:drop-shadow(0 0 8px rgba(255,255,255,.08));}
+  .dpc-scale-row.is-on::after{content:"";flex:1;height:1px;background:linear-gradient(90deg, currentColor, transparent);opacity:.8;max-width:12px;}
+
+  .dpc-hole-wrap{display:flex;justify-content:center;align-items:center;min-width:0;}
+  .dpc-hole{
+    position:relative;
+    width:165px;height:165px;border-radius:50%;
+    filter:drop-shadow(0 0 20px rgba(var(--dpc-rgb),.16)) drop-shadow(0 10px 24px rgba(0,0,0,.48));
+  }
+  .dpc-hole::before{content:"";position:absolute;inset:0;border-radius:50%;background:
+      radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 31%, rgba(11,14,28,.98) 31% 42%, transparent 42%),
+      conic-gradient(from 215deg, rgba(255,255,255,.03) 0deg, rgba(255,255,255,.14) 18deg, var(--dpc-a) 74deg, var(--dpc-b) 132deg, #ff8d58 220deg, rgba(255,182,123,.52) 282deg, var(--dpc-c) 334deg, rgba(255,255,255,.03) 360deg);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.06);animation:dpc-spin 22s linear infinite;}
+  .dpc-hole::after{content:"";position:absolute;inset:17px;border-radius:50%;background:radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 47%, rgba(0,0,0,.92) 47% 60%, transparent 60%), radial-gradient(circle at 60% 44%, rgba(255,255,255,.16), transparent 28%);} 
+  .dpc-orbit{position:absolute;left:-10px;right:-10px;top:31px;bottom:31px;border-radius:50%;transform:rotate(-13deg) scaleY(.46);background:linear-gradient(90deg, rgba(255,255,255,.07), rgba(var(--dpc-rgb),.18), rgba(255,149,95,.2), rgba(255,255,255,.05));box-shadow:0 0 18px rgba(var(--dpc-rgb),.2);}
+  .dpc-halo{position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle, rgba(var(--dpc-rgb),.10), transparent 64%);filter:blur(10px);}
+  .dpc-specks{position:absolute;inset:0;border-radius:50%;background:
+      radial-gradient(circle at 16% 42%, rgba(255,170,110,.85) 0 1.6px, transparent 2.4px),
+      radial-gradient(circle at 24% 26%, rgba(255,120,90,.82) 0 1.7px, transparent 2.5px),
+      radial-gradient(circle at 82% 20%, rgba(197,144,255,.7) 0 1.8px, transparent 2.4px),
+      radial-gradient(circle at 86% 72%, rgba(255,178,115,.88) 0 1.8px, transparent 2.5px),
+      radial-gradient(circle at 63% 84%, rgba(255,204,125,.72) 0 1.4px, transparent 2px),
+      radial-gradient(circle at 9% 20%, rgba(255,255,255,.7) 0 1.2px, transparent 1.8px);
+    animation:dpc-drift 16s ease-in-out infinite alternate;
+  }
+  .dpc-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;z-index:2;text-align:center;}
+  .dpc-score{font-size:58px;font-weight:850;line-height:.86;color:#fff;letter-spacing:-.05em;text-shadow:0 0 18px rgba(255,255,255,.07);}
+  .dpc-denom{font-size:13px;font-weight:800;color:#edf5ff;margin-top:1px;opacity:.92;}
+  .dpc-state{font-size:14px;font-weight:900;letter-spacing:.10em;color:var(--dpc-a);margin-top:4px;text-transform:uppercase;}
+  @keyframes dpc-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  @keyframes dpc-drift{from{transform:rotate(-2deg) scale(1);}to{transform:rotate(2deg) scale(1.02);}}
+
+  .dpc-side{display:grid;gap:8px;align-self:center;}
+  .dpc-stat{display:grid;grid-template-columns:28px 1fr;align-items:center;gap:8px;padding:9px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg, rgba(11,16,31,.78), rgba(7,11,22,.92));box-shadow:inset 0 1px 0 rgba(255,255,255,.03);}
+  .dpc-stat-ico{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);font-size:13px;color:#fff;}
+  .dpc-stat:nth-child(1) .dpc-stat-ico{color:#78dfff;}
+  .dpc-stat:nth-child(2) .dpc-stat-ico{color:#ffc65f;}
+  .dpc-stat:nth-child(3) .dpc-stat-ico{color:#96ed88;}
+  .dpc-stat:nth-child(4) .dpc-stat-ico{color:#ff7d6d;}
+  .dpc-stat b{display:block;font-size:18px;line-height:1;color:#fff;}
+  .dpc-stat span{display:block;font-size:10px;color:#bcc7e8;opacity:.85;margin-top:2px;letter-spacing:.04em;}
+  .dpc-stat.deficit b{color:var(--dpc-c);}
+
+  .dpc-bottom{padding:8px 10px 4px;border-radius:16px;border:1px solid rgba(255,255,255,.05);background:linear-gradient(180deg, rgba(8,12,23,.72), rgba(6,10,20,.86));}
+  .dpc-bottom-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:2px;}
+  .dpc-arc-title{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#dbe4ff;}
+  .dpc-arc-sub{font-size:10px;color:#aab6d8;opacity:.84;}
+  .dpc-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10px;color:#dbe4ff;white-space:nowrap;}
+  .dpc-badge i{width:8px;height:8px;border-radius:50%;background:var(--dpc-a);display:inline-block;box-shadow:0 0 10px var(--dpc-a);}
+  .dpc-bottom svg{display:block;width:100%;height:34px;overflow:visible;}
+  .dpc-bottom .grid line{stroke:rgba(255,255,255,.04);} 
+  .dpc-bottom .dp-axis text{font-size:8px;fill:#91a0c4;}
+  .dpc-bottom .dp-curve-line{stroke-width:2.4;}
+  .dpc-bottom .dp-node{r:4;}
 
   @media(max-width:1280px){
-    .console-stack{display:flex!important;flex-direction:column!important;}
-    .console-mini-grid{display:grid!important;grid-template-columns:1fr 1fr!important;grid-row:auto!important;grid-column:auto!important;}
-    #console-notes{grid-column:auto!important;grid-row:auto!important;}
+    .console-stack{
+      grid-template-columns:1fr!important;
+      grid-template-areas:
+        "summary"
+        "mini"
+        "pressure"
+        "notes"!important;
+    }
+    .console-mini-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.92fr)!important;}
   }
   @media(max-width:980px){
     .console-mini-grid{grid-template-columns:1fr!important;}
+    .dpc-main{grid-template-columns:1fr!important;}
+    .dpc-core-zone{grid-template-columns:58px 1fr!important;}
+    .dpc-side{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media(max-width:760px){
+    .dpc-head{flex-direction:column;}
+    .dpc-main{grid-template-columns:1fr!important;}
+    .dpc-core-zone{grid-template-columns:1fr!important;}
+    .dpc-scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;}
+    .dpc-scale-row{justify-content:center;}
+    .dpc-scale-row.is-on::after{display:none;}
+    .dpc-hole{width:150px;height:150px;}
+    .dpc-side{grid-template-columns:repeat(2,minmax(0,1fr));}
   }
 
 
@@ -9060,37 +9210,46 @@
       var data=deadlinePressureCompute();
       var peak=data.peak || {date:data.today,count:0,estHours:0,availHours:deadlinePressureAvailableHours(data.today),deficit:0,score:0,theme:data.theme,items:[]};
       var theme=data.theme;
-      host.className='panel deadline-pressure-card level-'+theme.key;
       var todayLabel=deadlinePressureDateLabel(peak.date,data.today);
-      var deficitText=(peak.deficit>0?'-':'')+Math.abs(peak.deficit||0).toFixed(1)+'h';
-      var deficitLabel=peak.deficit>0?'deficit':(peak.deficit<0?'buffer':'balanced');
-      var noteTitle = peak.score>80 ? 'Strong pull detected' : peak.score>60 ? 'Crowding building' : peak.score>40 ? 'Manageable load' : 'Low strain window';
-      var noteBody = peak.count ? ('Peak day carries '+peak.count+' deadline'+(peak.count===1?'':'s')+' with about '+peak.estHours.toFixed(1)+'h of work.') : 'No imminent deadline cluster detected.';
+      var deficit=(peak.deficit||0);
+      var deficitText=(deficit>0?'-':'')+Math.abs(deficit).toFixed(1)+'h';
+      var levelMeta=[
+        {key:'calm',label:'Calm'},
+        {key:'active',label:'Active'},
+        {key:'tight',label:'Tight'},
+        {key:'crammed',label:'Crammed'},
+        {key:'critical',label:'Critical'}
+      ];
+      host.className='panel deadline-pressure-card compact-blackhole level-'+theme.key;
       host.innerHTML =
-        '<div class="dp-wrap">'
-          +'<div class="dp-top">'
-            +'<div><div class="dp-kicker">Black Hole Accretion + Ring</div><div class="dp-title-row"><div class="dp-title">Deadline Pressure</div><span class="dp-info">i</span></div><div class="dp-sub">Gravity of commitments</div></div>'
-            +'<div class="dp-peak">Peak: <b>'+escapeHtml(todayLabel)+'</b></div>'
+        '<div class="dpc-wrap">'
+          +'<div class="dpc-head">'
+            +'<div><div class="dpc-kicker">Black Hole Accretion + Ring</div><div class="dpc-title-row"><h2>Deadline Pressure</h2><span class="dpc-info">i</span></div><div class="dpc-sub">Gravity of commitments</div></div>'
+            +'<div class="dpc-peak">Peak: <b>'+escapeHtml(todayLabel)+'</b></div>'
           +'</div>'
-          +'<div class="dp-legend">'
-            +['calm','active','tight','crammed','critical'].map(function(k,idx){
-              var ranges=['0–20','21–40','41–60','61–80','81–100'];
-              var names={calm:'Calm',active:'Active',tight:'Tight',crammed:'Crammed',critical:'Critical'};
-              return '<div class="dp-level dp-l-'+k+(theme.key===k?' active':'')+'"><div class="dp-orb"></div><div class="dp-level-text"><strong>'+names[k]+'</strong><span>'+ranges[idx]+'</span></div></div>';
-            }).join('')
+          +'<div class="dpc-main">'
+            +'<div class="dpc-core-zone">'
+              +'<div class="dpc-scale">'+levelMeta.map(function(item){ return '<div class="dpc-scale-row'+(theme.key===item.key?' is-on':'')+' '+item.key+'"><span class="dpc-dot"></span><span class="dpc-label">'+item.label+'</span></div>'; }).join('')+'</div>'
+              +'<div class="dpc-hole-wrap">'
+                +'<div class="dpc-hole">'
+                  +'<div class="dpc-halo"></div>'
+                  +'<div class="dpc-orbit"></div>'
+                  +'<div class="dpc-specks"></div>'
+                  +'<div class="dpc-center"><div class="dpc-score">'+Math.round(data.score)+'</div><div class="dpc-denom">/100</div><div class="dpc-state">'+escapeHtml(theme.label.toUpperCase())+'</div></div>'
+                +'</div>'
+              +'</div>'
+            +'</div>'
+            +'<div class="dpc-side">'
+              +'<div class="dpc-stat"><span class="dpc-stat-ico">▣</span><div><b>'+(peak.count||0)+'</b><span>deadlines</span></div></div>'
+              +'<div class="dpc-stat"><span class="dpc-stat-ico">◔</span><div><b>'+(peak.estHours||0).toFixed(1)+'h</b><span>est. work</span></div></div>'
+              +'<div class="dpc-stat"><span class="dpc-stat-ico">◎</span><div><b>'+(peak.availHours||0).toFixed(1)+'h</b><span>available</span></div></div>'
+              +'<div class="dpc-stat deficit"><span class="dpc-stat-ico">∿</span><div><b>'+deficitText+'</b><span>'+(deficit>0?'deficit':deficit<0?'buffer':'balanced')+'</span></div></div>'
+            +'</div>'
           +'</div>'
-          +'<div class="dp-core">'
-            +'<div class="dp-core-bg"><div class="dp-hole"><div class="dp-hole-ring"></div><div class="dp-particles"></div></div></div>'
-            +'<div class="dp-center"><div class="dp-score">'+Math.round(data.score)+'<small>/100</small></div><div class="dp-state">'+escapeHtml(theme.label.toUpperCase())+'</div></div>'
+          +'<div class="dpc-bottom">'
+            +'<div class="dpc-bottom-head"><div><div class="dpc-arc-title">Pressure Arc</div><div class="dpc-arc-sub">Next 7 days · highest pull highlighted</div></div><span class="dpc-badge"><i></i>'+Math.round(data.score)+'/100 '+escapeHtml(theme.label)+'</span></div>'
+            +deadlinePressureTrendSvg(data.series)
           +'</div>'
-          +'<div class="dp-metrics">'
-            +'<div class="dp-metric"><div class="dp-metric-icon">▣</div><div><b>'+(peak.count||0)+' deadline'+((peak.count||0)===1?'':'s')+'</b><span>peak-day cluster</span></div></div>'
-            +'<div class="dp-metric"><div class="dp-metric-icon">◔</div><div><b>'+(peak.estHours||0).toFixed(1)+'h</b><span>estimated work</span></div></div>'
-            +'<div class="dp-metric"><div class="dp-metric-icon">◎</div><div><b>'+(peak.availHours||0).toFixed(1)+'h</b><span>available focus</span></div></div>'
-            +'<div class="dp-metric"><div class="dp-metric-icon">∿</div><div><b>'+deficitText+'</b><span>'+deficitLabel+'</span></div></div>'
-          +'</div>'
-          +'<div class="dp-note"><div class="dp-note-swirl"></div><div class="dp-note-copy"><strong>'+escapeHtml(noteTitle)+'</strong>'+escapeHtml(noteBody)+' The more mass (tasks), the stronger the pull.</div></div>'
-          +'<div class="dp-trend"><div class="dp-trend-head"><div><div class="dp-trend-title">Pressure Arc</div><div class="dp-trend-sub">Next 7 days · highest pull highlighted</div></div><span class="dp-legend-badge"><i></i>'+Math.round(data.score)+'/100 '+escapeHtml(theme.label)+'</span></div>'+deadlinePressureTrendSvg(data.series)+'</div>'
         +'</div>';
     }
 
