@@ -7651,6 +7651,30 @@
     transform:scale(.92);
   }
 
+
+  /* Glass Vault v26 — balanced presets and properly cornered edit controls */
+  .bv-profiles{
+    padding:8px 12px 13px;
+  }
+  .bv-profile-row{
+    align-items:center;
+  }
+
+  /* Keep the edit pencil out of the card's normal text flow. */
+  .bv-profile-card > .bv-card-close{
+    position:absolute!important;
+    top:8px;
+    left:10px;
+    right:auto;
+    margin:0;
+    transform:none;
+    z-index:12!important;
+  }
+  .bv-profile-card > .bv-glass-kicker{
+    padding-left:33px;
+    min-height:18px;
+  }
+
 </style>
 </head>
 <body>
