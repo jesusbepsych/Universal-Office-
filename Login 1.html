@@ -8262,6 +8262,111 @@
   }
   .dpw-stat-icon svg{width:13px;height:13px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 
+
+  /* v40 — danger pulse for crammed / critical deadline pressure states */
+  #console-pressure.deadline-pressure-wide.alert-danger{
+    --dp-danger-rgb:255,88,76;
+    --dp-danger-soft:255,136,98;
+  }
+  #console-pressure.deadline-pressure-wide.level-crammed.alert-danger{
+    --dp-danger-rgb:255,92,70;
+    --dp-danger-soft:255,155,95;
+  }
+  #console-pressure.deadline-pressure-wide.level-critical.alert-danger{
+    --dp-danger-rgb:255,58,92;
+    --dp-danger-soft:255,118,164;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger::before,
+  #console-pressure.deadline-pressure-wide.alert-danger::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:inherit;
+    pointer-events:none;
+    z-index:1;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger::before{
+    background:
+      radial-gradient(48% 88% at 49% 54%, rgba(var(--dp-danger-rgb),.00) 0%, rgba(var(--dp-danger-rgb),.00) 44%, rgba(var(--dp-danger-rgb),.10) 58%, rgba(var(--dp-danger-rgb),.00) 76%),
+      linear-gradient(90deg, rgba(var(--dp-danger-rgb),.00), rgba(var(--dp-danger-rgb),.07) 48%, rgba(var(--dp-danger-rgb),.00));
+    mix-blend-mode:screen;
+    opacity:.42;
+    animation:dpwDangerField 2.85s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger::after{
+    border:1px solid rgba(var(--dp-danger-rgb),.14);
+    box-shadow:
+      inset 0 0 26px rgba(var(--dp-danger-rgb),.05),
+      0 0 0 1px rgba(var(--dp-danger-rgb),.05),
+      0 0 24px rgba(var(--dp-danger-rgb),.08),
+      0 0 58px rgba(var(--dp-danger-rgb),.05);
+    opacity:.72;
+    animation:dpwDangerFrame 2.85s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-visual::before{
+    background:
+      radial-gradient(66% 54% at 43% 56%, rgba(var(--dp-rgb),.12), transparent 62%),
+      radial-gradient(36% 42% at 16% 54%, rgba(var(--dp-danger-rgb),.10), transparent 72%),
+      radial-gradient(38% 48% at 72% 52%, rgba(var(--dp-danger-rgb),.16), transparent 68%);
+    animation:dpwDangerMist 2.85s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-score-orb{
+    animation:dpwDangerOrb 2.85s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-score-orb::before{
+    animation:dpwDangerHalo 2.85s ease-in-out infinite;
+    border-color:rgba(var(--dp-danger-rgb),.18);
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-score{
+    text-shadow:0 0 16px rgba(255,255,255,.16),0 0 20px rgba(var(--dp-danger-rgb),.18),0 0 34px rgba(var(--dp-danger-rgb),.10);
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-stat{
+    border-color:rgba(var(--dp-danger-rgb),.07);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.028),0 0 0 1px rgba(var(--dp-danger-rgb),.02);
+    animation:dpwDangerStat 2.85s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-stat:nth-child(2),
+  #console-pressure.deadline-pressure-wide.alert-danger .dpw-stat:nth-child(4){animation-delay:.22s;}
+  @keyframes dpwDangerField{
+    0%,100%{opacity:.24; filter:saturate(1) brightness(1);}
+    46%{opacity:.58; filter:saturate(1.2) brightness(1.05);}
+    58%{opacity:.72; filter:saturate(1.35) brightness(1.08);}
+  }
+  @keyframes dpwDangerFrame{
+    0%,100%{opacity:.52; box-shadow:inset 0 0 24px rgba(var(--dp-danger-rgb),.03),0 0 0 1px rgba(var(--dp-danger-rgb),.05),0 0 16px rgba(var(--dp-danger-rgb),.04),0 0 36px rgba(var(--dp-danger-rgb),.03);}
+    48%{opacity:.84; box-shadow:inset 0 0 30px rgba(var(--dp-danger-rgb),.06),0 0 0 1px rgba(var(--dp-danger-rgb),.08),0 0 32px rgba(var(--dp-danger-rgb),.09),0 0 72px rgba(var(--dp-danger-rgb),.08);}
+    58%{opacity:1; box-shadow:inset 0 0 36px rgba(var(--dp-danger-rgb),.07),0 0 0 1px rgba(var(--dp-danger-rgb),.11),0 0 46px rgba(var(--dp-danger-rgb),.14),0 0 92px rgba(var(--dp-danger-rgb),.10);}
+  }
+  @keyframes dpwDangerOrb{
+    0%,100%{transform:translate(-50%,-50%) scale(1); box-shadow:inset 0 1px 0 rgba(255,255,255,.08), inset 0 -10px 18px rgba(0,0,0,.5), 0 0 36px rgba(var(--dp-rgb),.28), 0 0 76px rgba(var(--dp-rgb),.08);}
+    46%{transform:translate(-50%,-50%) scale(1.018); box-shadow:inset 0 1px 0 rgba(255,255,255,.10), inset 0 -10px 20px rgba(0,0,0,.46), 0 0 40px rgba(var(--dp-danger-rgb),.18), 0 0 94px rgba(var(--dp-danger-rgb),.12), 0 0 20px rgba(var(--dp-rgb),.14);}
+    58%{transform:translate(-50%,-50%) scale(1.035); box-shadow:inset 0 1px 0 rgba(255,255,255,.12), inset 0 -10px 20px rgba(0,0,0,.42), 0 0 44px rgba(var(--dp-danger-rgb),.24), 0 0 110px rgba(var(--dp-danger-rgb),.18), 0 0 28px rgba(var(--dp-rgb),.18);}
+  }
+  @keyframes dpwDangerHalo{
+    0%,100%{opacity:.54; box-shadow:0 0 24px rgba(var(--dp-rgb),.18), inset 0 0 18px rgba(var(--dp-rgb),.05);}
+    48%{opacity:.82; box-shadow:0 0 36px rgba(var(--dp-danger-rgb),.22), inset 0 0 24px rgba(var(--dp-danger-rgb),.08);}
+    58%{opacity:1; box-shadow:0 0 44px rgba(var(--dp-danger-rgb),.30), 0 0 70px rgba(var(--dp-danger-rgb),.14), inset 0 0 28px rgba(var(--dp-danger-rgb),.12);}
+  }
+  @keyframes dpwDangerMist{
+    0%,100%{opacity:.88; filter:blur(1px) saturate(1);}
+    50%{opacity:1; filter:blur(1.2px) saturate(1.18);}
+    58%{opacity:1; filter:blur(1.4px) saturate(1.28);}
+  }
+  @keyframes dpwDangerStat{
+    0%,100%{transform:translateY(0);}
+    48%{transform:translateY(-.5px);}
+    58%{transform:translateY(-1px);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    #console-pressure.deadline-pressure-wide.alert-danger,
+    #console-pressure.deadline-pressure-wide.alert-danger::before,
+    #console-pressure.deadline-pressure-wide.alert-danger::after,
+    #console-pressure.deadline-pressure-wide.alert-danger .dpw-visual::before,
+    #console-pressure.deadline-pressure-wide.alert-danger .dpw-score-orb,
+    #console-pressure.deadline-pressure-wide.alert-danger .dpw-score-orb::before,
+    #console-pressure.deadline-pressure-wide.alert-danger .dpw-stat{animation:none!important;}
+  }
+
 </style>
 </head>
 <body>
@@ -9234,9 +9339,10 @@
         calm:{accent:[119,225,255],secondary:[89,145,255],warm:[210,248,255],hot:[126,236,255]},
         active:{accent:[146,239,132],secondary:[73,211,183],warm:[227,255,187],hot:[151,255,188]},
         tight:{accent:[255,214,107],secondary:[255,159,73],warm:[255,243,186],hot:[255,192,92]},
-        crammed:{accent:[255,155,103],secondary:[255,87,86],warm:[255,222,183],hot:[255,126,98]},
-        critical:{accent:[255,144,215],secondary:[181,124,255],warm:[255,198,112],hot:[255,117,192]}
+        crammed:{accent:[255,116,84],secondary:[255,64,62],warm:[255,214,168],hot:[255,98,84]},
+        critical:{accent:[255,96,128],secondary:[255,54,90],warm:[255,188,120],hot:[255,76,128]}
       }[themeKey]||{accent:[119,225,255],secondary:[89,145,255],warm:[210,248,255],hot:[126,236,255]};
+      var dangerLevel=themeKey==='critical'?1:themeKey==='crammed'?.72:0;
       var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var ro,raf=0,running=true,w=1,h=1,dpr=1,last=0;
       var trail=document.createElement('canvas'),trailCtx=trail.getContext('2d',{alpha:true});
@@ -9351,6 +9457,26 @@
       }
       function drawCore(t){
         var cx=w*.485,cy=h*.53,pulse=1+(reduce?0:Math.sin(t*1.2)*.025);
+        var alertBeat=dangerLevel?Math.pow((Math.sin(t*(themeKey==='critical'?4.2:3.1))+1)/2,3):0;
+        if(dangerLevel){
+          ctx.save();
+          ctx.globalCompositeOperation='screen';
+          var ringR=h*(.58+alertBeat*.22), ringCore=h*(.18+alertBeat*.08);
+          var pulseGrad=ctx.createRadialGradient(cx,cy,ringCore,cx,cy,ringR);
+          pulseGrad.addColorStop(0,'rgba(255,80,92,0)');
+          pulseGrad.addColorStop(.42,'rgba('+(themeKey==='critical'?'255,54,90':'255,86,62')+','+(0.02+alertBeat*.04)+')');
+          pulseGrad.addColorStop(.70,'rgba('+(themeKey==='critical'?'255,54,90':'255,86,62')+','+(0.10+alertBeat*.18*dangerLevel)+')');
+          pulseGrad.addColorStop(.88,'rgba('+(themeKey==='critical'?'255,112,156':'255,126,88')+','+(0.04+alertBeat*.08*dangerLevel)+')');
+          pulseGrad.addColorStop(1,'rgba(255,80,92,0)');
+          ctx.fillStyle=pulseGrad;
+          ctx.beginPath(); ctx.arc(cx,cy,ringR,0,Math.PI*2); ctx.fill();
+          ctx.lineWidth=1.4+alertBeat*2.0;
+          ctx.strokeStyle='rgba('+(themeKey==='critical'?'255,74,118':'255,104,76')+','+(0.08+alertBeat*.20)+')';
+          ctx.shadowColor='rgba('+(themeKey==='critical'?'255,54,90':'255,86,62')+','+(0.10+alertBeat*.24)+')';
+          ctx.shadowBlur=14+alertBeat*24;
+          ctx.beginPath(); ctx.arc(cx,cy,h*(.40+alertBeat*.06),0,Math.PI*2); ctx.stroke();
+          ctx.restore();
+        }
         bloomCtx.clearRect(0,0,w,h);bloomCtx.save();bloomCtx.globalCompositeOperation='lighter';
         var halo=bloomCtx.createRadialGradient(cx,cy,0,cx,cy,h*.78*pulse);halo.addColorStop(0,'rgba(255,250,222,.42)');halo.addColorStop(.11,rgba(palette.warm,.32));halo.addColorStop(.28,rgba(palette.accent,.18));halo.addColorStop(1,'rgba(0,0,0,0)');bloomCtx.fillStyle=halo;bloomCtx.beginPath();bloomCtx.ellipse(cx,cy,h*1.04*pulse,h*.68*pulse,0,0,Math.PI*2);bloomCtx.fill();
         bloomCtx.translate(cx,cy);bloomCtx.rotate(-.16);bloomCtx.scale(1,.28);
@@ -9384,7 +9510,8 @@
     function renderDeadlinePressure(){
       var host=el("console-pressure");if(!host)return;
       var data=deadlinePressureCompute(),peak=data.peak||{date:data.today,count:0,estHours:0,availHours:deadlinePressureAvailableHours(data.today),deficit:0},theme=data.theme,deficit=Number(peak.deficit||0),deficitText=(deficit>0?"-":"+")+Math.abs(deficit).toFixed(1)+"h";
-      host.className="panel deadline-pressure-wide level-"+theme.key;
+      var dangerClass=(theme.key==="crammed"||theme.key==="critical")?" alert-danger":"";
+      host.className="panel deadline-pressure-wide level-"+theme.key+dangerClass;
       host.setAttribute("aria-label","Deadline pressure "+Math.round(data.score)+" out of 100, "+theme.label+". Peak "+deadlinePressureDateLabel(peak.date,data.today)+".");
       host.innerHTML=''
         +'<div class="dpw-shell">'
