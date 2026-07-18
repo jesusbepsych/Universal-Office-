@@ -7935,6 +7935,153 @@
     .dps2-stat-label{display:none;}
   }
 
+
+
+  /* v36 — widen deadline pressure into full row beneath the top three cards */
+  .console-stack{
+    display:grid!important;
+    grid-template-columns:minmax(430px,1.06fr) minmax(315px,.82fr) minmax(280px,.70fr)!important;
+    grid-template-areas:
+      "summary deadline progress"
+      "pressure pressure pressure"
+      "notes notes notes"!important;
+    gap:12px!important;
+    align-items:start!important;
+  }
+  #console-pressure{grid-area:pressure!important; min-width:0!important;}
+  @media(max-width:1220px){
+    .console-stack{
+      grid-template-columns:minmax(410px,1.04fr) minmax(300px,.82fr) minmax(255px,.68fr)!important;
+      grid-template-areas:
+        "summary deadline progress"
+        "pressure pressure pressure"
+        "notes notes notes"!important;
+    }
+  }
+  @media(max-width:980px){
+    .console-stack{
+      grid-template-columns:1fr!important;
+      grid-template-areas:
+        "summary"
+        "deadline"
+        "progress"
+        "pressure"
+        "notes"!important;
+    }
+  }
+
+  #console-pressure.deadline-pressure-wide{
+    --dp-a:#73dcff;
+    --dp-b:#4fcfff;
+    --dp-c:#d9f9ff;
+    --dp-rgb:115,220,255;
+    position:relative!important;
+    width:100%!important;
+    height:146px!important;
+    min-height:146px!important;
+    max-height:146px!important;
+    padding:0!important;
+    overflow:hidden!important;
+    border-radius:24px!important;
+    border:1px solid rgba(121,148,204,.18)!important;
+    background:
+      radial-gradient(120% 150% at 50% 0%, rgba(139,164,255,.08), transparent 40%),
+      linear-gradient(180deg, rgba(10,16,31,.98), rgba(7,11,21,.995))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045), 0 26px 48px -44px rgba(0,0,0,.96)!important;
+    cursor:pointer;
+    outline:none;
+  }
+  #console-pressure.deadline-pressure-wide.level-calm{--dp-a:#77e1ff;--dp-b:#6ec7ff;--dp-c:#f1fbff;--dp-rgb:119,225,255;}
+  #console-pressure.deadline-pressure-wide.level-active{--dp-a:#92ef84;--dp-b:#5fe0b9;--dp-c:#f3ffe2;--dp-rgb:146,239,132;}
+  #console-pressure.deadline-pressure-wide.level-tight{--dp-a:#ffd66b;--dp-b:#ffae5c;--dp-c:#fff2c7;--dp-rgb:255,214,107;}
+  #console-pressure.deadline-pressure-wide.level-crammed{--dp-a:#ff9b67;--dp-b:#ff6f69;--dp-c:#ffe2c7;--dp-rgb:255,155,103;}
+  #console-pressure.deadline-pressure-wide.level-critical{--dp-a:#ff90d7;--dp-b:#b688ff;--dp-c:#ffe3fb;--dp-rgb:255,144,215;}
+  #console-pressure.deadline-pressure-wide:focus-visible{box-shadow:inset 0 0 0 1px rgba(var(--dp-rgb),.48),0 0 0 3px rgba(var(--dp-rgb),.08)!important;}
+
+  .dpw-shell{
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 336px;
+    gap:18px;
+    width:100%;
+    height:100%;
+    padding:14px 18px 14px 18px;
+    box-sizing:border-box;
+    isolation:isolate;
+  }
+  .dpw-shell::before{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px) 0 0/54px 100%,
+      linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px) 0 0/100% 42px;
+    opacity:.18; pointer-events:none;
+  }
+  .dpw-copy,.dpw-peak,.dpw-main,.dpw-stats{position:relative; z-index:2; min-width:0;}
+  .dpw-copy{position:absolute; left:18px; top:14px; display:flex; flex-direction:column; gap:5px;}
+  .dpw-title{font-size:14px; line-height:1; font-weight:920; letter-spacing:.01em; color:#fff; white-space:nowrap;}
+  .dpw-sub{font-size:7px; line-height:1; font-weight:650; letter-spacing:.04em; color:rgba(194,205,232,.82); white-space:nowrap;}
+  .dpw-peak{position:absolute; right:18px; top:14px; font-size:7px; line-height:1; color:#dce6ff; font-weight:760; letter-spacing:.03em; white-space:nowrap;}
+  .dpw-peak b{font-weight:900; color:var(--dp-a);}
+
+  .dpw-main{grid-column:1 / 2; position:relative; height:100%; border-radius:18px; overflow:hidden;}
+  .dpw-main::before{content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 50%, rgba(var(--dp-rgb),.06), transparent 68%); opacity:.8;}
+  .dpw-wave-bg{position:absolute; inset:0; pointer-events:none;}
+  .dpw-wave-bg::before{content:""; position:absolute; left:-2%; top:44%; width:56%; height:58px; transform:translateY(-50%); background:linear-gradient(90deg, rgba(58,125,255,.10), rgba(77,212,255,.16) 40%, rgba(149,240,165,.14) 74%, transparent); filter:blur(10px); opacity:.95;}
+  .dpw-wave-bg::after{content:""; position:absolute; right:18%; top:47%; width:30%; height:82px; transform:translateY(-50%); background:radial-gradient(ellipse at center, rgba(var(--dp-rgb),.22), transparent 62%); filter:blur(12px); opacity:.96;}
+  .dpw-svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible;}
+  .dpw-svg path{fill:none; stroke-linecap:round;}
+  .dpw-svg .l1{stroke:#5ea8ff; stroke-width:2.1; opacity:.88; filter:drop-shadow(0 0 8px rgba(94,168,255,.36));}
+  .dpw-svg .l2{stroke:#6fdcff; stroke-width:1.8; opacity:.84; filter:drop-shadow(0 0 8px rgba(111,220,255,.28));}
+  .dpw-svg .l3{stroke:#8cecb7; stroke-width:1.7; opacity:.76; filter:drop-shadow(0 0 8px rgba(140,236,183,.22));}
+  .dpw-svg .r1{stroke:rgba(255,192,108,.84); stroke-width:1.5; opacity:.82; filter:drop-shadow(0 0 8px rgba(255,192,108,.22));}
+  .dpw-svg .r2{stroke:rgba(var(--dp-rgb),.98); stroke-width:2.25; opacity:.98; filter:drop-shadow(0 0 10px rgba(var(--dp-rgb),.42));}
+  .dpw-svg .r3{stroke:rgba(var(--dp-rgb),.72); stroke-width:1.55; opacity:.88; filter:drop-shadow(0 0 8px rgba(var(--dp-rgb),.24));}
+  .dpw-svg .r4{stroke:rgba(255,130,176,.82); stroke-width:1.5; opacity:.80; filter:drop-shadow(0 0 8px rgba(255,130,176,.24));}
+  .dpw-svg .spark{fill:rgba(255,235,178,.76);}
+
+  .dpw-orb{
+    position:absolute; left:48%; top:50%; width:92px; height:92px; transform:translate(-50%,-50%);
+    border-radius:50%; z-index:3; display:grid; place-items:center;
+    background:radial-gradient(circle at 50% 28%, rgba(255,255,255,.20), rgba(255,255,255,.07) 14%, rgba(66,36,92,.94) 38%, rgba(17,10,29,1) 62%, rgba(8,7,18,1) 75%);
+    border:1px solid rgba(var(--dp-rgb),.32);
+    box-shadow:0 0 0 1px rgba(255,255,255,.05) inset, 0 0 28px rgba(var(--dp-rgb),.24), inset 0 -12px 18px rgba(0,0,0,.42);
+  }
+  .dpw-orb::before{content:""; position:absolute; inset:-22px; border-radius:50%; background:radial-gradient(circle, rgba(var(--dp-rgb),.34), rgba(var(--dp-rgb),.10) 38%, transparent 70%); filter:blur(10px); opacity:.92; z-index:-2;}
+  .dpw-orb::after{content:""; position:absolute; left:-84px; right:-84px; top:50%; height:22px; transform:translateY(-50%) rotate(-12deg); border-radius:999px; background:linear-gradient(90deg, rgba(255,161,112,.92), rgba(255,196,121,.88) 35%, rgba(var(--dp-rgb),.78) 100%); box-shadow:0 0 18px rgba(255,175,108,.18); opacity:.92; z-index:-1;}
+  .dpw-scorebox{text-align:center; display:flex; flex-direction:column; align-items:center; gap:2px; transform:translateY(1px);}
+  .dpw-score{font-size:36px; line-height:.82; font-weight:960; letter-spacing:-.05em; color:#fff; text-shadow:0 0 14px rgba(255,255,255,.12);}
+  .dpw-denom{font-size:8px; line-height:1; color:#f6f8ff; opacity:.94; font-weight:900;}
+  .dpw-state{font-size:10px; line-height:1; font-weight:950; letter-spacing:.13em; text-transform:uppercase; color:var(--dp-a); text-shadow:0 0 10px rgba(var(--dp-rgb),.24); margin-top:1px;}
+
+  .dpw-stats{grid-column:2 / 3; display:grid; grid-template-columns:1fr 1fr; gap:10px; align-content:center; padding-top:22px;}
+  .dpw-stat{display:flex; align-items:center; gap:10px; min-width:0; padding:12px 12px; border-radius:16px; border:1px solid rgba(255,255,255,.06); background:linear-gradient(180deg, rgba(10,16,30,.84), rgba(7,11,21,.94)); box-shadow:inset 0 1px 0 rgba(255,255,255,.028);}
+  .dpw-stat-icon{width:26px; height:26px; border-radius:50%; display:grid; place-items:center; border:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02); font-size:11px; flex:0 0 26px;}
+  .dpw-stat:nth-child(1) .dpw-stat-icon{color:#79d8ff; box-shadow:0 0 10px rgba(121,216,255,.12)}
+  .dpw-stat:nth-child(2) .dpw-stat-icon{color:#ffc86d; box-shadow:0 0 10px rgba(255,200,109,.12)}
+  .dpw-stat:nth-child(3) .dpw-stat-icon{color:#8ef084; box-shadow:0 0 10px rgba(142,240,132,.12)}
+  .dpw-stat:nth-child(4) .dpw-stat-icon{color:#db87ff; box-shadow:0 0 10px rgba(219,135,255,.12)}
+  .dpw-stat-copy{min-width:0; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:4px;}
+  .dpw-stat-value{font-size:11px; line-height:1; font-weight:900; color:#fff; white-space:nowrap;}
+  .dpw-stat-label{font-size:6px; line-height:1; font-weight:760; letter-spacing:.12em; text-transform:uppercase; color:rgba(192,205,235,.82); white-space:nowrap;}
+  .dpw-stat.is-deficit .dpw-stat-value{color:var(--dp-c);}
+
+  @media(max-width:1280px){
+    #console-pressure.deadline-pressure-wide{height:142px!important; min-height:142px!important; max-height:142px!important;}
+    .dpw-shell{grid-template-columns:minmax(0,1fr) 308px; gap:14px; padding:14px 14px 12px 16px;}
+    .dpw-orb{width:84px; height:84px;}
+    .dpw-score{font-size:32px;}
+  }
+  @media(max-width:980px){
+    #console-pressure.deadline-pressure-wide{height:158px!important; min-height:158px!important; max-height:158px!important;}
+    .dpw-shell{grid-template-columns:1fr; grid-template-rows:auto 1fr auto; padding:12px 12px 12px 12px; gap:8px;}
+    .dpw-main{height:86px;}
+    .dpw-copy{left:12px; top:12px;}
+    .dpw-peak{right:12px; top:12px;}
+    .dpw-orb{left:50%; top:48%; width:74px; height:74px;}
+    .dpw-score{font-size:28px;}
+    .dpw-stats{grid-column:1; grid-template-columns:1fr 1fr; padding-top:0;}
+  }
+
 </style>
 </head>
 <body>
@@ -8357,7 +8504,7 @@
               <div class="ds-c ds-fade" id="ds-c"></div>
             </div>
           </div>
-          <div class="panel deadline-pressure-mini level-calm" id="console-pressure" role="button" tabindex="0" aria-label="Deadline pressure summary"></div>
+          
         </div>
 
         <div class="console-mini-grid">
@@ -8404,6 +8551,8 @@
             <div id="gauge"></div>
           </div>
         </div>
+
+        <div class="panel deadline-pressure-wide level-calm" id="console-pressure" role="button" tabindex="0" aria-label="Deadline pressure summary"></div>
 
         <div class="panel notes-panel console-notes-matrix" id="console-notes">
           <div class="panel-head">
@@ -8897,40 +9046,36 @@
     function renderDeadlinePressure(){
       var host=el("console-pressure");if(!host)return;
       var data=deadlinePressureCompute(),peak=data.peak||{date:data.today,count:0,estHours:0,availHours:deadlinePressureAvailableHours(data.today),deficit:0},theme=data.theme,deficit=Number(peak.deficit||0),deficitText=(deficit>0?"-":"+")+Math.abs(deficit).toFixed(1)+"h";
-      host.className="panel deadline-pressure-mini level-"+theme.key;
+      host.className="panel deadline-pressure-wide level-"+theme.key;
       host.setAttribute("aria-label","Deadline pressure "+Math.round(data.score)+" out of 100, "+theme.label+". Peak "+deadlinePressureDateLabel(peak.date,data.today)+".");
       host.innerHTML=''
-        +'<div class="dps2-shell">'
-          +'<div class="dps2-copy"><div class="dps2-title">Deadline Pressure</div><div class="dps2-sub">Tidal Compression Wave</div></div>'
-          +'<div class="dps2-peak">Peak: <b>'+escapeHtml(deadlinePressureDateLabel(peak.date,data.today))+'</b></div>'
-          +'<div class="dps2-visual">'
-            +'<div class="dps2-wave-wrap">'
-              +'<div class="dps2-wave-bg"></div>'
-              +'<svg class="dps2-wave" viewBox="0 0 760 100" preserveAspectRatio="none" aria-hidden="true">'
-                +'<path class="left-a" d="M0 58 C78 76, 144 16, 236 40 S338 54, 390 50"></path>'
-                +'<path class="left-b" d="M0 46 C92 28, 142 74, 236 52 S336 50, 392 50"></path>'
-                +'<path class="left-c" d="M0 66 C70 68, 132 30, 220 44 S330 48, 392 50"></path>'
-                +'<path class="left-d" d="M0 38 C84 54, 144 30, 236 48 S334 50, 392 50"></path>'
-                +'<path class="right-a" d="M392 50 C478 34, 546 30, 760 18"></path>'
-                +'<path class="right-b" d="M392 50 C486 46, 582 46, 760 52"></path>'
-                +'<path class="right-c" d="M392 50 C470 62, 548 70, 760 86"></path>'
-                +'<path class="right-d" d="M392 50 C478 26, 576 16, 760 30"></path>'
-                +'<circle class="spark" cx="350" cy="36" r="1.8" opacity=".82"></circle>'
-                +'<circle class="spark" cx="364" cy="42" r="1.4" opacity=".72"></circle>'
-                +'<circle class="spark" cx="378" cy="58" r="1.8" opacity=".88"></circle>'
-                +'<circle class="spark" cx="406" cy="43" r="1.6" opacity=".66"></circle>'
-                +'<circle class="spark" cx="422" cy="34" r="1.2" opacity=".74"></circle>'
-                +'<circle class="spark" cx="438" cy="63" r="1.5" opacity=".58"></circle>'
-              +'</svg>'
-              +'<div class="dps2-center-burst"></div>'
-              +'<div class="dps2-orb"><div class="dps2-scorebox"><div class="dps2-score">'+Math.round(data.score)+'</div><div class="dps2-denom">/100</div><div class="dps2-state">'+escapeHtml(theme.label)+'</div></div></div>'
-            +'</div>'
+        +'<div class="dpw-shell">'
+          +'<div class="dpw-copy"><div class="dpw-title">Deadline Pressure</div><div class="dpw-sub">Tidal Compression Wave</div></div>'
+          +'<div class="dpw-peak">Peak: <b>'+escapeHtml(deadlinePressureDateLabel(peak.date,data.today))+'</b></div>'
+          +'<div class="dpw-main">'
+            +'<div class="dpw-wave-bg"></div>'
+            +'<svg class="dpw-svg" viewBox="0 0 980 150" preserveAspectRatio="none" aria-hidden="true">'
+              +'<path class="l1" d="M-10 78 C70 112, 130 18, 220 54 S340 72, 435 75"></path>'
+              +'<path class="l2" d="M-10 56 C88 22, 156 98, 238 66 S344 66, 436 75"></path>'
+              +'<path class="l3" d="M-10 92 C82 88, 146 34, 224 56 S338 70, 438 74"></path>'
+              +'<path class="r1" d="M438 74 C560 38, 638 48, 770 32 S896 30, 1000 42"></path>'
+              +'<path class="r2" d="M438 74 C566 74, 650 74, 780 74 S900 84, 1000 92"></path>'
+              +'<path class="r3" d="M438 74 C562 96, 658 104, 788 112 S908 118, 1000 124"></path>'
+              +'<path class="r4" d="M438 74 C566 20, 664 18, 800 18 S912 22, 1000 26"></path>'
+              +'<circle class="spark" cx="414" cy="54" r="2.0" opacity=".84"></circle>'
+              +'<circle class="spark" cx="430" cy="63" r="1.6" opacity=".78"></circle>'
+              +'<circle class="spark" cx="452" cy="84" r="1.8" opacity=".84"></circle>'
+              +'<circle class="spark" cx="474" cy="67" r="1.5" opacity=".72"></circle>'
+              +'<circle class="spark" cx="496" cy="49" r="1.3" opacity=".70"></circle>'
+              +'<circle class="spark" cx="516" cy="94" r="1.5" opacity=".60"></circle>'
+            +'</svg>'
+            +'<div class="dpw-orb"><div class="dpw-scorebox"><div class="dpw-score">'+Math.round(data.score)+'</div><div class="dpw-denom">/100</div><div class="dpw-state">'+escapeHtml(theme.label)+'</div></div></div>'
           +'</div>'
-          +'<div class="dps2-stats">'
-            +'<div class="dps2-stat"><span class="dps2-stat-icon">▣</span><div class="dps2-stat-copy"><div class="dps2-stat-value">'+(peak.count||0)+'</div><div class="dps2-stat-label">deadlines</div></div></div>'
-            +'<div class="dps2-stat"><span class="dps2-stat-icon">◔</span><div class="dps2-stat-copy"><div class="dps2-stat-value">'+(peak.estHours||0).toFixed(1)+'h</div><div class="dps2-stat-label">est. work</div></div></div>'
-            +'<div class="dps2-stat"><span class="dps2-stat-icon">◎</span><div class="dps2-stat-copy"><div class="dps2-stat-value">'+(peak.availHours||0).toFixed(1)+'h</div><div class="dps2-stat-label">available</div></div></div>'
-            +'<div class="dps2-stat is-deficit"><span class="dps2-stat-icon">∿</span><div class="dps2-stat-copy"><div class="dps2-stat-value">'+deficitText+'</div><div class="dps2-stat-label">'+(deficit>0?'deficit':deficit<0?'buffer':'balanced')+'</div></div></div>'
+          +'<div class="dpw-stats">'
+            +'<div class="dpw-stat"><span class="dpw-stat-icon">▣</span><div class="dpw-stat-copy"><div class="dpw-stat-value">'+(peak.count||0)+'</div><div class="dpw-stat-label">deadlines</div></div></div>'
+            +'<div class="dpw-stat"><span class="dpw-stat-icon">◔</span><div class="dpw-stat-copy"><div class="dpw-stat-value">'+(peak.estHours||0).toFixed(1)+'h</div><div class="dpw-stat-label">est. work</div></div></div>'
+            +'<div class="dpw-stat"><span class="dpw-stat-icon">◎</span><div class="dpw-stat-copy"><div class="dpw-stat-value">'+(peak.availHours||0).toFixed(1)+'h</div><div class="dpw-stat-label">available</div></div></div>'
+            +'<div class="dpw-stat is-deficit"><span class="dpw-stat-icon">∿</span><div class="dpw-stat-copy"><div class="dpw-stat-value">'+deficitText+'</div><div class="dpw-stat-label">'+(deficit>0?'deficit':deficit<0?'buffer':'balanced')+'</div></div></div>'
           +'</div>'
         +'</div>';
       if(!host.dataset.bound){
