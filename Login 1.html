@@ -7605,6 +7605,15 @@
     .bv-invoice-wrap.profile-settled::after{animation:none!important;}
   }
 
+
+  /* Glass Vault v24 — completed-date missing-entry rule */
+  .bv-missing-rule{
+    margin:-2px 0 8px;
+    color:#8b7583;
+    font:500 7.5px/1.45 var(--mono);
+    letter-spacing:.015em;
+  }
+
 </style>
 </head>
 <body>
@@ -7697,6 +7706,7 @@
 
                 <section class="bv-box bv-missing" id="bv-missing-box">
                   <div class="bv-box-title"><span>△ Missing Entries</span><span class="bv-alert-count" id="bv-missing-count">0</span></div>
+                  <div class="bv-missing-rule">Only work dated before today is treated as missing.</div>
                   <div class="bv-missing-list" id="bv-missing-list"></div>
                   <button class="bv-scan-btn" id="bv-scan-calendar" type="button">Scan Calendar</button>
                 </section>
@@ -7809,7 +7819,7 @@
               <div class="bv-modal-head">
                 <div>
                   <h3>AI Billing Review</h3>
-                  <p>A local smart review of calendar gaps, rates, duplicates, incomplete entries, and active timers.</p>
+                  <p>A local smart review of past calendar gaps, rates, duplicates, incomplete entries, and active timers.</p>
                 </div>
                 <button class="bv-close" data-bv-close type="button">×</button>
               </div>
@@ -10992,9 +11002,20 @@
     function scanSuggestions(){
       const p=period(),tasks=(typeof allTasks!=="undefined"&&Array.isArray(allTasks))?allTasks:[];
       const existing=new Set(p.entries.map(e=>e.sourceId).filter(Boolean)),ignored=new Set(p.ignored||[]);
-      lastSuggestions=tasks.filter(t=>String(t.due_date||"").slice(0,7)===state.activeMonth&&isBillableTask(t)).map(t=>{
-        const key=taskKey(t),pr=inferProfile(t)||profile();return {key,task:t,profile:pr,hours:taskHours(t),services:serviceForTask(pr,t)};
+      const today=todayYMD();
+
+      lastSuggestions=tasks.filter(t=>{
+        const due=String(t.due_date||"");
+        return (
+          due.slice(0,7)===state.activeMonth &&
+          due<today &&
+          isBillableTask(t)
+        );
+      }).map(t=>{
+        const key=taskKey(t),pr=inferProfile(t)||profile();
+        return {key,task:t,profile:pr,hours:taskHours(t),services:serviceForTask(pr,t)};
       }).filter(s=>!existing.has(s.key)&&!ignored.has(s.key));
+
       return lastSuggestions;
     }
     function suggestionByKey(key){return scanSuggestions().find(s=>s.key===key);}
@@ -11097,7 +11118,7 @@
         : "This billing cycle looks clear.";
       $("bv-ai-sublead").textContent=review.count
         ? "Use the actions below to create drafts, set wages, or inspect questionable entries."
-        : "No calendar gaps, missing rates, duplicate groups, or incomplete entries were detected.";
+        : "No past calendar gaps, missing rates, duplicate groups, or incomplete entries were detected.";
       const addAll=$("bv-ai-add-all");
       if(addAll)addAll.disabled=!review.suggestions.length||activeLocked();
 
@@ -11402,7 +11423,7 @@
     function renderMissing(){
       const host=$("bv-missing-list"),ss=scanSuggestions();if(!host)return;
       const previousScroll=host.scrollTop;
-      if(!ss.length){host.innerHTML='<div class="bv-empty-mini">No unlogged billable calendar events were detected for this month.</div>';return;}
+      if(!ss.length){host.innerHTML='<div class="bv-empty-mini">No past billable calendar events are currently missing for this month.</div>';return;}
       host.innerHTML=ss.map(s=>'<div class="bv-missing-row"><div><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h suggested · '+esc(s.profile.name)+'</small></div><button class="bv-mini-add" data-bv-suggest="'+esc(s.key)+'" title="Add as draft">＋</button></div>').join("");
       host.querySelectorAll("[data-bv-suggest]").forEach(b=>b.addEventListener("click",()=>openSuggestion(b.dataset.bvSuggest)));
       requestAnimationFrame(()=>{host.scrollTop=Math.min(previousScroll,Math.max(0,host.scrollHeight-host.clientHeight));});
@@ -11649,7 +11670,7 @@
             finishProfileCarousel(target,false);
           },520);
         },{passive:false});
-      }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" possible billing entries found.":"No missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" suggestions refreshed.":"No unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
+      }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" past billing entries may be missing.":"No past missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" past missing-entry suggestions refreshed.":"No past unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
       $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
       $("bv-profile-form").addEventListener("submit",saveProfileForm);$("bv-delete-profile").addEventListener("click",deleteProfile);
       document.querySelectorAll("[data-bv-close]").forEach(b=>b.addEventListener("click",()=>{const modal=b.closest(".bv-modal");if(modal)showModal(modal.id,false);}));document.querySelectorAll(".bv-modal").forEach(m=>m.addEventListener("click",ev=>{if(ev.target===m)showModal(m.id,false);}));
