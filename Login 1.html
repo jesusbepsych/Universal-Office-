@@ -7606,12 +7606,49 @@
   }
 
 
-  /* Glass Vault v24 — completed-date missing-entry rule */
-  .bv-missing-rule{
-    margin:-2px 0 8px;
-    color:#8b7583;
-    font:500 7.5px/1.45 var(--mono);
-    letter-spacing:.015em;
+
+
+  /* Glass Vault v25 — decluttered panels and dismissible recommendations */
+  .bv-missing-actions{
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .bv-mini-add,
+  .bv-mini-dismiss{
+    flex:0 0 auto;
+    transition:
+      transform .2s ease,
+      border-color .24s ease,
+      background .24s ease,
+      color .24s ease,
+      box-shadow .24s ease;
+  }
+  .bv-mini-dismiss{
+    width:25px;
+    height:25px;
+    padding:0;
+    border-radius:7px;
+    border:1px solid rgba(255,111,130,.22);
+    background:rgba(91,25,40,.24);
+    color:#b9838d;
+    font:600 15px/1 var(--mono);
+  }
+  .bv-mini-dismiss:hover{
+    color:#ffb1bb;
+    border-color:rgba(255,123,140,.48);
+    background:rgba(123,36,53,.40);
+    box-shadow:0 0 12px rgba(255,89,112,.12);
+  }
+  .bv-mini-add:hover{
+    color:#c5e8ff;
+    border-color:rgba(105,181,255,.62);
+    background:rgba(62,130,215,.42);
+    box-shadow:0 0 12px rgba(76,157,255,.16);
+  }
+  .bv-mini-add:active,
+  .bv-mini-dismiss:active{
+    transform:scale(.92);
   }
 
 </style>
@@ -7706,7 +7743,6 @@
 
                 <section class="bv-box bv-missing" id="bv-missing-box">
                   <div class="bv-box-title"><span>△ Missing Entries</span><span class="bv-alert-count" id="bv-missing-count">0</span></div>
-                  <div class="bv-missing-rule">Only work dated before today is treated as missing.</div>
                   <div class="bv-missing-list" id="bv-missing-list"></div>
                   <button class="bv-scan-btn" id="bv-scan-calendar" type="button">Scan Calendar</button>
                 </section>
@@ -7721,11 +7757,10 @@
                   <div class="bv-platform"></div>
                   <div id="bv-profile-stage"></div>
                   <div class="bv-profile-dots" id="bv-profile-dots" aria-label="Job profile position"></div>
-                  <div class="bv-stage-help">Swipe across the vault or use the arrows · Tap to focus · Drag chips to reassign</div>
                 </div>
 
                 <section class="bv-box">
-                  <div class="bv-box-title"><span>Job Profile Presets</span><small>Load a profile to speed up billing</small></div>
+                  
                   <div class="bv-profiles"><div class="bv-profile-row" id="bv-profile-presets"></div></div>
                 </section>
 
@@ -11424,8 +11459,12 @@
       const host=$("bv-missing-list"),ss=scanSuggestions();if(!host)return;
       const previousScroll=host.scrollTop;
       if(!ss.length){host.innerHTML='<div class="bv-empty-mini">No past billable calendar events are currently missing for this month.</div>';return;}
-      host.innerHTML=ss.map(s=>'<div class="bv-missing-row"><div><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h suggested · '+esc(s.profile.name)+'</small></div><button class="bv-mini-add" data-bv-suggest="'+esc(s.key)+'" title="Add as draft">＋</button></div>').join("");
+      host.innerHTML=ss.map(s=>'<div class="bv-missing-row"><div><strong>'+esc(formatDate(s.task.due_date)+' · '+(s.task.title||"Calendar work"))+'</strong><small>'+safeNum(s.hours).toFixed(2)+'h suggested · '+esc(s.profile.name)+'</small></div><div class="bv-missing-actions"><button class="bv-mini-dismiss" data-bv-dismiss="'+esc(s.key)+'" title="Dismiss this recommendation" aria-label="Dismiss recommendation">×</button><button class="bv-mini-add" data-bv-suggest="'+esc(s.key)+'" title="Add as draft" aria-label="Add recommendation as draft">＋</button></div></div>').join("");
       host.querySelectorAll("[data-bv-suggest]").forEach(b=>b.addEventListener("click",()=>openSuggestion(b.dataset.bvSuggest)));
+      host.querySelectorAll("[data-bv-dismiss]").forEach(b=>b.addEventListener("click",()=>{
+        ignoreBillingSuggestion(b.dataset.bvDismiss);
+        notice("Missing-entry recommendation dismissed.");
+      }));
       requestAnimationFrame(()=>{host.scrollTop=Math.min(previousScroll,Math.max(0,host.scrollHeight-host.clientHeight));});
     }
     function renderStage(){
