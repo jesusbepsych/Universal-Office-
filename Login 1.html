@@ -7766,6 +7766,260 @@
     .cg-agenda-day{grid-template-columns:54px minmax(0,1fr);}
   }
 
+
+
+  /* v28 — Deadline Pressure / Black Hole Accretion Ring */
+  .console-stack{
+    grid-template-columns:minmax(430px,1.04fr) minmax(315px,.82fr) minmax(280px,.70fr)!important;
+    grid-template-areas:
+      "summary deadline progress"
+      "pressure pressure pressure"
+      "notes notes notes"!important;
+  }
+  #console-pressure{grid-area:pressure!important;min-width:0!important;}
+  @media(max-width:980px){
+    .console-stack{
+      grid-template-areas:
+        "summary"
+        "deadline"
+        "progress"
+        "pressure"
+        "notes"!important;
+    }
+  }
+
+  .deadline-pressure-card{
+    --dp-a:#73dcff;
+    --dp-b:#488dff;
+    --dp-c:#baf2ff;
+    --dp-accent:#7ee6ff;
+    --dp-rgb:126,230,255;
+    position:relative!important;
+    overflow:hidden!important;
+    min-height:374px!important;
+    padding:0!important;
+    border-radius:22px!important;
+    border:1px solid rgba(126,145,198,.24)!important;
+    background:
+      radial-gradient(140% 120% at 0% 0%, rgba(var(--dp-rgb),.13), transparent 34%),
+      radial-gradient(110% 90% at 100% 100%, rgba(var(--dp-rgb),.09), transparent 42%),
+      linear-gradient(180deg, rgba(8,12,26,.97), rgba(4,8,18,.98))!important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.05),
+      inset 0 0 0 1px rgba(255,255,255,.02),
+      0 18px 44px rgba(0,0,0,.34)!important;
+  }
+  .deadline-pressure-card.level-calm{--dp-a:#79dcff;--dp-b:#4e84ff;--dp-c:#c7f8ff;--dp-accent:#81e6ff;--dp-rgb:121,220,255;}
+  .deadline-pressure-card.level-active{--dp-a:#89f39b;--dp-b:#2fd6b0;--dp-c:#d0ffd3;--dp-accent:#8ef0aa;--dp-rgb:137,243,155;}
+  .deadline-pressure-card.level-tight{--dp-a:#ffd46e;--dp-b:#ff9a3d;--dp-c:#fff0b2;--dp-accent:#ffc766;--dp-rgb:255,196,102;}
+  .deadline-pressure-card.level-crammed{--dp-a:#ff955a;--dp-b:#ff5555;--dp-c:#ffd1a6;--dp-accent:#ff9966;--dp-rgb:255,125,92;}
+  .deadline-pressure-card.level-critical{--dp-a:#ff78b8;--dp-b:#b06cff;--dp-c:#ffd2ef;--dp-accent:#d68cff;--dp-rgb:214,140,255;}
+
+  .dp-wrap{
+    position:relative;
+    display:grid;
+    grid-template-columns:255px minmax(0,1fr) 220px;
+    grid-template-rows:auto 1fr 110px;
+    grid-template-areas:
+      "top top top"
+      "legend core metrics"
+      "note trend trend";
+    gap:14px 16px;
+    padding:16px 18px 16px;
+    min-height:374px;
+  }
+  .dp-wrap::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px) 0 0/54px 100%,
+      linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px) 0 0/100% 54px;
+    pointer-events:none;
+    opacity:.45;
+  }
+  .dp-top{grid-area:top;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1;}
+  .dp-kicker{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#d8e2ff;opacity:.9;margin-bottom:8px;
+  }
+  .dp-title-row{display:flex;align-items:center;gap:10px;}
+  .dp-title{font-size:19px;font-weight:800;letter-spacing:.02em;color:#ffffff;line-height:1.02;}
+  .dp-info{
+    width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;
+    border:1px solid rgba(177,192,236,.32);color:#b8c8f1;font-size:11px;background:rgba(18,26,46,.65);
+  }
+  .dp-sub{font-size:12px;color:#c2ccee;opacity:.82;margin-top:4px;}
+  .dp-peak{font-size:15px;font-weight:700;color:#cfd9fa;white-space:nowrap;padding-top:4px;}
+  .dp-peak b{color:var(--dp-a);font-weight:800;}
+
+  .dp-legend{grid-area:legend;position:relative;z-index:1;padding:2px 0 0;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+  .dp-level{
+    display:grid;grid-template-columns:56px 1fr;align-items:center;gap:10px;
+    color:#d6dcf5;
+  }
+  .dp-orb{
+    width:44px;height:18px;position:relative;display:flex;align-items:center;justify-content:center;
+  }
+  .dp-orb::before{
+    content:"";width:15px;height:15px;border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25) 18%, currentColor 45%, rgba(0,0,0,.1) 78%);
+    box-shadow:0 0 16px currentColor, 0 0 32px color-mix(in srgb, currentColor 45%, transparent);
+    transform:translateX(-8px);
+  }
+  .dp-orb::after{
+    content:"";position:absolute;left:24px;right:0;top:50%;height:2px;transform:translateY(-50%);
+    background:linear-gradient(90deg, currentColor, rgba(255,255,255,.08));opacity:.9;
+  }
+  .dp-level-text{display:flex;flex-direction:column;gap:1px;}
+  .dp-level-text strong{font-size:12px;letter-spacing:.06em;text-transform:uppercase;}
+  .dp-level-text span{font-size:11px;color:#c3cbe8;opacity:.92;}
+  .dp-level.active .dp-level-text strong,.dp-level.active .dp-level-text span{color:#fff;}
+  .dp-level.active .dp-orb::before{transform:translateX(-4px) scale(1.22);}
+  .dp-l-calm{color:#70d9ff;} .dp-l-active{color:#9af067;} .dp-l-tight{color:#ffc558;} .dp-l-crammed{color:#ff6d52;} .dp-l-critical{color:#cc74ff;}
+
+  .dp-core{grid-area:core;position:relative;display:flex;align-items:center;justify-content:center;min-height:186px;z-index:1;}
+  .dp-core-bg{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;
+  }
+  .dp-hole{
+    position:relative;width:272px;height:272px;border-radius:50%;
+    filter:drop-shadow(0 0 30px rgba(var(--dp-rgb),.2)) drop-shadow(0 10px 34px rgba(0,0,0,.48));
+  }
+  .dp-hole::before{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 0 28%, rgba(10,12,25,.98) 28% 39%, transparent 39%),
+      conic-gradient(from 0deg,
+        rgba(0,0,0,0) 0deg,
+        rgba(255,255,255,.08) 20deg,
+        var(--dp-a) 55deg,
+        var(--dp-b) 130deg,
+        #ff7d53 210deg,
+        rgba(255,120,90,.4) 260deg,
+        var(--dp-c) 320deg,
+        rgba(0,0,0,0) 360deg);
+    box-shadow:inset 0 0 42px rgba(255,255,255,.06);
+    animation:dp-spin 22s linear infinite;
+  }
+  .dp-hole::after{
+    content:"";position:absolute;inset:20px;border-radius:50%;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(0,0,0,.99) 0 45%, rgba(0,0,0,.92) 45% 58%, transparent 58%),
+      radial-gradient(circle at 58% 42%, rgba(255,255,255,.18), transparent 26%);
+    box-shadow:0 0 0 1px rgba(255,255,255,.04), inset 0 0 24px rgba(255,255,255,.03);
+  }
+  .dp-hole-ring{
+    position:absolute;inset:-8px;border-radius:50%;
+    background:radial-gradient(circle, transparent 56%, rgba(255,255,255,.08) 57%, transparent 63%),
+               radial-gradient(circle at 60% 50%, rgba(var(--dp-rgb),.24), transparent 61%);
+    filter:blur(.2px);
+  }
+  .dp-particles{
+    position:absolute;inset:-10px;border-radius:50%;pointer-events:none;
+    background:
+      radial-gradient(circle at 20% 48%, rgba(255,170,110,.95) 0 1.6px, transparent 2px),
+      radial-gradient(circle at 29% 26%, rgba(255,120,90,.85) 0 2px, transparent 2.5px),
+      radial-gradient(circle at 18% 62%, rgba(255,120,90,.8) 0 2.4px, transparent 2.8px),
+      radial-gradient(circle at 76% 18%, rgba(180,140,255,.7) 0 2.2px, transparent 2.8px),
+      radial-gradient(circle at 84% 74%, rgba(255,150,100,.9) 0 2px, transparent 2.6px),
+      radial-gradient(circle at 63% 86%, rgba(255,210,135,.7) 0 1.8px, transparent 2.6px),
+      radial-gradient(circle at 9% 17%, rgba(255,255,255,.75) 0 1.3px, transparent 2px),
+      radial-gradient(circle at 90% 43%, rgba(255,170,130,.7) 0 1.8px, transparent 2.4px);
+    filter:drop-shadow(0 0 10px rgba(255,140,100,.22));
+    animation:dp-drift 18s ease-in-out infinite alternate;
+  }
+  @keyframes dp-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  @keyframes dp-drift{from{transform:rotate(-2deg) scale(1);}to{transform:rotate(2deg) scale(1.02);}}
+
+  .dp-center{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;z-index:2;text-align:center;
+  }
+  .dp-score{font-size:62px;line-height:.92;font-weight:800;letter-spacing:-.04em;color:#f7fbff;text-shadow:0 0 18px rgba(255,255,255,.08);}
+  .dp-score small{font-size:16px;font-weight:700;opacity:.86;letter-spacing:.02em;display:block;margin-top:4px;}
+  .dp-state{font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--dp-a);margin-top:4px;}
+
+  .dp-metrics{grid-area:metrics;display:flex;flex-direction:column;gap:10px;z-index:1;}
+  .dp-metric{
+    display:grid;grid-template-columns:32px 1fr;align-items:center;gap:10px;
+    padding:12px 12px;border-radius:16px;
+    background:linear-gradient(180deg, rgba(10,16,34,.82), rgba(8,12,26,.88));
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03), 0 8px 22px rgba(0,0,0,.16);
+  }
+  .dp-metric-icon{
+    width:32px;height:32px;border-radius:11px;display:grid;place-items:center;
+    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+    color:#fff;
+  }
+  .dp-metric:nth-child(1) .dp-metric-icon{color:#72dcff;}
+  .dp-metric:nth-child(2) .dp-metric-icon{color:#ffc75b;}
+  .dp-metric:nth-child(3) .dp-metric-icon{color:#97ef84;}
+  .dp-metric:nth-child(4) .dp-metric-icon{color:#ff6662;}
+  .dp-metric b{display:block;font-size:14px;color:#f5f7ff;letter-spacing:.01em;}
+  .dp-metric span{display:block;font-size:11px;color:#bcc7e8;opacity:.88;margin-top:2px;}
+
+  .dp-note{
+    grid-area:note;z-index:1;border-radius:16px;padding:14px 14px;display:flex;gap:12px;align-items:center;
+    background:linear-gradient(180deg, rgba(8,12,26,.78), rgba(6,10,20,.88));
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .dp-note-swirl{
+    width:48px;height:48px;border-radius:14px;flex:0 0 auto;
+    background:radial-gradient(circle at 40% 38%, rgba(255,205,118,.75), rgba(255,122,92,.18) 24%, rgba(108,67,255,.18) 42%, rgba(0,0,0,.2) 60%),
+               conic-gradient(from 120deg, rgba(255,105,95,.85), rgba(255,199,106,.88), rgba(255,90,90,.2), rgba(0,0,0,0));
+    box-shadow:0 0 16px rgba(255,154,88,.18), inset 0 0 18px rgba(255,255,255,.06);
+  }
+  .dp-note-copy{font-size:12px;color:#d8e3fb;line-height:1.45;}
+  .dp-note-copy strong{display:block;font-size:13px;color:#fff;margin-bottom:3px;}
+
+  .dp-trend{
+    grid-area:trend;z-index:1;border-radius:18px;padding:10px 14px 8px;
+    border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg, rgba(8,12,26,.72), rgba(6,10,22,.88));
+  }
+  .dp-trend-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:4px;}
+  .dp-trend-title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#dbe4ff;}
+  .dp-trend-sub{font-size:11px;color:#acb6d8;opacity:.86;}
+  .dp-trend svg{display:block;width:100%;height:82px;overflow:visible;}
+  .dp-axis text{font-size:10px;fill:#8e9abe;}
+  .dp-axis line{stroke:rgba(255,255,255,.08);}
+  .dp-trend .grid line{stroke:rgba(255,255,255,.05);}
+  .dp-curve-area{fill:url(#dpAreaGrad);opacity:.24;}
+  .dp-curve-line{fill:none;stroke:url(#dpLineGrad);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 10px rgba(var(--dp-rgb),.14));}
+  .dp-node{stroke:#08101f;stroke-width:2.2;}
+  .dp-node.peak{stroke:#ffffff;stroke-width:2.6;filter:drop-shadow(0 0 8px currentColor);}
+  .dp-legend-badge{
+    display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:999px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:10.5px;color:#d8e3ff;
+  }
+  .dp-legend-badge i{width:8px;height:8px;border-radius:50%;background:var(--dp-a);display:inline-block;box-shadow:0 0 8px var(--dp-a);}
+
+  @media(max-width:1180px){
+    .dp-wrap{
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto auto auto auto;
+      grid-template-areas:
+        "top top"
+        "core core"
+        "legend metrics"
+        "note trend";
+    }
+    .dp-core{min-height:230px;}
+  }
+  @media(max-width:760px){
+    .dp-wrap{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "top"
+        "core"
+        "legend"
+        "metrics"
+        "note"
+        "trend";
+    }
+    .dp-top{flex-direction:column;}
+    .dp-metrics{grid-template-columns:1fr 1fr;display:grid;}
+  }
+
 </style>
 </head>
 <body>
@@ -8235,6 +8489,8 @@
           </div>
         </div>
 
+        <div class="panel deadline-pressure-card level-calm" id="console-pressure"></div>
+
         <div class="panel notes-panel console-notes-matrix" id="console-notes">
           <div class="panel-head">
             <h2>Signal Garden</h2>
@@ -8693,6 +8949,200 @@
       el("legend").innerHTML=legendCats.map(c=>{ const m=catMeta(c); return '<span><i style="background:'+m.color+'"></i>'+m.label+'</span>'; }).join("");
     }
 
+
+
+    function deadlinePressureTheme(score){
+      score=Math.max(0,Math.min(100,Number(score)||0));
+      if(score<=20) return {key:"calm", label:"Calm", accent:"#81e6ff"};
+      if(score<=40) return {key:"active", label:"Active", accent:"#8ef0aa"};
+      if(score<=60) return {key:"tight", label:"Tight", accent:"#ffc766"};
+      if(score<=80) return {key:"crammed", label:"Crammed", accent:"#ff9966"};
+      return {key:"critical", label:"Critical", accent:"#d68cff"};
+    }
+    function deadlinePressureDateLabel(ymd,today){
+      if(!ymd) return "No peak";
+      var dl=dayDiff(ymd,today);
+      if(dl<0) return (-dl===1?"Yesterday":"Overdue");
+      if(dl===0) return "Today";
+      if(dl===1) return "Tomorrow";
+      try{ return new Date(ymd+"T12:00:00Z").toLocaleDateString([], {weekday:"short", month:"short", day:"numeric", timeZone:"UTC"}); }
+      catch(e){ return ymd; }
+    }
+    function deadlinePressureHoursFromText(txt){
+      var s=String(txt||"").toLowerCase();
+      var h=1.25;
+      if(/midterm|final exam|final\b|exam\b/.test(s)) h=3.8;
+      else if(/literature|paper|essay|report|research|proposal|presentation/.test(s)) h=3.2;
+      else if(/project|portfolio/.test(s)) h=4.2;
+      else if(/quiz|test\b/.test(s)) h=1.75;
+      else if(/reading|annotation|discussion|reflection/.test(s)) h=2.0;
+      else if(/problem set|worksheet|assignment|homework|hw\b/.test(s)) h=2.4;
+      else if(/review|study/.test(s)) h=1.5;
+      else if(/email|reply|form|survey|application|sign/.test(s)) h=0.75;
+      if(/urgent|asap|tonight/.test(s)) h += .5;
+      return Math.max(.5, Math.min(6, h));
+    }
+    function deadlinePressureParseDate(text){
+      if(!text) return null;
+      var today=pacificYMD(), TY=+today.slice(0,4);
+      var MONTHS={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+      function buildYMD(mo,da,yr){
+        if(!mo||!da||mo<1||mo>12||da<1||da>31) return null;
+        function ymd(y){ return y+"-"+String(mo).padStart(2,"0")+"-"+String(da).padStart(2,"0"); }
+        if(yr) return ymd(yr<100?2000+yr:yr);
+        var cand=ymd(TY); if(dayDiff(cand,today)<-180) return ymd(TY+1); return cand;
+      }
+      var s=String(text);
+      var m=s.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/);
+      if(m) return buildYMD(+m[1],+m[2],m[3]?+m[3]:null);
+      var mn=s.match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})/i);
+      if(mn) return buildYMD(MONTHS[mn[1].slice(0,3).toLowerCase()],+mn[2],null);
+      return null;
+    }
+    function deadlinePressureCleanLabel(text){
+      var s=String(text||"");
+      s=s.replace(/\(\s*(due|by|deadline)?\s*\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\s*\)/ig,"");
+      s=s.replace(/\b(due|by|deadline)\s*:?\s*\d{1,2}\/\d{1,2}(?:\/\d{2,4})?/ig,"");
+      s=s.replace(/\(\s*(due|by|deadline)?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\s*\)/ig,"");
+      s=s.replace(/\b(due|by|deadline)\s*:?\s*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?/ig,"");
+      s=s.replace(/\(\s*\)/g,"").replace(/[\s\-\u2013\u2014:]+$/,""
+      ).trim();
+      return s||String(text||"");
+    }
+    function deadlinePressureBusyHours(ymd){
+      function hhmmToFloat(v){ if(!v) return null; var s=String(v).slice(0,5).split(":"); return (+s[0]||0)+((+s[1]||0)/60); }
+      var blocks=(allTasks||[]).filter(function(t){ return t && t.due_date===ymd && t.due_time && (t.end_time || t.due_time); }).map(function(t){
+        var s=hhmmToFloat(t.due_time), e=t.end_time?hhmmToFloat(t.end_time):null;
+        if(s==null) return null;
+        if(e==null) e=s+1;
+        if(t.end_date && t.end_date>ymd) e=23;
+        s=Math.max(6,Math.min(23,s)); e=Math.max(6,Math.min(23,e));
+        if(e<=s) e=Math.min(23,s+1);
+        return {s:s,e:e};
+      }).filter(Boolean).sort(function(a,b){return a.s-b.s;});
+      if(!blocks.length) return 0;
+      var merged=[]; blocks.forEach(function(b){ var last=merged[merged.length-1]; if(last && b.s<=last.e){ last.e=Math.max(last.e,b.e); } else merged.push({s:b.s,e:b.e}); });
+      return merged.reduce(function(sum,b){ return sum + Math.max(0,b.e-b.s); },0);
+    }
+    function deadlinePressureAvailableHours(ymd){
+      var d=new Date(ymd+"T12:00:00Z").getUTCDay();
+      var base=(d===0||d===6)?8:6;
+      var busy=deadlinePressureBusyHours(ymd);
+      var avail=base-(busy*.65);
+      return Math.max(.5, Math.min(base, +(avail.toFixed(1))));
+    }
+    function deadlinePressureCollect(){
+      var items=[], seen={};
+      var today=pacificYMD();
+      function pushItem(key,label,due,est,source){
+        if(!due) return; var dl=dayDiff(due,today); if(dl<-2||dl>7) return;
+        key=String(key||[source,due,label].join("|")).toLowerCase();
+        if(seen[key]) return; seen[key]=1;
+        items.push({key:key,label:deadlinePressureCleanLabel(label),due:due,est:est||deadlinePressureHoursFromText(label),source:source||"task",daysLeft:dl});
+      }
+      (allTasks||[]).forEach(function(t){
+        if(!t || t.status==="done" || !t.due_date) return;
+        var s=((t.title||"")+" "+(t.category||"")+" "+(t.source||"")).toLowerCase();
+        var eventish=!!(t.end_time && !/(quiz|exam|paper|essay|report|project|assignment|discussion|deadline|due|form|email|review|study|reading|literature|application|reflection|worksheet|problem set)/.test(s));
+        if(eventish) return;
+        pushItem("task:"+(t.id||[t.due_date,t.title].join("|")), t.title||"Task", t.due_date, deadlinePressureHoursFromText(t.title||t.category||"task"), "tasks");
+      });
+      (folderItems||[]).forEach(function(it){
+        if(!it || it.done) return; var due=deadlinePressureParseDate(it.title); if(!due) return;
+        pushItem("folder:"+(it.id||[due,it.title].join("|")), it.title||"Signal item", due, deadlinePressureHoursFromText(it.title||"task"), "folders");
+      });
+      (inboxTodos||[]).forEach(function(t){
+        if(!t || t.status==="done") return; var due=deadlinePressureParseDate((t.title||"")+" "+(t.summary||"")); if(!due) return;
+        pushItem("todo:"+(t.id||[due,t.title].join("|")), t.title||t.summary||"Action item", due, deadlinePressureHoursFromText((t.title||"")+" "+(t.summary||"")), "todo");
+      });
+      return items.sort(function(a,b){ return (a.due<b.due?-1:a.due>b.due?1:0) || a.label.localeCompare(b.label); });
+    }
+    function deadlinePressureCompute(){
+      var today=pacificYMD();
+      var items=deadlinePressureCollect();
+      var byDay={};
+      items.forEach(function(it){
+        var d=byDay[it.due] || (byDay[it.due]={date:it.due, items:[], count:0, estHours:0, overdue:false});
+        d.items.push(it); d.count++; d.estHours += Number(it.est)||0; if(it.daysLeft<0) d.overdue=true;
+      });
+      var buckets=Object.keys(byDay).sort().map(function(k){
+        var b=byDay[k]; b.estHours=+b.estHours.toFixed(1); b.availHours=deadlinePressureAvailableHours(b.date);
+        b.deficit=+(b.estHours-b.availHours).toFixed(1);
+        var dl=dayDiff(b.date,today);
+        var urgency = dl<0?30:dl===0?28:dl===1?24:dl===2?18:dl===3?13:dl<=5?8:5;
+        var collisions = b.count<=1?0:Math.min(28, (b.count-1)*10 + (b.count>=3?8:0) + (b.count>=4?6:0));
+        var workload = Math.min(18, b.estHours*2.2);
+        var deficitScore = Math.max(0, Math.min(32, b.deficit*9));
+        var overdue = b.overdue?12:0;
+        b.score=Math.max(0, Math.min(100, Math.round(urgency + collisions + workload + deficitScore + overdue)));
+        b.theme=deadlinePressureTheme(b.score);
+        return b;
+      });
+      var peak=buckets.length?buckets.reduce(function(best,b){ return !best || b.score>best.score ? b : best; },null):null;
+      var score=peak?peak.score:0;
+      var theme=deadlinePressureTheme(score);
+      var series=[];
+      for(var i=0;i<7;i++){
+        var dt=new Date(today+"T12:00:00Z"); dt.setUTCDate(dt.getUTCDate()+i);
+        var ymd=dt.toISOString().slice(0,10);
+        var bucket=buckets.find(function(b){return b.date===ymd;});
+        series.push({date:ymd, score:bucket?bucket.score:0, label:dt.toLocaleDateString([], {weekday:"short", timeZone:"UTC"}).slice(0,3), peak:!!(peak&&peak.date===ymd)});
+      }
+      return {today:today, items:items, buckets:buckets, peak:peak, score:score, theme:theme, series:series};
+    }
+    function deadlinePressureTrendSvg(series){
+      series=series||[]; var w=640,h=82,pL=8,pR=8,pT=8,pB=18;
+      if(!series.length) return '';
+      var step=(w-pL-pR)/(Math.max(1,series.length-1));
+      function x(i){ return pL + step*i; }
+      function y(v){ return pT + (1-(Math.max(0,Math.min(100,v))/100))*(h-pT-pB); }
+      var pts=series.map(function(s,i){ return {x:x(i), y:y(s.score), score:s.score, label:s.label, peak:s.peak}; });
+      var line=''; pts.forEach(function(p,i){ line += (i?' L ':'M ')+p.x.toFixed(2)+' '+p.y.toFixed(2); });
+      var area=line+' L '+pts[pts.length-1].x.toFixed(2)+' '+(h-pB)+' L '+pts[0].x.toFixed(2)+' '+(h-pB)+' Z';
+      var grid=''; for(var gy=0;gy<=4;gy++){ var yy=pT+((h-pT-pB)/4)*gy; grid += '<line x1="'+pL+'" y1="'+yy.toFixed(1)+'" x2="'+(w-pR)+'" y2="'+yy.toFixed(1)+'"></line>'; }
+      var ticks=''; pts.forEach(function(p){ ticks += '<text x="'+p.x.toFixed(1)+'" y="'+(h-3)+'" text-anchor="middle">'+escapeHtml(p.label)+'</text>'; });
+      var nodes=pts.map(function(p){ var th=deadlinePressureTheme(p.score); return '<circle class="dp-node'+(p.peak?' peak':'')+'" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(p.peak?7:5)+'" fill="'+th.accent+'"></circle>'; }).join('');
+      return '<svg viewBox="0 0 '+w+' '+h+'" aria-label="7-day pressure arc"><defs><linearGradient id="dpLineGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#73dcff"/><stop offset="28%" stop-color="#9af067"/><stop offset="55%" stop-color="#ffc558"/><stop offset="78%" stop-color="#ff6d52"/><stop offset="100%" stop-color="#cc74ff"/></linearGradient><linearGradient id="dpAreaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(120,220,255,.45)"/><stop offset="100%" stop-color="rgba(120,220,255,0)"/></linearGradient></defs><g class="grid">'+grid+'</g><path class="dp-curve-area" d="'+area+'"></path><path class="dp-curve-line" d="'+line+'"></path>'+nodes+'<g class="dp-axis">'+ticks+'</g></svg>';
+    }
+    function renderDeadlinePressure(){
+      var host=el('console-pressure'); if(!host) return;
+      var data=deadlinePressureCompute();
+      var peak=data.peak || {date:data.today,count:0,estHours:0,availHours:deadlinePressureAvailableHours(data.today),deficit:0,score:0,theme:data.theme,items:[]};
+      var theme=data.theme;
+      host.className='panel deadline-pressure-card level-'+theme.key;
+      var todayLabel=deadlinePressureDateLabel(peak.date,data.today);
+      var deficitText=(peak.deficit>0?'-':'')+Math.abs(peak.deficit||0).toFixed(1)+'h';
+      var deficitLabel=peak.deficit>0?'deficit':(peak.deficit<0?'buffer':'balanced');
+      var noteTitle = peak.score>80 ? 'Strong pull detected' : peak.score>60 ? 'Crowding building' : peak.score>40 ? 'Manageable load' : 'Low strain window';
+      var noteBody = peak.count ? ('Peak day carries '+peak.count+' deadline'+(peak.count===1?'':'s')+' with about '+peak.estHours.toFixed(1)+'h of work. The more mass (tasks), the stronger the pull.') : 'No imminent deadline cluster detected. The field is calm and there is room to breathe.';
+      host.innerHTML =
+        '<div class="dp-wrap">'
+          +'<div class="dp-top">'
+            +'<div><div class="dp-kicker">Black Hole Accretion + Ring</div><div class="dp-title-row"><div class="dp-title">Deadline Pressure</div><span class="dp-info">i</span></div><div class="dp-sub">Gravity of commitments</div></div>'
+            +'<div class="dp-peak">Peak: <b>'+escapeHtml(todayLabel)+'</b></div>'
+          +'</div>'
+          +'<div class="dp-legend">'
+            +['calm','active','tight','crammed','critical'].map(function(k,idx){
+              var ranges=['0–20','21–40','41–60','61–80','81–100'];
+              var names={calm:'Calm',active:'Active',tight:'Tight',crammed:'Crammed',critical:'Critical'};
+              return '<div class="dp-level dp-l-'+k+(theme.key===k?' active':'')+'"><div class="dp-orb"></div><div class="dp-level-text"><strong>'+names[k]+'</strong><span>'+ranges[idx]+'</span></div></div>';
+            }).join('')
+          +'</div>'
+          +'<div class="dp-core">'
+            +'<div class="dp-core-bg"><div class="dp-hole"><div class="dp-hole-ring"></div><div class="dp-particles"></div></div></div>'
+            +'<div class="dp-center"><div class="dp-score">'+Math.round(data.score)+'<small>/100</small></div><div class="dp-state">'+escapeHtml(theme.label.toUpperCase())+'</div></div>'
+          +'</div>'
+          +'<div class="dp-metrics">'
+            +'<div class="dp-metric"><div class="dp-metric-icon">▣</div><div><b>'+(peak.count||0)+' deadline'+((peak.count||0)===1?'':'s')+'</b><span>cluster on peak day</span></div></div>'
+            +'<div class="dp-metric"><div class="dp-metric-icon">◔</div><div><b>'+(peak.estHours||0).toFixed(1)+'h</b><span>estimated work</span></div></div>'
+            +'<div class="dp-metric"><div class="dp-metric-icon">◎</div><div><b>'+(peak.availHours||0).toFixed(1)+'h</b><span>available focus</span></div></div>'
+            +'<div class="dp-metric"><div class="dp-metric-icon">∿</div><div><b>'+deficitText+'</b><span>'+deficitLabel+'</span></div></div>'
+          +'</div>'
+          +'<div class="dp-note"><div class="dp-note-swirl"></div><div class="dp-note-copy"><strong>'+escapeHtml(noteTitle)+'</strong>'+escapeHtml(noteBody)+'</div></div>'
+          +'<div class="dp-trend"><div class="dp-trend-head"><div><div class="dp-trend-title">Pressure arc</div><div class="dp-trend-sub">Next 7 days · highest pull is highlighted</div></div><span class="dp-legend-badge"><i></i>'+Math.round(data.score)+'/100 '+escapeHtml(theme.label)+'</span></div>'+deadlinePressureTrendSvg(data.series)+'</div>'
+        +'</div>';
+    }
+
     function renderDeadlineMonitor(){
       var host=el("deadline-monitor-list"); if(!host) return;
       var META={
@@ -8759,6 +9209,7 @@
 
       if(!shown.length){
         host.innerHTML='<div class="deadline-monitor-row safe"><div class="deadline-flag"><span class="deadline-glyph">\u2B21</span><span>Clear</span></div><div class="deadline-task">No dated items yet</div><div class="deadline-chip">all set</div></div>';
+        renderDeadlinePressure();
         return;
       }
       host.innerHTML=shown.map(function(it){
@@ -8769,9 +9220,10 @@
           +'<div class="deadline-chip">'+escapeHtml(chipOf(it.dl))+'</div>'
         +'</div>';
       }).join("");
+      renderDeadlinePressure();
     }
 
-    function refreshViews(){ renderRibbon(false); renderGauge(); renderAgenda(); renderDeadlineMonitor(); }
+    function refreshViews(){ renderRibbon(false); renderGauge(); renderAgenda(); renderDeadlineMonitor(); renderDeadlinePressure(); }
 
     /* ---------- Notes & folders (own data, separate tables) ---------- */
     let notes=[], folders=[], folderItems=[];
