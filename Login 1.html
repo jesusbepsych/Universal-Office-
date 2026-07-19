@@ -8790,6 +8790,255 @@
     #command-deck,#command-deck .cd-shell,#command-deck .cd-render-root,#command-deck .cd-layout,.cd-layout.cd-has-focus .cd-card,.cd-focus-content{transition:none!important;}
   }
 
+
+  /* v45 — streamlined workspace rows, structured dialogs, and lower-cost focus motion */
+  .command-deck-panel{
+    background:
+      radial-gradient(90% 82% at 50% -6%,rgba(110,135,255,.145),transparent 57%),
+      radial-gradient(50% 52% at 13% 78%,rgba(67,223,205,.072),transparent 72%),
+      radial-gradient(48% 52% at 87% 80%,rgba(185,105,255,.068),transparent 74%),
+      linear-gradient(180deg,rgba(7,11,23,.992),rgba(3,6,13,.999))!important;
+  }
+  .command-deck-panel::before{opacity:.26;}
+  .command-deck-panel.cd-motion-active .cd-atmosphere{opacity:.58;}
+  #command-deck,
+  #command-deck .cd-shell,
+  #command-deck .cd-render-root,
+  #command-deck .cd-layout{transition:none!important;}
+  .cd-layout{transform:translateZ(0);}
+  .cd-layout.cd-measuring .cd-card{transition:none!important;}
+  .cd-track.is-dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;}
+  .cd-track.is-dragging .cd-card{pointer-events:none;}
+  .cd-card{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+  .cd-card:hover{filter:saturate(1.04) brightness(.98);}
+  .cd-card.is-active .cd-card-surface{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.12),
+      inset 0 0 0 1px rgba(255,255,255,.024),
+      inset 0 -27px 45px rgba(0,0,0,.36),
+      0 30px 64px rgba(0,0,0,.42),
+      0 0 40px rgba(var(--c),.14);
+  }
+  .cd-card.is-active .cd-card-depth{opacity:.88;transform:translate3d(1px,1px,-20px);}
+  .cd-card.is-active .cd-card-glow{opacity:.92;}
+
+  .cd-layout.cd-has-focus .cd-card{
+    transition:transform .43s cubic-bezier(.2,.78,.2,1),opacity .25s ease!important;
+  }
+  .cd-layout.cd-has-focus .cd-card:not(.is-active){pointer-events:none;}
+  .cd-layout.cd-has-focus .cd-card.is-before{
+    opacity:0!important;filter:none!important;
+    transform:translate3d(-72px,22px,-60px) rotateY(13deg) scale(.64)!important;
+  }
+  .cd-layout.cd-has-focus .cd-card.is-after{
+    opacity:0!important;filter:none!important;
+    transform:translate3d(72px,22px,-60px) rotateY(-13deg) scale(.64)!important;
+  }
+  .cd-layout.cd-has-focus .cd-card.is-active{
+    opacity:0!important;filter:none!important;
+    transform:translate3d(0,0,28px) scale(1.018)!important;
+  }
+  .cd-layout.cd-transitioning{pointer-events:none;}
+  .cd-layout.cd-transitioning .cd-focus-layer,
+  .cd-layout.cd-transitioning .cd-focus-card{pointer-events:none;}
+  .cd-layout.cd-transitioning .cd-focus-card{
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 30px 72px rgba(0,0,0,.48),0 0 34px rgba(var(--c),.10);
+  }
+  .cd-layout.cd-transitioning .cd-focus-card::before{animation-play-state:paused;opacity:.30;}
+
+  #command-deck.cd-panel-focused,
+  #command-deck.cd-panel-focused .cd-shell,
+  #command-deck.cd-panel-focused .cd-render-root,
+  #command-deck.cd-panel-focused .cd-layout{min-height:650px!important;}
+  .cd-focus-layer{inset:82px 18px 42px;}
+  .cd-focus-card{
+    width:min(980px,calc(100% - 4px));height:452px;border-radius:28px;
+    border-color:rgba(var(--c),.32);
+    background:
+      radial-gradient(84% 75% at 12% -2%,rgba(var(--c),.225),transparent 58%),
+      radial-gradient(66% 96% at 103% 102%,rgba(var(--c),.105),transparent 66%),
+      linear-gradient(146deg,rgba(24,34,61,.96),rgba(8,13,27,.99) 44%,rgba(4,7,15,.998));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.12),
+      inset 0 0 0 1px rgba(255,255,255,.018),
+      inset 0 -42px 84px rgba(0,0,0,.34),
+      0 42px 96px rgba(0,0,0,.56),
+      0 0 58px rgba(var(--c),.14);
+    transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  }
+  .cd-focus-card::before{
+    background:
+      linear-gradient(112deg,transparent 0 24%,rgba(255,255,255,.115) 39%,rgba(255,255,255,.02) 49%,transparent 64%),
+      radial-gradient(54% 12% at 50% 0%,rgba(255,255,255,.18),transparent 88%);
+    animation:cdFocusSheen 8s cubic-bezier(.4,0,.2,1) infinite alternate;
+  }
+  .cd-focus-edge{
+    position:absolute;inset:2px;border-radius:26px;z-index:2;pointer-events:none;
+    border:1px solid rgba(255,255,255,.022);
+    box-shadow:inset 1px 0 0 rgba(var(--c),.07),inset -1px 0 0 rgba(var(--c),.035);
+  }
+  @keyframes cdFocusSheen{0%,30%{transform:translateX(-34%);opacity:.48}70%,100%{transform:translateX(22%);opacity:.70}}
+  .cd-focus-inner{padding:22px 24px 20px;}
+  .cd-focus-hero{gap:14px;padding-bottom:15px;}
+  .cd-focus-controls{display:flex;align-items:center;gap:8px;margin-left:auto;flex:0 0 auto;}
+  .cd-focus-switcher{
+    display:flex;align-items:center;gap:2px;padding:3px;border-radius:13px;
+    border:1px solid rgba(255,255,255,.065);background:rgba(5,9,19,.42);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  }
+  .cd-focus-nav{
+    width:30px;height:29px;border:0;border-radius:9px;background:transparent;color:rgba(207,219,243,.80);
+    display:grid;place-items:center;font-size:16px;line-height:1;
+    transition:transform .17s ease,color .17s ease,background .17s ease;
+  }
+  .cd-focus-nav:hover{transform:translateY(-1px);color:#f2f6ff;background:rgba(var(--c),.11);}
+  .cd-focus-manage{
+    height:36px;padding:0 13px;border-radius:12px;border:1px solid rgba(var(--c),.19);
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    background:linear-gradient(180deg,rgba(var(--c),.11),rgba(6,11,23,.72));color:#e3ebfb;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045);font-size:7px;font-weight:850;letter-spacing:.10em;text-transform:uppercase;
+    transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  }
+  .cd-focus-manage svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .cd-focus-manage:hover{transform:translateY(-1px);border-color:rgba(var(--c),.36);background:linear-gradient(180deg,rgba(var(--c),.17),rgba(7,12,25,.78));}
+  .cd-focus-close{
+    width:36px;height:36px;flex:0 0 36px;margin-left:0;border-radius:12px;
+    border:1px solid rgba(255,255,255,.075);background:linear-gradient(180deg,rgba(24,33,57,.85),rgba(8,13,26,.95));
+    color:#dbe5fb;display:grid;place-items:center;font-size:19px;line-height:1;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  }
+  .cd-focus-close:hover{transform:translateY(-1px);border-color:rgba(var(--c),.30);background:linear-gradient(180deg,rgba(30,42,70,.92),rgba(10,16,31,.98));}
+  .cd-focus-close:active{transform:scale(.95);}
+
+  .cd-focus-body{grid-template-columns:minmax(0,1fr) 218px;gap:19px;}
+  .cd-focus-list{overscroll-behavior:contain;scrollbar-gutter:stable;}
+  .cd-focus-task{
+    grid-template-columns:30px minmax(0,1fr) auto;
+    gap:12px;min-height:54px;padding:9px 12px;margin-bottom:8px;border-radius:15px;
+    transform:translateZ(0);contain:layout style;
+  }
+  .cd-focus-task.is-note{grid-template-columns:30px minmax(0,1fr);}
+  .cd-task-check{width:28px;height:28px;border-radius:10px;}
+  .cd-note-glyph{width:28px;height:28px;border-radius:10px;}
+  .cd-task-title{font-size:10.25px;line-height:1.42;letter-spacing:.005em;}
+  .cd-task-type{margin-top:4px;font-size:6.7px;}
+  .cd-task-state{padding:5px 8px;font-size:6.4px;}
+  .cd-side-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:13px;}
+  .cd-side-actions button{
+    min-height:34px;padding:0 10px;border-radius:11px;border:1px solid rgba(var(--c),.16);
+    background:linear-gradient(180deg,rgba(var(--c),.09),rgba(4,8,17,.38));
+    color:rgba(224,233,249,.84);font-size:6.8px;font-weight:850;letter-spacing:.09em;text-transform:uppercase;
+    transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  }
+  .cd-side-actions button:hover{transform:translateY(-1px);border-color:rgba(var(--c),.31);background:linear-gradient(180deg,rgba(var(--c),.15),rgba(4,8,17,.44));}
+  .cd-side-actions button.danger{border-color:rgba(255,93,130,.12);color:rgba(255,178,197,.76);background:rgba(255,70,110,.03);}
+  .cd-side-actions button.danger:hover{border-color:rgba(255,93,130,.27);color:#ffc1cf;background:rgba(255,70,110,.07);}
+  .cd-side-note{margin-top:12px;}
+
+  .console-stack.cd-focus-elevated{z-index:300!important;}
+  .console-stack.cd-manager-elevated{z-index:520!important;}
+  .cd-manager-layer{
+    position:absolute;inset:0;z-index:100;display:grid;place-items:center;padding:24px;box-sizing:border-box;overflow:auto;
+    background:rgba(2,5,12,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);
+    opacity:0;transition:opacity .2s ease,background .24s ease,-webkit-backdrop-filter .24s ease,backdrop-filter .24s ease;
+  }
+  .cd-manager-layer.on{opacity:1;background:rgba(2,5,12,.76);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);}
+  .cd-manager-card{
+    --c:103,135,255;position:relative;width:min(468px,100%);max-height:calc(100% - 8px);overflow:auto;
+    padding:0;border-radius:24px;color-scheme:dark;
+    border:1px solid rgba(var(--c),.28);
+    background:
+      radial-gradient(100% 80% at 8% -8%,rgba(var(--c),.20),transparent 58%),
+      linear-gradient(150deg,rgba(23,32,57,.99),rgba(6,10,21,.998));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 38px 92px rgba(0,0,0,.64),0 0 52px rgba(var(--c),.13);
+    transform:translate3d(0,16px,0) scale(.972);opacity:.94;
+    transition:transform .34s cubic-bezier(.16,1,.3,1),opacity .22s ease;
+  }
+  .cd-manager-card::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(112deg,transparent 0 28%,rgba(255,255,255,.08) 42%,transparent 58%);opacity:.42;
+  }
+  .cd-manager-layer.on .cd-manager-card{transform:translate3d(0,0,0) scale(1);opacity:1;}
+  .cd-manager-head{
+    position:relative;z-index:1;display:grid;grid-template-columns:48px minmax(0,1fr) 34px;gap:14px;align-items:start;
+    padding:22px 22px 18px;border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .cd-manager-icon{
+    width:48px;height:48px;border-radius:16px;display:grid;place-items:center;color:rgb(var(--c));
+    border:1px solid rgba(var(--c),.25);background:linear-gradient(180deg,rgba(var(--c),.13),rgba(5,10,21,.62));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.065),0 0 24px rgba(var(--c),.10);
+  }
+  .cd-manager-icon svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .cd-manager-copy{min-width:0;}
+  .cd-manager-kicker{font-size:7px;font-weight:850;letter-spacing:.17em;text-transform:uppercase;color:rgb(var(--c));opacity:.9;}
+  .cd-manager-card h3{margin:7px 0 0;font-size:22px;line-height:1.08;color:#f4f7ff;letter-spacing:-.025em;}
+  .cd-manager-card p{margin:7px 0 0;font-size:8.7px;line-height:1.52;color:rgba(188,201,229,.69);}
+  .cd-manager-close{
+    position:relative;z-index:2;width:34px;height:34px;border-radius:11px;border:1px solid rgba(255,255,255,.07);
+    background:rgba(6,10,21,.64);color:#dce6fa;font-size:17px;display:grid;place-items:center;
+    transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  }
+  .cd-manager-close:hover{transform:translateY(-1px);border-color:rgba(var(--c),.28);background:rgba(var(--c),.09);}
+  .cd-manager-fields{position:relative;z-index:1;display:grid;gap:14px;padding:18px 22px 3px;}
+  .cd-manager-card label{display:grid;gap:7px;margin:0;}
+  .cd-manager-card label>span{font-size:7px;font-weight:820;letter-spacing:.11em;text-transform:uppercase;color:rgba(196,208,234,.76);}
+  .cd-manager-card input,.cd-manager-card select{
+    width:100%;height:42px;margin:0;border-radius:12px;border:1px solid rgba(255,255,255,.08);
+    background:rgba(3,7,16,.72);color:#edf3ff;padding:0 12px;font-size:10px;outline:none;box-sizing:border-box;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025);transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+  }
+  .cd-manager-card select{cursor:pointer;}
+  .cd-manager-card input:hover,.cd-manager-card select:hover{border-color:rgba(var(--c),.20);background:rgba(4,9,20,.82);}
+  .cd-manager-card input:focus,.cd-manager-card select:focus{border-color:rgba(var(--c),.42);box-shadow:0 0 0 3px rgba(var(--c),.075);}
+  .cd-manager-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.28fr;gap:9px;padding:18px 22px 22px;}
+  .cd-manager-actions button{
+    min-height:39px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.07);
+    background:rgba(6,10,21,.68);color:#ced9ef;font-size:7px;font-weight:850;letter-spacing:.09em;text-transform:uppercase;
+    transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  }
+  .cd-manager-actions button:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.14);background:rgba(11,17,33,.80);}
+  .cd-manager-actions button.primary{border-color:rgba(var(--c),.30);background:linear-gradient(180deg,rgba(var(--c),.23),rgba(var(--c),.09));color:#f2f6ff;box-shadow:0 0 20px rgba(var(--c),.07);}
+  .cd-manager-actions button.primary:hover{border-color:rgba(var(--c),.45);background:linear-gradient(180deg,rgba(var(--c),.30),rgba(var(--c),.12));}
+  .cd-manager-actions button:disabled{opacity:.55;transform:none;cursor:wait;}
+
+  @media(max-width:900px){
+    #command-deck.cd-panel-focused,#command-deck.cd-panel-focused .cd-shell,#command-deck.cd-panel-focused .cd-render-root,#command-deck.cd-panel-focused .cd-layout{min-height:716px!important;}
+    .cd-focus-card{height:516px;}
+    .cd-focus-body{grid-template-columns:minmax(0,1fr) 180px;gap:14px;}
+    .cd-focus-controls{gap:6px;}
+    .cd-focus-manage{padding:0 10px;}
+  }
+  @media(max-width:650px){
+    #command-deck.cd-panel-focused,#command-deck.cd-panel-focused .cd-shell,#command-deck.cd-panel-focused .cd-render-root,#command-deck.cd-panel-focused .cd-layout{min-height:820px!important;}
+    .cd-focus-layer{inset:76px 7px 35px;}
+    .cd-focus-card{height:664px;border-radius:22px;}
+    .cd-focus-inner{padding:16px 12px 14px;}
+    .cd-focus-hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;}
+    .cd-focus-controls{grid-column:1/-1;width:100%;margin-left:0;justify-content:flex-end;}
+    .cd-focus-manage{width:36px;padding:0;}
+    .cd-focus-manage span{display:none;}
+    .cd-focus-name{font-size:19px;}
+    .cd-focus-summary{font-size:7.2px;}
+    .cd-focus-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;}
+    .cd-focus-task{grid-template-columns:28px minmax(0,1fr) auto;gap:9px;padding:8px 9px;}
+    .cd-focus-task .cd-task-state{display:none;}
+    .cd-focus-task.is-note{grid-template-columns:28px minmax(0,1fr);}
+    .cd-focus-side{grid-template-columns:auto 1fr;}
+    .cd-side-actions{margin-top:0;}
+    .cd-manager-layer{padding:9px;align-items:center;}
+    .cd-manager-card{width:100%;max-height:calc(100% - 2px);border-radius:20px;}
+    .cd-manager-head{grid-template-columns:42px minmax(0,1fr) 32px;gap:11px;padding:18px 16px 15px;}
+    .cd-manager-icon{width:42px;height:42px;border-radius:14px;}
+    .cd-manager-card h3{font-size:19px;}
+    .cd-manager-fields{padding:16px 16px 2px;}
+    .cd-manager-actions{padding:16px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .cd-focus-card::before{animation:none!important;}
+    .cd-manager-layer,.cd-manager-card,.cd-layout.cd-has-focus .cd-card{transition:none!important;}
+  }
+
 </style>
 </head>
 <body>
@@ -13168,196 +13417,7 @@
     function dailyRows(prof){
       const es=entries(prof.id),map={};es.forEach(e=>{const d=Number(String(e.date).slice(-2));if(!map[d])map[d]={hours:0,descs:[]};map[d].hours+=safeNum(e.hours);if(e.description&&!map[d].descs.includes(e.description))map[d].descs.push(e.description);});return Array.from({length:daysInMonth(state.activeMonth)},(_,i)=>({date:state.activeMonth+"-"+String(i+1).padStart(2,"0"),hours:map[i+1]?map[i+1].hours:0,description:map[i+1]?map[i+1].descs.join(" & "):""}));
     }
-    function printableSheet(prof){const rows=dailyRows(prof),total=rows.reduce((a,r)=>a+r.hours,0),[y,m]=state.activeMonth.split("-").map(Number),title=new Date(y,m-1,1).toLocaleString("en-US",{month:"long",year:"numeric"}),periodText=(m)+"/01/"+y+" to "+m+"/"+String(daysInMonth(state.activeMonth)).padStart(2,"0")+"/"+y;return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(prof.name+" "+title)+'</title><style>@page{size:letter portrait;margin:.45in}body{font-family:Arial,sans-serif;color:#111;margin:0}.actions{margin:0 0 15px}.actions button{padding:8px 14px}table{width:100%;border-collapse:collapse;font-size:10px}td,th{border:1px solid #d6d6d6;height:18px;padding:2px 5px}.month{background:#d5a4bd;font-weight:bold;text-align:center;font-size:15px;height:30px}.label{font-weight:bold}.center{text-align:center}.hours{width:70px}.date{width:125px}.total{font-weight:bold}@media print{.actions{display:none}}
-  /* v44 step 3 — production polish, resilient motion, and workspace controls */
-  .command-deck-panel{
-    background:
-      radial-gradient(90% 82% at 50% -6%,rgba(110,135,255,.145),transparent 57%),
-      radial-gradient(50% 52% at 13% 78%,rgba(67,223,205,.072),transparent 72%),
-      radial-gradient(48% 52% at 87% 80%,rgba(185,105,255,.068),transparent 74%),
-      linear-gradient(180deg,rgba(7,11,23,.992),rgba(3,6,13,.999))!important;
-  }
-  .command-deck-panel::before{opacity:.26;}
-  .cd-layout{transform:translateZ(0);}
-  .cd-track.is-dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto;}
-  .cd-track.is-dragging .cd-card{pointer-events:none;}
-  .cd-card{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
-  .cd-card:hover{filter:saturate(1.04) brightness(.98);}
-  .cd-card.is-active .cd-card-surface{
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.12),
-      inset 0 0 0 1px rgba(255,255,255,.024),
-      inset 0 -27px 45px rgba(0,0,0,.36),
-      0 30px 64px rgba(0,0,0,.42),
-      0 0 40px rgba(var(--c),.14);
-  }
-  .cd-card.is-active .cd-card-depth{opacity:.88;transform:translate3d(1px,1px,-20px);}
-  .cd-card.is-active .cd-card-glow{opacity:.92;}
-
-  .cd-layout.cd-has-focus .cd-card:not(.is-active){pointer-events:none;}
-  .cd-layout.cd-has-focus .cd-card.is-before{
-    opacity:0!important;filter:blur(3px) saturate(.45)!important;
-    transform:translate3d(-82px,26px,-74px) rotateY(18deg) scale(.60)!important;
-  }
-  .cd-layout.cd-has-focus .cd-card.is-after{
-    opacity:0!important;filter:blur(3px) saturate(.45)!important;
-    transform:translate3d(82px,26px,-74px) rotateY(-18deg) scale(.60)!important;
-  }
-  .cd-layout.cd-has-focus .cd-card.is-active{
-    opacity:0!important;filter:saturate(1.04) brightness(1.04)!important;
-    transform:translate3d(0,0,38px) scale(1.025)!important;
-  }
-  .cd-layout.cd-transitioning{pointer-events:none;}
-  .cd-layout.cd-transitioning .cd-focus-layer{pointer-events:none;}
-  .cd-layout.cd-transitioning .cd-focus-card{pointer-events:none;}
-
-  #command-deck.cd-panel-focused,
-  #command-deck.cd-panel-focused .cd-shell,
-  #command-deck.cd-panel-focused .cd-render-root,
-  #command-deck.cd-panel-focused .cd-layout{min-height:650px!important;}
-  .cd-focus-layer{inset:82px 18px 42px;}
-  .cd-focus-card{
-    width:min(980px,calc(100% - 4px));height:452px;border-radius:28px;
-    border-color:rgba(var(--c),.32);
-    background:
-      radial-gradient(84% 75% at 12% -2%,rgba(var(--c),.225),transparent 58%),
-      radial-gradient(66% 96% at 103% 102%,rgba(var(--c),.105),transparent 66%),
-      linear-gradient(146deg,rgba(24,34,61,.96),rgba(8,13,27,.99) 44%,rgba(4,7,15,.998));
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.12),
-      inset 0 0 0 1px rgba(255,255,255,.018),
-      inset 0 -42px 84px rgba(0,0,0,.34),
-      0 42px 96px rgba(0,0,0,.56),
-      0 0 58px rgba(var(--c),.14);
-    transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  }
-  .cd-focus-card::before{
-    background:
-      linear-gradient(112deg,transparent 0 24%,rgba(255,255,255,.115) 39%,rgba(255,255,255,.02) 49%,transparent 64%),
-      radial-gradient(54% 12% at 50% 0%,rgba(255,255,255,.18),transparent 88%);
-    animation:cdFocusSheen 8s cubic-bezier(.4,0,.2,1) infinite alternate;
-  }
-  .cd-focus-edge{
-    position:absolute;inset:2px;border-radius:26px;z-index:2;pointer-events:none;
-    border:1px solid rgba(255,255,255,.022);
-    box-shadow:inset 1px 0 0 rgba(var(--c),.07),inset -1px 0 0 rgba(var(--c),.035);
-  }
-  @keyframes cdFocusSheen{0%,30%{transform:translateX(-34%);opacity:.48}70%,100%{transform:translateX(22%);opacity:.70}}
-  .cd-focus-inner{padding:22px 24px 20px;}
-  .cd-focus-hero{gap:14px;padding-bottom:15px;}
-  .cd-focus-controls{display:flex;align-items:center;gap:7px;margin-left:auto;}
-  .cd-focus-nav,.cd-focus-manage{
-    height:36px;border-radius:12px;border:1px solid rgba(255,255,255,.07);
-    background:linear-gradient(180deg,rgba(23,33,57,.82),rgba(8,13,26,.95));
-    color:#d7e1f6;box-shadow:inset 0 1px 0 rgba(255,255,255,.055);
-    transition:transform .2s ease,border-color .2s ease,background .2s ease;
-  }
-  .cd-focus-nav{width:34px;font-size:16px;display:grid;place-items:center;}
-  .cd-focus-manage{padding:0 12px;font-size:7px;font-weight:850;letter-spacing:.11em;text-transform:uppercase;}
-  .cd-focus-nav:hover,.cd-focus-manage:hover{transform:translateY(-1px);border-color:rgba(var(--c),.28);background:linear-gradient(180deg,rgba(29,41,69,.92),rgba(10,16,31,.98));}
-  .cd-focus-close{margin-left:1px;}
-  .cd-focus-body{grid-template-columns:minmax(0,1fr) 218px;gap:19px;}
-  .cd-focus-list{overscroll-behavior:contain;scrollbar-gutter:stable;}
-  .cd-focus-task{
-    grid-template-columns:27px minmax(0,1fr) auto auto;
-    min-height:46px;padding:7px 8px 7px 9px;margin-bottom:7px;
-    transform:translateZ(0);contain:layout style;
-  }
-  .cd-focus-task.is-note{grid-template-columns:27px minmax(0,1fr) auto;}
-  .cd-task-actions{display:flex;align-items:center;gap:3px;opacity:0;transform:translateX(4px);transition:opacity .18s ease,transform .2s ease;}
-  .cd-focus-task:hover .cd-task-actions,.cd-focus-task:focus-within .cd-task-actions{opacity:1;transform:none;}
-  .cd-task-actions button{
-    width:24px;height:24px;border-radius:8px;border:1px solid rgba(255,255,255,.055);background:rgba(4,8,17,.48);
-    color:rgba(195,208,234,.70);font-size:10px;line-height:1;display:grid;place-items:center;
-    transition:transform .16s ease,color .16s ease,border-color .16s ease,background .16s ease;
-  }
-  .cd-task-actions button:hover:not(:disabled){transform:translateY(-1px);color:#eef4ff;border-color:rgba(var(--c),.23);background:rgba(var(--c),.075);}
-  .cd-task-actions button:disabled{opacity:.22;cursor:default;}
-  .cd-task-actions button.danger:hover{color:#ffb0c2;border-color:rgba(255,91,128,.24);background:rgba(255,74,112,.07);}
-  .cd-focus-task.is-editing{grid-template-columns:1fr;padding:7px;}
-  .cd-inline-edit{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;width:100%;}
-  .cd-inline-edit input{
-    min-width:0;height:31px;border-radius:10px;border:1px solid rgba(var(--c),.32);background:rgba(3,7,16,.74);color:#edf4ff;padding:0 10px;font-size:9px;outline:none;
-    box-shadow:0 0 0 3px rgba(var(--c),.055),inset 0 1px 0 rgba(255,255,255,.025);
-  }
-  .cd-inline-edit button{
-    height:31px;padding:0 10px;border-radius:10px;border:1px solid rgba(255,255,255,.065);background:rgba(8,13,26,.76);color:#dbe5f8;font-size:7px;font-weight:820;letter-spacing:.08em;text-transform:uppercase;
-  }
-  .cd-inline-edit button[type="submit"]{border-color:rgba(var(--c),.24);background:rgba(var(--c),.10);}
-  .cd-side-actions{display:flex;flex-direction:column;gap:7px;margin-top:13px;}
-  .cd-side-actions button{
-    min-height:31px;border-radius:10px;border:1px solid rgba(var(--c),.16);background:linear-gradient(180deg,rgba(var(--c),.08),rgba(4,8,17,.34));
-    color:rgba(224,233,249,.82);font-size:6.8px;font-weight:850;letter-spacing:.09em;text-transform:uppercase;
-    transition:transform .18s ease,border-color .18s ease,background .18s ease;
-  }
-  .cd-side-actions button:hover{transform:translateY(-1px);border-color:rgba(var(--c),.30);background:linear-gradient(180deg,rgba(var(--c),.13),rgba(4,8,17,.40));}
-  .cd-side-actions button.danger{border-color:rgba(255,93,130,.11);color:rgba(255,170,192,.68);background:rgba(255,70,110,.025);}
-  .cd-side-actions button.danger:hover{border-color:rgba(255,93,130,.25);color:#ffc1cf;background:rgba(255,70,110,.06);}
-  .cd-side-note{margin-top:12px;}
-
-  .cd-manager-layer{
-    position:absolute;inset:0;z-index:60;display:grid;place-items:center;padding:20px;box-sizing:border-box;
-    background:rgba(2,5,12,.18);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
-    opacity:0;transition:opacity .18s ease,background .22s ease,backdrop-filter .22s ease;-webkit-transition:opacity .18s ease,background .22s ease,-webkit-backdrop-filter .22s ease;
-  }
-  .cd-manager-layer.on{opacity:1;background:rgba(2,5,12,.64);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
-  .cd-manager-card{
-    --c:103,135,255;position:relative;width:min(410px,calc(100% - 20px));padding:23px;border-radius:22px;
-    border:1px solid rgba(139,161,220,.22);background:radial-gradient(90% 68% at 10% 0%,rgba(103,135,255,.15),transparent 58%),linear-gradient(150deg,rgba(23,32,57,.98),rgba(6,10,21,.995));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 35px 80px rgba(0,0,0,.58),0 0 44px rgba(103,135,255,.10);
-    transform:translateY(12px) scale(.975);transition:transform .28s cubic-bezier(.16,1,.3,1);
-  }
-  .cd-manager-layer.on .cd-manager-card{transform:none;}
-  .cd-manager-close{position:absolute;right:13px;top:13px;width:32px;height:32px;border-radius:11px;border:1px solid rgba(255,255,255,.065);background:rgba(6,10,21,.58);color:#dce6fa;font-size:17px;}
-  .cd-manager-kicker{font-size:7px;font-weight:850;letter-spacing:.17em;text-transform:uppercase;color:#93a9ef;}
-  .cd-manager-card h3{margin:8px 0 0;font-size:21px;color:#f4f7ff;letter-spacing:-.025em;}
-  .cd-manager-card p{margin:7px 0 18px;font-size:8.5px;line-height:1.5;color:rgba(182,196,226,.68);}
-  .cd-manager-card label{display:block;margin-top:12px;font-size:7px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:rgba(188,201,229,.72);}
-  .cd-manager-card input,.cd-manager-card select{width:100%;height:38px;margin-top:7px;border-radius:11px;border:1px solid rgba(255,255,255,.075);background:rgba(3,7,16,.68);color:#edf3ff;padding:0 11px;font-size:9px;outline:none;box-sizing:border-box;}
-  .cd-manager-card input:focus,.cd-manager-card select:focus{border-color:rgba(103,135,255,.36);box-shadow:0 0 0 3px rgba(103,135,255,.07);}
-  .cd-manager-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:19px;}
-  .cd-manager-actions button{height:35px;padding:0 13px;border-radius:11px;border:1px solid rgba(255,255,255,.065);background:rgba(6,10,21,.65);color:#ced9ef;font-size:7px;font-weight:850;letter-spacing:.09em;text-transform:uppercase;}
-  .cd-manager-actions button.primary{border-color:rgba(103,135,255,.27);background:linear-gradient(180deg,rgba(103,135,255,.20),rgba(103,135,255,.08));color:#f1f5ff;}
-  .cd-manager-actions button:disabled{opacity:.55;}
-
-  @media(hover:none){.cd-task-actions{opacity:.82;transform:none;}}
-  @media(max-width:900px){
-    #command-deck.cd-panel-focused,#command-deck.cd-panel-focused .cd-shell,#command-deck.cd-panel-focused .cd-render-root,#command-deck.cd-panel-focused .cd-layout{min-height:716px!important;}
-    .cd-focus-card{height:516px;}
-    .cd-focus-body{grid-template-columns:minmax(0,1fr) 180px;gap:14px;}
-    .cd-focus-controls{gap:5px;}
-    .cd-focus-manage{padding:0 9px;}
-    .cd-task-actions{opacity:.68;transform:none;}
-  }
-  @media(max-width:650px){
-    #command-deck.cd-panel-focused,#command-deck.cd-panel-focused .cd-shell,#command-deck.cd-panel-focused .cd-render-root,#command-deck.cd-panel-focused .cd-layout{min-height:820px!important;}
-    .cd-focus-layer{inset:76px 7px 35px;}
-    .cd-focus-card{height:664px;border-radius:22px;}
-    .cd-focus-inner{padding:16px 12px 14px;}
-    .cd-focus-hero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;}
-    .cd-focus-controls{display:grid;grid-template-columns:repeat(2,32px);gap:5px;}
-    .cd-focus-manage{display:none;}
-    .cd-focus-close{width:32px;height:32px;grid-column:2;grid-row:1;}
-    .cd-focus-name{font-size:19px;}
-    .cd-focus-summary{font-size:7.2px;}
-    .cd-focus-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;}
-    .cd-focus-task{grid-template-columns:26px minmax(0,1fr) auto;}
-    .cd-focus-task .cd-task-state{display:none;}
-    .cd-focus-task.is-note{grid-template-columns:26px minmax(0,1fr) auto;}
-    .cd-task-actions{gap:2px;}
-    .cd-task-actions button{width:22px;height:22px;}
-    .cd-task-actions button[data-cd-move]{display:none;}
-    .cd-focus-side{grid-template-columns:auto 1fr;}
-    .cd-side-actions{margin-top:0;display:grid;grid-template-columns:1fr;}
-    .cd-manager-layer{padding:8px;}
-    .cd-manager-card{padding:20px 17px;}
-  }
-  @media(prefers-reduced-motion:reduce){
-    .cd-focus-card::before{animation:none!important;}
-    .cd-manager-layer,.cd-manager-card,.cd-task-actions,.cd-layout.cd-has-focus .cd-card{transition:none!important;}
-  }
-
-</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><table><tr><td></td><td class="month">'+esc(title)+'</td><td></td></tr><tr><td class="label">Payroll Period</td><td colspan="2">'+esc(periodText)+'</td></tr><tr><td class="label">Employee: '+esc(prof.employee||"Jesus Garcia")+'</td><td class="label">Hours:</td><td></td></tr>'+rows.map(r=>'<tr><td class="date center">'+esc(new Date(r.date+"T12:00:00").toLocaleDateString("en-US"))+'</td><td class="hours">'+(r.hours?r.hours.toFixed(r.hours%1?2:0):"")+'</td><td>'+esc(r.description)+'</td></tr>').join("")+'<tr><td class="total center">Total</td><td class="total">'+total.toFixed(total%1?2:0)+'</td><td></td></tr></table></body></html>';}
+    function printableSheet(prof){const rows=dailyRows(prof),total=rows.reduce((a,r)=>a+r.hours,0),[y,m]=state.activeMonth.split("-").map(Number),title=new Date(y,m-1,1).toLocaleString("en-US",{month:"long",year:"numeric"}),periodText=(m)+"/01/"+y+" to "+m+"/"+String(daysInMonth(state.activeMonth)).padStart(2,"0")+"/"+y;return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(prof.name+" "+title)+'</title><style>@page{size:letter portrait;margin:.45in}body{font-family:Arial,sans-serif;color:#111;margin:0}.actions{margin:0 0 15px}.actions button{padding:8px 14px}table{width:100%;border-collapse:collapse;font-size:10px}td,th{border:1px solid #d6d6d6;height:18px;padding:2px 5px}.month{background:#d5a4bd;font-weight:bold;text-align:center;font-size:15px;height:30px}.label{font-weight:bold}.center{text-align:center}.hours{width:70px}.date{width:125px}.total{font-weight:bold}@media print{.actions{display:none}}</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><table><tr><td></td><td class="month">'+esc(title)+'</td><td></td></tr><tr><td class="label">Payroll Period</td><td colspan="2">'+esc(periodText)+'</td></tr><tr><td class="label">Employee: '+esc(prof.employee||"Jesus Garcia")+'</td><td class="label">Hours:</td><td></td></tr>'+rows.map(r=>'<tr><td class="date center">'+esc(new Date(r.date+"T12:00:00").toLocaleDateString("en-US"))+'</td><td class="hours">'+(r.hours?r.hours.toFixed(r.hours%1?2:0):"")+'</td><td>'+esc(r.description)+'</td></tr>').join("")+'<tr><td class="total center">Total</td><td class="total">'+total.toFixed(total%1?2:0)+'</td><td></td></tr></table></body></html>';}
     function openPrint(){const w=window.open("","_blank");if(!w){notice("Allow pop-ups to open the PDF preview.");return;}w.document.open();w.document.write(printableSheet(profile()));w.document.close();audit("pdf_preview_opened",profile().name);save("PDF opened");}
     function loadScript(src,test){return new Promise((resolve,reject)=>{if(test())return resolve();const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error("Could not load export library"));document.head.appendChild(s);});}
     async function downloadPDF(){
@@ -13525,6 +13585,7 @@
   var cdSuppressClickUntil=0;
   var cdBusy=false;
   var cdDeferredRefresh=false;
+  var cdManagerReturnFocus=null;
   var cdReduced=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var cdOrders=cdReadJson("commandDeck.orders",{});
   var legacyRenderMatrix=renderMatrix;
@@ -13565,14 +13626,6 @@
     order.forEach(function(key){if(byKey.has(key)){out.push(byKey.get(key));byKey.delete(key);}});
     raw.forEach(function(it){var key=cdItemKey(card,it);if(byKey.has(key)){out.push(it);byKey.delete(key);}});
     return out;
-  }
-  function cdPersistCurrentOrder(card,items){cdOrders[String(card.id)]=items.map(function(it){return cdItemKey(card,it);});cdWriteJson("commandDeck.orders",cdOrders);}
-  function cdRemoveOrderKey(cardId,key){var a=cdOrders[String(cardId)];if(!Array.isArray(a))return;cdOrders[String(cardId)]=a.filter(function(x){return x!==key;});cdWriteJson("commandDeck.orders",cdOrders);}
-  function cdMoveItem(cardId,key,dir){
-    var card=cdFindCard(cardId);if(!card)return;
-    var items=cdOrderedItems(card),i=items.findIndex(function(it){return cdItemKey(card,it)===key;});
-    var j=i+dir;if(i<0||j<0||j>=items.length)return;
-    var tmp=items[i];items[i]=items[j];items[j]=tmp;cdPersistCurrentOrder(card,items);cdRefreshOrRender();
   }
 
   function cdCardHtml(card,index){
@@ -13617,28 +13670,18 @@
     if(center)cdCenterCard(host,active,true);
   }
 
-  function cdTaskActions(card,it,index,total){
-    var key=cdItemKey(card,it),up=index===0,down=index===total-1;
-    return '<div class="cd-task-actions" aria-label="Item actions">'
-      +'<button type="button" data-cd-edit="'+escapeHtml(key)+'" title="Edit" aria-label="Edit item">✎</button>'
-      +'<button type="button" data-cd-move="-1" data-cd-key="'+escapeHtml(key)+'" '+(up?'disabled':'')+' title="Move up" aria-label="Move item up">↑</button>'
-      +'<button type="button" data-cd-move="1" data-cd-key="'+escapeHtml(key)+'" '+(down?'disabled':'')+' title="Move down" aria-label="Move item down">↓</button>'
-      +'<button type="button" class="danger" data-cd-delete="'+escapeHtml(key)+'" title="Delete" aria-label="Delete item">×</button>'
-    +'</div>';
-  }
-
-  function cdFocusTaskHtml(card,it,index,total){
-    var key=cdItemKey(card,it),actions=cdTaskActions(card,it,index,total);
+  function cdFocusTaskHtml(card,it){
+    var key=cdItemKey(card,it);
     if(card.kind==="capture"&&it.kind==="note"){
-      return '<div class="cd-focus-task is-note" data-cd-item-key="'+escapeHtml(key)+'"><span class="cd-note-glyph">✦</span><div class="cd-task-copy"><div class="cd-task-title">'+escapeHtml(it.title)+'</div><div class="cd-task-type">Quick note</div></div>'+actions+'</div>';
+      return '<div class="cd-focus-task is-note" data-cd-item-key="'+escapeHtml(key)+'"><span class="cd-note-glyph">✦</span><div class="cd-task-copy"><div class="cd-task-title">'+escapeHtml(it.title)+'</div><div class="cd-task-type">Quick note</div></div></div>';
     }
     var done=!!it.done,action=card.kind==="capture"?' data-cd-complete-quick="'+escapeHtml(it.id)+'"':' data-cd-toggle-folder="'+escapeHtml(it.id)+'"';
-    return '<div class="cd-focus-task '+(done?'is-done':'')+'" data-cd-item-key="'+escapeHtml(key)+'"><button class="cd-task-check" type="button"'+action+' aria-label="'+(done?'Reopen':'Complete')+' '+escapeHtml(it.title)+'"><i></i></button><div class="cd-task-copy"><div class="cd-task-title">'+escapeHtml(it.title)+'</div><div class="cd-task-type">'+(card.kind==="capture"?'Quick task':'Workspace task')+'</div></div><span class="cd-task-state">'+(done?'Complete':'Open')+'</span>'+actions+'</div>';
+    return '<div class="cd-focus-task '+(done?'is-done':'')+'" data-cd-item-key="'+escapeHtml(key)+'"><button class="cd-task-check" type="button"'+action+' aria-label="'+(done?'Reopen':'Complete')+' '+escapeHtml(it.title)+'"><i></i></button><div class="cd-task-copy"><div class="cd-task-title">'+escapeHtml(it.title)+'</div><div class="cd-task-type">'+(card.kind==="capture"?'Quick task':'Workspace task')+'</div></div><span class="cd-task-state">'+(done?'Complete':'Open')+'</span></div>';
   }
 
   function cdFocusListHtml(card){
     var items=cdOrderedItems(card);
-    return items.length?items.map(function(it,i){return cdFocusTaskHtml(card,it,i,items.length);}).join(""):'<div class="cd-focus-empty"><div><strong>Nothing is inside this workspace yet.</strong><br>Add the first item below.</div></div>';
+    return items.length?items.map(function(it){return cdFocusTaskHtml(card,it);}).join(""):'<div class="cd-focus-empty"><div><strong>Nothing is inside this workspace yet.</strong><br>Add the first item below.</div></div>';
   }
 
   function cdFocusHtml(card){
@@ -13646,12 +13689,12 @@
     var composer=card.kind==="capture"
       ? '<form class="cd-composer with-mode" data-cd-compose="capture"><div class="cd-capture-mode" role="group" aria-label="Capture type"><button type="button" data-cd-capture-mode="tasks" class="'+(cdCaptureMode==='tasks'?'on':'')+'">Task</button><button type="button" data-cd-capture-mode="notes" class="'+(cdCaptureMode==='notes'?'on':'')+'">Note</button></div><input data-cd-input autocomplete="off" placeholder="'+(cdCaptureMode==='tasks'?'Add a quick task…':'Jot a quick note…')+'"><button type="submit">Add</button></form>'
       : '<form class="cd-composer" data-cd-compose="folder"><input data-cd-input autocomplete="off" placeholder="Add a task to this workspace…"><button type="submit">Add task</button></form>';
-    var controls='<div class="cd-focus-controls"><button class="cd-focus-nav" data-cd-switch="-1" type="button" aria-label="Previous workspace">‹</button><button class="cd-focus-nav" data-cd-switch="1" type="button" aria-label="Next workspace">›</button>'+(card.kind==="folder"?'<button class="cd-focus-manage" data-cd-manage="edit" type="button" aria-label="Rename workspace">Edit</button>':'')+'<button class="cd-focus-close" data-cd-close type="button" aria-label="Return to all workspaces">×</button></div>';
+    var controls='<div class="cd-focus-controls"><div class="cd-focus-switcher" role="group" aria-label="Switch workspace"><button class="cd-focus-nav" data-cd-switch="-1" type="button" aria-label="Previous workspace">‹</button><button class="cd-focus-nav" data-cd-switch="1" type="button" aria-label="Next workspace">›</button></div>'+(card.kind==="folder"?'<button class="cd-focus-manage" data-cd-manage="edit" type="button" aria-label="Edit workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path></svg><span>Edit workspace</span></button>':'')+'<button class="cd-focus-close" data-cd-close type="button" aria-label="Return to all workspaces">×</button></div>';
     var sideActions=card.kind==="folder"?'<div class="cd-side-actions"><button type="button" data-cd-focus-input>＋ Add item</button><button type="button" class="danger" data-cd-delete-workspace>Delete workspace</button></div>':'<div class="cd-side-actions"><button type="button" data-cd-focus-input>＋ New capture</button></div>';
     return '<div class="cd-focus-layer is-entering" style="--c:'+c+'" data-cd-focus-id="'+escapeHtml(card.id)+'"><section class="cd-focus-card" style="--c:'+c+'" role="dialog" aria-modal="true" aria-label="'+escapeHtml(card.name)+' workspace" tabindex="-1"><div class="cd-focus-depth"></div><div class="cd-focus-edge" aria-hidden="true"></div><div class="cd-focus-inner cd-focus-content">'
       +'<header class="cd-focus-hero"><div class="cd-focus-icon">'+icon+'</div><div class="cd-focus-heading"><div class="cd-focus-kicker">'+escapeHtml(card.kind==="capture"?'Capture workspace':card.category)+'</div><div class="cd-focus-name">'+escapeHtml(card.name)+'</div><div class="cd-focus-summary" data-cd-summary>'+total+' item'+(total===1?'':'s')+' · '+open+' open · '+done+' complete</div></div>'+controls+'</header>'
       +'<div class="cd-focus-body"><section class="cd-task-zone"><div class="cd-zone-head"><span class="cd-zone-title">Workspace contents</span><span class="cd-zone-count">'+total+' total</span></div><div class="cd-focus-list">'+cdFocusListHtml(card)+'</div>'+composer+'</section>'
-      +'<aside class="cd-focus-side"><div class="cd-side-label">Workspace pulse</div><div class="cd-progress-orb" style="--pct:'+(pct*3.6)+'deg"><strong>'+pct+'%</strong><span>complete</span></div><div class="cd-stat-grid"><div class="cd-stat"><b>'+open+'</b><span>Open</span></div><div class="cd-stat"><b>'+done+'</b><span>Done</span></div><div class="cd-stat"><b>'+total+'</b><span>Total</span></div></div>'+sideActions+'<div class="cd-side-note">Changes save to the same underlying dashboard data. Item ordering is remembered on this device.</div></aside></div>'
+      +'<aside class="cd-focus-side"><div class="cd-side-label">Workspace pulse</div><div class="cd-progress-orb" style="--pct:'+(pct*3.6)+'deg"><strong>'+pct+'%</strong><span>complete</span></div><div class="cd-stat-grid"><div class="cd-stat"><b>'+open+'</b><span>Open</span></div><div class="cd-stat"><b>'+done+'</b><span>Done</span></div><div class="cd-stat"><b>'+total+'</b><span>Total</span></div></div>'+sideActions+'<div class="cd-side-note">Changes save to the same underlying dashboard data. Existing item order remains preserved on this device.</div></aside></div>'
     +'</div></section></div>';
   }
 
@@ -13663,9 +13706,25 @@
     +'</div>';
   }
 
-  function cdMeasureTransform(source,target){
-    var s=source.getBoundingClientRect(),t=target.getBoundingClientRect();
+  function cdMeasureTransform(sourceOrRect,target){
+    var s=sourceOrRect&&sourceOrRect.nodeType?sourceOrRect.getBoundingClientRect():sourceOrRect,t=target.getBoundingClientRect();
     return {x:s.left-t.left,y:s.top-t.top,sx:Math.max(.08,s.width/t.width),sy:Math.max(.08,s.height/t.height)};
+  }
+  function cdBrowseCardRect(layout,source){
+    if(!layout||!source)return null;
+    var hadFocus=layout.classList.contains("cd-has-focus");
+    layout.classList.add("cd-measuring");
+    if(hadFocus)layout.classList.remove("cd-has-focus");
+    var rect=source.getBoundingClientRect();
+    if(hadFocus)layout.classList.add("cd-has-focus");
+    layout.classList.remove("cd-measuring");
+    return rect;
+  }
+  function cdSetMotion(panel,on){
+    if(!panel)return;
+    panel.classList.toggle("cd-motion-active",!!on);
+    var canvas=panel.querySelector(".cd-atmosphere");
+    if(!on&&canvas&&typeof canvas._cdAtmosphereSync==="function")canvas._cdAtmosphereSync();
   }
   function cdNextFrame(){return new Promise(function(resolve){requestAnimationFrame(function(){requestAnimationFrame(resolve);});});}
   function cdAnimate(node,frames,options){
@@ -13675,55 +13734,59 @@
     var wait=Math.max(120,Number(options&&options.duration||400)+120);
     return Promise.race([animation.finished.catch(function(){}),new Promise(function(resolve){setTimeout(resolve,wait);})]);
   }
-  function cdUnlock(){cdBusy=false;if(cdDeferredRefresh){cdDeferredRefresh=false;requestAnimationFrame(cdRefreshOrRender);}}
+  function cdUnlock(panel){cdSetMotion(panel,false);cdBusy=false;if(cdDeferredRefresh){cdDeferredRefresh=false;requestAnimationFrame(cdRefreshOrRender);}}
 
   async function cdOpenFocus(host,id,source){
     if(cdBusy||cdMode==="focus")return;
     var card=cdFindCard(id),layout=host.querySelector(".cd-layout"),panel=el("command-deck");if(!card||!layout||!source)return;
-    cdBusy=true;cdMode="focus";cdActiveId=String(id);cdSetActive(host,id,false);
+    var sourceRect=source.getBoundingClientRect();
+    cdBusy=true;cdMode="focus";cdActiveId=String(id);cdSetActive(host,id,false);cdSetMotion(panel,true);
+    var stack=host.closest(".console-stack");if(stack)stack.classList.add("cd-focus-elevated");
     if(panel)panel.classList.add("cd-panel-focused");
     layout.classList.add("cd-has-focus","cd-transitioning");
     layout.insertAdjacentHTML("beforeend",cdFocusHtml(card));
     var layer=layout.querySelector(".cd-focus-layer"),focus=layer&&layer.querySelector(".cd-focus-card");cdBindFocus(host,layer);
     await cdNextFrame();
-    if(!layer||!focus){layout.classList.remove("cd-transitioning");cdUnlock();return;}
-    var m=cdMeasureTransform(source,focus);
-    setTimeout(function(){if(layer&&layer.isConnected)layer.classList.add("is-content-ready");},190);
+    if(!layer||!focus){layout.classList.remove("cd-transitioning");cdUnlock(panel);return;}
+    var m=cdMeasureTransform(sourceRect,focus),contentTimer=setTimeout(function(){if(layer&&layer.isConnected)layer.classList.add("is-content-ready");},230);
     await Promise.all([
       cdAnimate(focus,[
-        {transform:"translate("+m.x+"px,"+m.y+"px) scale("+m.sx+","+m.sy+") rotateY(0deg)",borderRadius:"22px",opacity:.94},
-        {transform:"translate(0,0) scale(1,1) rotateY(0deg)",borderRadius:"27px",opacity:1}
-      ],{duration:680,easing:"cubic-bezier(.16,1,.3,1)",fill:"both"}),
-      cdAnimate(layer,[{opacity:.62},{opacity:1}],{duration:430,easing:"ease-out",fill:"both"})
+        {transform:"translate3d("+m.x+"px,"+m.y+"px,0) scale("+m.sx+","+m.sy+")",borderRadius:"22px",opacity:.92},
+        {offset:.78,transform:"translate3d(0,0,0) scale(1.006,.996)",borderRadius:"28px",opacity:1},
+        {transform:"translate3d(0,0,0) scale(1,1)",borderRadius:"28px",opacity:1}
+      ],{duration:560,easing:"cubic-bezier(.16,1,.3,1)",fill:"both"}),
+      cdAnimate(layer,[{opacity:0},{opacity:1}],{duration:300,easing:"ease-out",fill:"both"})
     ]);
+    clearTimeout(contentTimer);
     if(focus){focus.style.transform="";focus.style.opacity="";}
     layout.classList.remove("cd-transitioning");
     if(layer)layer.classList.add("is-content-ready");
-    cdUnlock();
+    cdUnlock(panel);
     var close=layer&&layer.querySelector("[data-cd-close]");if(close)close.focus({preventScroll:true});
   }
 
   async function cdCloseFocus(host){
     if(cdBusy)return;
-    var layout=host.querySelector(".cd-layout"),layer=layout&&layout.querySelector(".cd-focus-layer"),focus=layer&&layer.querySelector(".cd-focus-card");
+    var layout=host.querySelector(".cd-layout"),layer=layout&&layout.querySelector(".cd-focus-layer"),focus=layer&&layer.querySelector(".cd-focus-card"),panel=el("command-deck");
     if(!layout||!layer||!focus){cdMode="browse";renderCommandDeck();return;}
-    cdBusy=true;layout.classList.add("cd-transitioning","cd-closing");layer.classList.remove("is-content-ready");
-    var source=layout.querySelector('.cd-card[data-cd-id="'+cdSel(cdActiveId)+'"]'),panel=el("command-deck");
-    var m=source?cdMeasureTransform(source,focus):null;
+    cdBusy=true;cdSetMotion(panel,true);layout.classList.add("cd-transitioning","cd-closing");layer.classList.remove("is-content-ready");
+    var source=layout.querySelector('.cd-card[data-cd-id="'+cdSel(cdActiveId)+'"]'),targetRect=source?cdBrowseCardRect(layout,source):null;
+    var m=targetRect?cdMeasureTransform(targetRect,focus):null;
     if(m){
       await Promise.all([
         cdAnimate(focus,[
-          {transform:"translate(0,0) scale(1,1)",borderRadius:"27px",opacity:1},
-          {transform:"translate("+m.x+"px,"+m.y+"px) scale("+m.sx+","+m.sy+")",borderRadius:"22px",opacity:.82}
-        ],{duration:520,easing:"cubic-bezier(.4,0,.2,1)",fill:"both"}),
-        cdAnimate(layer,[{opacity:1},{opacity:.08}],{duration:480,easing:"ease-in",fill:"both"})
+          {transform:"translate3d(0,0,0) scale(1,1)",borderRadius:"28px",opacity:1},
+          {transform:"translate3d("+m.x+"px,"+m.y+"px,0) scale("+m.sx+","+m.sy+")",borderRadius:"22px",opacity:.76}
+        ],{duration:430,easing:"cubic-bezier(.4,0,.2,1)",fill:"both"}),
+        cdAnimate(layer,[{opacity:1},{opacity:0}],{duration:360,easing:"ease-in",fill:"both"})
       ]);
     }
     cdMode="browse";
+    var stack=host.closest(".console-stack");if(stack)stack.classList.remove("cd-focus-elevated");
     if(panel)panel.classList.remove("cd-panel-focused");
     layer.remove();layout.classList.remove("cd-has-focus","cd-transitioning","cd-closing");layout.classList.add("cd-restoring");
     requestAnimationFrame(function(){requestAnimationFrame(function(){layout.classList.remove("cd-restoring");});});
-    cdSetActive(host,cdActiveId,false);cdUnlock();
+    cdSetActive(host,cdActiveId,false);cdUnlock(panel);
     if(source)source.focus({preventScroll:true});
   }
 
@@ -13731,18 +13794,16 @@
     if(cdBusy||cdMode!=="focus")return;
     var cards=cdCards(),i=cards.findIndex(function(c){return String(c.id)===String(cdActiveId);});if(i<0)return;
     var next=cards[(i+dir+cards.length)%cards.length];if(!next)return;
-    var layout=host.querySelector(".cd-layout"),oldLayer=layout&&layout.querySelector(".cd-focus-layer"),oldFocus=oldLayer&&oldLayer.querySelector(".cd-focus-card");if(!oldLayer||!oldFocus)return;
-    cdBusy=true;layout.classList.add("cd-transitioning");
-    await cdAnimate(oldFocus,[{opacity:1,transform:"translateX(0) scale(1)"},{opacity:0,transform:"translateX("+(dir>0?-28:28)+"px) scale(.985)"}],{duration:230,easing:"cubic-bezier(.4,0,.2,1)",fill:"both"});
+    var layout=host.querySelector(".cd-layout"),oldLayer=layout&&layout.querySelector(".cd-focus-layer"),oldFocus=oldLayer&&oldLayer.querySelector(".cd-focus-card"),panel=el("command-deck");if(!oldLayer||!oldFocus)return;
+    cdBusy=true;cdSetMotion(panel,true);layout.classList.add("cd-transitioning");
+    await cdAnimate(oldFocus,[{opacity:1,transform:"translate3d(0,0,0) scale(1)"},{opacity:0,transform:"translate3d("+(dir>0?-24:24)+"px,0,0) scale(.988)"}],{duration:180,easing:"cubic-bezier(.4,0,.2,1)",fill:"both"});
     cdActiveId=String(next.id);cdSetActive(host,cdActiveId,false);
     oldLayer.outerHTML=cdFocusHtml(next);
     var layer=layout.querySelector(".cd-focus-layer"),focus=layer.querySelector(".cd-focus-card");layer.classList.remove("is-entering");layer.classList.add("is-content-ready");cdBindFocus(host,layer);
-    await cdAnimate(focus,[{opacity:0,transform:"translateX("+(dir>0?28:-28)+"px) scale(.985)"},{opacity:1,transform:"translateX(0) scale(1)"}],{duration:360,easing:"cubic-bezier(.16,1,.3,1)",fill:"both"});
-    focus.style.transform="";focus.style.opacity="";layout.classList.remove("cd-transitioning");cdUnlock();
+    await cdAnimate(focus,[{opacity:0,transform:"translate3d("+(dir>0?24:-24)+"px,0,0) scale(.988)"},{opacity:1,transform:"translate3d(0,0,0) scale(1)"}],{duration:285,easing:"cubic-bezier(.16,1,.3,1)",fill:"both"});
+    focus.style.transform="";focus.style.opacity="";layout.classList.remove("cd-transitioning");cdUnlock(panel);
     var close=layer.querySelector("[data-cd-close]");if(close)close.focus({preventScroll:true});
   }
-
-  function cdFindItem(card,key){return cdOrderedItems(card).find(function(it){return cdItemKey(card,it)===key;})||null;}
 
   function cdRefreshFocus(host){
     if(!host)return;
@@ -13760,70 +13821,42 @@
     if(cdMode==="focus"&&host&&host.querySelector(".cd-focus-layer"))cdRefreshFocus(host);else renderCommandDeck();
   }
 
-  function cdEnterEdit(host,row,card,key){
-    var it=cdFindItem(card,key);if(!it||!row)return;
-    row.classList.add("is-editing");
-    row.innerHTML='<form class="cd-inline-edit" data-cd-inline-edit="'+escapeHtml(key)+'"><input autocomplete="off" value="'+escapeHtml(it.title)+'" aria-label="Edit item"><button type="submit">Save</button><button type="button" data-cd-edit-cancel>Cancel</button></form>';
-    var input=row.querySelector("input");if(input){input.focus();input.select();}
-  }
-
-  async function cdCommitEdit(host,card,key,title){
-    title=String(title||"").trim();var it=cdFindItem(card,key);if(!it||!title){cdRefreshFocus(host);return;}
-    var old=it.title;it.title=title;
-    if(card.kind==="folder"){
-      var src=folderItems.find(function(x){return String(x.id)===String(it.id);});if(src)src.title=title;
-    }else if(it.kind==="quick"){
-      var q=quickTasks.find(function(x){return String(x.id)===String(it.id);});if(q)q.body=title;
-    }else{
-      var n=notes.find(function(x){return String(x.id)===String(it.id);});if(n)n.body=title;
-    }
-    cdRefreshFocus(host);
-    if(!client){toast("Sign in to save this edit.");return;}
-    try{
-      var query;
-      if(card.kind==="folder")query=client.from("folder_items").update({title:title}).eq("id",it.id);
-      else if(it.kind==="quick")query=client.from("quick_tasks").update({body:title}).eq("id",it.id);
-      else query=client.from("notes").update({body:title}).eq("id",it.id);
-      var res=await query;if(res&&res.error)throw res.error;
-      try{if(card.kind==="folder")legacyRenderMatrix();else if(it.kind==="quick")legacyRenderQuickTasks();else legacyRenderNotes();}catch(_e){}
-    }catch(err){
-      if(card.kind==="folder"){var src2=folderItems.find(function(x){return String(x.id)===String(it.id);});if(src2)src2.title=old;}
-      else if(it.kind==="quick"){var q2=quickTasks.find(function(x){return String(x.id)===String(it.id);});if(q2)q2.body=old;}
-      else{var n2=notes.find(function(x){return String(x.id)===String(it.id);});if(n2)n2.body=old;}
-      cdRefreshFocus(host);toast("Couldn't save that edit"+(err&&err.message?": "+err.message:"."));
-    }
-  }
-
-  function cdDeleteItemFromCard(card,key){
-    var it=cdFindItem(card,key);if(!it)return;
-    if(!confirm('Delete "'+cdSafe(it.title,90)+'"?'))return;
-    cdRemoveOrderKey(card.id,key);
-    if(card.kind==="folder")deleteItem(it.id);else if(it.kind==="quick")deleteQuickTask(it.id);else deleteNote(it.id);
-  }
-
   function cdManagerHtml(mode,card){
-    var edit=mode==="edit"&&card&&card.kind==="folder",name=edit?card.name:"",cat=edit?(card.folder.category||""):"";
+    var edit=mode==="edit"&&card&&card.kind==="folder",name=edit?card.name:"",cat=edit?(card.folder.category||""):"",c=edit?cdColor(card):"127,147,197";
     var options="";try{options=catOptions(cat);}catch(_e){options='<option value="">General</option>';}
-    return '<div class="cd-manager-layer" data-cd-manager-layer><form class="cd-manager-card" data-cd-manager-form="'+(edit?'edit':'create')+'" data-cd-manager-id="'+(edit?escapeHtml(card.id):'')+'"><button class="cd-manager-close" type="button" data-cd-manager-close aria-label="Close">×</button><div class="cd-manager-kicker">'+(edit?'Workspace settings':'New command card')+'</div><h3>'+(edit?'Refine workspace':'Create workspace')+'</h3><p>'+(edit?'Update the card label or its operating category.':'Add a focused domain to the Command Deck.')+'</p><label>Name<input name="name" autocomplete="off" maxlength="64" value="'+escapeHtml(name)+'" placeholder="Workspace name" required></label><label>Category<select name="category">'+options+'</select></label><div class="cd-manager-actions"><button type="button" data-cd-manager-close>Cancel</button><button class="primary" type="submit">'+(edit?'Save changes':'Create workspace')+'</button></div></form></div>';
+    var icon=edit?'<svg viewBox="0 0 24 24"><path d="M4 20h4l11-11-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path></svg>':'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path><path d="M4 4h16v16H4z"></path></svg>';
+    return '<div class="cd-manager-layer" data-cd-manager-layer><form class="cd-manager-card" style="--c:'+c+'" data-cd-manager-form="'+(edit?'edit':'create')+'" data-cd-manager-id="'+(edit?escapeHtml(card.id):'')+'" role="dialog" aria-modal="true" aria-labelledby="cd-manager-title">'
+      +'<header class="cd-manager-head"><div class="cd-manager-icon" aria-hidden="true">'+icon+'</div><div class="cd-manager-copy"><div class="cd-manager-kicker">'+(edit?'Workspace settings':'New command card')+'</div><h3 id="cd-manager-title">'+(edit?'Refine workspace':'Create workspace')+'</h3><p>'+(edit?'Update the workspace name or its operating category.':'Add a focused domain to the Command Deck.')+'</p></div><button class="cd-manager-close" type="button" data-cd-manager-close aria-label="Close">×</button></header>'
+      +'<div class="cd-manager-fields"><label><span>Workspace name</span><input name="name" autocomplete="off" maxlength="64" value="'+escapeHtml(name)+'" placeholder="Workspace name" required></label><label><span>Operating category</span><select name="category">'+options+'</select></label></div>'
+      +'<div class="cd-manager-actions"><button type="button" data-cd-manager-close>Cancel</button><button class="primary" type="submit">'+(edit?'Save workspace':'Create workspace')+'</button></div>'
+    +'</form></div>';
   }
 
   function cdOpenManager(host,mode,card){
     var layout=host&&host.querySelector(".cd-layout");if(!layout||layout.querySelector(".cd-manager-layer"))return;
+    cdManagerReturnFocus=document.activeElement;
+    var primary=host.closest(".console-stack")||host.closest(".console-primary");if(primary)primary.classList.add("cd-manager-elevated");
     layout.insertAdjacentHTML("beforeend",cdManagerHtml(mode,card));
     var layer=layout.querySelector(".cd-manager-layer"),form=layer.querySelector(".cd-manager-card");
-    requestAnimationFrame(function(){layer.classList.add("on");var input=form.querySelector('input[name="name"]');if(input){input.focus();input.select();}});
+    requestAnimationFrame(function(){requestAnimationFrame(function(){layer.classList.add("on");var input=form.querySelector('input[name="name"]');if(input){input.focus({preventScroll:true});input.select();}});});
     layer.addEventListener("click",function(e){if(e.target===layer||e.target.closest("[data-cd-manager-close]"))cdCloseManager(layer);});
     form.addEventListener("submit",function(e){e.preventDefault();cdSaveManager(host,form,layer);});
   }
-  function cdCloseManager(layer){if(!layer)return;layer.classList.remove("on");setTimeout(function(){if(layer.isConnected)layer.remove();},cdReduced?0:180);}
+  function cdCloseManager(layer,restoreFocus){
+    if(!layer)return;
+    layer.classList.remove("on");
+    var returnTo=cdManagerReturnFocus,primary=layer.closest(".console-stack")||layer.closest(".console-primary");cdManagerReturnFocus=null;
+    setTimeout(function(){if(layer.isConnected)layer.remove();if(primary)primary.classList.remove("cd-manager-elevated");if(restoreFocus!==false&&returnTo&&returnTo.isConnected){try{returnTo.focus({preventScroll:true});}catch(_e){returnTo.focus();}}},cdReduced?0:210);
+  }
+
   async function cdSaveManager(host,form,layer){
     var mode=form.getAttribute("data-cd-manager-form"),id=form.getAttribute("data-cd-manager-id"),name=form.elements.name.value.trim(),category=form.elements.category.value||null;if(!name)return;
     var submit=form.querySelector('button[type="submit"]');if(submit){submit.disabled=true;submit.textContent="Saving…";}
     if(mode==="create"){
-      cdCloseManager(layer);createFolder(name,category);return;
+      cdCloseManager(layer,false);createFolder(name,category);return;
     }
     var f=folders.find(function(x){return String(x.id)===String(id);});if(!f){cdCloseManager(layer);return;}
-    var oldName=f.name,oldCat=f.category;f.name=name;f.category=category;cdCloseManager(layer);cdRefreshFocus(host);
+    var oldName=f.name,oldCat=f.category;f.name=name;f.category=category;cdCloseManager(layer,false);cdRefreshFocus(host);
     if(!client){toast("Sign in to save workspace changes.");return;}
     try{var res=await client.from("folders").update({name:name,category:category}).eq("id",id);if(res&&res.error)throw res.error;try{legacyRenderMatrix();}catch(_e){}}
     catch(err){f.name=oldName;f.category=oldCat;cdRefreshFocus(host);toast("Couldn't update workspace"+(err&&err.message?": "+err.message:"."));}
@@ -13847,23 +13880,16 @@
       if(btn.hasAttribute("data-cd-toggle-folder")){toggleItem(btn.getAttribute("data-cd-toggle-folder"));return;}
       if(btn.hasAttribute("data-cd-complete-quick")){deleteQuickTask(btn.getAttribute("data-cd-complete-quick"));return;}
       if(btn.hasAttribute("data-cd-capture-mode")){cdCaptureMode=btn.getAttribute("data-cd-capture-mode")==="notes"?"notes":"tasks";cdWriteText("commandDeck.captureMode",cdCaptureMode);layer.querySelectorAll("[data-cd-capture-mode]").forEach(function(b){b.classList.toggle("on",b===btn);});var input=layer.querySelector("[data-cd-input]");if(input){input.placeholder=cdCaptureMode==="tasks"?"Add a quick task…":"Jot a quick note…";input.focus();}return;}
-      if(btn.hasAttribute("data-cd-edit")){var row=btn.closest(".cd-focus-task"),card=cdFindCard(cdActiveId);cdEnterEdit(host,row,card,btn.getAttribute("data-cd-edit"));return;}
-      if(btn.hasAttribute("data-cd-edit-cancel")){cdRefreshFocus(host);return;}
-      if(btn.hasAttribute("data-cd-delete")){var card2=cdFindCard(cdActiveId);cdDeleteItemFromCard(card2,btn.getAttribute("data-cd-delete"));return;}
-      if(btn.hasAttribute("data-cd-move")){cdMoveItem(cdActiveId,btn.getAttribute("data-cd-key"),Number(btn.getAttribute("data-cd-move")));return;}
       if(btn.hasAttribute("data-cd-manage")){cdOpenManager(host,"edit",cdFindCard(cdActiveId));return;}
       if(btn.hasAttribute("data-cd-delete-workspace")){cdDeleteWorkspace(host);return;}
       if(btn.hasAttribute("data-cd-focus-input")){var inp=layer.querySelector("[data-cd-input]");if(inp)inp.focus();return;}
     });
     layer.addEventListener("submit",function(e){
-      var inline=e.target.closest("[data-cd-inline-edit]");
-      if(inline){e.preventDefault();var card=cdFindCard(cdActiveId),value=inline.querySelector("input").value;cdCommitEdit(host,card,inline.getAttribute("data-cd-inline-edit"),value);return;}
       var form=e.target.closest("[data-cd-compose]");if(!form)return;e.preventDefault();
       var input=form.querySelector("[data-cd-input]"),value=input?input.value.trim():"";if(!value)return;if(input)input.value="";
       if(form.getAttribute("data-cd-compose")==="folder")addItemTo(cdActiveId,value);
       else{var hidden=el("note-input");if(!hidden)return;hidden.value=value;noteMode=cdCaptureMode;if(cdCaptureMode==="tasks")addQuickTask();else addNote();}
     });
-    layer.addEventListener("keydown",function(e){if(e.key==="Escape"&&e.target.closest(".cd-inline-edit")){e.preventDefault();cdRefreshFocus(host);}});
   }
 
   function cdSnapNearest(host){
@@ -13908,12 +13934,14 @@
     function rnd(){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return((seed>>>0)%1000000)/1000000;}
     function rebuild(){var count=w<700?34:52;pts=[];for(var i=0;i<count;i++)pts.push({x:rnd()*w,y:rnd()*h,r:.25+rnd()*.9,a:.025+rnd()*.12,s:.035+rnd()*.10,p:rnd()*6.28});}
     function resize(){var r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;w=r.width;h=r.height;dpr=Math.min(1.65,window.devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);rebuild();draw(performance.now());}
-    function shouldRun(){return visible&&pageVisible&&!cdReduced;}
+    var hostPanel=canvas.closest(".command-deck-panel");
+    function shouldRun(){return visible&&pageVisible&&!cdReduced&&!(hostPanel&&hostPanel.classList.contains("cd-motion-active"));}
     function draw(ms){var t=ms*.001;ctx.clearRect(0,0,w,h);var g=ctx.createRadialGradient(w*.5,h*.32,0,w*.5,h*.32,w*.55);g.addColorStop(0,"rgba(101,130,255,.066)");g.addColorStop(.42,"rgba(81,212,202,.015)");g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.save();ctx.globalCompositeOperation="screen";pts.forEach(function(p){var x=p.x+Math.sin(t*p.s+p.p)*7,y=p.y+Math.cos(t*p.s*.8+p.p)*4,a=p.a*(.66+.34*Math.sin(t*.42+p.p));ctx.fillStyle="rgba(204,220,255,"+a+")";ctx.beginPath();ctx.arc(x,y,p.r,0,Math.PI*2);ctx.fill();});ctx.restore();}
     function frame(ms){raf=0;draw(ms);if(shouldRun())raf=requestAnimationFrame(frame);}
     function sync(){if(shouldRun()&&!raf)raf=requestAnimationFrame(frame);else if(!shouldRun()&&raf){cancelAnimationFrame(raf);raf=0;}}
     resize();ro=new ResizeObserver(resize);ro.observe(canvas);
     if("IntersectionObserver" in window){io=new IntersectionObserver(function(entries){visible=!!(entries[0]&&entries[0].isIntersecting);sync();},{threshold:.02});io.observe(canvas);}
+    canvas._cdAtmosphereSync=sync;
     document.addEventListener("visibilitychange",function(){pageVisible=!document.hidden;sync();});sync();
   }
 
@@ -13922,10 +13950,11 @@
     var legacy=el("console-notes");if(legacy){legacy.setAttribute("aria-hidden","true");try{legacy.inert=true;}catch(_e){}}
     var cards=cdCards();if(!cdActiveId||!cards.some(function(c){return String(c.id)===String(cdActiveId);}))cdActiveId=cards.length?String(cards[0].id):null;
     root.innerHTML=cdBrowseMarkup(cards);cdBindBrowse(root);cdSetActive(root,cdActiveId,false);cdAtmosphere(panel.querySelector(".cd-atmosphere"));
+    var stack=root.closest(".console-stack");
     if(cdMode==="focus"&&cdActiveId){
       var card=cdFindCard(cdActiveId),layout=root.querySelector(".cd-layout");
-      if(card&&layout){panel.classList.add("cd-panel-focused");layout.classList.add("cd-has-focus");layout.insertAdjacentHTML("beforeend",cdFocusHtml(card));var layer=layout.querySelector(".cd-focus-layer");layer.classList.remove("is-entering");layer.classList.add("is-content-ready");cdBindFocus(root,layer);}else{cdMode="browse";panel.classList.remove("cd-panel-focused");}
-    }else panel.classList.remove("cd-panel-focused");
+      if(card&&layout){if(stack)stack.classList.add("cd-focus-elevated");panel.classList.add("cd-panel-focused");layout.classList.add("cd-has-focus");layout.insertAdjacentHTML("beforeend",cdFocusHtml(card));var layer=layout.querySelector(".cd-focus-layer");layer.classList.remove("is-entering");layer.classList.add("is-content-ready");cdBindFocus(root,layer);}else{cdMode="browse";if(stack)stack.classList.remove("cd-focus-elevated");panel.classList.remove("cd-panel-focused");}
+    }else{if(stack)stack.classList.remove("cd-focus-elevated");panel.classList.remove("cd-panel-focused");}
   }
 
   renderMatrix=function(){try{legacyRenderMatrix();}catch(_e){}cdRefreshOrRender();};
