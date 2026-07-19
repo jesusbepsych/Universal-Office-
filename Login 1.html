@@ -8367,6 +8367,116 @@
     #console-pressure.deadline-pressure-wide.alert-danger .dpw-stat{animation:none!important;}
   }
 
+
+  /* v41 — richer orb glows for calm / active / tight, distinct orange pulse for crammed */
+  #console-pressure.deadline-pressure-wide.level-calm:not(.alert-danger) .dpw-score-orb,
+  #console-pressure.deadline-pressure-wide.level-active:not(.alert-danger) .dpw-score-orb,
+  #console-pressure.deadline-pressure-wide.level-tight:not(.alert-danger) .dpw-score-orb{
+    transition:box-shadow .35s ease,border-color .35s ease,filter .35s ease;
+  }
+  #console-pressure.deadline-pressure-wide.level-calm:not(.alert-danger) .dpw-score-orb{
+    border-color:rgba(124,229,255,.52);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      inset 0 -16px 28px rgba(0,0,0,.58),
+      inset 0 0 26px rgba(119,225,255,.14),
+      0 0 0 1px rgba(255,255,255,.025),
+      0 0 34px rgba(119,225,255,.34),
+      0 0 72px rgba(119,225,255,.16),
+      0 0 118px rgba(110,199,255,.08);
+    filter:saturate(1.05);
+  }
+  #console-pressure.deadline-pressure-wide.level-active:not(.alert-danger) .dpw-score-orb{
+    border-color:rgba(150,242,139,.54);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      inset 0 -16px 28px rgba(0,0,0,.58),
+      inset 0 0 26px rgba(146,239,132,.14),
+      0 0 0 1px rgba(255,255,255,.025),
+      0 0 34px rgba(146,239,132,.34),
+      0 0 72px rgba(95,224,185,.17),
+      0 0 118px rgba(146,239,132,.09);
+    filter:saturate(1.08);
+  }
+  #console-pressure.deadline-pressure-wide.level-tight:not(.alert-danger) .dpw-score-orb{
+    border-color:rgba(255,218,112,.56);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      inset 0 -16px 28px rgba(0,0,0,.58),
+      inset 0 0 30px rgba(255,214,107,.16),
+      0 0 0 1px rgba(255,255,255,.025),
+      0 0 38px rgba(255,214,107,.38),
+      0 0 80px rgba(255,174,92,.20),
+      0 0 126px rgba(255,214,107,.10);
+    filter:saturate(1.1);
+  }
+  #console-pressure.deadline-pressure-wide.level-calm:not(.alert-danger) .dpw-score-orb::before{
+    border-color:rgba(124,229,255,.28);
+    box-shadow:0 0 30px rgba(119,225,255,.28),0 0 66px rgba(110,199,255,.10),inset 0 0 18px rgba(119,225,255,.08);
+  }
+  #console-pressure.deadline-pressure-wide.level-active:not(.alert-danger) .dpw-score-orb::before{
+    border-color:rgba(150,242,139,.28);
+    box-shadow:0 0 30px rgba(146,239,132,.30),0 0 66px rgba(95,224,185,.12),inset 0 0 18px rgba(146,239,132,.08);
+  }
+  #console-pressure.deadline-pressure-wide.level-tight:not(.alert-danger) .dpw-score-orb::before{
+    border-color:rgba(255,218,112,.30);
+    box-shadow:0 0 32px rgba(255,214,107,.34),0 0 72px rgba(255,174,92,.14),inset 0 0 20px rgba(255,214,107,.10);
+  }
+  #console-pressure.deadline-pressure-wide.level-calm:not(.alert-danger) .dpw-score-orb::after{
+    background:radial-gradient(circle,rgba(119,225,255,.16),rgba(110,199,255,.06) 44%,transparent 72%);
+    filter:blur(12px);
+  }
+  #console-pressure.deadline-pressure-wide.level-active:not(.alert-danger) .dpw-score-orb::after{
+    background:radial-gradient(circle,rgba(146,239,132,.18),rgba(95,224,185,.07) 46%,transparent 72%);
+    filter:blur(12px);
+  }
+  #console-pressure.deadline-pressure-wide.level-tight:not(.alert-danger) .dpw-score-orb::after{
+    background:radial-gradient(circle,rgba(255,214,107,.20),rgba(255,174,92,.09) 46%,transparent 72%);
+    filter:blur(13px);
+  }
+
+  #console-pressure.deadline-pressure-wide.alert-crammed{
+    --dp-danger-rgb:255,136,58;
+    --dp-danger-soft:255,196,102;
+  }
+  #console-pressure.deadline-pressure-wide.alert-critical{
+    --dp-danger-rgb:255,58,92;
+    --dp-danger-soft:255,118,164;
+  }
+  #console-pressure.deadline-pressure-wide.alert-crammed .dpw-score-orb{
+    animation:dpwDangerOrbOrange 2.9s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-crammed .dpw-score-orb::before{
+    animation:dpwDangerHaloOrange 2.9s ease-in-out infinite;
+    border-color:rgba(255,156,76,.20);
+  }
+  #console-pressure.deadline-pressure-wide.alert-critical .dpw-score-orb{
+    animation:dpwDangerOrbRed 2.75s ease-in-out infinite;
+  }
+  #console-pressure.deadline-pressure-wide.alert-critical .dpw-score-orb::before{
+    animation:dpwDangerHaloRed 2.75s ease-in-out infinite;
+  }
+  @keyframes dpwDangerOrbOrange{
+    0%,100%{transform:translate(-50%,-50%) scale(1); box-shadow:inset 0 1px 0 rgba(255,255,255,.08), inset 0 -10px 18px rgba(0,0,0,.5), 0 0 36px rgba(255,174,92,.24), 0 0 76px rgba(255,136,58,.08);}
+    46%{transform:translate(-50%,-50%) scale(1.018); box-shadow:inset 0 1px 0 rgba(255,255,255,.10), inset 0 -10px 20px rgba(0,0,0,.46), 0 0 42px rgba(255,156,76,.22), 0 0 96px rgba(255,136,58,.14), 0 0 22px rgba(255,214,107,.16);}
+    58%{transform:translate(-50%,-50%) scale(1.032); box-shadow:inset 0 1px 0 rgba(255,255,255,.12), inset 0 -10px 20px rgba(0,0,0,.42), 0 0 48px rgba(255,176,84,.28), 0 0 116px rgba(255,136,58,.20), 0 0 30px rgba(255,214,107,.20);}
+  }
+  @keyframes dpwDangerHaloOrange{
+    0%,100%{opacity:.56; box-shadow:0 0 26px rgba(255,174,92,.18), inset 0 0 18px rgba(255,214,107,.06);}
+    48%{opacity:.84; box-shadow:0 0 38px rgba(255,156,76,.24), inset 0 0 24px rgba(255,174,92,.09);}
+    58%{opacity:1; box-shadow:0 0 48px rgba(255,136,58,.30), 0 0 74px rgba(255,176,84,.16), inset 0 0 28px rgba(255,174,92,.12);}
+  }
+  @keyframes dpwDangerOrbRed{
+    0%,100%{transform:translate(-50%,-50%) scale(1); box-shadow:inset 0 1px 0 rgba(255,255,255,.08), inset 0 -10px 18px rgba(0,0,0,.5), 0 0 36px rgba(255,96,128,.24), 0 0 76px rgba(255,58,92,.08);}
+    46%{transform:translate(-50%,-50%) scale(1.018); box-shadow:inset 0 1px 0 rgba(255,255,255,.10), inset 0 -10px 20px rgba(0,0,0,.46), 0 0 42px rgba(255,74,118,.24), 0 0 98px rgba(255,58,92,.15), 0 0 24px rgba(255,118,164,.15);}
+    58%{transform:translate(-50%,-50%) scale(1.035); box-shadow:inset 0 1px 0 rgba(255,255,255,.12), inset 0 -10px 20px rgba(0,0,0,.42), 0 0 50px rgba(255,58,92,.32), 0 0 118px rgba(255,58,92,.22), 0 0 30px rgba(255,118,164,.18);}
+  }
+  @keyframes dpwDangerHaloRed{
+    0%,100%{opacity:.56; box-shadow:0 0 26px rgba(255,96,128,.18), inset 0 0 18px rgba(255,118,164,.06);}
+    48%{opacity:.84; box-shadow:0 0 40px rgba(255,74,118,.26), inset 0 0 24px rgba(255,58,92,.10);}
+    58%{opacity:1; box-shadow:0 0 50px rgba(255,58,92,.34), 0 0 78px rgba(255,118,164,.16), inset 0 0 28px rgba(255,58,92,.12);}
+  }
+
 </style>
 </head>
 <body>
@@ -9325,9 +9435,139 @@
       (allTasks||[]).forEach(function(t){if(!t||t.status==="done"||!t.due_date)return;var s=((t.title||"")+" "+(t.category||"")).toLowerCase();if(t.due_time&&t.end_time&&!/(quiz|exam|paper|essay|report|project|assignment|discussion|deadline|form|review|study|reading|literature|application|reflection|worksheet|problem set)/.test(s))return;add("task:"+(t.id||""),t.title||"Task",t.due_date,t,"task");});
       return items.sort(function(a,b){return a.due<b.due?-1:a.due>b.due?1:a.label.localeCompare(b.label);});
     }
-    function deadlinePressureBusyHours(ymd){function tf(v){if(!v)return null;var p=String(v).slice(0,5).split(":");return(+p[0]||0)+((+p[1]||0)/60);}var blocks=(allTasks||[]).filter(function(t){return t&&t.due_date===ymd&&t.due_time;}).map(function(t){var s=tf(t.due_time),e=tf(t.end_time);if(s==null)return null;if(e==null)e=s+1;if(e<=s)e=s+1;return{s:Math.max(6,Math.min(23,s)),e:Math.max(6,Math.min(23,e))};}).filter(Boolean).sort(function(a,b){return a.s-b.s;});var merged=[];blocks.forEach(function(b){var l=merged[merged.length-1];if(l&&b.s<=l.e)l.e=Math.max(l.e,b.e);else merged.push({s:b.s,e:b.e});});return merged.reduce(function(sum,b){return sum+Math.max(0,b.e-b.s);},0);}
-    function deadlinePressureAvailableHours(ymd){var day=new Date(ymd+"T12:00:00Z").getUTCDay(),base=(day===0||day===6)?8:6;return Math.max(.5,Math.min(base,+(base-deadlinePressureBusyHours(ymd)*.75).toFixed(1)));}
-    function deadlinePressureCompute(){var today=pacificYMD(),items=deadlinePressureCollect(),map={};items.forEach(function(it){var b=map[it.due]||(map[it.due]={date:it.due,items:[],count:0,estHours:0,overdue:false});b.items.push(it);b.count++;b.estHours+=it.est;if(it.daysLeft<0)b.overdue=true;});var buckets=Object.keys(map).sort().map(function(k){var b=map[k],dl=dayDiff(k,today);b.estHours=+b.estHours.toFixed(1);b.availHours=deadlinePressureAvailableHours(k);b.deficit=+(b.estHours-b.availHours).toFixed(1);var urgency=dl<0?28:dl===0?24:dl===1?18:dl===2?12:dl===3?8:dl<=5?5:3;var collision=b.count<=1?0:b.count===2?12:b.count===3?24:b.count===4?34:42;var ratio=b.availHours>0?b.estHours/b.availHours:3;var load=ratio<=1?Math.round(ratio*8):Math.min(24,Math.round(8+(ratio-1)*12));var deficit=Math.min(12,Math.max(0,Math.round(b.deficit*3)));b.score=Math.max(0,Math.min(100,urgency+collision+load+deficit+(b.overdue?8:0)));b.theme=deadlinePressureTheme(b.score);return b;});var peak=buckets.length?buckets.reduce(function(best,b){return!best||b.score>best.score?b:best;},null):null;return{today:today,items:items,buckets:buckets,peak:peak,score:peak?peak.score:0,theme:deadlinePressureTheme(peak?peak.score:0)};}
+    /* v43 — real free-time block model for Deadline Pressure availability.
+       The configuration is intentionally limited to the items approved for this calculation:
+       a waking window, calendar commitments, transition/travel buffers, meal/routine blocks,
+       and optional recovery following long commitments. */
+    function deadlinePressureFocusConfig(){
+      var defaults={
+        dayStart:7,
+        dayEnd:23,
+        transitionMinutes:15,
+        longCommitmentHours:3,
+        recoveryMinutes:20,
+        recoveryEnabled:true,
+        routineBlocks:[
+          {start:12.5,end:13,label:"Lunch / routine"},
+          {start:18.5,end:19,label:"Dinner / routine"}
+        ]
+      };
+      try{
+        var saved=JSON.parse(localStorage.getItem("deadlinePressureFocusConfigV1")||"null");
+        if(saved&&typeof saved==="object"){
+          ["dayStart","dayEnd","transitionMinutes","longCommitmentHours","recoveryMinutes"].forEach(function(k){
+            var v=Number(saved[k]);if(isFinite(v))defaults[k]=v;
+          });
+          if(typeof saved.recoveryEnabled==="boolean")defaults.recoveryEnabled=saved.recoveryEnabled;
+          if(Array.isArray(saved.routineBlocks))defaults.routineBlocks=saved.routineBlocks;
+        }
+      }catch(e){}
+      defaults.dayStart=Math.max(0,Math.min(23.5,defaults.dayStart));
+      defaults.dayEnd=Math.max(defaults.dayStart+.5,Math.min(24,defaults.dayEnd));
+      defaults.transitionMinutes=Math.max(0,Math.min(90,defaults.transitionMinutes));
+      defaults.longCommitmentHours=Math.max(1,Math.min(12,defaults.longCommitmentHours));
+      defaults.recoveryMinutes=Math.max(0,Math.min(120,defaults.recoveryMinutes));
+      return defaults;
+    }
+    function deadlinePressureTimeFloat(v){
+      if(v===null||v===undefined||v==="")return null;
+      if(typeof v==="number"&&isFinite(v))return v;
+      var p=String(v).slice(0,5).split(":");
+      var h=Number(p[0]),m=Number(p[1]||0);
+      return isFinite(h)&&isFinite(m)?h+(m/60):null;
+    }
+    function deadlinePressureMergeIntervals(intervals,start,end){
+      var clean=(intervals||[]).map(function(b){
+        var s=Math.max(start,Math.min(end,Number(b.s))),e=Math.max(start,Math.min(end,Number(b.e)));
+        return isFinite(s)&&isFinite(e)&&e>s?{s:s,e:e,type:b.type||"busy",label:b.label||""}:null;
+      }).filter(Boolean).sort(function(a,b){return a.s-b.s||a.e-b.e;});
+      var merged=[];
+      clean.forEach(function(b){
+        var last=merged[merged.length-1];
+        if(last&&b.s<=last.e+.001){last.e=Math.max(last.e,b.e);}
+        else merged.push({s:b.s,e:b.e});
+      });
+      return merged;
+    }
+    function deadlinePressureScheduledIntervals(ymd,cfg){
+      var start=cfg.dayStart,end=cfg.dayEnd,transition=cfg.transitionMinutes/60,recovery=cfg.recoveryMinutes/60;
+      var eventWords=/(clinic|work|class|lecture|section|meeting|appointment|session|therapy|tutor|shift|training|interview|office hours|lab|practicum|supervision|call|visit)/i;
+      var scheduledCats={"clinic-work":1,"behavioral-work":1,"side-gig":1,"class":1,"work":1,"admin":1,"appointment":1,"personal":1};
+      var blocks=[];
+      (allTasks||[]).forEach(function(t){
+        if(!t||!t.due_date)return;
+        var startsToday=t.due_date===ymd;
+        var spansToday=t.due_date<ymd&&t.end_date&&t.end_date>=ymd;
+        if(!startsToday&&!spansToday)return;
+        var source=String(t.source||"").toLowerCase(),title=String(t.title||"");
+        var calendarLike=!!t.end_time||!!scheduledCats[t.category]||/calendar|gcal|google/.test(source)||eventWords.test(title);
+        if(!calendarLike)return;
+        var s,e;
+        if(spansToday){
+          s=start;
+          e=t.end_date===ymd?(deadlinePressureTimeFloat(t.end_time)||end):end;
+        }else{
+          s=deadlinePressureTimeFloat(t.due_time);
+          if(s===null)return;
+          if(t.end_date&&t.end_date>ymd)e=end;
+          else{
+            e=deadlinePressureTimeFloat(t.end_time);
+            if(e===null)e=s+1;
+            if(e<=s)e=end;
+          }
+        }
+        var duration=Math.max(0,e-s);
+        var extraAfter=(cfg.recoveryEnabled&&duration>=cfg.longCommitmentHours)?recovery:0;
+        blocks.push({
+          s:s-transition,
+          e:e+transition+extraAfter,
+          type:"calendar",
+          label:title
+        });
+      });
+      (cfg.routineBlocks||[]).forEach(function(r){
+        var s=deadlinePressureTimeFloat(r.start),e=deadlinePressureTimeFloat(r.end);
+        if(s!==null&&e!==null&&e>s)blocks.push({s:s,e:e,type:"routine",label:r.label||"Routine"});
+      });
+      return deadlinePressureMergeIntervals(blocks,start,end);
+    }
+    function deadlinePressureFocusWeight(minutes){
+      minutes=Math.max(0,Number(minutes)||0);
+      if(minutes<20)return 0;
+      if(minutes<=45)return .25;
+      if(minutes<=90)return .65;
+      if(minutes<=180)return .80;
+      /* Longer uninterrupted blocks gradually move from 85% toward 90%. */
+      return Math.min(.90,.85+Math.min(1,(minutes-180)/180)*.05);
+    }
+    function deadlinePressureAvailabilityDetails(ymd){
+      var cfg=deadlinePressureFocusConfig(),start=cfg.dayStart,end=cfg.dayEnd;
+      var occupied=deadlinePressureScheduledIntervals(ymd,cfg),free=[],cursor=start;
+      occupied.forEach(function(b){
+        if(b.s>cursor)free.push({s:cursor,e:b.s});
+        cursor=Math.max(cursor,b.e);
+      });
+      if(cursor<end)free.push({s:cursor,e:end});
+      var usable=0,raw=0;
+      free=free.map(function(b){
+        var minutes=Math.max(0,(b.e-b.s)*60),weight=deadlinePressureFocusWeight(minutes),focusMinutes=minutes*weight;
+        raw+=minutes;usable+=focusMinutes;
+        return {s:b.s,e:b.e,minutes:minutes,weight:weight,focusMinutes:focusMinutes};
+      });
+      var occupiedMinutes=occupied.reduce(function(sum,b){return sum+Math.max(0,(b.e-b.s)*60);},0);
+      return {
+        usableHours:+(usable/60).toFixed(1),
+        rawFreeHours:+(raw/60).toFixed(1),
+        occupiedHours:+(occupiedMinutes/60).toFixed(1),
+        freeBlocks:free,
+        occupiedBlocks:occupied,
+        dayStart:start,
+        dayEnd:end
+      };
+    }
+    function deadlinePressureBusyHours(ymd){return deadlinePressureAvailabilityDetails(ymd).occupiedHours;}
+    function deadlinePressureAvailableHours(ymd){return deadlinePressureAvailabilityDetails(ymd).usableHours;}
+    function deadlinePressureCompute(){var today=pacificYMD(),items=deadlinePressureCollect(),map={};items.forEach(function(it){var b=map[it.due]||(map[it.due]={date:it.due,items:[],count:0,estHours:0,overdue:false});b.items.push(it);b.count++;b.estHours+=it.est;if(it.daysLeft<0)b.overdue=true;});var buckets=Object.keys(map).sort().map(function(k){var b=map[k],dl=dayDiff(k,today);b.estHours=+b.estHours.toFixed(1);b.availability=deadlinePressureAvailabilityDetails(k);b.availHours=b.availability.usableHours;b.deficit=+(b.estHours-b.availHours).toFixed(1);var urgency=dl<0?28:dl===0?24:dl===1?18:dl===2?12:dl===3?8:dl<=5?5:3;var collision=b.count<=1?0:b.count===2?12:b.count===3?24:b.count===4?34:42;var ratio=b.availHours>0?b.estHours/b.availHours:3;var load=ratio<=1?Math.round(ratio*8):Math.min(24,Math.round(8+(ratio-1)*12));var deficit=Math.min(12,Math.max(0,Math.round(b.deficit*3)));b.score=Math.max(0,Math.min(100,urgency+collision+load+deficit+(b.overdue?8:0)));b.theme=deadlinePressureTheme(b.score);return b;});var peak=buckets.length?buckets.reduce(function(best,b){return!best||b.score>best.score?b:best;},null):null;return{today:today,items:items,buckets:buckets,peak:peak,score:peak?peak.score:0,theme:deadlinePressureTheme(peak?peak.score:0)};}
     function deadlinePressureCanvasArt(host, themeKey){
       var canvas=host.querySelector('.dpw-canvas');
       if(!canvas)return;
@@ -9339,7 +9579,7 @@
         calm:{accent:[119,225,255],secondary:[89,145,255],warm:[210,248,255],hot:[126,236,255]},
         active:{accent:[146,239,132],secondary:[73,211,183],warm:[227,255,187],hot:[151,255,188]},
         tight:{accent:[255,214,107],secondary:[255,159,73],warm:[255,243,186],hot:[255,192,92]},
-        crammed:{accent:[255,116,84],secondary:[255,64,62],warm:[255,214,168],hot:[255,98,84]},
+        crammed:{accent:[255,154,68],secondary:[255,102,52],warm:[255,224,170],hot:[255,178,72]},
         critical:{accent:[255,96,128],secondary:[255,54,90],warm:[255,188,120],hot:[255,76,128]}
       }[themeKey]||{accent:[119,225,255],secondary:[89,145,255],warm:[210,248,255],hot:[126,236,255]};
       var dangerLevel=themeKey==='critical'?1:themeKey==='crammed'?.72:0;
@@ -9464,15 +9704,15 @@
           var ringR=h*(.58+alertBeat*.22), ringCore=h*(.18+alertBeat*.08);
           var pulseGrad=ctx.createRadialGradient(cx,cy,ringCore,cx,cy,ringR);
           pulseGrad.addColorStop(0,'rgba(255,80,92,0)');
-          pulseGrad.addColorStop(.42,'rgba('+(themeKey==='critical'?'255,54,90':'255,86,62')+','+(0.02+alertBeat*.04)+')');
-          pulseGrad.addColorStop(.70,'rgba('+(themeKey==='critical'?'255,54,90':'255,86,62')+','+(0.10+alertBeat*.18*dangerLevel)+')');
-          pulseGrad.addColorStop(.88,'rgba('+(themeKey==='critical'?'255,112,156':'255,126,88')+','+(0.04+alertBeat*.08*dangerLevel)+')');
+          pulseGrad.addColorStop(.42,'rgba('+(themeKey==='critical'?'255,54,90':'255,136,58')+','+(0.02+alertBeat*.04)+')');
+          pulseGrad.addColorStop(.70,'rgba('+(themeKey==='critical'?'255,54,90':'255,136,58')+','+(0.10+alertBeat*.18*dangerLevel)+')');
+          pulseGrad.addColorStop(.88,'rgba('+(themeKey==='critical'?'255,112,156':'255,196,102')+','+(0.04+alertBeat*.08*dangerLevel)+')');
           pulseGrad.addColorStop(1,'rgba(255,80,92,0)');
           ctx.fillStyle=pulseGrad;
           ctx.beginPath(); ctx.arc(cx,cy,ringR,0,Math.PI*2); ctx.fill();
           ctx.lineWidth=1.4+alertBeat*2.0;
-          ctx.strokeStyle='rgba('+(themeKey==='critical'?'255,74,118':'255,104,76')+','+(0.08+alertBeat*.20)+')';
-          ctx.shadowColor='rgba('+(themeKey==='critical'?'255,54,90':'255,86,62')+','+(0.10+alertBeat*.24)+')';
+          ctx.strokeStyle='rgba('+(themeKey==='critical'?'255,74,118':'255,154,68')+','+(0.08+alertBeat*.20)+')';
+          ctx.shadowColor='rgba('+(themeKey==='critical'?'255,54,90':'255,136,58')+','+(0.10+alertBeat*.24)+')';
           ctx.shadowBlur=14+alertBeat*24;
           ctx.beginPath(); ctx.arc(cx,cy,h*(.40+alertBeat*.06),0,Math.PI*2); ctx.stroke();
           ctx.restore();
@@ -9510,7 +9750,7 @@
     function renderDeadlinePressure(){
       var host=el("console-pressure");if(!host)return;
       var data=deadlinePressureCompute(),peak=data.peak||{date:data.today,count:0,estHours:0,availHours:deadlinePressureAvailableHours(data.today),deficit:0},theme=data.theme,deficit=Number(peak.deficit||0),deficitText=(deficit>0?"-":"+")+Math.abs(deficit).toFixed(1)+"h";
-      var dangerClass=(theme.key==="crammed"||theme.key==="critical")?" alert-danger":"";
+      var dangerClass=theme.key==="critical"?" alert-danger alert-critical":(theme.key==="crammed"?" alert-danger alert-crammed":"");
       host.className="panel deadline-pressure-wide level-"+theme.key+dangerClass;
       host.setAttribute("aria-label","Deadline pressure "+Math.round(data.score)+" out of 100, "+theme.label+". Peak "+deadlinePressureDateLabel(peak.date,data.today)+".");
       host.innerHTML=''
