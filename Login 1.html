@@ -6612,6 +6612,13 @@
   .bv-monthlabel{min-width:148px;text-align:center;color:#eef5ff;font:600 15px var(--mono);letter-spacing:.03em;}
   .bv-head-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0;}
   .bv-save-state{font:500 9px/1.35 var(--mono);color:#7587a8;text-align:left;white-space:nowrap;}
+  .bv-cloud-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:0;padding:2px 3px;cursor:pointer;color:#6f7e98;font:600 8px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.65;transition:opacity .2s,color .2s;}
+  .bv-cloud-btn:hover{opacity:1;color:#9fb0cc;}
+  .bv-cloud-dot{width:6px;height:6px;border-radius:50%;background:#3a4a63;color:#5b6b86;box-shadow:0 0 5px currentColor;transition:background .3s,color .3s;}
+  .bv-cloud-dot.ok{background:#4ee0a9;color:#4ee0a9;}
+  .bv-cloud-dot.syncing{background:#ffc65b;color:#ffc65b;animation:bvCloudPulse 1s infinite;}
+  .bv-cloud-dot.err{background:#f4577f;color:#f4577f;}
+  @keyframes bvCloudPulse{50%{opacity:.35;}}
   .bv-save-state b{display:block;color:#aabbd6;font-weight:600;}
   .bv-ai-btn{height:38px;padding:0 13px;border-radius:9px;border:1px solid rgba(var(--bv-gold),.44);background:linear-gradient(180deg,rgba(var(--bv-gold),.14),rgba(33,22,17,.76));color:#ffd584;font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;box-shadow:0 0 17px rgba(var(--bv-gold),.10);}
   .bv-ai-btn em{display:inline-grid;place-items:center;min-width:19px;height:19px;margin-left:5px;border-radius:999px;background:#f4a43e;color:#1f1100;font-style:normal;}
@@ -9200,6 +9207,7 @@
               </div>
               <div class="bv-head-actions">
                 <div class="bv-save-state"><b>Auto-save</b><span id="bv-save-time">Ready</span></div>
+                <button class="bv-cloud-btn" id="bv-cloud-sync" type="button" title="Back up billing to the cloud and re-sync all"><span class="bv-cloud-dot" id="bv-cloud-dot"></span>Cloud</button>
                 <button class="bv-ai-btn" id="bv-ai-btn" type="button" aria-controls="bv-ai-modal" title="Open a complete smart billing review">AI Suggestions <em id="bv-ai-count">0</em></button>
               </div>
             </header>
@@ -12932,9 +12940,71 @@
     function save(note,options={}){
       state.lastSaved=new Date().toISOString();
       localStorage.setItem(KEY,JSON.stringify(state));
+      queueBillingSync();
       if(options&&options.quiet)return;
       const n=$("bv-save-time");
       if(n)n.textContent=timeNow()+(note?" · "+note:"");
+    }
+    // ---- Cloud backup + one-way entries feed (Supabase) ----
+    var _billingUid=null, _billingSyncTimer=null, _billingSyncing=false;
+    async function billingUid(){
+      if(_billingUid) return _billingUid;
+      if(typeof client==="undefined"||!client) return null;
+      try{ const r=await client.auth.getUser(); _billingUid=r&&r.data&&r.data.user?r.data.user.id:null; }catch(_){ }
+      return _billingUid;
+    }
+    function billingRows(uid){
+      var rows=[];
+      Object.values(state.periods||{}).forEach(function(p){
+        (p.entries||[]).forEach(function(e){
+          var prof=(state.profiles||[]).find(function(x){return x.id===e.profileId;});
+          rows.push({
+            user_id:uid, entry_id:String(e.id), profile_id:e.profileId||null,
+            profile_name:prof?prof.name:(e.profileId||""),
+            month:p.month||String(e.date||"").slice(0,7),
+            work_date:e.date||null, hours:Number(e.hours)||0, status:e.status||"draft",
+            description:e.description||"", services:(e.serviceIds||[]).join(", "),
+            notes:e.notes||"", source_id:e.sourceId||null
+          });
+        });
+      });
+      return rows;
+    }
+    function setCloudDot(cls){ var d=$("bv-cloud-dot"); if(d) d.className="bv-cloud-dot "+(cls||""); }
+    async function syncBillingToSupabase(){
+      if(_billingSyncing) return {ok:false,err:"busy"};
+      if(typeof client==="undefined"||!client) return {ok:false,err:"offline"};
+      var uid=await billingUid(); if(!uid) return {ok:false,err:"no session"};
+      _billingSyncing=true; setCloudDot("syncing");
+      try{
+        var bk=await client.from("billing_backups").upsert({user_id:uid,data:state,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+        if(bk.error) throw bk.error;
+        var rows=billingRows(uid);
+        if(rows.length){ var up=await client.from("billing_entries").upsert(rows,{onConflict:"entry_id"}); if(up.error) throw up.error; }
+        var ids=rows.map(function(r){return r.entry_id;});
+        var del=client.from("billing_entries").delete().eq("user_id",uid);
+        if(ids.length) del=del.not("entry_id","in","("+ids.map(function(x){return '"'+String(x).replace(/"/g,"")+'"';}).join(",")+")");
+        var dr=await del; if(dr.error) throw dr.error;
+        setCloudDot("ok"); _billingSyncing=false; return {ok:true,count:rows.length};
+      }catch(e){ setCloudDot("err"); _billingSyncing=false; return {ok:false,err:String((e&&e.message)||e)}; }
+    }
+    function queueBillingSync(){ if(_billingSyncTimer) clearTimeout(_billingSyncTimer); _billingSyncTimer=setTimeout(function(){ syncBillingToSupabase(); },1500); }
+    async function loadBillingFromCloud(){
+      if(typeof client==="undefined"||!client) return;
+      var uid=await billingUid(); if(!uid) return;
+      try{
+        var r=await client.from("billing_backups").select("data,updated_at").eq("user_id",uid).maybeSingle();
+        if(r.error||!r.data||!r.data.data){ setCloudDot("ok"); return; }
+        var cloud=r.data.data;
+        var localSaved=state.lastSaved?Date.parse(state.lastSaved):0;
+        var cloudSaved=cloud.lastSaved?Date.parse(cloud.lastSaved):(r.data.updated_at?Date.parse(r.data.updated_at):0);
+        if(cloudSaved>localSaved){
+          localStorage.setItem(KEY,JSON.stringify(cloud));
+          state=loadState();
+          if(typeof render==="function") render();
+        }
+        setCloudDot("ok");
+      }catch(_){ }
     }
     function audit(type,detail){const p=ensurePeriod();p.audit.unshift({id:uid("audit"),at:new Date().toISOString(),type,detail:detail||""});p.audit=p.audit.slice(0,100);}
     function profile(id=state.activeProfileId){return state.profiles.find(p=>p.id===id)||state.profiles[0];}
@@ -13664,6 +13734,12 @@
       $("bv-workflow").querySelectorAll("[data-status]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.status)));$("bv-lock-btn").addEventListener("click",toggleLock);$("bv-history-btn").addEventListener("click",()=>{renderHistory();showModal("bv-history-modal",true);});$("bv-open-pdf").addEventListener("click",openPrint);$("bv-download-pdf").addEventListener("click",downloadPDF);$("bv-export-table").addEventListener("click",exportTable);
       document.addEventListener("dashboard-task-status",ev=>{const d=ev.detail||{},t=d.task;if(!t||d.previousStatus==="done"||t.status!=="done"||!isBillableTask(t))return;const key=taskKey(t);if(Object.values(state.periods).some(p=>(p.entries||[]).some(e=>e.sourceId===key)))return;state.pendingTaskId=t.id;save("capture suggested");if(!panel.classList.contains("hidden")){if(confirm("This completed event looks billable. Capture it now?")){state.pendingTaskId=null;const pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}else notice("Completed work may need billing. Open Billing to capture it.");renderHeader();});
       render();
+      var cloudBtn=$("bv-cloud-sync");
+      if(cloudBtn) cloudBtn.addEventListener("click",async function(){
+        var r=await syncBillingToSupabase();
+        notice(r.ok?("Backed up "+r.count+" entr"+(r.count===1?"y":"ies")+" to the cloud."):("Cloud sync unavailable: "+(r.err||"unknown")));
+      });
+      setTimeout(loadBillingFromCloud,2500);
     }
     if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bind);else bind();
   })();
