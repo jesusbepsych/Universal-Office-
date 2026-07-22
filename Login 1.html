@@ -12920,12 +12920,15 @@
         {id:"tutoring",name:"Tutoring",employee:"Jesus Garcia",employer:"",rate:0,color:COLORS[3],keywords:["tutor","tutoring","education"],services:[{id:"TUTOR",label:"Tutoring",description:"Tutoring Services"}]}
       ];
     }
-    function freshState(){return {version:VERSION,activeMonth:currentMonth(),activeProfileId:"translation",profiles:defaultProfiles(),periods:{},timer:null,lastSaved:null,pendingTaskId:null};}
+    function freshState(){return {version:VERSION,activeMonth:currentMonth(),activeProfileId:"translation",profiles:defaultProfiles(),periods:{},timer:null,lastSaved:null,pendingTaskId:null,pendingTaskIds:[]};}
     function loadState(){
       let s=null;try{s=JSON.parse(localStorage.getItem(KEY)||"null");}catch(_){s=null;}
       if(!s||typeof s!=="object")s=freshState();
       s.version=VERSION;s.profiles=Array.isArray(s.profiles)&&s.profiles.length?s.profiles:defaultProfiles();s.periods=s.periods||{};s.activeMonth=/^\d{4}-\d{2}$/.test(s.activeMonth||"")?s.activeMonth:currentMonth();
       if(!s.profiles.some(p=>p.id===s.activeProfileId))s.activeProfileId=s.profiles[0].id;
+      s.pendingTaskIds=Array.isArray(s.pendingTaskIds)?s.pendingTaskIds:[];
+      if(s.pendingTaskId&&s.pendingTaskIds.indexOf(s.pendingTaskId)===-1)s.pendingTaskIds.push(s.pendingTaskId);
+      s.pendingTaskId=null;
       return s;
     }
     let state=loadState(), clockTicker=null, lastSuggestions=[], profileSwipeUntil=0;
@@ -13563,7 +13566,7 @@
       const e=id?period().entries.find(x=>x.id===id):null,base=e||prefill||{};$("bv-entry-title").textContent=e?"Edit Billing Entry":"New Billing Entry";$("bv-entry-id").value=e?e.id:"";$("bv-entry-source-id").value=base.sourceId||"";populateProfileSelect(base.profileId||state.activeProfileId);$("bv-entry-date").value=base.date||todayYMD();$("bv-entry-start").value=base.start||"";$("bv-entry-end").value=base.end||"";$("bv-entry-hours").value=safeNum(base.hours||1);$("bv-entry-status").value=base.status||"draft";$("bv-entry-description").value=base.description||"";$("bv-entry-notes").value=base.notes||"";renderServiceChecks(base.serviceIds||[]);renderEntryRateHint();$("bv-delete-entry").classList.toggle("hidden",!e);showModal("bv-entry-modal",true);
     }
     function openSuggestion(key){const s=suggestionByKey(key);if(!s)return;openEntry(null,{sourceId:s.key,profileId:s.profile.id,date:s.task.due_date,start:s.task.due_time?String(s.task.due_time).slice(0,5):"",end:s.task.end_time?String(s.task.end_time).slice(0,5):"",hours:s.hours,serviceIds:s.services,description:generatedDescription(s.profile,s.services),notes:"Calendar-assisted entry: "+(s.task.title||"")});}
-    function saveEntryForm(ev){ev.preventDefault();if(activeLocked())return;const id=$("bv-entry-id").value,prof=profile($("bv-entry-profile").value),serviceIds=[...$("bv-entry-services").querySelectorAll("input:checked")].map(x=>x.value),candidate={id:id||uid("entry"),profileId:prof.id,date:$("bv-entry-date").value,start:$("bv-entry-start").value,end:$("bv-entry-end").value,hours:safeNum($("bv-entry-hours").value),status:$("bv-entry-status").value,serviceIds,description:$("bv-entry-description").value.trim()||generatedDescription(prof,serviceIds),notes:$("bv-entry-notes").value.trim(),sourceId:$("bv-entry-source-id").value||null,updatedAt:new Date().toISOString()};if(!candidate.date||candidate.hours<=0){notice("Enter a valid date and number of hours.");return;}if(hasDuplicate(candidate,id)){if(!confirm("A very similar entry already exists. Save this duplicate anyway?"))return;}const arr=period().entries,index=arr.findIndex(x=>x.id===id);if(index>=0)arr[index]={...arr[index],...candidate};else arr.push({...candidate,createdAt:new Date().toISOString()});audit(index>=0?"entry_updated":"entry_added",candidate.description+" · "+candidate.hours+"h");save("entry saved");showModal("bv-entry-modal",false);render();}
+    function saveEntryForm(ev){ev.preventDefault();if(activeLocked())return;const id=$("bv-entry-id").value,prof=profile($("bv-entry-profile").value),serviceIds=[...$("bv-entry-services").querySelectorAll("input:checked")].map(x=>x.value),candidate={id:id||uid("entry"),profileId:prof.id,date:$("bv-entry-date").value,start:$("bv-entry-start").value,end:$("bv-entry-end").value,hours:safeNum($("bv-entry-hours").value),status:$("bv-entry-status").value,serviceIds,description:$("bv-entry-description").value.trim()||generatedDescription(prof,serviceIds),notes:$("bv-entry-notes").value.trim(),sourceId:$("bv-entry-source-id").value||null,updatedAt:new Date().toISOString()};if(!candidate.date||candidate.hours<=0){notice("Enter a valid date and number of hours.");return;}if(hasDuplicate(candidate,id)){if(!confirm("A very similar entry already exists. Save this duplicate anyway?"))return;}const arr=period().entries,index=arr.findIndex(x=>x.id===id);if(index>=0)arr[index]={...arr[index],...candidate};else arr.push({...candidate,createdAt:new Date().toISOString()});audit(index>=0?"entry_updated":"entry_added",candidate.description+" · "+candidate.hours+"h");save("entry saved");showModal("bv-entry-modal",false);render();setTimeout(drainPendingCaptures,120);}
     function deleteEntry(){const id=$("bv-entry-id").value;if(!id||activeLocked())return;if(!confirm("Delete this billing entry?"))return;period().entries=period().entries.filter(e=>e.id!==id);audit("entry_deleted",id);save("entry deleted");showModal("bv-entry-modal",false);render();}
     function openProfile(id=null){if(activeLocked()){notice("Unlock the period before changing job profiles.");return;}const p=id?profile(id):null;$("bv-profile-title").textContent=p?"Edit Job Profile":"New Job Profile";$("bv-profile-id").value=p?p.id:"";$("bv-profile-name").value=p?p.name:"";$("bv-profile-rate").value=p?p.rate||0:0;$("bv-profile-employee").value=p?p.employee||"Jesus Garcia":"Jesus Garcia";$("bv-profile-employer").value=p?p.employer||"":"";$("bv-profile-services").value=p?(p.services||[]).map(s=>s.label).join(", "):"";$("bv-profile-keywords").value=p?(p.keywords||[]).join(", "):"";$("bv-delete-profile").classList.toggle("hidden",!p||state.profiles.length<=1);showModal("bv-profile-modal",true);}
     function saveProfileForm(ev){ev.preventDefault();const oldId=$("bv-profile-id").value,name=$("bv-profile-name").value.trim();if(!name)return;const labels=$("bv-profile-services").value.split(",").map(x=>x.trim()).filter(Boolean),services=labels.map((label,i)=>({id:label.toUpperCase().replace(/[^A-Z0-9]/g,"")||"S"+i,label,description:label+(name.toLowerCase().includes("translation")?" Translation Services":" Services")}));const p={id:oldId||uid("profile"),name,rate:safeNum($("bv-profile-rate").value),employee:$("bv-profile-employee").value.trim()||"Jesus Garcia",employer:$("bv-profile-employer").value.trim(),services:services.length?services:[{id:"SERVICE",label:"Service",description:name}],keywords:$("bv-profile-keywords").value.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean),color:oldId?profile(oldId).color:COLORS[state.profiles.length%COLORS.length]};const i=state.profiles.findIndex(x=>x.id===oldId);if(i>=0)state.profiles[i]=p;else state.profiles.push(p);state.activeProfileId=p.id;audit(i>=0?"profile_updated":"profile_created",p.name);save("profile saved");showModal("bv-profile-modal",false);render();}
@@ -13590,6 +13593,39 @@
     async function exportTable(){
       const prof=profile(),rows=dailyRows(prof),total=rows.reduce((a,r)=>a+r.hours,0);try{await loadScript("https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js",()=>window.XLSX);const aoa=[["",monthLabel(state.activeMonth),""],["Payroll Period",state.activeMonth+"-01 to "+state.activeMonth+"-"+String(daysInMonth(state.activeMonth)).padStart(2,"0"),""],["Employee: "+(prof.employee||"Jesus Garcia"),"Hours:",""],...rows.map(r=>[new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),r.hours||"",r.description]),["Total",total,""]];const ws=XLSX.utils.aoa_to_sheet(aoa);ws["!merges"]=[{s:{r:0,c:1},e:{r:0,c:2}},{s:{r:1,c:1},e:{r:1,c:2}}];ws["!cols"]=[{wch:18},{wch:12},{wch:54}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,monthShort(state.activeMonth));XLSX.writeFile(wb,(prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".xlsx");audit("spreadsheet_exported",prof.name);save("table exported");}catch(err){const csv=[["Date","Hours","Service Description"],...rows.map(r=>[new Date(r.date+"T12:00:00").toLocaleDateString("en-US"),r.hours||"",r.description]),["Total",total,""]].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"),blob=new Blob([csv],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(prof.employee||"Billing")+" "+monthLabel(state.activeMonth)+".csv";a.click();URL.revokeObjectURL(a.href);notice("Spreadsheet library was unavailable, so a CSV table was exported.");}}
 
+    function drainPendingCaptures(){
+      state.pendingTaskIds=Array.isArray(state.pendingTaskIds)?state.pendingTaskIds:[];
+      if(!state.pendingTaskIds.length)return;
+      const all=(typeof allTasks!=="undefined"?allTasks:[]);
+      const queue=state.pendingTaskIds.slice();
+      let openedFor=null;
+      for(let i=0;i<queue.length;i++){
+        const id=queue[i];
+        const t=all.find(x=>String(x.id)===String(id));
+        // drop ids we can no longer resolve, or that are already logged
+        if(!t){ state.pendingTaskIds=state.pendingTaskIds.filter(x=>String(x)!==String(id)); continue; }
+        const key=taskKey(t);
+        if(Object.values(state.periods).some(p=>(p.entries||[]).some(e=>e.sourceId===key))){
+          state.pendingTaskIds=state.pendingTaskIds.filter(x=>String(x)!==String(id)); continue;
+        }
+        const remaining=state.pendingTaskIds.length;
+        const suffix=remaining>1?(" ("+remaining+" waiting)"):"";
+        if(confirm("Log the completed event \u2018"+(t.title||"Calendar work")+"\u2019 for billing?"+suffix)){
+          state.pendingTaskIds=state.pendingTaskIds.filter(x=>String(x)!==String(id));
+          const pr=inferProfile(t)||profile();
+          openedFor=t;
+          save();
+          openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});
+          break; // one form at a time; the rest stay queued
+        } else {
+          // declined: remove so it is not asked again this session
+          state.pendingTaskIds=state.pendingTaskIds.filter(x=>String(x)!==String(id));
+        }
+      }
+      save();
+      if(!openedFor&&typeof renderHeader==="function")renderHeader();
+    }
+
     function bind(){
       const panel=$("billing-vault-panel"),agenda=$("agenda-panel"),btn=$("dock-billing"),primary=$("console-overview");
       const consoleMain=primary&&primary.closest(".console-main");
@@ -13597,7 +13633,7 @@
       if(!panel||!agenda||!btn)return;
       function setBillingVault(on,restoreAgenda=true){
         if(on){if(window.setReplyDesk)window.setReplyDesk(false);if(window.setCalDesk)window.setCalDesk(false);if(window.setMoneyBuddy)window.setMoneyBuddy(false,false);if(window.setActionPanel)window.setActionPanel(false);const sig=$("signals-panel");if(sig)sig.classList.remove("open");const ds=$("dock-signals");if(ds)ds.classList.remove("on");document.querySelectorAll(".dock-btn").forEach(b=>b.classList.toggle("on",b===btn));}
-        panel.classList.toggle("hidden",!on);panel.style.display=on?"block":"";panel.setAttribute("aria-hidden",on?"false":"true");if(on||restoreAgenda){agenda.classList.toggle("hidden",on);agenda.style.display=on?"none":"";}primary.classList.toggle("billing-mode",on);if(consoleMain)consoleMain.classList.toggle("billing-open",on);if(consoleDock)consoleDock.classList.toggle("billing-compact",on);btn.classList.toggle("on",on);if(on){render();setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);if(state.pendingTaskId){const t=(typeof allTasks!=="undefined"?allTasks:[]).find(x=>String(x.id)===String(state.pendingTaskId));state.pendingTaskId=null;save();if(t&&confirm("Log the completed event ‘"+(t.title||"Calendar work")+"’ for billing?")){const key=taskKey(t),pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}}
+        panel.classList.toggle("hidden",!on);panel.style.display=on?"block":"";panel.setAttribute("aria-hidden",on?"false":"true");if(on||restoreAgenda){agenda.classList.toggle("hidden",on);agenda.style.display=on?"none":"";}primary.classList.toggle("billing-mode",on);if(consoleMain)consoleMain.classList.toggle("billing-open",on);if(consoleDock)consoleDock.classList.toggle("billing-compact",on);btn.classList.toggle("on",on);if(on){render();setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);drainPendingCaptures();}
       }
       window.setBillingVault=setBillingVault;
       btn.addEventListener("click",()=>setBillingVault(panel.classList.contains("hidden")));
@@ -13732,7 +13768,7 @@
       document.querySelectorAll("[data-bv-close]").forEach(b=>b.addEventListener("click",()=>{const modal=b.closest(".bv-modal");if(modal)showModal(modal.id,false);}));document.querySelectorAll(".bv-modal").forEach(m=>m.addEventListener("click",ev=>{if(ev.target===m)showModal(m.id,false);}));
       $("bv-roll-switch").addEventListener("click",()=>{period().rollover.enabled=period().rollover.enabled===false;save("rollover updated");renderRollover();});$("bv-carry-drafts").addEventListener("change",()=>{period().rollover.carryDrafts=$("bv-carry-drafts").checked;save("rollover updated");});$("bv-auto-move").addEventListener("change",()=>{period().rollover.autoMove=$("bv-auto-move").checked;save("rollover updated");});$("bv-roll-now").addEventListener("click",doRollover);
       $("bv-workflow").querySelectorAll("[data-status]").forEach(b=>b.addEventListener("click",()=>setStatus(b.dataset.status)));$("bv-lock-btn").addEventListener("click",toggleLock);$("bv-history-btn").addEventListener("click",()=>{renderHistory();showModal("bv-history-modal",true);});$("bv-open-pdf").addEventListener("click",openPrint);$("bv-download-pdf").addEventListener("click",downloadPDF);$("bv-export-table").addEventListener("click",exportTable);
-      document.addEventListener("dashboard-task-status",ev=>{const d=ev.detail||{},t=d.task;if(!t||d.previousStatus==="done"||t.status!=="done"||!isBillableTask(t))return;const key=taskKey(t);if(Object.values(state.periods).some(p=>(p.entries||[]).some(e=>e.sourceId===key)))return;state.pendingTaskId=t.id;save("capture suggested");if(!panel.classList.contains("hidden")){if(confirm("This completed event looks billable. Capture it now?")){state.pendingTaskId=null;const pr=inferProfile(t)||profile();openEntry(null,{sourceId:key,profileId:pr.id,date:t.due_date,start:t.due_time?String(t.due_time).slice(0,5):"",end:t.end_time?String(t.end_time).slice(0,5):"",hours:taskHours(t),serviceIds:serviceForTask(pr,t),description:generatedDescription(pr,serviceForTask(pr,t)),notes:"Clock-out capture from completed agenda event"});}}else notice("Completed work may need billing. Open Billing to capture it.");renderHeader();});
+      document.addEventListener("dashboard-task-status",ev=>{const d=ev.detail||{},t=d.task;if(!t||d.previousStatus==="done"||t.status!=="done"||!isBillableTask(t))return;const key=taskKey(t);if(Object.values(state.periods).some(p=>(p.entries||[]).some(e=>e.sourceId===key)))return;state.pendingTaskIds=Array.isArray(state.pendingTaskIds)?state.pendingTaskIds:[];if(state.pendingTaskIds.map(String).indexOf(String(t.id))===-1)state.pendingTaskIds.push(t.id);save("capture suggested");if(!panel.classList.contains("hidden")){drainPendingCaptures();}else notice(state.pendingTaskIds.length>1?(state.pendingTaskIds.length+" completed events may need billing. Open Billing to capture them."):"Completed work may need billing. Open Billing to capture it.");renderHeader();});
       render();
       var cloudBtn=$("bv-cloud-sync");
       if(cloudBtn) cloudBtn.addEventListener("click",async function(){
@@ -14109,8 +14145,8 @@
     function step(dir){var cards=[].slice.call(host.querySelectorAll(".cd-card:not(.cd-add-card)")),cur=cards.findIndex(function(x){return x.classList.contains("is-active");}),i=Math.max(0,Math.min(cards.length-1,cur+dir));cdSetActive(host,cards[i].getAttribute("data-cd-id"),true);}
     if(prev)prev.addEventListener("click",function(){step(-1);});if(next)next.addEventListener("click",function(){step(1);});
     var down=false,startX=0,startLeft=0,moved=false,pid=null;
-    track.addEventListener("pointerdown",function(e){if(e.pointerType==="touch"||cdMode==="focus")return;down=true;pid=e.pointerId;startX=e.clientX;startLeft=track.scrollLeft;moved=false;track.classList.add("is-dragging");track.setPointerCapture&&track.setPointerCapture(pid);});
-    track.addEventListener("pointermove",function(e){if(!down||e.pointerId!==pid)return;var dx=e.clientX-startX;if(Math.abs(dx)>5){moved=true;e.preventDefault();track.scrollLeft=startLeft-dx;}});
+    track.addEventListener("pointerdown",function(e){if(e.pointerType==="touch"||cdMode==="focus")return;down=true;pid=e.pointerId;startX=e.clientX;startLeft=track.scrollLeft;moved=false;});
+    track.addEventListener("pointermove",function(e){if(!down||e.pointerId!==pid)return;var dx=e.clientX-startX;if(Math.abs(dx)>5){if(!moved){moved=true;track.classList.add("is-dragging");try{track.setPointerCapture&&track.setPointerCapture(pid);}catch(_e){}}e.preventDefault();track.scrollLeft=startLeft-dx;}});
     function end(){if(!down)return;down=false;track.classList.remove("is-dragging");if(moved){cdSuppressClickUntil=Date.now()+190;cdSnapNearest(host);}try{track.releasePointerCapture(pid);}catch(_e){}pid=null;}
     track.addEventListener("pointerup",end);track.addEventListener("pointercancel",end);
     track.addEventListener("wheel",function(e){if(cdMode==="focus")return;if(Math.abs(e.deltaX)>Math.abs(e.deltaY)||e.shiftKey){e.preventDefault();track.scrollLeft+=(e.deltaX||e.deltaY);clearTimeout(track._cdWheelTimer);track._cdWheelTimer=setTimeout(function(){cdSnapNearest(host);},130);}}, {passive:false});
