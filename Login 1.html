@@ -9141,6 +9141,61 @@
     .cd-priority-input{transition:none!important;}
   }
 
+
+
+  /* Billing entry redesign v23 — structured live-summary form */
+  #bv-entry-modal{padding:18px;background:rgba(2,6,13,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  #bv-entry-modal .bv-entry-redesign{width:min(1110px,97vw);max-height:92vh;padding:0;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) 250px;border-radius:22px;border:1px solid rgba(90,153,232,.42);background:linear-gradient(145deg,rgba(15,29,51,.985),rgba(5,12,24,.995));box-shadow:0 36px 110px rgba(0,0,0,.68),0 0 54px rgba(44,124,235,.14)}
+  #bv-entry-modal .bv-entry-main{min-width:0;padding:20px 18px 14px;overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(72,151,239,.25) transparent}
+  #bv-entry-modal .bv-entry-head{margin:0 0 12px;padding:0 2px;align-items:center}
+  #bv-entry-modal .bv-entry-heading{display:flex;align-items:center;gap:10px;min-width:0}
+  #bv-entry-modal .bv-entry-bolt{display:grid;place-items:center;width:23px;height:30px;color:#4fa7ff;font:900 29px/1 var(--disp);text-shadow:0 0 16px rgba(79,167,255,.7);transform:skew(-7deg)}
+  #bv-entry-modal .bv-entry-head h3{font-size:20px;letter-spacing:-.02em}
+  #bv-entry-modal .bv-entry-head .bv-close{flex:0 0 34px;width:34px;height:34px;border-radius:10px}
+  #bv-entry-modal .bv-entry-section{margin-top:9px;padding:11px 12px 12px;border:1px solid rgba(93,143,211,.18);border-radius:14px;background:linear-gradient(180deg,rgba(19,36,62,.60),rgba(8,18,34,.52));box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+  #bv-entry-modal .bv-entry-section-title{display:flex;align-items:center;gap:8px;margin-bottom:9px;color:#dce8fa;font:650 11px var(--body)}
+  #bv-entry-modal .bv-entry-section-title>span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(180deg,#4ca8ff,#246dca);box-shadow:0 0 18px rgba(67,154,255,.30);font:700 11px var(--mono)}
+  #bv-entry-modal .bv-entry-section-title>i{font-style:normal;color:#8fb1dc;font-size:14px;opacity:.9}
+  #bv-entry-modal .bv-entry-section-title>strong{font-weight:650}
+  #bv-entry-modal .bv-entry-two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:11px}
+  #bv-entry-modal .bv-field label{margin-bottom:5px;font-size:7.5px;color:#8fa4c4}
+  #bv-entry-modal .bv-field input,#bv-entry-modal .bv-field select,#bv-entry-modal .bv-field textarea{min-height:37px;border-radius:9px;border-color:rgba(91,147,218,.25);background:rgba(4,11,23,.68);font-size:10.5px;padding:8px 10px}
+  #bv-entry-modal .bv-field textarea{height:46px;min-height:46px;resize:none}
+  #bv-entry-modal .bv-time-grid{display:grid;grid-template-columns:minmax(125px,1fr) 18px minmax(125px,1fr) 118px 86px;gap:9px;align-items:end}
+  #bv-entry-modal .bv-time-dash{align-self:center;text-align:center;color:#b7c7df;font:600 17px var(--mono);padding-top:12px}
+  #bv-entry-modal .bv-duration-card{height:50px;border-radius:10px;border:1px solid rgba(86,151,222,.23);background:linear-gradient(180deg,rgba(27,52,84,.72),rgba(8,19,36,.76));padding:8px 10px;display:flex;flex-direction:column;justify-content:center}
+  #bv-entry-modal .bv-duration-card small{font:600 7px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#8fa6c6}
+  #bv-entry-modal .bv-duration-card strong{margin-top:3px;color:#67c4ff;font:700 13px var(--mono);text-shadow:0 0 12px rgba(70,176,255,.22)}
+  #bv-entry-modal .bv-hours-field{min-width:0}
+  #bv-entry-modal .bv-service-status-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(160px,.75fr);gap:11px;align-items:end}
+  #bv-entry-modal .bv-service-checks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+  #bv-entry-modal .bv-service-checks label{position:relative;justify-content:flex-start;min-height:48px;padding:8px 9px;border-radius:10px;background:linear-gradient(180deg,rgba(17,32,55,.80),rgba(7,15,29,.82));border-color:rgba(98,145,207,.22);color:#b7c8df;font-size:8.2px;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease}
+  #bv-entry-modal .bv-service-checks label:hover{transform:translateY(-1px);border-color:rgba(79,163,255,.42)}
+  #bv-entry-modal .bv-service-checks label:has(input:checked){border-color:#3d9cff;background:linear-gradient(180deg,rgba(38,100,174,.34),rgba(8,30,58,.86));box-shadow:0 0 0 1px rgba(51,145,247,.12),0 0 18px rgba(44,134,238,.13);color:#bfe1ff}
+  #bv-entry-modal .bv-service-checks input{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-height:16px;border-radius:50%;border:1px solid rgba(174,193,220,.43);background:#050a12;display:grid;place-items:center;flex:0 0 16px;margin:0}
+  #bv-entry-modal .bv-service-checks input:checked{border-color:#58acff;background:#3a98ed;box-shadow:0 0 11px rgba(60,160,255,.45)}
+  #bv-entry-modal .bv-service-checks input:checked::after{content:"✓";color:#fff;font:800 10px/1 var(--body)}
+  #bv-entry-modal .bv-ready-chip{display:inline-flex;margin-top:6px;padding:4px 8px;border-radius:999px;color:#69d69b;background:rgba(46,154,99,.14);font:600 7.5px var(--mono);letter-spacing:.02em}
+  #bv-entry-modal .bv-ready-chip::before{content:"◉";margin-right:5px}
+  #bv-entry-modal .bv-details-grid{grid-template-columns:1fr 1fr}
+  #bv-entry-modal .bv-entry-actions{margin-top:11px}
+  #bv-entry-modal .bv-entry-actions button{height:38px;min-width:112px}
+  #bv-entry-modal .bv-entry-actions .primary{min-width:138px}
+  #bv-entry-modal .bv-toast-note{margin-top:10px;font-size:7px;color:#6e829f}
+  #bv-entry-modal .bv-entry-summary{min-width:0;padding:18px 14px;border-left:1px solid rgba(91,146,214,.22);background:linear-gradient(180deg,rgba(10,24,43,.94),rgba(4,11,22,.98));overflow:auto;display:flex;flex-direction:column;gap:8px}
+  #bv-entry-modal .bv-summary-head{display:flex;align-items:center;gap:8px;padding:3px 3px 8px;color:#f0f5ff;font:650 15px var(--disp)}
+  #bv-entry-modal .bv-summary-live{width:9px;height:9px;border-radius:50%;background:#55d083;box-shadow:0 0 12px rgba(85,208,131,.46)}
+  #bv-entry-modal .bv-summary-card{display:grid;grid-template-columns:27px minmax(0,1fr);gap:8px;align-items:center;min-height:61px;padding:10px;border-radius:11px;border:1px solid rgba(91,142,208,.20);background:linear-gradient(180deg,rgba(20,39,66,.68),rgba(7,17,31,.75));box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+  #bv-entry-modal .bv-summary-card>i,#bv-entry-modal .bv-summary-amount>i{font-style:normal;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#89b4e8;border:1px solid rgba(88,147,219,.16);background:rgba(20,44,74,.42)}
+  #bv-entry-modal .bv-summary-card div,#bv-entry-modal .bv-summary-amount div{min-width:0}
+  #bv-entry-modal .bv-summary-card small,#bv-entry-modal .bv-summary-amount small{display:block;color:#8298b8;font:600 7px var(--mono);letter-spacing:.04em;text-transform:none}
+  #bv-entry-modal .bv-summary-card strong{display:block;margin-top:4px;color:#e1eafa;font:600 10.5px var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #bv-entry-modal .bv-summary-duration strong{font-size:18px;color:#57d492;text-shadow:0 0 16px rgba(74,210,141,.22)}
+  #bv-entry-modal .bv-summary-amount{margin-top:auto;display:grid;grid-template-columns:29px minmax(0,1fr);gap:9px;align-items:center;min-height:76px;padding:12px;border-radius:11px;border:1px solid rgba(70,154,248,.42);background:linear-gradient(180deg,rgba(22,57,96,.72),rgba(7,24,46,.90));box-shadow:0 0 24px rgba(44,133,236,.10),inset 0 1px 0 rgba(255,255,255,.04)}
+  #bv-entry-modal .bv-summary-amount strong{display:block;margin-top:4px;color:#4fa6ff;font:750 21px var(--mono);text-shadow:0 0 16px rgba(67,155,251,.25)}
+  @media(max-width:900px){#bv-entry-modal{padding:10px}#bv-entry-modal .bv-entry-redesign{grid-template-columns:minmax(0,1fr) 210px;max-height:94vh}#bv-entry-modal .bv-entry-main{padding:15px 12px 12px}#bv-entry-modal .bv-time-grid{grid-template-columns:1fr 14px 1fr 102px}.bv-hours-field{grid-column:1/-1}#bv-entry-modal .bv-service-checks{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:680px){#bv-entry-modal .bv-entry-redesign{display:block;overflow:auto}#bv-entry-modal .bv-entry-main{overflow:visible}#bv-entry-modal .bv-entry-summary{border-left:0;border-top:1px solid rgba(91,146,214,.22);display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}#bv-entry-modal .bv-summary-head,#bv-entry-modal .bv-summary-amount{grid-column:1/-1}#bv-entry-modal .bv-entry-two-col,#bv-entry-modal .bv-service-status-grid{grid-template-columns:1fr}#bv-entry-modal .bv-time-grid{grid-template-columns:1fr 12px 1fr}#bv-entry-modal .bv-duration-card{grid-column:1/3}#bv-entry-modal .bv-hours-field{grid-column:3}#bv-entry-modal .bv-details-grid{grid-template-columns:1fr}}
+  @media(max-width:460px){#bv-entry-modal .bv-time-grid{grid-template-columns:1fr}#bv-entry-modal .bv-time-dash{display:none}#bv-entry-modal .bv-duration-card,#bv-entry-modal .bv-hours-field{grid-column:auto}#bv-entry-modal .bv-service-checks{grid-template-columns:1fr 1fr}#bv-entry-modal .bv-entry-summary{grid-template-columns:1fr}#bv-entry-modal .bv-summary-head,#bv-entry-modal .bv-summary-amount{grid-column:auto}#bv-entry-modal .bv-entry-actions{flex-wrap:wrap}#bv-entry-modal .bv-entry-actions button{flex:1}}
 </style>
 </head>
 <body>
@@ -9303,23 +9358,64 @@
           </div>
 
           <div class="bv-modal hidden" id="bv-entry-modal" aria-hidden="true">
-            <form class="bv-modal-card" id="bv-entry-form">
-              <div class="bv-modal-head"><div><h3 id="bv-entry-title">New Billing Entry</h3><p>Capture the work once; the ledger and exports update automatically.</p></div><button class="bv-close" data-bv-close type="button">×</button></div>
-              <input type="hidden" id="bv-entry-id">
-              <input type="hidden" id="bv-entry-source-id">
-              <div class="bv-form-grid">
-                <div class="bv-field"><label>Job profile</label><select id="bv-entry-profile"></select><small class="bv-field-help" id="bv-entry-rate-hint">Rate is inherited from the selected profile.</small></div>
-                <div class="bv-field"><label>Date</label><input id="bv-entry-date" type="date" required></div>
-                <div class="bv-field"><label>Start time</label><input id="bv-entry-start" type="time"></div>
-                <div class="bv-field"><label>End time</label><input id="bv-entry-end" type="time"></div>
-                <div class="bv-field"><label>Hours</label><input id="bv-entry-hours" type="number" min="0" max="24" step="0.25" required></div>
-                <div class="bv-field"><label>Entry status</label><select id="bv-entry-status"><option value="draft">Draft</option><option value="reviewed">Reviewed</option><option value="submitted">Submitted</option></select></div>
-                <div class="bv-field full"><label>Service types</label><div class="bv-service-checks" id="bv-entry-services"></div></div>
-                <div class="bv-field full"><label>Description</label><input id="bv-entry-description" placeholder="Service description"></div>
-                <div class="bv-field full"><label>Notes</label><textarea id="bv-entry-notes" placeholder="Optional internal note"></textarea></div>
+            <form class="bv-modal-card bv-entry-redesign" id="bv-entry-form">
+              <div class="bv-entry-main">
+                <div class="bv-modal-head bv-entry-head">
+                  <div class="bv-entry-heading"><span class="bv-entry-bolt" aria-hidden="true">ϟ</span><h3 id="bv-entry-title">New Billing Entry</h3></div>
+                  <button class="bv-close" data-bv-close type="button" aria-label="Close billing entry">×</button>
+                </div>
+                <input type="hidden" id="bv-entry-id">
+                <input type="hidden" id="bv-entry-source-id">
+                <small class="bv-field-help hidden" id="bv-entry-rate-hint">Rate is inherited from the selected profile.</small>
+
+                <section class="bv-entry-section">
+                  <div class="bv-entry-section-title"><span>1</span><i aria-hidden="true">▣</i><strong>Job Profile &amp; Date</strong></div>
+                  <div class="bv-entry-two-col">
+                    <div class="bv-field"><label>Job profile</label><select id="bv-entry-profile"></select></div>
+                    <div class="bv-field"><label>Date</label><input id="bv-entry-date" type="date" required></div>
+                  </div>
+                </section>
+
+                <section class="bv-entry-section">
+                  <div class="bv-entry-section-title"><span>2</span><i aria-hidden="true">◷</i><strong>Time Block</strong></div>
+                  <div class="bv-time-grid">
+                    <div class="bv-field"><label>Start time</label><input id="bv-entry-start" type="time"></div>
+                    <div class="bv-time-dash" aria-hidden="true">−</div>
+                    <div class="bv-field"><label>End time</label><input id="bv-entry-end" type="time"></div>
+                    <div class="bv-duration-card"><small>Duration</small><strong id="bv-entry-duration-display">1h 00m</strong></div>
+                    <div class="bv-field bv-hours-field"><label>Hours</label><input id="bv-entry-hours" type="number" min="0" max="24" step="0.25" required></div>
+                  </div>
+                </section>
+
+                <section class="bv-entry-section">
+                  <div class="bv-entry-section-title"><span>3</span><i aria-hidden="true">◇</i><strong>Service Type &amp; Status</strong></div>
+                  <div class="bv-service-status-grid">
+                    <div class="bv-field"><label>Service types</label><div class="bv-service-checks" id="bv-entry-services"></div></div>
+                    <div class="bv-field"><label>Entry status</label><select id="bv-entry-status"><option value="draft">Draft</option><option value="reviewed">Reviewed</option><option value="submitted">Submitted</option></select><div class="bv-ready-chip" id="bv-entry-ready">Ready to save</div></div>
+                  </div>
+                </section>
+
+                <section class="bv-entry-section">
+                  <div class="bv-entry-section-title"><span>4</span><i aria-hidden="true">▤</i><strong>Additional Details</strong></div>
+                  <div class="bv-entry-two-col bv-details-grid">
+                    <div class="bv-field"><label>Description</label><input id="bv-entry-description" placeholder="Service description (optional)"></div>
+                    <div class="bv-field"><label>Notes</label><textarea id="bv-entry-notes" placeholder="Optional internal note"></textarea></div>
+                  </div>
+                </section>
+
+                <div class="bv-modal-actions bv-entry-actions"><button class="danger hidden" id="bv-delete-entry" type="button">Delete</button><button data-bv-close type="button">Cancel</button><button class="primary" type="submit">Save Entry <span aria-hidden="true">▣</span></button></div>
+                <div class="bv-toast-note">Data is stored locally in this browser. No private employer system access is required.</div>
               </div>
-              <div class="bv-modal-actions"><button class="danger hidden" id="bv-delete-entry" type="button">Delete</button><button data-bv-close type="button">Cancel</button><button class="primary" type="submit">Save Entry</button></div>
-              <div class="bv-toast-note">Data is stored locally in this browser. No private employer system access is required.</div>
+
+              <aside class="bv-entry-summary" aria-label="Live billing entry summary">
+                <div class="bv-summary-head"><span class="bv-summary-live" aria-hidden="true"></span><strong>Live Summary</strong></div>
+                <div class="bv-summary-card"><i aria-hidden="true">▣</i><div><small>Job Profile</small><strong id="bv-summary-profile">—</strong></div></div>
+                <div class="bv-summary-card"><i aria-hidden="true">□</i><div><small>Date</small><strong id="bv-summary-date">—</strong></div></div>
+                <div class="bv-summary-card"><i aria-hidden="true">◷</i><div><small>Time Block</small><strong id="bv-summary-time">—</strong></div></div>
+                <div class="bv-summary-card bv-summary-duration"><i aria-hidden="true">◷</i><div><small>Duration</small><strong id="bv-summary-duration">1h 00m</strong></div></div>
+                <div class="bv-summary-card"><i aria-hidden="true">◇</i><div><small>Service Type</small><strong id="bv-summary-service">—</strong></div></div>
+                <div class="bv-summary-amount"><i aria-hidden="true">▦</i><div><small>Estimated Amount</small><strong id="bv-summary-amount">$0.00</strong></div></div>
+              </aside>
             </form>
           </div>
 
@@ -13559,11 +13655,15 @@
 
     function showModal(id,on=true){const n=$(id);if(!n)return;n.classList.toggle("hidden",!on);n.setAttribute("aria-hidden",on?"false":"true");}
     function populateProfileSelect(selected){const s=$("bv-entry-profile");s.innerHTML=state.profiles.map(p=>'<option value="'+esc(p.id)+'" '+(p.id===selected?"selected":"")+'>'+esc(p.name)+'</option>').join("");}
-    function renderEntryRateHint(){const hint=$("bv-entry-rate-hint"),select=$("bv-entry-profile");if(!hint||!select)return;const p=profile(select.value);hint.textContent=p.rate?money(p.rate)+" per hour · amount is calculated automatically":"No hourly rate is set · edit this job profile to calculate earnings";}
-    function renderServiceChecks(selectedIds=[]){const p=profile($("bv-entry-profile").value||state.activeProfileId),host=$("bv-entry-services");host.innerHTML=(p.services||[]).map(s=>'<label><input type="checkbox" value="'+esc(s.id)+'" '+(selectedIds.includes(s.id)?"checked":"")+'> '+esc(s.label)+'</label>').join("")||'<span class="bv-empty-mini">No service labels configured.</span>';host.querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{$("bv-entry-description").value=generatedDescription(p,[...host.querySelectorAll("input:checked")].map(x=>x.value));}));}
+    function renderEntryRateHint(){const hint=$("bv-entry-rate-hint"),select=$("bv-entry-profile");if(!hint||!select)return;const p=profile(select.value);hint.textContent=p.rate?money(p.rate)+" per hour · amount is calculated automatically":"No hourly rate is set · edit this job profile to calculate earnings";updateEntrySummary();}
+    function formatEntryDate(value){if(!value)return "—";const d=new Date(value+"T12:00:00");return Number.isNaN(d.getTime())?value:d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
+    function formatEntryTime(value){if(!value)return "—";const parts=String(value).split(":");let h=Number(parts[0]),m=Number(parts[1]||0);if(!Number.isFinite(h))return value;const ap=h>=12?"PM":"AM";h=h%12||12;return h+":"+String(m).padStart(2,"0")+" "+ap;}
+    function formatEntryDuration(hours){const n=Math.max(0,safeNum(hours)),mins=Math.round(n*60),h=Math.floor(mins/60),m=mins%60;return h?String(h)+"h "+String(m).padStart(2,"0")+"m":String(m)+"m";}
+    function updateEntrySummary(){const modal=$("bv-entry-modal");if(!modal||modal.classList.contains("hidden"))return;const prof=profile($("bv-entry-profile").value||state.activeProfileId),start=$("bv-entry-start").value,end=$("bv-entry-end").value,hours=safeNum($("bv-entry-hours").value),checks=[...$("bv-entry-services").querySelectorAll("input:checked")],labels=checks.map(input=>{const service=(prof.services||[]).find(s=>String(s.id)===String(input.value));return service?service.label:(input.parentElement?input.parentElement.textContent.trim():input.value);});const timeText=start||end?[formatEntryTime(start),formatEntryTime(end)].join(" – "):"—";const durationText=formatEntryDuration(hours);if($("bv-entry-duration-display"))$("bv-entry-duration-display").textContent=durationText;if($("bv-summary-profile"))$("bv-summary-profile").textContent=prof.name||"—";if($("bv-summary-date"))$("bv-summary-date").textContent=formatEntryDate($("bv-entry-date").value);if($("bv-summary-time"))$("bv-summary-time").textContent=timeText;if($("bv-summary-duration"))$("bv-summary-duration").textContent=durationText;if($("bv-summary-service"))$("bv-summary-service").textContent=labels.join(", ")||"—";if($("bv-summary-amount"))$("bv-summary-amount").textContent=money(hours*safeNum(prof.rate));}
+    function renderServiceChecks(selectedIds=[]){const p=profile($("bv-entry-profile").value||state.activeProfileId),host=$("bv-entry-services");host.innerHTML=(p.services||[]).map(s=>'<label><input type="checkbox" value="'+esc(s.id)+'" '+(selectedIds.includes(s.id)?"checked":"")+'> <span>'+esc(s.label)+'</span></label>').join("")||'<span class="bv-empty-mini">No service labels configured.</span>';host.querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{$("bv-entry-description").value=generatedDescription(p,[...host.querySelectorAll("input:checked")].map(x=>x.value));updateEntrySummary();}));updateEntrySummary();}
     function openEntry(id=null,prefill=null){
       if(activeLocked()){notice("This period is locked. Unlock it before changing entries.");return;}
-      const e=id?period().entries.find(x=>x.id===id):null,base=e||prefill||{};$("bv-entry-title").textContent=e?"Edit Billing Entry":"New Billing Entry";$("bv-entry-id").value=e?e.id:"";$("bv-entry-source-id").value=base.sourceId||"";populateProfileSelect(base.profileId||state.activeProfileId);$("bv-entry-date").value=base.date||todayYMD();$("bv-entry-start").value=base.start||"";$("bv-entry-end").value=base.end||"";$("bv-entry-hours").value=safeNum(base.hours||1);$("bv-entry-status").value=base.status||"draft";$("bv-entry-description").value=base.description||"";$("bv-entry-notes").value=base.notes||"";renderServiceChecks(base.serviceIds||[]);renderEntryRateHint();$("bv-delete-entry").classList.toggle("hidden",!e);showModal("bv-entry-modal",true);
+      const e=id?period().entries.find(x=>x.id===id):null,base=e||prefill||{};$("bv-entry-title").textContent=e?"Edit Billing Entry":"New Billing Entry";$("bv-entry-id").value=e?e.id:"";$("bv-entry-source-id").value=base.sourceId||"";populateProfileSelect(base.profileId||state.activeProfileId);$("bv-entry-date").value=base.date||todayYMD();$("bv-entry-start").value=base.start||"";$("bv-entry-end").value=base.end||"";$("bv-entry-hours").value=safeNum(base.hours||1);$("bv-entry-status").value=base.status||"draft";$("bv-entry-description").value=base.description||"";$("bv-entry-notes").value=base.notes||"";renderServiceChecks(base.serviceIds||[]);renderEntryRateHint();$("bv-delete-entry").classList.toggle("hidden",!e);showModal("bv-entry-modal",true);updateEntrySummary();
     }
     function openSuggestion(key){const s=suggestionByKey(key);if(!s)return;openEntry(null,{sourceId:s.key,profileId:s.profile.id,date:s.task.due_date,start:s.task.due_time?String(s.task.due_time).slice(0,5):"",end:s.task.end_time?String(s.task.end_time).slice(0,5):"",hours:s.hours,serviceIds:s.services,description:generatedDescription(s.profile,s.services),notes:"Calendar-assisted entry: "+(s.task.title||"")});}
     function saveEntryForm(ev){ev.preventDefault();if(activeLocked())return;const id=$("bv-entry-id").value,prof=profile($("bv-entry-profile").value),serviceIds=[...$("bv-entry-services").querySelectorAll("input:checked")].map(x=>x.value),candidate={id:id||uid("entry"),profileId:prof.id,date:$("bv-entry-date").value,start:$("bv-entry-start").value,end:$("bv-entry-end").value,hours:safeNum($("bv-entry-hours").value),status:$("bv-entry-status").value,serviceIds,description:$("bv-entry-description").value.trim()||generatedDescription(prof,serviceIds),notes:$("bv-entry-notes").value.trim(),sourceId:$("bv-entry-source-id").value||null,updatedAt:new Date().toISOString()};if(!candidate.date||candidate.hours<=0){notice("Enter a valid date and number of hours.");return;}if(hasDuplicate(candidate,id)){if(!confirm("A very similar entry already exists. Save this duplicate anyway?"))return;}const arr=period().entries,index=arr.findIndex(x=>x.id===id);if(index>=0)arr[index]={...arr[index],...candidate};else arr.push({...candidate,createdAt:new Date().toISOString()});audit(index>=0?"entry_updated":"entry_added",candidate.description+" · "+candidate.hours+"h");save("entry saved");showModal("bv-entry-modal",false);render();setTimeout(drainPendingCaptures,120);}
@@ -13763,7 +13863,7 @@
           },520);
         },{passive:false});
       }$("bv-manual-btn").addEventListener("click",()=>openEntry());$("bv-create-entry").addEventListener("click",()=>openEntry());$("bv-calendar-btn").addEventListener("click",()=>{$("bv-missing-box").scrollIntoView({behavior:"smooth",block:"center"});scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" past billing entries may be missing.":"No past missing entries detected.");});$("bv-scan-calendar").addEventListener("click",()=>{scanSuggestions();render();notice(lastSuggestions.length?lastSuggestions.length+" past missing-entry suggestions refreshed.":"No past unlogged billable events found.");});$("bv-ai-btn").addEventListener("click",openAIReview);$("bv-ai-rescan").addEventListener("click",()=>{renderAIReview();notice("Smart billing review refreshed.");});$("bv-ai-add-all").addEventListener("click",addAllSuggestionDrafts);$("bv-clock-btn").addEventListener("click",startOrStopClock);
-      $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);}));
+      $("bv-entry-form").addEventListener("submit",saveEntryForm);$("bv-delete-entry").addEventListener("click",deleteEntry);$("bv-entry-profile").addEventListener("change",()=>{renderServiceChecks([]);renderEntryRateHint();$("bv-entry-description").value=generatedDescription(profile($("bv-entry-profile").value),[]);updateEntrySummary();});["bv-entry-start","bv-entry-end"].forEach(id=>$(id).addEventListener("change",()=>{const h=duration($("bv-entry-start").value,$("bv-entry-end").value);if(h>0)$("bv-entry-hours").value=roundQuarter(h);updateEntrySummary();}));["bv-entry-date","bv-entry-hours","bv-entry-status","bv-entry-description","bv-entry-notes"].forEach(id=>{const node=$(id);if(node){node.addEventListener("input",updateEntrySummary);node.addEventListener("change",updateEntrySummary);}});
       $("bv-profile-form").addEventListener("submit",saveProfileForm);$("bv-delete-profile").addEventListener("click",deleteProfile);
       document.querySelectorAll("[data-bv-close]").forEach(b=>b.addEventListener("click",()=>{const modal=b.closest(".bv-modal");if(modal)showModal(modal.id,false);}));document.querySelectorAll(".bv-modal").forEach(m=>m.addEventListener("click",ev=>{if(ev.target===m)showModal(m.id,false);}));
       $("bv-roll-switch").addEventListener("click",()=>{period().rollover.enabled=period().rollover.enabled===false;save("rollover updated");renderRollover();});$("bv-carry-drafts").addEventListener("change",()=>{period().rollover.carryDrafts=$("bv-carry-drafts").checked;save("rollover updated");});$("bv-auto-move").addEventListener("change",()=>{period().rollover.autoMove=$("bv-auto-move").checked;save("rollover updated");});$("bv-roll-now").addEventListener("click",doRollover);
