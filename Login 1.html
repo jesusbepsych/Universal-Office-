@@ -8714,9 +8714,14 @@
   .cd-focus-icon{width:54px;height:54px;flex:0 0 54px;border-radius:18px;display:grid;place-items:center;color:rgb(var(--c));border:1px solid rgba(var(--c),.29);background:radial-gradient(circle at 34% 27%,rgba(255,255,255,.15),transparent 34%),linear-gradient(180deg,rgba(var(--c),.16),rgba(7,12,25,.64));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 28px rgba(var(--c),.14);}
   .cd-focus-icon .micon,.cd-focus-icon .micon svg{width:36px;height:36px;display:block;}
   .cd-focus-icon svg{width:27px;height:27px;stroke:currentColor;fill:none;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;}
-  .cd-focus-heading{min-width:0;flex:1;}
+  .cd-focus-heading{min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;}
   .cd-focus-kicker{font-size:7.5px;font-weight:850;letter-spacing:.16em;text-transform:uppercase;color:rgb(var(--c));opacity:.9;}
   .cd-focus-name{margin-top:5px;font-size:25px;line-height:1.04;font-weight:900;letter-spacing:-.025em;color:#f7f9ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cd-focus-name-btn{margin-top:4px;padding:0;border:0;background:transparent;display:inline-flex;align-items:center;gap:8px;max-width:100%;align-self:flex-start;color:#f7f9ff;font-size:25px;line-height:1.04;font-weight:900;letter-spacing:-.025em;text-align:left;cursor:pointer;transition:transform .18s ease,opacity .18s ease,color .18s ease;}
+  .cd-focus-name-btn:hover{transform:translateY(-1px);color:#ffffff;opacity:.98;}
+  .cd-focus-name-btn:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(var(--c),.22);border-radius:10px;}
+  .cd-focus-name-text{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cd-focus-name-btn svg{width:14px;height:14px;flex:0 0 14px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;opacity:.8;transform:translateY(1px);}
   .cd-focus-summary{margin-top:6px;font-size:8.5px;color:rgba(188,202,232,.74);letter-spacing:.04em;text-transform:uppercase;}
   .cd-focus-close{width:37px;height:37px;flex:0 0 37px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(180deg,rgba(24,33,57,.85),rgba(8,13,26,.95));color:#dbe5fb;display:grid;place-items:center;font-size:19px;line-height:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);transition:transform .22s ease,border-color .22s ease,background .22s ease;}
   .cd-focus-close:hover{transform:translateY(-1px);border-color:rgba(var(--c),.30);background:linear-gradient(180deg,rgba(30,42,70,.92),rgba(10,16,31,.98));}
@@ -8756,7 +8761,7 @@
 
   .cd-focus-side{min-width:0;border-left:1px solid rgba(255,255,255,.055);padding-left:18px;display:flex;flex-direction:column;}
   .cd-side-label{font-size:7px;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:rgba(180,194,223,.64);}
-  .cd-progress-orb{--pct:0deg;position:relative;width:106px;height:106px;margin:14px auto 12px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(rgb(var(--c)) var(--pct),rgba(255,255,255,.055) 0);box-shadow:0 0 28px rgba(var(--c),.11);}
+  .cd-progress-orb{--pct:0deg;position:relative;width:106px;height:106px;margin:8px auto 10px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(rgb(var(--c)) var(--pct),rgba(255,255,255,.055) 0);box-shadow:0 0 28px rgba(var(--c),.11);}
   .cd-progress-orb::before{content:"";position:absolute;inset:7px;border-radius:50%;background:radial-gradient(circle at 38% 30%,rgba(var(--c),.11),rgba(7,12,25,.96) 66%);border:1px solid rgba(255,255,255,.055);box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
   .cd-progress-orb strong{position:relative;z-index:2;font-size:22px;color:#f5f8ff;letter-spacing:-.04em;}
   .cd-progress-orb span{position:absolute;z-index:2;margin-top:30px;font-size:6px;text-transform:uppercase;letter-spacing:.12em;color:rgba(179,194,224,.60);}
@@ -8783,7 +8788,7 @@
     .cd-focus-inner{padding:18px 14px 15px;}
     .cd-focus-hero{gap:11px;}
     .cd-focus-icon{width:46px;height:46px;flex-basis:46px;border-radius:15px;}
-    .cd-focus-name{font-size:21px;}
+    .cd-focus-name,.cd-focus-name-btn{font-size:21px;}
     .cd-focus-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;}
     .cd-focus-list{grid-template-columns:1fr;}
     .cd-focus-side{border-left:0;border-top:1px solid rgba(255,255,255,.055);padding:12px 0 0;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;}
@@ -8933,7 +8938,7 @@
   .cd-task-title{font-size:10.25px;line-height:1.42;letter-spacing:.005em;}
   .cd-task-type{margin-top:4px;font-size:6.7px;}
   .cd-task-state{padding:5px 8px;font-size:6.4px;}
-  .cd-side-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:13px;}
+  .cd-side-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;}
   .cd-side-actions button{
     min-height:34px;padding:0 10px;border-radius:11px;border:1px solid rgba(var(--c),.16);
     background:linear-gradient(180deg,rgba(var(--c),.09),rgba(4,8,17,.38));
@@ -8943,7 +8948,7 @@
   .cd-side-actions button:hover{transform:translateY(-1px);border-color:rgba(var(--c),.31);background:linear-gradient(180deg,rgba(var(--c),.15),rgba(4,8,17,.44));}
   .cd-side-actions button.danger{border-color:rgba(255,93,130,.12);color:rgba(255,178,197,.76);background:rgba(255,70,110,.03);}
   .cd-side-actions button.danger:hover{border-color:rgba(255,93,130,.27);color:#ffc1cf;background:rgba(255,70,110,.07);}
-  .cd-side-note{margin-top:12px;}
+  .cd-side-note{margin-top:10px;}
 
   .console-stack.cd-focus-elevated{z-index:300!important;}
   .console-stack.cd-manager-elevated{z-index:520!important;}
@@ -9027,7 +9032,7 @@
     .cd-focus-controls{grid-column:1/-1;width:100%;margin-left:0;justify-content:flex-end;}
     .cd-focus-manage{width:36px;padding:0;}
     .cd-focus-manage span{display:none;}
-    .cd-focus-name{font-size:19px;}
+    .cd-focus-name,.cd-focus-name-btn{font-size:19px;}
     .cd-focus-summary{font-size:7.2px;}
     .cd-focus-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;}
     .cd-focus-list{grid-template-columns:1fr;}
@@ -14001,10 +14006,11 @@
     var composer=card.kind==="capture"
       ? '<form class="cd-composer with-mode" data-cd-compose="capture"><div class="cd-capture-mode" role="group" aria-label="Capture type"><button type="button" data-cd-capture-mode="tasks" class="'+(cdCaptureMode==='tasks'?'on':'')+'">Task</button><button type="button" data-cd-capture-mode="notes" class="'+(cdCaptureMode==='notes'?'on':'')+'">Note</button></div><input data-cd-input autocomplete="off" placeholder="'+(cdCaptureMode==='tasks'?'Add a quick task…':'Jot a quick note…')+'"><button type="submit">Add</button></form>'
       : '<form class="cd-composer" data-cd-compose="folder"><input data-cd-input autocomplete="off" placeholder="Add a task to this workspace…"><button type="submit">Add task</button></form>';
-    var controls='<div class="cd-focus-controls"><div class="cd-focus-switcher" role="group" aria-label="Switch workspace"><button class="cd-focus-nav" data-cd-switch="-1" type="button" aria-label="Previous workspace">‹</button><button class="cd-focus-nav" data-cd-switch="1" type="button" aria-label="Next workspace">›</button></div>'+(card.kind==="folder"?'<button class="cd-focus-manage" data-cd-manage="edit" type="button" aria-label="Edit workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path></svg><span>Edit workspace</span></button>':'')+'<button class="cd-focus-close" data-cd-close type="button" aria-label="Return to all workspaces">×</button></div>';
+    var controls='<div class="cd-focus-controls"><div class="cd-focus-switcher" role="group" aria-label="Switch workspace"><button class="cd-focus-nav" data-cd-switch="-1" type="button" aria-label="Previous workspace">‹</button><button class="cd-focus-nav" data-cd-switch="1" type="button" aria-label="Next workspace">›</button></div><button class="cd-focus-close" data-cd-close type="button" aria-label="Return to all workspaces">×</button></div>';
+    var titleHtml=card.kind==="folder"?'<button class="cd-focus-name-btn" data-cd-manage="edit" type="button" aria-label="Edit workspace title and category"><span class="cd-focus-name-text">'+escapeHtml(card.name)+'</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l11-11-4-4L4 16v4z"></path><path d="M13.5 6.5l4 4"></path></svg></button>':'<div class="cd-focus-name">'+escapeHtml(card.name)+'</div>';
     var sideActions=card.kind==="folder"?'<div class="cd-side-actions"><button type="button" data-cd-focus-input>＋ Add item</button><button type="button" class="danger" data-cd-delete-workspace>Delete workspace</button></div>':'<div class="cd-side-actions"><button type="button" data-cd-focus-input>＋ New capture</button></div>';
     return '<div class="cd-focus-layer is-entering" style="--c:'+c+'" data-cd-focus-id="'+escapeHtml(card.id)+'"><section class="cd-focus-card" style="--c:'+c+'" role="dialog" aria-modal="true" aria-label="'+escapeHtml(card.name)+' workspace" tabindex="-1"><div class="cd-focus-depth"></div><div class="cd-focus-edge" aria-hidden="true"></div><div class="cd-focus-inner cd-focus-content">'
-      +'<header class="cd-focus-hero"><div class="cd-focus-icon">'+icon+'</div><div class="cd-focus-heading"><div class="cd-focus-kicker">'+escapeHtml(card.kind==="capture"?'Capture workspace':card.category)+'</div><div class="cd-focus-name">'+escapeHtml(card.name)+'</div><div class="cd-focus-summary" data-cd-summary>'+total+' item'+(total===1?'':'s')+' · '+open+' open · '+done+' complete</div></div>'+controls+'</header>'
+      +'<header class="cd-focus-hero"><div class="cd-focus-icon">'+icon+'</div><div class="cd-focus-heading"><div class="cd-focus-kicker">'+escapeHtml(card.kind==="capture"?'Capture workspace':card.category)+'</div>'+titleHtml+'<div class="cd-focus-summary" data-cd-summary>'+total+' item'+(total===1?'':'s')+' · '+open+' open · '+done+' complete</div></div>'+controls+'</header>'
       +'<div class="cd-focus-body"><section class="cd-task-zone"><div class="cd-zone-head"><span class="cd-zone-title">Workspace contents</span><span class="cd-zone-count">'+total+' total</span></div><div class="cd-focus-list">'+cdFocusListHtml(card)+'</div>'+composer+'</section>'
       +'<aside class="cd-focus-side"><div class="cd-side-label">Workspace pulse</div><div class="cd-progress-orb" style="--pct:'+(pct*3.6)+'deg"><strong>'+pct+'%</strong><span>complete</span></div><div class="cd-stat-grid"><div class="cd-stat"><b>'+open+'</b><span>Open</span></div><div class="cd-stat"><b>'+done+'</b><span>Done</span></div><div class="cd-stat"><b>'+total+'</b><span>Total</span></div></div>'+sideActions+'<div class="cd-side-note">Changes save to the same underlying dashboard data. Existing item order remains preserved on this device.</div></aside></div>'
     +'</div></section></div>';
